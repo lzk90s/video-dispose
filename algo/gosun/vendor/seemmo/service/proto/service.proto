@@ -8,7 +8,7 @@ message Void {
 message VideoTrailRecRequest {
     uint32 videoChl = 1;
     uint64 timestamp = 2;
-    bytes rgbImg = 3;
+    bytes bgr24 = 3;
     uint32 height = 4;
     uint32 width = 5;
 }

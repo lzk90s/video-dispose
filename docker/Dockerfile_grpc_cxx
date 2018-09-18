@@ -3,9 +3,8 @@ FROM grpc/cxx:latest as ORIGIN
 
 FROM ubuntu:16.04 as BUILD
 COPY --from=ORIGIN /var/local/git/grpc /var//local/git/grpc
-COPY sources.list /etc/apt
 
-RUN sed -i 's/archive.ubuntu.com/mirrors.aliyun.com/g' && \
+RUN sed -i 's/archive.ubuntu.com/mirrors.aliyun.com/g' /etc/apt/sources.list && \
     apt-get update && apt-get install -y \
       build-essential autoconf git pkg-config \
       automake libtool curl make g++ unzip && \
@@ -25,7 +24,7 @@ RUN  rm -rf /usr/local/lib/* && \
     cd third_party/protobuf && \
     export CFLAGS=-fPIC && export CXXFLAGS=-fPIC &&  \
     ./autogen.sh && ./configure --disable-shared && \
-    make -j$(nproc) && make install && make clean && ldconfig && \
+    make clean && make -j$(nproc) && make install && make clean && ldconfig && \
     echo "--- installing grpc ---" && \
     cd /var/local/git/grpc && \
     make -j$(nproc) install-static && make install-headers && make install-plugins && make clean && ldconfig

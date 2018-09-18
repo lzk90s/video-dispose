@@ -6,10 +6,12 @@
 #include <sstream>
 #include "common/helper/singleton.h"
 #include "json/json.hpp"
-#include "algo/seemmo/vendor/algo.h"
 
 using json = nlohmann::json;
 using namespace std;
+
+namespace algo {
+namespace seemmo {
 
 typedef struct SeemideoCfg {
     string baseDir;
@@ -20,37 +22,22 @@ typedef struct SeemideoCfg {
     int32_t devId;
 } SEEMIDEO_CFG;
 
-typedef struct GosunCfg {
-
-} GOSUN_CFG;
-
 class AlgoSetting {
 public:
-    SEEMIDEO_CFG seemideoCfg;
-    GOSUN_CFG gosunCfg;
+    SEEMIDEO_CFG config;
 
 public:
-    int32_t Init(const string &f) {
+    void Init(const string &f) {
         int32_t ret = 0;
-        ret = parseSeemideo(f, seemideoCfg);
-        if (E_OK != ret) {
-            return ret;
-        }
-
-        ret = parseGosun(f, gosunCfg);
-        if (E_OK != ret) {
-            return ret;
-        }
-
-        return E_OK;
+        parse(f, config);
     }
 
 private:
-    int32_t parseSeemideo(const string &f, SEEMIDEO_CFG &cfg) {
+    void parse(const string &f, SEEMIDEO_CFG &cfg) {
         ifstream fin(f);
         if (!fin.is_open()) {
             cout << "Failed to open config file" << f.c_str() << endl;
-            return E_FILEOPEN;
+            throw runtime_error("Open config file fail");
         }
 
         stringstream stm;
@@ -64,7 +51,7 @@ private:
         auto j = json::parse(stm.str());
         if (j.empty() || j[SEEMIDEO_CFG_KEY].empty()) {
             cout << "json is empty" << endl;
-            return E_INVALID_CFG;
+            throw runtime_error("Invalid config file");
         }
 
         auto o = j[SEEMIDEO_CFG_KEY];
@@ -75,13 +62,11 @@ private:
         cfg.authType = o["auth_type"].get<int>();
         cfg.devId = o["dev_id"].get<int>();
     }
-
-    int32_t parseGosun(const string &f, GOSUN_CFG &cfg) {
-        return E_OK;
-    }
-
 };
 
 typedef Singleton<AlgoSetting> AlgoSettingSingleton;
 
 #define ALGO_SETTING() AlgoSettingSingleton::getInstance()
+
+}
+}

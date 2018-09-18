@@ -6,6 +6,8 @@
 using namespace  std;
 using json = nlohmann::json;
 
+namespace algo {
+namespace seemmo {
 namespace trail {
 
 class FilterParamBuilder {
@@ -63,8 +65,7 @@ public:
     }
 
 private:
-
 };
-
-
+}
+}
 }

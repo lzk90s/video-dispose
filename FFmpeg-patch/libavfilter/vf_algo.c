@@ -25,20 +25,8 @@ typedef struct ThreadData {
     AVFrame *in, *out;
 } ThreadData;
 
-static void image_copy_plane(uint8_t *dst, int dst_linesize,
-                             const uint8_t *src, int src_linesize,
-                             int bytewidth, int height) {
-    if (!dst || !src)
-        return;
-    av_assert0(abs(src_linesize) >= bytewidth);
-    av_assert0(abs(dst_linesize) >= bytewidth);
-    for (; height > 0; height--) {
-        memcpy(dst, src, bytewidth);
-        dst += dst_linesize;
-        src += src_linesize;
-    }
-}
 
+#if 0
 static int i420p_to_bgr24(const AVFrame *src, AVFrame *dst) {
     if (src->format != AV_PIX_FMT_YUV420P) {
         av_log(NULL, AV_LOG_ERROR, "i420p_to_bgr24 only for yuv420p, but the format is %d\n", src->format);
@@ -118,6 +106,21 @@ static int bgr24_to_i420p(const  AVFrame *src, AVFrame *dst) {
 
     return 0;
 }
+#endif
+
+static void image_copy_plane(uint8_t *dst, int dst_linesize,
+                             const uint8_t *src, int src_linesize,
+                             int bytewidth, int height) {
+    if (!dst || !src)
+        return;
+    av_assert0(abs(src_linesize) >= bytewidth);
+    av_assert0(abs(dst_linesize) >= bytewidth);
+    for (; height > 0; height--) {
+        memcpy(dst, src, bytewidth);
+        dst += dst_linesize;
+        src += src_linesize;
+    }
+}
 
 //for YUV data, frame->data[0] save Y, frame->data[1] save U, frame->data[2] save V
 static int frame_copy_video(AVFrame *dst, const AVFrame *src) {
@@ -163,7 +166,7 @@ static int do_conversion(AVFilterContext *ctx, void *arg, int jobnr,
     AVFrame *src = td->in;
 
     // video filter, data[0] (bgr24 data)
-    VFilter_Routine(src->data[0], src->width, src->height, NULL);
+    VFilter_Routine(src->data[0], src->width, src->height);
 
     // copy video
     frame_copy_video(dst, src);

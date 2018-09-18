@@ -8,6 +8,8 @@
 using namespace  std;
 using json = nlohmann::json;
 
+namespace algo {
+namespace seemmo {
 namespace trail {
 
 typedef struct tagDetectArea {
@@ -124,5 +126,5 @@ private:
 
 };
 }
-
-
+}
+}

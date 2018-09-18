@@ -1,7 +1,7 @@
-TOP_DIR=../../../
+TOP_DIR=../../../../../
 
-MODULE_NAME=libseemmo_vendor
-MODULE_SUFFIX=.so
+MODULE_NAME=seemmo_algo_service
+MODULE_SUFFIX=
 
 OUT_PKG_DIR=$(TOP_DIR)/pkg
 OUT_OBJ_DIR = $(TOP_DIR)/obj
@@ -10,9 +10,9 @@ TARGET=$(OUT_PKG_DIR)/$(MODULE_NAME)$(MODULE_SUFFIX)
 CXX = g++
 AR = ar
 
-INC = -I$(TOP_DIR) -I$(TOP_DIR)/thirdparty -I$(SEEMMO_SDK_HOME)/include
-LIB = -L$(TOP_DIR) -L$(SEEMMO_SDK_HOME)/lib -L$(OPENCV_HOME)/lib -lexport_sdk -lpthread
-
+VENDOR_DIR=$(TOP_DIR)/algo/gosun/vendor
+INC =-I$(VENDOR_DIR) -I$(TOP_DIR) -I$(TOP_DIR)/thirdparty -I$(TOP_DIR)/common
+LIB = `pkg-config --libs grpc++ grpc` -Wl,--as-needed -lgrpc -lprotobuf -lpthread -ldl
 
 CXX_FLAGS = $(INC) -std=c++11 -fPIC
 LD_FLAGS = $(LIB)
@@ -47,10 +47,9 @@ DEPS = $(OBJS:.o=$(SRC_SUFFIX).d)
 $(DEPS) : $(OUT_OBJ_DIR)/%$(SRC_SUFFIX).d : %$(SRC_SUFFIX)
 	$(CXX) $(CXX_FLAGS) $< -MM > $(OUT_OBJ_DIR)/$<.d
 
-#install: $(TARGET)
-#	@mkdir -p $(TOP_DIR)/pkg
-#	@cp $(TARGET) $(OUT_PKG_DIR) -rf
-#	@cp resource/* $(OUT_PKG_DIR) -rf
+install: $(TARGET)
+	@mkdir -p $(TOP_DIR)/pkg
+	@cp resource/* $(OUT_PKG_DIR) -rf
 
 clean:
 	@rm -rf $(OUT_OBJ_DIR)

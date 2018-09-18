@@ -253,19 +253,19 @@ class VideoTrailRecRequest : public ::google::protobuf::Message /* @@protoc_inse
 
   // accessors -------------------------------------------------------
 
-  // bytes rgbImg = 3;
-  void clear_rgbimg();
-  static const int kRgbImgFieldNumber = 3;
-  const ::std::string& rgbimg() const;
-  void set_rgbimg(const ::std::string& value);
+  // bytes bgr24 = 3;
+  void clear_bgr24();
+  static const int kBgr24FieldNumber = 3;
+  const ::std::string& bgr24() const;
+  void set_bgr24(const ::std::string& value);
   #if LANG_CXX11
-  void set_rgbimg(::std::string&& value);
+  void set_bgr24(::std::string&& value);
   #endif
-  void set_rgbimg(const char* value);
-  void set_rgbimg(const void* value, size_t size);
-  ::std::string* mutable_rgbimg();
-  ::std::string* release_rgbimg();
-  void set_allocated_rgbimg(::std::string* rgbimg);
+  void set_bgr24(const char* value);
+  void set_bgr24(const void* value, size_t size);
+  ::std::string* mutable_bgr24();
+  ::std::string* release_bgr24();
+  void set_allocated_bgr24(::std::string* bgr24);
 
   // uint64 timestamp = 2;
   void clear_timestamp();
@@ -295,7 +295,7 @@ class VideoTrailRecRequest : public ::google::protobuf::Message /* @@protoc_inse
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  ::google::protobuf::internal::ArenaStringPtr rgbimg_;
+  ::google::protobuf::internal::ArenaStringPtr bgr24_;
   ::google::protobuf::uint64 timestamp_;
   ::google::protobuf::uint32 videochl_;
   ::google::protobuf::uint32 height_;
@@ -457,57 +457,57 @@ inline void VideoTrailRecRequest::set_timestamp(::google::protobuf::uint64 value
   // @@protoc_insertion_point(field_set:gosun.video.VideoTrailRecRequest.timestamp)
 }
 
-// bytes rgbImg = 3;
-inline void VideoTrailRecRequest::clear_rgbimg() {
-  rgbimg_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+// bytes bgr24 = 3;
+inline void VideoTrailRecRequest::clear_bgr24() {
+  bgr24_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline const ::std::string& VideoTrailRecRequest::rgbimg() const {
-  // @@protoc_insertion_point(field_get:gosun.video.VideoTrailRecRequest.rgbImg)
-  return rgbimg_.GetNoArena();
+inline const ::std::string& VideoTrailRecRequest::bgr24() const {
+  // @@protoc_insertion_point(field_get:gosun.video.VideoTrailRecRequest.bgr24)
+  return bgr24_.GetNoArena();
 }
-inline void VideoTrailRecRequest::set_rgbimg(const ::std::string& value) {
+inline void VideoTrailRecRequest::set_bgr24(const ::std::string& value) {
   
-  rgbimg_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:gosun.video.VideoTrailRecRequest.rgbImg)
+  bgr24_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:gosun.video.VideoTrailRecRequest.bgr24)
 }
 #if LANG_CXX11
-inline void VideoTrailRecRequest::set_rgbimg(::std::string&& value) {
+inline void VideoTrailRecRequest::set_bgr24(::std::string&& value) {
   
-  rgbimg_.SetNoArena(
+  bgr24_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:gosun.video.VideoTrailRecRequest.rgbImg)
+  // @@protoc_insertion_point(field_set_rvalue:gosun.video.VideoTrailRecRequest.bgr24)
 }
 #endif
-inline void VideoTrailRecRequest::set_rgbimg(const char* value) {
+inline void VideoTrailRecRequest::set_bgr24(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
-  rgbimg_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:gosun.video.VideoTrailRecRequest.rgbImg)
+  bgr24_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:gosun.video.VideoTrailRecRequest.bgr24)
 }
-inline void VideoTrailRecRequest::set_rgbimg(const void* value, size_t size) {
+inline void VideoTrailRecRequest::set_bgr24(const void* value, size_t size) {
   
-  rgbimg_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+  bgr24_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:gosun.video.VideoTrailRecRequest.rgbImg)
+  // @@protoc_insertion_point(field_set_pointer:gosun.video.VideoTrailRecRequest.bgr24)
 }
-inline ::std::string* VideoTrailRecRequest::mutable_rgbimg() {
+inline ::std::string* VideoTrailRecRequest::mutable_bgr24() {
   
-  // @@protoc_insertion_point(field_mutable:gosun.video.VideoTrailRecRequest.rgbImg)
-  return rgbimg_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  // @@protoc_insertion_point(field_mutable:gosun.video.VideoTrailRecRequest.bgr24)
+  return bgr24_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline ::std::string* VideoTrailRecRequest::release_rgbimg() {
-  // @@protoc_insertion_point(field_release:gosun.video.VideoTrailRecRequest.rgbImg)
+inline ::std::string* VideoTrailRecRequest::release_bgr24() {
+  // @@protoc_insertion_point(field_release:gosun.video.VideoTrailRecRequest.bgr24)
   
-  return rgbimg_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  return bgr24_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void VideoTrailRecRequest::set_allocated_rgbimg(::std::string* rgbimg) {
-  if (rgbimg != NULL) {
+inline void VideoTrailRecRequest::set_allocated_bgr24(::std::string* bgr24) {
+  if (bgr24 != NULL) {
     
   } else {
     
   }
-  rgbimg_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), rgbimg);
-  // @@protoc_insertion_point(field_set_allocated:gosun.video.VideoTrailRecRequest.rgbImg)
+  bgr24_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), bgr24);
+  // @@protoc_insertion_point(field_set_allocated:gosun.video.VideoTrailRecRequest.bgr24)
 }
 
 // uint32 height = 4;

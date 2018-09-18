@@ -5,15 +5,16 @@
 #include <sstream>
 #include <cstdint>
 #include <cassert>
-
+#include <vector>
 
 #include <grpc++/grpc++.h>
 #include <grpc/support/log.h>
-#include "algo/seemmo/service/rpc/service.grpc.pb.h"
 
 #include "common/helper/singleton.h"
-#include "algo/seemmo/service/rpcserver/server.h"
-#include "algo/seemmo/service/rpcserver/algo_loader.h"
+
+#include "seemmo/service/rpc/service.grpc.pb.h"
+#include "seemmo/service/rpcserver/server.h"
+#include "seemmo/service/rpcserver/algo_loader.h"
 
 using grpc::Server;
 using grpc::ServerAsyncResponseWriter;
@@ -27,6 +28,9 @@ using gosun::video::VideoTrailRecReply;
 using gosun::video::VideoProc;
 
 using namespace std;
+
+namespace algo {
+namespace seemmo {
 
 AlgoLoader algoLoader;
 
@@ -157,3 +161,6 @@ private:
 RpcServer *NewRpcServer() {
     return &Singleton<ServerImpl>::getInstance();
 }
+}
+}
+

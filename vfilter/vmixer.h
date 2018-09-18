@@ -1,17 +1,21 @@
 #pragma once
 
+#include <string>
 #include <map>
 #include "vfilter/target.h"
-#include "opencv/cv.h"
-#include "opencv2/opencv.hpp"
+#include "vfilter/cvx_text.h"
 
 using namespace std;
 
+namespace vf {
+
 class VMixer {
 public:
+    VMixer();
 
-    void MixFrame(cv::Mat &frame);
+    void MixFrame(cv::Mat &frame, TargetMap &tm);
 
 private:
-    map<string, DetectTarget> targetMap;
+    CvxText text_;
 };
+}

@@ -12,6 +12,8 @@
 using namespace  std;
 using json = nlohmann::json;
 
+namespace algo {
+namespace seemmo {
 namespace rec {
 
 typedef struct tagAttribute {
@@ -193,4 +195,5 @@ private:
 
 };
 }
-
+}
+}

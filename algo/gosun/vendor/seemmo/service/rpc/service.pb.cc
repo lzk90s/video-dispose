@@ -102,7 +102,7 @@ const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUT
   ~0u,  // no _weak_field_map_
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::gosun::video::VideoTrailRecRequest, videochl_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::gosun::video::VideoTrailRecRequest, timestamp_),
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::gosun::video::VideoTrailRecRequest, rgbimg_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::gosun::video::VideoTrailRecRequest, bgr24_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::gosun::video::VideoTrailRecRequest, height_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::gosun::video::VideoTrailRecRequest, width_),
   ~0u,  // no _has_bits_
@@ -145,17 +145,17 @@ void protobuf_RegisterTypes(const ::std::string&) {
 void AddDescriptorsImpl() {
   InitDefaults();
   static const char descriptor[] GOOGLE_PROTOBUF_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
-      "\n\rservice.proto\022\013gosun.video\"\006\n\004Void\"j\n\024"
+      "\n\rservice.proto\022\013gosun.video\"\006\n\004Void\"i\n\024"
       "VideoTrailRecRequest\022\020\n\010videoChl\030\001 \001(\r\022\021"
-      "\n\ttimestamp\030\002 \001(\004\022\016\n\006rgbImg\030\003 \001(\014\022\016\n\006hei"
-      "ght\030\004 \001(\r\022\r\n\005width\030\005 \001(\r\"&\n\022VideoTrailRe"
-      "cReply\022\020\n\010jsonData\030\001 \001(\t2`\n\tVideoProc\022S\n"
-      "\013TrailAndRec\022!.gosun.video.VideoTrailRec"
-      "Request\032\037.gosun.video.VideoTrailRecReply"
-      "\"\000b\006proto3"
+      "\n\ttimestamp\030\002 \001(\004\022\r\n\005bgr24\030\003 \001(\014\022\016\n\006heig"
+      "ht\030\004 \001(\r\022\r\n\005width\030\005 \001(\r\"&\n\022VideoTrailRec"
+      "Reply\022\020\n\010jsonData\030\001 \001(\t2`\n\tVideoProc\022S\n\013"
+      "TrailAndRec\022!.gosun.video.VideoTrailRecR"
+      "equest\032\037.gosun.video.VideoTrailRecReply\""
+      "\000b\006proto3"
   };
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-      descriptor, 290);
+      descriptor, 289);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "service.proto", &protobuf_RegisterTypes);
 }
@@ -360,7 +360,7 @@ void VideoTrailRecRequest::InitAsDefaultInstance() {
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int VideoTrailRecRequest::kVideoChlFieldNumber;
 const int VideoTrailRecRequest::kTimestampFieldNumber;
-const int VideoTrailRecRequest::kRgbImgFieldNumber;
+const int VideoTrailRecRequest::kBgr24FieldNumber;
 const int VideoTrailRecRequest::kHeightFieldNumber;
 const int VideoTrailRecRequest::kWidthFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
@@ -376,9 +376,9 @@ VideoTrailRecRequest::VideoTrailRecRequest(const VideoTrailRecRequest& from)
   : ::google::protobuf::Message(),
       _internal_metadata_(NULL) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  rgbimg_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  if (from.rgbimg().size() > 0) {
-    rgbimg_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.rgbimg_);
+  bgr24_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.bgr24().size() > 0) {
+    bgr24_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.bgr24_);
   }
   ::memcpy(&timestamp_, &from.timestamp_,
     static_cast<size_t>(reinterpret_cast<char*>(&width_) -
@@ -387,7 +387,7 @@ VideoTrailRecRequest::VideoTrailRecRequest(const VideoTrailRecRequest& from)
 }
 
 void VideoTrailRecRequest::SharedCtor() {
-  rgbimg_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  bgr24_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   ::memset(&timestamp_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&width_) -
       reinterpret_cast<char*>(&timestamp_)) + sizeof(width_));
@@ -399,7 +399,7 @@ VideoTrailRecRequest::~VideoTrailRecRequest() {
 }
 
 void VideoTrailRecRequest::SharedDtor() {
-  rgbimg_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  bgr24_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
 void VideoTrailRecRequest::SetCachedSize(int size) const {
@@ -422,7 +422,7 @@ void VideoTrailRecRequest::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  rgbimg_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  bgr24_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   ::memset(&timestamp_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&width_) -
       reinterpret_cast<char*>(&timestamp_)) + sizeof(width_));
@@ -467,12 +467,12 @@ bool VideoTrailRecRequest::MergePartialFromCodedStream(
         break;
       }
 
-      // bytes rgbImg = 3;
+      // bytes bgr24 = 3;
       case 3: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
             static_cast< ::google::protobuf::uint8>(26u /* 26 & 0xFF */)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
-                input, this->mutable_rgbimg()));
+                input, this->mutable_bgr24()));
         } else {
           goto handle_unusual;
         }
@@ -543,10 +543,10 @@ void VideoTrailRecRequest::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteUInt64(2, this->timestamp(), output);
   }
 
-  // bytes rgbImg = 3;
-  if (this->rgbimg().size() > 0) {
+  // bytes bgr24 = 3;
+  if (this->bgr24().size() > 0) {
     ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
-      3, this->rgbimg(), output);
+      3, this->bgr24(), output);
   }
 
   // uint32 height = 4;
@@ -583,11 +583,11 @@ void VideoTrailRecRequest::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::WriteUInt64ToArray(2, this->timestamp(), target);
   }
 
-  // bytes rgbImg = 3;
-  if (this->rgbimg().size() > 0) {
+  // bytes bgr24 = 3;
+  if (this->bgr24().size() > 0) {
     target =
       ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
-        3, this->rgbimg(), target);
+        3, this->bgr24(), target);
   }
 
   // uint32 height = 4;
@@ -617,11 +617,11 @@ size_t VideoTrailRecRequest::ByteSizeLong() const {
       ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
         (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()));
   }
-  // bytes rgbImg = 3;
-  if (this->rgbimg().size() > 0) {
+  // bytes bgr24 = 3;
+  if (this->bgr24().size() > 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::BytesSize(
-        this->rgbimg());
+        this->bgr24());
   }
 
   // uint64 timestamp = 2;
@@ -679,9 +679,9 @@ void VideoTrailRecRequest::MergeFrom(const VideoTrailRecRequest& from) {
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  if (from.rgbimg().size() > 0) {
+  if (from.bgr24().size() > 0) {
 
-    rgbimg_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.rgbimg_);
+    bgr24_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.bgr24_);
   }
   if (from.timestamp() != 0) {
     set_timestamp(from.timestamp());
@@ -721,7 +721,7 @@ void VideoTrailRecRequest::Swap(VideoTrailRecRequest* other) {
 }
 void VideoTrailRecRequest::InternalSwap(VideoTrailRecRequest* other) {
   using std::swap;
-  rgbimg_.Swap(&other->rgbimg_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+  bgr24_.Swap(&other->bgr24_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
     GetArenaNoVirtual());
   swap(timestamp_, other->timestamp_);
   swap(videochl_, other->videochl_);

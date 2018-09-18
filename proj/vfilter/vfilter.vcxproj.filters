@@ -29,6 +29,9 @@
     <ClCompile Include="..\..\vfilter\cvx_text.cc">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\vfilter\vsink.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\vfilter\vfilter.h">
@@ -40,19 +43,13 @@
     <ClInclude Include="..\..\vfilter\vsink.h">
       <Filter>源文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\vfilter\vframe.h">
-      <Filter>源文件</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\vfilter\target.h">
-      <Filter>源文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\vfilter\rgb_yuv_conv.h">
       <Filter>源文件</Filter>
     </ClInclude>
     <ClInclude Include="..\..\vfilter\cvx_text.h">
       <Filter>源文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\vfilter\avframe_cvmat_conv.h">
+    <ClInclude Include="..\..\vfilter\algo_async_caller.h">
       <Filter>源文件</Filter>
     </ClInclude>
   </ItemGroup>

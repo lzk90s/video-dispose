@@ -10,6 +10,26 @@
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\algo\gosun\vendor\seemmo\proxy\seemmo_proxy.cc" />
+    <ClCompile Include="..\..\algo\gosun\vendor\seemmo\service\rpcserver\main.cc" />
+    <ClCompile Include="..\..\algo\gosun\vendor\seemmo\service\rpcserver\server_impl.cc" />
+    <ClCompile Include="..\..\algo\gosun\vendor\seemmo\wrapper\seemmo_algo.cc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\algo\gosun\vendor\seemmo\proxy\seemmo_proxy.h" />
+    <ClInclude Include="..\..\algo\gosun\vendor\seemmo\service\rpcserver\algo_loader.h" />
+    <ClInclude Include="..\..\algo\gosun\vendor\seemmo\service\rpcserver\server.h" />
+    <ClInclude Include="..\..\algo\gosun\vendor\seemmo\wrapper\algo.h" />
+    <ClInclude Include="..\..\algo\gosun\vendor\seemmo\wrapper\filter_param_builder.h" />
+    <ClInclude Include="..\..\algo\gosun\vendor\seemmo\wrapper\filter_result_parser.h" />
+    <ClInclude Include="..\..\algo\gosun\vendor\seemmo\wrapper\rec_param_builder.h" />
+    <ClInclude Include="..\..\algo\gosun\vendor\seemmo\wrapper\rec_result_parser.h" />
+    <ClInclude Include="..\..\algo\gosun\vendor\seemmo\wrapper\setting.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\algo\gosun\vendor\seemmo\wrapper\Makefile" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{5B28DD3F-50F4-4B5C-AAB7-585F37C01ACA}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
@@ -70,7 +90,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\;..\..\thirdparty</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\;..\..\thirdparty;..\..\algo\gosun\vendor</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -79,23 +99,6 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\algo\seemmo\service\rpcserver\algo_loader.h" />
-    <ClInclude Include="..\..\algo\seemmo\service\rpcserver\server.h" />
-    <ClInclude Include="..\..\algo\seemmo\stub\seemmo_stub.h" />
-    <ClInclude Include="..\..\algo\seemmo\vendor\algo.h" />
-    <ClInclude Include="..\..\algo\seemmo\vendor\filter_param_builder.h" />
-    <ClInclude Include="..\..\algo\seemmo\vendor\filter_result_parser.h" />
-    <ClInclude Include="..\..\algo\seemmo\vendor\rec_param_builder.h" />
-    <ClInclude Include="..\..\algo\seemmo\vendor\rec_result_parser.h" />
-    <ClInclude Include="..\..\algo\seemmo\vendor\setting.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\algo\seemmo\service\rpcserver\main.cc" />
-    <ClCompile Include="..\..\algo\seemmo\service\rpcserver\server_impl.cc" />
-    <ClCompile Include="..\..\algo\seemmo\stub\seemmo_stub.cc" />
-    <ClCompile Include="..\..\algo\seemmo\vendor\seemmo_algo.cc" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

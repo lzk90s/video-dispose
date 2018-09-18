@@ -15,46 +15,49 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\algo\seemmo\service\rpcserver\algo_loader.h">
+    <ClCompile Include="..\..\algo\gosun\vendor\seemmo\proxy\seemmo_proxy.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\algo\gosun\vendor\seemmo\service\rpcserver\main.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\algo\gosun\vendor\seemmo\service\rpcserver\server_impl.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\algo\gosun\vendor\seemmo\wrapper\seemmo_algo.cc">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\algo\gosun\vendor\seemmo\wrapper\algo.h">
       <Filter>源文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\algo\seemmo\service\rpcserver\server.h">
+    <ClInclude Include="..\..\algo\gosun\vendor\seemmo\service\rpcserver\algo_loader.h">
       <Filter>源文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\algo\seemmo\stub\seemmo_stub.h">
+    <ClInclude Include="..\..\algo\gosun\vendor\seemmo\wrapper\filter_param_builder.h">
       <Filter>源文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\algo\seemmo\vendor\algo.h">
+    <ClInclude Include="..\..\algo\gosun\vendor\seemmo\wrapper\filter_result_parser.h">
       <Filter>源文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\algo\seemmo\vendor\filter_param_builder.h">
+    <ClInclude Include="..\..\algo\gosun\vendor\seemmo\wrapper\rec_param_builder.h">
       <Filter>源文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\algo\seemmo\vendor\filter_result_parser.h">
+    <ClInclude Include="..\..\algo\gosun\vendor\seemmo\wrapper\rec_result_parser.h">
       <Filter>源文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\algo\seemmo\vendor\rec_param_builder.h">
+    <ClInclude Include="..\..\algo\gosun\vendor\seemmo\proxy\seemmo_proxy.h">
       <Filter>源文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\algo\seemmo\vendor\rec_result_parser.h">
+    <ClInclude Include="..\..\algo\gosun\vendor\seemmo\service\rpcserver\server.h">
       <Filter>源文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\algo\seemmo\vendor\setting.h">
+    <ClInclude Include="..\..\algo\gosun\vendor\seemmo\wrapper\setting.h">
       <Filter>源文件</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\algo\seemmo\service\rpcserver\main.cc">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\algo\seemmo\service\rpcserver\server_impl.cc">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\algo\seemmo\stub\seemmo_stub.cc">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\algo\seemmo\vendor\seemmo_algo.cc">
-      <Filter>源文件</Filter>
-    </ClCompile>
+    <None Include="..\..\algo\gosun\vendor\seemmo\wrapper\Makefile" />
   </ItemGroup>
 </Project>

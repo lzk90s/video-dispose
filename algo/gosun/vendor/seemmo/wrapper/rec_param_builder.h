@@ -8,8 +8,9 @@
 using namespace  std;
 using json = nlohmann::json;
 
+namespace algo {
+namespace seemmo {
 namespace rec {
-
 
 typedef struct tagRecLocation {
     int32_t Type;
@@ -20,7 +21,7 @@ typedef struct tagRecLocation {
 } RecLocation;
 
 void to_json(json& j, const RecLocation& p) {
-    j = json{ { "Type", p.Type }, {"GUID", p.GUID}, { "ContextCode", p.ContextCode }, { "Rect", p.Rect }, { "Trail", p.Trail } };
+    j = json{ { "Type", p.Type },{ "GUID", p.GUID },{ "ContextCode", p.ContextCode },{ "Rect", p.Rect },{ "Trail", p.Trail } };
 }
 
 class RecParamBuilder {
@@ -58,5 +59,6 @@ public:
 private:
 
 };
-
+}
+}
 }

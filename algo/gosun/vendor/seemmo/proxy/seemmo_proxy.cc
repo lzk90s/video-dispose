@@ -11,8 +11,8 @@
 #include <grpc++/security/credentials.h>
 #include <grpc++/support/status.h>
 
-#include "algo/seemmo/service/rpc/service.pb.h"
-#include "algo/seemmo/service/rpc/service.grpc.pb.h"
+#include "seemmo/service/rpc/service.pb.h"
+#include "seemmo/service/rpc/service.grpc.pb.h"
 
 using grpc::ChannelArguments;
 using grpc::ChannelInterface;
@@ -24,20 +24,21 @@ using gosun::video::VideoProc;
 
 using namespace std;
 
+namespace algo {
+namespace seemmo {
 
-class SeemmoVideoProcClient {
+class VideoProcClient {
 public:
-    SeemmoVideoProcClient(std::shared_ptr<ChannelInterface> channel) : stub_(VideoProc::NewStub(channel)) {}
+    VideoProcClient(std::shared_ptr<ChannelInterface> channel) : stub_(VideoProc::NewStub(channel)) {}
 
-    int32_t TrailAndRec(int32_t videoChl, uint64_t timeStamp, const uint8_t *rgbImg, uint32_t height, uint32_t width) {
-        VideoTrailRecRequest request;
-
+    int32_t TrailAndRec(int32_t videoChl, uint64_t timeStamp, const uint8_t *bgr24, uint32_t height, uint32_t width) {
         gpr_timespec timespec;
-        timespec.tv_sec = 2;//设置阻塞时间为2秒
+        timespec.tv_sec = 2;	//设置阻塞时间为2秒
         timespec.tv_nsec = 0;
         timespec.clock_type = GPR_TIMESPAN;
 
-        //request.set_name(user);
+        VideoTrailRecRequest request;
+
         VideoTrailRecReply reply;
         ClientContext context;
         context.set_deadline(timespec);
@@ -56,26 +57,32 @@ private:
 };
 
 
-static SeemmoVideoProcClient *client = nullptr;
+class AlgoStub {
+public:
+    AlgoStub() {
+    }
 
-int32_t SeemmoStubOpen(const string &address) {
-    assert(!address.empty());
-    grpc_init();
-    client = new SeemmoVideoProcClient(grpc::CreateChannel(address, grpc::InsecureChannelCredentials()));
-}
+    ~AlgoStub() {
+        m_client.reset();
+    }
 
-int32_t SeemmoStubClose() {
-    if (nullptr != client) {
-        client->Shutdown();
-        delete client;
-        client = nullptr;
+    int32_t Open(string &address) {
+        assert(!address.empty());
+        grpc_init();
+        m_client.reset(new VideoProcClient(grpc::CreateChannel(address, grpc::InsecureChannelCredentials())));
+    }
+
+    int32_t Close() {
+        m_client->Shutdown();
         grpc_shutdown();
     }
-}
 
-int32_t SeemmoStubVideoTrailAndRec(int32_t videoChl, uint64_t timeStamp, const uint8_t *rgbImg, uint32_t height, uint32_t width) {
-    if (nullptr == client) {
-        return -1;
+    int32_t VideoTrailAndRec(int32_t videoChl, uint64_t timeStamp, const uint8_t *bgr24, uint32_t height, uint32_t width) {
+        return m_client->TrailAndRec(videoChl, timeStamp, bgr24, height, width);
     }
-    return client->TrailAndRec(videoChl, timeStamp, rgbImg, height, width);
+
+private:
+    shared_ptr<VideoProcClient> m_client;
+};
+}
 }

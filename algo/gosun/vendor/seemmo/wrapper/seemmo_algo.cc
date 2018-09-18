@@ -8,15 +8,18 @@
 #include "common/helper/logger.h"
 
 #include "sdk_export/sdk_export.h"
-#include "algo/seemmo/vendor/setting.h"
-#include "algo/seemmo/vendor/algo.h"
-#include "algo/seemmo/vendor/filter_param_builder.h"
-#include "algo/seemmo/vendor/filter_result_parser.h"
-#include "algo/seemmo/vendor/rec_param_builder.h"
-#include "algo/seemmo/vendor/rec_result_parser.h"
+#include "seemmo/wrapper/setting.h"
+#include "seemmo/wrapper/algo.h"
+#include "seemmo/wrapper/filter_param_builder.h"
+#include "seemmo/wrapper/filter_result_parser.h"
+#include "seemmo/wrapper/rec_param_builder.h"
+#include "seemmo/wrapper/rec_result_parser.h"
 
 using json = nlohmann::json;
 using namespace std;
+
+namespace algo {
+namespace seemmo {
 
 class TrailWorker {
 public:
@@ -28,7 +31,8 @@ public:
         cw.wait();
     }
 
-    future<shared_ptr<trail::TrailResponseMsg>> commitAsyncTask(int32_t videoChl, uint64_t timeStamp, const uint8_t *rgbImg, uint32_t height, uint32_t width, const string &param) {
+    future<shared_ptr<trail::TrailResponseMsg>> commitAsyncTask(int32_t videoChl, uint64_t timeStamp, const uint8_t *rgbImg,
+    uint32_t height, uint32_t width, const string &param) {
         return tp.commit(trail, videoChl, timeStamp, rgbImg, height, width, param);
     }
 
@@ -36,7 +40,7 @@ private:
     void threadInitProc() {
         LOG_INFO("Begin to init trail thread");
 
-        int ret = seemmo_thread_init(SEEMMO_LOAD_TYPE_FILTER, ALGO_SETTING().seemideoCfg.devId, 1);
+        int ret = seemmo_thread_init(SEEMMO_LOAD_TYPE_FILTER, ALGO_SETTING().config.devId, 1);
         if (0 != ret) {
             LOG_ERROR("Failed to init trail thread, ret {}", ret);
         }
@@ -50,7 +54,8 @@ private:
         LOG_INFO("Succeed to destroy trail thread");
     }
 
-    static shared_ptr<trail::TrailResponseMsg> trail(int32_t videoChl, uint64_t timeStamp, const uint8_t *rgbImg, uint32_t height, uint32_t width,  const string &param) {
+    static shared_ptr<trail::TrailResponseMsg> trail(int32_t videoChl, uint64_t timeStamp, const uint8_t *rgbImg,
+            uint32_t height, uint32_t width, const string &param) {
         const int BUF_LEN = 1024 * 1024 * 10;
         char* rspBuf = new char[BUF_LEN] {0};
         int32_t rspLen = BUF_LEN;
@@ -84,7 +89,8 @@ public:
         cw.wait();
     }
 
-    future<shared_ptr<rec::RecResponseMsg>> CommitAsyncTask(const uint8_t *rgbImg, uint32_t height, uint32_t width, const string &param) {
+    future<shared_ptr<rec::RecResponseMsg>> CommitAsyncTask(const uint8_t *rgbImg, uint32_t height, uint32_t width,
+    const string &param) {
         return tp.commit(rec, rgbImg, height, width, param);
     }
 
@@ -92,7 +98,7 @@ private:
     void threadInitProc() {
         LOG_INFO("Begin to init recognize thread");
 
-        int ret = seemmo_thread_init(SEEMMO_LOAD_TYPE_RECOG, ALGO_SETTING().seemideoCfg.devId, 1);
+        int ret = seemmo_thread_init(SEEMMO_LOAD_TYPE_RECOG, ALGO_SETTING().config.devId, 1);
         if (0 != ret) {
             LOG_ERROR("Failed to init recognize thread, ret {}", ret);
         }
@@ -106,7 +112,8 @@ private:
         LOG_INFO("Succeed to destroy recognize thread");
     }
 
-    static shared_ptr<rec::RecResponseMsg> rec(const uint8_t *rgbImg, uint32_t height, uint32_t width, const string &param) {
+    static shared_ptr<rec::RecResponseMsg> rec(const uint8_t *rgbImg, uint32_t height, uint32_t width,
+            const string &param) {
         const int BUF_LEN = 1024 * 1024 * 10;
         char* rspBuf = new char[BUF_LEN] {0};
         int32_t rspLen = BUF_LEN;
@@ -133,9 +140,9 @@ private:
 };
 
 
-class SeemideoAlgo {
+class Algo {
 public:
-    SeemideoAlgo() {
+    Algo() {
     }
 
     int32_t Init(const string &cfg) {
@@ -144,11 +151,11 @@ public:
         LOG_INFO("Begin to init seemmo sdk");
 
         INVOKE_RETURN_IF_FAIL(
-            seemmo_process_init(ALGO_SETTING().seemideoCfg.baseDir.c_str(),
-                                ALGO_SETTING().seemideoCfg.imgCoreNum,
-                                ALGO_SETTING().seemideoCfg.videoCoreNum,
-                                ALGO_SETTING().seemideoCfg.authServer.c_str(),
-                                ALGO_SETTING().seemideoCfg.authType,
+            seemmo_process_init(ALGO_SETTING().config.baseDir.c_str(),
+                                ALGO_SETTING().config.imgCoreNum,
+                                ALGO_SETTING().config.videoCoreNum,
+                                ALGO_SETTING().config.authServer.c_str(),
+                                ALGO_SETTING().config.authType,
                                 true),
             "Seemmo process init"
         );
@@ -171,24 +178,21 @@ public:
         return seemmo_uninit();
     }
 
-    int32_t TrailAndRec(int32_t videoChl, uint64_t timeStamp, const uint8_t *rgbImg, uint32_t height, uint32_t width) {
+    int32_t TrailAndRec(int32_t videoChl, uint64_t timeStamp, const uint8_t *rgbImg, uint32_t height, uint32_t width,
+                        char *rspJson, uint32_t &rspLen) {
         CountTimer timer("TrailAndRec");
 
-        future<shared_ptr<trail::TrailResponseMsg>> f1 = trailWorker->commitAsyncTask(videoChl, timeStamp, rgbImg, height, width, trail::FilterParamBuilder().Build());
+        future<shared_ptr<trail::TrailResponseMsg>> f1 = trailWorker->commitAsyncTask(videoChl, timeStamp, rgbImg, height,
+                width, trail::FilterParamBuilder().Build());
         shared_ptr<trail::TrailResponseMsg> trailRsp = f1.get();
         if (nullptr == trailRsp) {
             LOG_ERROR("Null trail response");
-            return E_FAIL;
+            return E_NPE;
         }
 
         if (trailRsp->Code != 0) {
             LOG_ERROR("Seemmo trail return error {}, {}", trailRsp->Code, trailRsp->Message);
             return trailRsp->Code;
-        }
-
-        if (trailRsp->FilterResults.empty()) {
-            LOG_DEBUG("No trail object, ignore");
-            return E_OK;
         }
 
         vector<rec::RecLocation> locations;
@@ -210,22 +214,21 @@ public:
             }
         }
 
-        if (locations.empty()) {
-            LOG_DEBUG("Trail location is empty, ignore");
-            return E_OK;
+        if (!locations.empty()) {
+            future<shared_ptr<rec::RecResponseMsg>> f2 = recWorker->CommitAsyncTask(rgbImg, height, width,
+                                                 rec::RecParamBuilder().Build(locations));
+            shared_ptr<rec::RecResponseMsg> recRsp = f2.get();
+            if (nullptr == recRsp) {
+                LOG_ERROR("Null recognize response");
+                return E_NPE;
+            }
+
+            if (recRsp->Code != 0) {
+                LOG_ERROR("Seemmo recognize return error {}, {}", recRsp->Code, recRsp->Message);
+                return recRsp->Code;
+            }
         }
 
-        future<shared_ptr<rec::RecResponseMsg>> f2 = recWorker->CommitAsyncTask(rgbImg, height, width, rec::RecParamBuilder().Build(locations));
-        shared_ptr<rec::RecResponseMsg> recRsp = f2.get();
-        if (nullptr == recRsp) {
-            LOG_ERROR("Null recognize response");
-            return E_FAIL;
-        }
-
-        if (recRsp->Code != 0) {
-            LOG_ERROR("Seemmo recognize return error {}, {}", recRsp->Code,  recRsp->Message);
-            return recRsp->Code;
-        }
 
         return E_OK;
     }
@@ -246,16 +249,22 @@ private:
     shared_ptr<RecWorker> recWorker;
 };
 
-typedef Singleton<SeemideoAlgo> SeemideoAlgoSingleton;
+typedef Singleton<Algo> AlgoSingleton;
 
 int32_t Algo_Init(const char *cfg) {
-    return SeemideoAlgoSingleton::getInstance().Init(cfg);
+    return algo::seemmo::AlgoSingleton::getInstance().Init(cfg);
 }
 
 int32_t Algo_Destroy(void) {
-    return SeemideoAlgoSingleton::getInstance().Destroy();
+    return algo::seemmo::AlgoSingleton::getInstance().Destroy();
 }
 
-int32_t Algo_VideoTrailAndRec(int32_t videoChl, uint64_t timeStamp, const uint8_t *rgbImg, uint32_t height, uint32_t width) {
-    SeemideoAlgoSingleton::getInstance().TrailAndRec(videoChl, timeStamp, rgbImg, height, width);
+int32_t Algo_VideoTrailAndRec(int32_t videoChl, uint64_t timeStamp, const uint8_t *rgbImg, uint32_t height,
+                              uint32_t width, char *rspJson, uint32_t &rspLen) {
+    algo::seemmo::AlgoSingleton::getInstance().TrailAndRec(videoChl, timeStamp, rgbImg, height, width, rspJson, rspLen);
 }
+
+}
+}
+
+

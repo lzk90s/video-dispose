@@ -1,7 +1,7 @@
-TOP_DIR=../../../
+TOP_DIR=../../../../../
 
-MODULE_NAME=seemmo_algo_service
-MODULE_SUFFIX=
+MODULE_NAME=libseemmo_proxy
+MODULE_SUFFIX=.so
 
 OUT_PKG_DIR=$(TOP_DIR)/pkg
 OUT_OBJ_DIR = $(TOP_DIR)/obj
@@ -10,7 +10,8 @@ TARGET=$(OUT_PKG_DIR)/$(MODULE_NAME)$(MODULE_SUFFIX)
 CXX = g++
 AR = ar
 
-INC = -I$(TOP_DIR) -I$(TOP_DIR)/thirdparty -I$(TOP_DIR)/common
+VENDOR_DIR=$(TOP_DIR)/algo/gosun/vendor
+INC =-I$(VENDOR_DIR) -I$(TOP_DIR) -I$(TOP_DIR)/thirdparty -I$(TOP_DIR)/common
 LIB = `pkg-config --libs grpc++ grpc` -Wl,--as-needed -lgrpc -lprotobuf -lpthread -ldl
 
 CXX_FLAGS = $(INC) -std=c++11 -fPIC
@@ -48,7 +49,7 @@ $(DEPS) : $(OUT_OBJ_DIR)/%$(SRC_SUFFIX).d : %$(SRC_SUFFIX)
 
 install: $(TARGET)
 	@mkdir -p $(TOP_DIR)/pkg
-	@cp resource/* $(OUT_PKG_DIR) -rf
+	#@cp $(TARGET) $(OUT_PKG_DIR) -rf
 
 clean:
 	@rm -rf $(OUT_OBJ_DIR)
