@@ -1,0 +1,11 @@
+*.exe
+*.sdf
+Release/
+Debug/
+*.log
+*.opensdf
+*.suo
+obj/
+pkg/
+.vs/
+thirdparty/opencv
