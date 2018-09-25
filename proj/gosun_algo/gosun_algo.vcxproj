@@ -70,6 +70,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>..\..\;..\..\thirdparty</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -79,7 +80,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\algo\gosun\stub\gosun_stub.h" />
+    <ClCompile Include="..\..\algo\gosun\service\algo_service.cpp" />
+    <ClCompile Include="..\..\algo\gosun\stub\algo_stub.cc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\algo\gosun\stub\algo_stub.h" />
+    <ClInclude Include="..\..\algo\gosun\stub\object_type.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

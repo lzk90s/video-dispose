@@ -11,24 +11,33 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\algo\gosun\vendor\seemmo\proxy\seemmo_proxy.cc" />
-    <ClCompile Include="..\..\algo\gosun\vendor\seemmo\service\rpcserver\main.cc" />
-    <ClCompile Include="..\..\algo\gosun\vendor\seemmo\service\rpcserver\server_impl.cc" />
-    <ClCompile Include="..\..\algo\gosun\vendor\seemmo\wrapper\seemmo_algo.cc" />
+    <ClInclude Include="..\..\algo\vendor\seemmo\rpc\service.grpc.pb.h" />
+    <ClInclude Include="..\..\algo\vendor\seemmo\rpc\service.pb.h" />
+    <ClInclude Include="..\..\algo\vendor\seemmo\server\algo_loader.h" />
+    <ClInclude Include="..\..\algo\vendor\seemmo\server\server.h" />
+    <ClInclude Include="..\..\algo\vendor\seemmo\server\setting.h" />
+    <ClInclude Include="..\..\algo\vendor\seemmo\stub_impl\detect_result_parser.h" />
+    <ClInclude Include="..\..\algo\vendor\seemmo\stub_impl\filter_param_builder.h" />
+    <ClInclude Include="..\..\algo\vendor\seemmo\stub_impl\filter_result_parser.h" />
+    <ClInclude Include="..\..\algo\vendor\seemmo\stub_impl\rec_param_builder.h" />
+    <ClInclude Include="..\..\algo\vendor\seemmo\stub_impl\rec_result_parser.h" />
+    <ClInclude Include="..\..\algo\vendor\seemmo\stub_impl\seemmo_stub.h" />
+    <ClInclude Include="..\..\algo\vendor\seemmo\wrapper\algo_wrapper.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\algo\gosun\vendor\seemmo\proxy\seemmo_proxy.h" />
-    <ClInclude Include="..\..\algo\gosun\vendor\seemmo\service\rpcserver\algo_loader.h" />
-    <ClInclude Include="..\..\algo\gosun\vendor\seemmo\service\rpcserver\server.h" />
-    <ClInclude Include="..\..\algo\gosun\vendor\seemmo\wrapper\algo.h" />
-    <ClInclude Include="..\..\algo\gosun\vendor\seemmo\wrapper\filter_param_builder.h" />
-    <ClInclude Include="..\..\algo\gosun\vendor\seemmo\wrapper\filter_result_parser.h" />
-    <ClInclude Include="..\..\algo\gosun\vendor\seemmo\wrapper\rec_param_builder.h" />
-    <ClInclude Include="..\..\algo\gosun\vendor\seemmo\wrapper\rec_result_parser.h" />
-    <ClInclude Include="..\..\algo\gosun\vendor\seemmo\wrapper\setting.h" />
+    <None Include="..\..\algo\vendor\seemmo\Makefile_stub" />
+    <None Include="..\..\algo\vendor\seemmo\rpc\protoc.sh" />
+    <None Include="..\..\algo\vendor\seemmo\rpc\service.proto" />
+    <None Include="..\..\algo\vendor\seemmo\server\protoc.sh" />
+    <None Include="..\..\algo\vendor\seemmo\wrapper\Makefile" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\algo\gosun\vendor\seemmo\wrapper\Makefile" />
+    <ClCompile Include="..\..\algo\vendor\seemmo\rpc\service.grpc.pb.cc" />
+    <ClCompile Include="..\..\algo\vendor\seemmo\rpc\service.pb.cc" />
+    <ClCompile Include="..\..\algo\vendor\seemmo\server\main.cc" />
+    <ClCompile Include="..\..\algo\vendor\seemmo\server\server_impl.cc" />
+    <ClCompile Include="..\..\algo\vendor\seemmo\stub_impl\seemmo_stub.cc" />
+    <ClCompile Include="..\..\algo\vendor\seemmo\wrapper\algo_wrapper.cc" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{5B28DD3F-50F4-4B5C-AAB7-585F37C01ACA}</ProjectGuid>

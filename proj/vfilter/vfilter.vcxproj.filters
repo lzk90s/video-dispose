@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="源文件\mixer">
+      <UniqueIdentifier>{cffbb90f-f6f6-4d02-8edb-eec93741a82c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\vfilter\Makefile">
@@ -23,34 +26,43 @@
     <ClCompile Include="..\..\vfilter\vfilter.cc">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\vfilter\vmixer.cc">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\vfilter\cvx_text.cc">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\vfilter\vsink.cc">
       <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\vfilter\mixer\cvx_text.cc">
+      <Filter>源文件\mixer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\vfilter\vfilter.h">
       <Filter>源文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\vfilter\vmixer.h">
-      <Filter>源文件</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\vfilter\vsink.h">
       <Filter>源文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\vfilter\target.h">
+    <ClInclude Include="..\..\vfilter\app.h">
       <Filter>源文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\vfilter\cvx_text.h">
+    <ClInclude Include="..\..\vfilter\frame_cache.h">
       <Filter>源文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\vfilter\algo_async_caller.h">
+    <ClInclude Include="..\..\vfilter\async_algo_proc.h">
       <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\vfilter\mixer\vmixer.h">
+      <Filter>源文件\mixer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\vfilter\mixer\cvx_text.h">
+      <Filter>源文件\mixer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\vfilter\mixer\vehicle_mixer.h">
+      <Filter>源文件\mixer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\vfilter\mixer\person_mixer.h">
+      <Filter>源文件\mixer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\vfilter\mixer\bike_mixer.h">
+      <Filter>源文件\mixer</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

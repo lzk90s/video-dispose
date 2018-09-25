@@ -7,7 +7,7 @@
     </Filter>
     <Filter Include="头文件">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
     <Filter Include="资源文件">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
@@ -15,19 +15,21 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\algo\gosun\service\algo_service.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\algo\gosun\stub\algo_stub.cc">
+    <ClCompile Include="..\..\algo\stub\algo_stub.cc">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\algo\gosun\stub\algo_stub.h">
+    <ClInclude Include="..\..\algo\stub\algo_stub.h">
       <Filter>源文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\algo\gosun\stub\object_type.h">
+    <ClInclude Include="..\..\algo\stub\object_type.h">
       <Filter>源文件</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\algo\stub\Makefile">
+      <Filter>源文件</Filter>
+    </None>
   </ItemGroup>
 </Project>

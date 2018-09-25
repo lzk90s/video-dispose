@@ -83,17 +83,20 @@
     <None Include="..\..\vfilter\Makefile" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\vfilter\cvx_text.cc" />
+    <ClCompile Include="..\..\vfilter\mixer\cvx_text.cc" />
     <ClCompile Include="..\..\vfilter\vfilter.cc" />
-    <ClCompile Include="..\..\vfilter\vmixer.cc" />
     <ClCompile Include="..\..\vfilter\vsink.cc" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\vfilter\algo_async_caller.h" />
-    <ClInclude Include="..\..\vfilter\cvx_text.h" />
-    <ClInclude Include="..\..\vfilter\target.h" />
+    <ClInclude Include="..\..\vfilter\async_algo_proc.h" />
+    <ClInclude Include="..\..\vfilter\app.h" />
+    <ClInclude Include="..\..\vfilter\frame_cache.h" />
+    <ClInclude Include="..\..\vfilter\mixer\bike_mixer.h" />
+    <ClInclude Include="..\..\vfilter\mixer\cvx_text.h" />
+    <ClInclude Include="..\..\vfilter\mixer\person_mixer.h" />
+    <ClInclude Include="..\..\vfilter\mixer\vehicle_mixer.h" />
+    <ClInclude Include="..\..\vfilter\mixer\vmixer.h" />
     <ClInclude Include="..\..\vfilter\vfilter.h" />
-    <ClInclude Include="..\..\vfilter\vmixer.h" />
     <ClInclude Include="..\..\vfilter\vsink.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

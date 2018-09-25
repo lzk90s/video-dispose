@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package algo.seemmo;
+
+message Void {
+}
+
+message TrailRequest {
+    uint32 videoChl = 1;
+    uint64 timestamp = 2;
+    bytes bgr24 = 3;
+    uint32 height = 4;
+    uint32 width = 5;
+    string param = 6;
+}
+
+message TrailReply {
+    string data = 1;
+}
+
+message RecognizeRequest{
+    bytes bgr24 = 1;
+    uint32 height = 2;
+    uint32 width = 3;
+    string param = 4;
+}
+
+message RecognizeReply{
+    string data = 1;
+}
+
+service VideoProc{
+    rpc Trail(TrailRequest) returns (TrailReply) {}
+    rpc Recognize(RecognizeRequest) returns (RecognizeReply){}
+}

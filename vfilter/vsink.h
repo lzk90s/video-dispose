@@ -8,35 +8,32 @@
 #include <mutex>
 
 #include "opencv/cv.h"
-#include "vfilter/vmixer.h"
-#include "vfilter/target.h"
+#include "vfilter/async_algo_proc.h"
+#include "vfilter/mixer/bike_mixer.h"
+#include "vfilter/mixer/person_mixer.h"
+#include "vfilter/mixer/vehicle_mixer.h"
 
 using namespace std;
 
 namespace vf {
 
-class VSink {
+class VSink : public AsyncAlgoProcessor {
 public:
-    // 抽帧时间间隔（毫秒）
-    const static int32_t FRAME_PICK_INTERNAL_MS = 200;
-    // 缓存的最大帧数(5分钟的帧数)
-    const static int32_t FRAME_CACHE_MAX_NUM = 5 * (1000 / FRAME_PICK_INTERNAL_MS);
-
-public:
-    VSink();
+    VSink(uint32_t channelId);
 
     // 接收到一帧数据
     int32_t OnReceivedFrame(cv::Mat &frame);
 
-    // 接收到算法的响应
-    int32_t OnReceivedAlgoReply();
+
+protected:
+    void OnAlgoDetectReply(DetectResult &detectResult) override;
+
+    void OnAlgoFilterReply(FilterResult &filterResult) override;
+
+    void OnAlgoRecognizeReply(RecogResult &recResult) override;
 
 private:
     bool needPickFrame();
-
-    void pickFrame(cv::Mat &frame);
-
-    void cacheFrame(cv::Mat &frame);
 
     void mixFrame(cv::Mat &frame);
 
@@ -44,12 +41,11 @@ private:
     chrono::steady_clock::time_point lastTime_;
     chrono::steady_clock::time_point currTime_;
 
-    VMixer vmixer_;
+    uint32_t channelId_;
 
-    deque<cv::Mat> frameCache_;
-    mutex frameCacheMutex_;
-    TargetMap targetMap_;
-    mutex targetMapMutex_;
+    VehicleMixer vehicleMixer_;
+    BikeMixer bikeMixer_;
+    PersonMixer personMixer_;
 };
 
 }

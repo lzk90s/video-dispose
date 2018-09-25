@@ -12,8 +12,17 @@
 #include "libswscale/swscale.h"
 #include "libavformat/avformat.h"
 
-#include "vfilter.h"
+#include <dlfcn.h>
 
+typedef int32_t (*PF_VFilter_Init)();
+typedef int32_t (*PF_VFilter_Destroy)();
+typedef int32_t (*PF_VFilter_Routine)(uint32_t channelId, uint8_t *bgr24, uint32_t width, uint32_t height);
+
+static void *handle = NULL;
+const static char *VFILTER_DLL_NAME = "libvideo_filter.so";
+static PF_VFilter_Init pf_VFilter_Init = NULL;
+static PF_VFilter_Destroy pf_VFilter_Destroy = NULL;
+static PF_VFilter_Routine pf_VFilter_Routine = NULL;
 
 typedef struct TransformContext {
     const AVClass *class;
@@ -166,7 +175,8 @@ static int do_conversion(AVFilterContext *ctx, void *arg, int jobnr,
     AVFrame *src = td->in;
 
     // video filter, data[0] (bgr24 data)
-    VFilter_Routine(src->data[0], src->width, src->height);
+    int32_t channelId = 0;
+    pf_VFilter_Routine(channelId, src->data[0], src->width, src->height);
 
     // copy video
     frame_copy_video(dst, src);
@@ -218,14 +228,36 @@ static av_cold int config_output(AVFilterLink *outlink) {
 static av_cold int init(AVFilterContext *ctx) {
     av_log(NULL, AV_LOG_DEBUG, "init \n");
     //TransformContext *privCtx = ctx->priv;
-    //init something here if you want
+    handle = dlopen(VFILTER_DLL_NAME, RTLD_LAZY);
+    if (NULL == handle) {
+        av_log(NULL, AV_LOG_ERROR, "load library %s failed, error %s\n", VFILTER_DLL_NAME, dlerror());
+        return AVERROR(EINVAL);
+    }
+
+    pf_VFilter_Init = (PF_VFilter_Init)dlsym(handle, "VFilter_Init");
+    pf_VFilter_Destroy = (PF_VFilter_Destroy)dlsym(handle, "VFilter_Destroy");
+    pf_VFilter_Routine = (PF_VFilter_Routine)dlsym(handle, "VFilter_Routine");
+
+    if (NULL == pf_VFilter_Init || NULL == pf_VFilter_Destroy || NULL == pf_VFilter_Routine) {
+        av_log(NULL, AV_LOG_ERROR, "no symbol found in library, %p, %p, %p\n", pf_VFilter_Init, pf_VFilter_Destroy,
+               pf_VFilter_Routine);
+        return AVERROR(EINVAL);
+    }
+
+    int ret = pf_VFilter_Init();
+    if (0 != ret) {
+        av_log(NULL, AV_LOG_ERROR, "failed to init vf\n");
+        return AVERROR(ret);
+    }
     return 0;
 }
 
 static av_cold void uninit(AVFilterContext *ctx) {
     av_log(NULL, AV_LOG_DEBUG, "uninit \n");
     //TransformContext *privCtx = ctx->priv;
-    //uninit something here if you want
+    if (NULL != pf_VFilter_Destroy) {
+        pf_VFilter_Destroy();
+    }
 }
 
 //currently we just support the most common YUV420, can add more if needed

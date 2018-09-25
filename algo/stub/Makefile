@@ -1,9 +1,8 @@
-TOP_DIR=../
+TOP_DIR=../../
 
-MODULE_NAME=libvideo_filter
+MODULE_NAME=libalgo_stub
 MODULE_SUFFIX=.so
 
-INSTALL_PREFIX=/usr/local
 OUT_PKG_DIR=$(TOP_DIR)/pkg
 OUT_OBJ_DIR = $(TOP_DIR)/obj
 TARGET=$(OUT_PKG_DIR)/$(MODULE_NAME)$(MODULE_SUFFIX)
@@ -11,22 +10,23 @@ TARGET=$(OUT_PKG_DIR)/$(MODULE_NAME)$(MODULE_SUFFIX)
 CXX = g++
 AR = ar
 
-INC =-I$(TOP_DIR) -I$(TOP_DIR)/thirdparty -I$(TOP_DIR)/common -I$(TOP_DIR)/thirdparty/libyuv/include `pkg-config --cflags opencv freetype2`
-LIB = -L$(TOP_DIR)/pkg `pkg-config --libs freetype2` -lpthread -ldl -lstdc++ -lopencv_core -lopencv_imgproc -lippicv -lalgo_stub 
+INC = -I$(TOP_DIR) -I$(TOP_DIR)/thirdparty 
+LIB = -L$(TOP_DIR) -L$(TOP_DIR)/pkg -lseemmo_stub_impl
+
 
 CXX_FLAGS = $(INC) -std=c++11 -fPIC
 LD_FLAGS = $(LIB)
 
-#ifdef DEBUG
-CXX_FLAGS += -g -O0
-#endif
+ifdef DEBUG
+CXX_FLAGS += -g
+endif
 
 SRC_SUFFIX=.cc
 SRC_PATH=$(shell find . -type f -name "*$(SRC_SUFFIX)")
 OBJS = $(addprefix $(OUT_OBJ_DIR)/,$(subst $(SRC_SUFFIX),.o,$(SRC_PATH)))
 
 
-
+MAKE_PKG_DIR := $(shell mkdir -p $(OUT_PKG_DIR))
 MAKE_OBJECT_DIR := $(foreach f, $(OBJS), $(shell mkdir -p $(dir $f)))
 
 default: $(TARGET)
@@ -47,10 +47,10 @@ DEPS = $(OBJS:.o=$(SRC_SUFFIX).d)
 $(DEPS) : $(OUT_OBJ_DIR)/%$(SRC_SUFFIX).d : %$(SRC_SUFFIX)
 	$(CXX) $(CXX_FLAGS) $< -MM > $(OUT_OBJ_DIR)/$<.d
 
-install: $(TARGET)
-	@mkdir -p $(TOP_DIR)/pkg
-	cp $(TARGET) $(INSTALL_PREFIX)/lib -rf
-	cp vfilter.h $(INSTALL_PREFIX)/include	-f
+#install: $(TARGET)
+#	@mkdir -p $(TOP_DIR)/pkg
+#	@cp $(TARGET) $(OUT_PKG_DIR) -rf
+#	@cp resource/* $(OUT_PKG_DIR) -rf
 
 clean:
 	@rm -rf $(OUT_OBJ_DIR)
