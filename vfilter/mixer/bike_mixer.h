@@ -4,10 +4,12 @@
 #include <string>
 #include <mutex>
 
+#include "common/helper/logger.h"
 #include "algo/stub/object_type.h"
 #include "vfilter/mixer/vmixer.h"
 
 using namespace std;
+using namespace algo;
 
 namespace vf {
 class BikeMixer : public VMixer {

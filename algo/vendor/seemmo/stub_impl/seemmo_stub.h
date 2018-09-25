@@ -1,6 +1,8 @@
 #pragma once
 
 #include <memory>
+#include <string>
+#include <vector>
 
 #include "algo/stub/algo_stub.h"
 
@@ -9,9 +11,31 @@ using namespace  std;
 namespace algo {
 namespace seemmo {
 
-algo::AlgoStub* NewAlgoStub();
+class SeemmoAlgoStub : public algo::AlgoStub {
+public:
+    SeemmoAlgoStub();
 
-void FreeAlgoStub(algo::AlgoStub *&stub);
+    ~SeemmoAlgoStub();
+
+    int32_t Trail(
+        uint32_t channelId,
+        uint64_t frameId,
+        uint8_t *bgr24,
+        uint32_t width,
+        uint32_t height,
+        const TrailParam &param,
+        DetectResult &detect,
+        FilterResult &filter
+    ) override;
+
+    int32_t Recognize(
+        uint8_t *bgr24,
+        uint32_t width,
+        uint32_t height,
+        const RecogParam &param,
+        RecogResult &rec
+    ) override;
+};
 
 }
 }

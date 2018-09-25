@@ -4,23 +4,37 @@
 #include <dlfcn.h>
 #include <cstdint>
 
-#include "algo/vendor/seemmo/server/setting.h"
+#include "common/helper/logger.h"
 
 using namespace std;
 
 namespace algo {
 namespace seemmo {
 
-typedef int32_t (*PF_Seemmo_AlgoInit)(const char *basedir, uint32_t imgCoreNum, uint32_t videoCoreNum,
-                                      const char *authServer, uint32_t authType, uint32_t hwDevId);
+typedef int32_t (*PF_Seemmo_AlgoInit)(const char *basedir,
+                                      uint32_t imgCoreNum,
+                                      uint32_t videoCoreNum,
+                                      const char *authServer,
+                                      uint32_t authType,
+                                      uint32_t hwDevId);
 
 typedef int32_t (*PF_Seemmo_AlgoDestroy)(void);
 
-typedef int32_t (*PF_Seemmo_AlgoTrail)(int32_t videoChl, uint64_t timestamp, const uint8_t *bgr24, uint32_t width,
-                                       uint32_t height, const char *param, char *jsonRsp, uint32_t &rspLen);
+typedef int32_t (*PF_Seemmo_AlgoTrail)(int32_t videoChl,
+                                       uint64_t timestamp,
+                                       const uint8_t *bgr24,
+                                       uint32_t width,
+                                       uint32_t height,
+                                       const char *param,
+                                       char *jsonRsp,
+                                       uint32_t &rspLen);
 
-typedef int32_t (*PF_Seemmo_AlgoRecognize)(const uint8_t *bgr24, uint32_t width, uint32_t height, const char *param,
-        char *jsonRsp, uint32_t &rspLen);
+typedef int32_t (*PF_Seemmo_AlgoRecognize)(const uint8_t *bgr24,
+        uint32_t width,
+        uint32_t height,
+        const char *param,
+        char *jsonRsp,
+        uint32_t &rspLen);
 
 
 class AlgoLoader {
@@ -28,23 +42,24 @@ public:
     const char* ALGO_DLL_NAME = "libseemmo_wrapper.so";
 
     AlgoLoader()
-        : handle_(nullptr), pf_Seemmo_AlgoInit_(nullptr), pf_Seemmo_AlgoDestroy_(nullptr), pf_Seemmo_AlgoTrail_(nullptr),
+        : handle_(nullptr),
+          pf_Seemmo_AlgoInit_(nullptr),
+          pf_Seemmo_AlgoDestroy_(nullptr),
+          pf_Seemmo_AlgoTrail_(nullptr),
           pf_Seemmo_AlgoRecognize_(nullptr) {
     }
 
     ~AlgoLoader() {
-        if (nullptr != handle_) {
-            dlclose(handle_);
-            pf_Seemmo_AlgoInit_ = nullptr;
-            pf_Seemmo_AlgoDestroy_ = nullptr;
-            pf_Seemmo_AlgoTrail_ = nullptr;
-            pf_Seemmo_AlgoRecognize_ = nullptr;
-            handle_ = nullptr;
-        }
+        Unload();
     }
 
-    void Load(const string &algoCfgPath) {
-        ALGO_SETTING().Init(algoCfgPath);
+    void Load(const string &baseDir,
+              uint32_t imgCoreNum,
+              uint32_t videoCoreNum,
+              uint32_t authType,
+              const string &authServer,
+              uint32_t gpuDevId) {
+        LOG_INFO("Load algo {}", ALGO_DLL_NAME);
 
         handle_ = dlopen(ALGO_DLL_NAME, RTLD_LAZY);
         if (nullptr == handle_) {
@@ -61,11 +76,24 @@ public:
             throw runtime_error("invalid symbol in dll");
         }
 
-        int ret = pf_Seemmo_AlgoInit_(ALGO_SETTING().config.baseDir.c_str(), ALGO_SETTING().config.imgCoreNum,
-                                      ALGO_SETTING().config.videoCoreNum,ALGO_SETTING().config.authServer.c_str(),
-                                      ALGO_SETTING().config.authType,ALGO_SETTING().config.devId);
+        int ret = pf_Seemmo_AlgoInit_(baseDir.c_str(), imgCoreNum,videoCoreNum, authServer.c_str(),authType,gpuDevId);
         if (0 != ret) {
             throw runtime_error("init algorithm error, ret " + std::to_string(ret));
+        }
+    }
+
+    void Unload() {
+        if (nullptr != pf_Seemmo_AlgoDestroy_ && nullptr != handle_) {
+            LOG_INFO("Unload algo");
+
+            pf_Seemmo_AlgoDestroy_();
+
+            dlclose(handle_);
+            pf_Seemmo_AlgoInit_ = nullptr;
+            pf_Seemmo_AlgoDestroy_ = nullptr;
+            pf_Seemmo_AlgoTrail_ = nullptr;
+            pf_Seemmo_AlgoRecognize_ = nullptr;
+            handle_ = nullptr;
         }
     }
 

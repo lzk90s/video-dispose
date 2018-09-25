@@ -29,6 +29,7 @@
 #include <google/protobuf/message.h>
 #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
 #include <google/protobuf/extension_set.h>  // IWYU pragma: export
+#include <google/protobuf/service.h>
 #include <google/protobuf/unknown_field_set.h>
 // @@protoc_insertion_point(includes)
 #define PROTOBUF_INTERNAL_EXPORT_protobuf_service_2eproto 
@@ -38,7 +39,7 @@ namespace protobuf_service_2eproto {
 struct TableStruct {
   static const ::google::protobuf::internal::ParseTableField entries[];
   static const ::google::protobuf::internal::AuxillaryParseTableField aux[];
-  static const ::google::protobuf::internal::ParseTable schema[5];
+  static const ::google::protobuf::internal::ParseTable schema[4];
   static const ::google::protobuf::internal::FieldMetadata field_metadata[];
   static const ::google::protobuf::internal::SerializationTable serialization_table[];
   static const ::google::protobuf::uint32 offsets[];
@@ -59,9 +60,6 @@ extern TrailReplyDefaultTypeInternal _TrailReply_default_instance_;
 class TrailRequest;
 class TrailRequestDefaultTypeInternal;
 extern TrailRequestDefaultTypeInternal _TrailRequest_default_instance_;
-class Void;
-class VoidDefaultTypeInternal;
-extern VoidDefaultTypeInternal _Void_default_instance_;
 }  // namespace seemmo
 }  // namespace algo
 namespace google {
@@ -70,109 +68,12 @@ template<> ::algo::seemmo::RecognizeReply* Arena::CreateMaybeMessage<::algo::see
 template<> ::algo::seemmo::RecognizeRequest* Arena::CreateMaybeMessage<::algo::seemmo::RecognizeRequest>(Arena*);
 template<> ::algo::seemmo::TrailReply* Arena::CreateMaybeMessage<::algo::seemmo::TrailReply>(Arena*);
 template<> ::algo::seemmo::TrailRequest* Arena::CreateMaybeMessage<::algo::seemmo::TrailRequest>(Arena*);
-template<> ::algo::seemmo::Void* Arena::CreateMaybeMessage<::algo::seemmo::Void>(Arena*);
 }  // namespace protobuf
 }  // namespace google
 namespace algo {
 namespace seemmo {
 
 // ===================================================================
-
-class Void : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:algo.seemmo.Void) */ {
- public:
-  Void();
-  virtual ~Void();
-
-  Void(const Void& from);
-
-  inline Void& operator=(const Void& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  #if LANG_CXX11
-  Void(Void&& from) noexcept
-    : Void() {
-    *this = ::std::move(from);
-  }
-
-  inline Void& operator=(Void&& from) noexcept {
-    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
-      if (this != &from) InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-  #endif
-  static const ::google::protobuf::Descriptor* descriptor();
-  static const Void& default_instance();
-
-  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const Void* internal_default_instance() {
-    return reinterpret_cast<const Void*>(
-               &_Void_default_instance_);
-  }
-  static constexpr int kIndexInFileMessages =
-    0;
-
-  void Swap(Void* other);
-  friend void swap(Void& a, Void& b) {
-    a.Swap(&b);
-  }
-
-  // implements Message ----------------------------------------------
-
-  inline Void* New() const final {
-    return CreateMaybeMessage<Void>(NULL);
-  }
-
-  Void* New(::google::protobuf::Arena* arena) const final {
-    return CreateMaybeMessage<Void>(arena);
-  }
-  void CopyFrom(const ::google::protobuf::Message& from) final;
-  void MergeFrom(const ::google::protobuf::Message& from) final;
-  void CopyFrom(const Void& from);
-  void MergeFrom(const Void& from);
-  void Clear() final;
-  bool IsInitialized() const final;
-
-  size_t ByteSizeLong() const final;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input) final;
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const final;
-  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
-      bool deterministic, ::google::protobuf::uint8* target) const final;
-  int GetCachedSize() const final { return _cached_size_.Get(); }
-
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const final;
-  void InternalSwap(Void* other);
-  private:
-  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
-    return NULL;
-  }
-  inline void* MaybeArenaPtr() const {
-    return NULL;
-  }
-  public:
-
-  ::google::protobuf::Metadata GetMetadata() const final;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  // @@protoc_insertion_point(class_scope:algo.seemmo.Void)
- private:
-
-  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  mutable ::google::protobuf::internal::CachedSize _cached_size_;
-  friend struct ::protobuf_service_2eproto::TableStruct;
-};
-// -------------------------------------------------------------------
 
 class TrailRequest : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:algo.seemmo.TrailRequest) */ {
  public:
@@ -209,7 +110,7 @@ class TrailRequest : public ::google::protobuf::Message /* @@protoc_insertion_po
                &_TrailRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    1;
+    0;
 
   void Swap(TrailRequest* other);
   friend void swap(TrailRequest& a, TrailRequest& b) {
@@ -363,7 +264,7 @@ class TrailReply : public ::google::protobuf::Message /* @@protoc_insertion_poin
                &_TrailReply_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    2;
+    1;
 
   void Swap(TrailReply* other);
   friend void swap(TrailReply& a, TrailReply& b) {
@@ -474,7 +375,7 @@ class RecognizeRequest : public ::google::protobuf::Message /* @@protoc_insertio
                &_RecognizeRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    3;
+    2;
 
   void Swap(RecognizeRequest* other);
   friend void swap(RecognizeRequest& a, RecognizeRequest& b) {
@@ -614,7 +515,7 @@ class RecognizeReply : public ::google::protobuf::Message /* @@protoc_insertion_
                &_RecognizeReply_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    4;
+    3;
 
   void Swap(RecognizeReply* other);
   friend void swap(RecognizeReply& a, RecognizeReply& b) {
@@ -690,6 +591,73 @@ class RecognizeReply : public ::google::protobuf::Message /* @@protoc_insertion_
 };
 // ===================================================================
 
+class VideoProcService_Stub;
+
+class VideoProcService : public ::google::protobuf::Service {
+ protected:
+  // This class should be treated as an abstract interface.
+  inline VideoProcService() {};
+ public:
+  virtual ~VideoProcService();
+
+  typedef VideoProcService_Stub Stub;
+
+  static const ::google::protobuf::ServiceDescriptor* descriptor();
+
+  virtual void Trail(::google::protobuf::RpcController* controller,
+                       const ::algo::seemmo::TrailRequest* request,
+                       ::algo::seemmo::TrailReply* response,
+                       ::google::protobuf::Closure* done);
+  virtual void Recognize(::google::protobuf::RpcController* controller,
+                       const ::algo::seemmo::RecognizeRequest* request,
+                       ::algo::seemmo::RecognizeReply* response,
+                       ::google::protobuf::Closure* done);
+
+  // implements Service ----------------------------------------------
+
+  const ::google::protobuf::ServiceDescriptor* GetDescriptor();
+  void CallMethod(const ::google::protobuf::MethodDescriptor* method,
+                  ::google::protobuf::RpcController* controller,
+                  const ::google::protobuf::Message* request,
+                  ::google::protobuf::Message* response,
+                  ::google::protobuf::Closure* done);
+  const ::google::protobuf::Message& GetRequestPrototype(
+    const ::google::protobuf::MethodDescriptor* method) const;
+  const ::google::protobuf::Message& GetResponsePrototype(
+    const ::google::protobuf::MethodDescriptor* method) const;
+
+ private:
+  GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(VideoProcService);
+};
+
+class VideoProcService_Stub : public VideoProcService {
+ public:
+  VideoProcService_Stub(::google::protobuf::RpcChannel* channel);
+  VideoProcService_Stub(::google::protobuf::RpcChannel* channel,
+                   ::google::protobuf::Service::ChannelOwnership ownership);
+  ~VideoProcService_Stub();
+
+  inline ::google::protobuf::RpcChannel* channel() { return channel_; }
+
+  // implements VideoProcService ------------------------------------------
+
+  void Trail(::google::protobuf::RpcController* controller,
+                       const ::algo::seemmo::TrailRequest* request,
+                       ::algo::seemmo::TrailReply* response,
+                       ::google::protobuf::Closure* done);
+  void Recognize(::google::protobuf::RpcController* controller,
+                       const ::algo::seemmo::RecognizeRequest* request,
+                       ::algo::seemmo::RecognizeReply* response,
+                       ::google::protobuf::Closure* done);
+ private:
+  ::google::protobuf::RpcChannel* channel_;
+  bool owns_channel_;
+  GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(VideoProcService_Stub);
+};
+
+
+// ===================================================================
+
 
 // ===================================================================
 
@@ -697,10 +665,6 @@ class RecognizeReply : public ::google::protobuf::Message /* @@protoc_insertion_
   #pragma GCC diagnostic push
   #pragma GCC diagnostic ignored "-Wstrict-aliasing"
 #endif  // __GNUC__
-// Void
-
-// -------------------------------------------------------------------
-
 // TrailRequest
 
 // uint32 videoChl = 1;
@@ -1120,8 +1084,6 @@ inline void RecognizeReply::set_allocated_data(::std::string* data) {
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
-// -------------------------------------------------------------------
-
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

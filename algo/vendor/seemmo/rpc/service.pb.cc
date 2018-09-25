@@ -21,11 +21,6 @@
 
 namespace algo {
 namespace seemmo {
-class VoidDefaultTypeInternal {
- public:
-  ::google::protobuf::internal::ExplicitlyConstructed<Void>
-      _instance;
-} _Void_default_instance_;
 class TrailRequestDefaultTypeInternal {
  public:
   ::google::protobuf::internal::ExplicitlyConstructed<TrailRequest>
@@ -49,20 +44,6 @@ class RecognizeReplyDefaultTypeInternal {
 }  // namespace seemmo
 }  // namespace algo
 namespace protobuf_service_2eproto {
-static void InitDefaultsVoid() {
-  GOOGLE_PROTOBUF_VERIFY_VERSION;
-
-  {
-    void* ptr = &::algo::seemmo::_Void_default_instance_;
-    new (ptr) ::algo::seemmo::Void();
-    ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
-  }
-  ::algo::seemmo::Void::InitAsDefaultInstance();
-}
-
-::google::protobuf::internal::SCCInfo<0> scc_info_Void =
-    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsVoid}, {}};
-
 static void InitDefaultsTrailRequest() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
@@ -120,21 +101,16 @@ static void InitDefaultsRecognizeReply() {
     {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsRecognizeReply}, {}};
 
 void InitDefaults() {
-  ::google::protobuf::internal::InitSCC(&scc_info_Void.base);
   ::google::protobuf::internal::InitSCC(&scc_info_TrailRequest.base);
   ::google::protobuf::internal::InitSCC(&scc_info_TrailReply.base);
   ::google::protobuf::internal::InitSCC(&scc_info_RecognizeRequest.base);
   ::google::protobuf::internal::InitSCC(&scc_info_RecognizeReply.base);
 }
 
-::google::protobuf::Metadata file_level_metadata[5];
+::google::protobuf::Metadata file_level_metadata[4];
+const ::google::protobuf::ServiceDescriptor* file_level_service_descriptors[1];
 
 const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
-  ~0u,  // no _has_bits_
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::algo::seemmo::Void, _internal_metadata_),
-  ~0u,  // no _extensions_
-  ~0u,  // no _oneof_case_
-  ~0u,  // no _weak_field_map_
   ~0u,  // no _has_bits_
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::algo::seemmo::TrailRequest, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -169,15 +145,13 @@ const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUT
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::algo::seemmo::RecognizeReply, data_),
 };
 static const ::google::protobuf::internal::MigrationSchema schemas[] GOOGLE_PROTOBUF_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
-  { 0, -1, sizeof(::algo::seemmo::Void)},
-  { 5, -1, sizeof(::algo::seemmo::TrailRequest)},
-  { 16, -1, sizeof(::algo::seemmo::TrailReply)},
-  { 22, -1, sizeof(::algo::seemmo::RecognizeRequest)},
-  { 31, -1, sizeof(::algo::seemmo::RecognizeReply)},
+  { 0, -1, sizeof(::algo::seemmo::TrailRequest)},
+  { 11, -1, sizeof(::algo::seemmo::TrailReply)},
+  { 17, -1, sizeof(::algo::seemmo::RecognizeRequest)},
+  { 26, -1, sizeof(::algo::seemmo::RecognizeReply)},
 };
 
 static ::google::protobuf::Message const * const file_default_instances[] = {
-  reinterpret_cast<const ::google::protobuf::Message*>(&::algo::seemmo::_Void_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&::algo::seemmo::_TrailRequest_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&::algo::seemmo::_TrailReply_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&::algo::seemmo::_RecognizeRequest_default_instance_),
@@ -188,7 +162,7 @@ void protobuf_AssignDescriptors() {
   AddDescriptors();
   AssignDescriptors(
       "service.proto", schemas, file_default_instances, TableStruct::offsets,
-      file_level_metadata, NULL, NULL);
+      file_level_metadata, NULL, file_level_service_descriptors);
 }
 
 void protobuf_AssignDescriptorsOnce() {
@@ -199,27 +173,27 @@ void protobuf_AssignDescriptorsOnce() {
 void protobuf_RegisterTypes(const ::std::string&) GOOGLE_PROTOBUF_ATTRIBUTE_COLD;
 void protobuf_RegisterTypes(const ::std::string&) {
   protobuf_AssignDescriptorsOnce();
-  ::google::protobuf::internal::RegisterAllTypes(file_level_metadata, 5);
+  ::google::protobuf::internal::RegisterAllTypes(file_level_metadata, 4);
 }
 
 void AddDescriptorsImpl() {
   InitDefaults();
   static const char descriptor[] GOOGLE_PROTOBUF_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
-      "\n\rservice.proto\022\013algo.seemmo\"\006\n\004Void\"p\n\014"
-      "TrailRequest\022\020\n\010videoChl\030\001 \001(\r\022\021\n\ttimest"
-      "amp\030\002 \001(\004\022\r\n\005bgr24\030\003 \001(\014\022\016\n\006height\030\004 \001(\r"
-      "\022\r\n\005width\030\005 \001(\r\022\r\n\005param\030\006 \001(\t\"\032\n\nTrailR"
-      "eply\022\014\n\004data\030\001 \001(\t\"O\n\020RecognizeRequest\022\r"
-      "\n\005bgr24\030\001 \001(\014\022\016\n\006height\030\002 \001(\r\022\r\n\005width\030\003"
-      " \001(\r\022\r\n\005param\030\004 \001(\t\"\036\n\016RecognizeReply\022\014\n"
-      "\004data\030\001 \001(\t2\225\001\n\tVideoProc\022=\n\005Trail\022\031.alg"
-      "o.seemmo.TrailRequest\032\027.algo.seemmo.Trai"
-      "lReply\"\000\022I\n\tRecognize\022\035.algo.seemmo.Reco"
-      "gnizeRequest\032\033.algo.seemmo.RecognizeRepl"
-      "y\"\000b\006proto3"
+      "\n\rservice.proto\022\013algo.seemmo\"p\n\014TrailReq"
+      "uest\022\020\n\010videoChl\030\001 \001(\r\022\021\n\ttimestamp\030\002 \001("
+      "\004\022\r\n\005bgr24\030\003 \001(\014\022\016\n\006height\030\004 \001(\r\022\r\n\005widt"
+      "h\030\005 \001(\r\022\r\n\005param\030\006 \001(\t\"\032\n\nTrailReply\022\014\n\004"
+      "data\030\001 \001(\t\"O\n\020RecognizeRequest\022\r\n\005bgr24\030"
+      "\001 \001(\014\022\016\n\006height\030\002 \001(\r\022\r\n\005width\030\003 \001(\r\022\r\n\005"
+      "param\030\004 \001(\t\"\036\n\016RecognizeReply\022\014\n\004data\030\001 "
+      "\001(\t2\234\001\n\020VideoProcService\022=\n\005Trail\022\031.algo"
+      ".seemmo.TrailRequest\032\027.algo.seemmo.Trail"
+      "Reply\"\000\022I\n\tRecognize\022\035.algo.seemmo.Recog"
+      "nizeRequest\032\033.algo.seemmo.RecognizeReply"
+      "\"\000B\003\200\001\001b\006proto3"
   };
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-      descriptor, 451);
+      descriptor, 455);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "service.proto", &protobuf_RegisterTypes);
 }
@@ -237,185 +211,6 @@ struct StaticDescriptorInitializer {
 }  // namespace protobuf_service_2eproto
 namespace algo {
 namespace seemmo {
-
-// ===================================================================
-
-void Void::InitAsDefaultInstance() {
-}
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
-#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
-
-Void::Void()
-  : ::google::protobuf::Message(), _internal_metadata_(NULL) {
-  ::google::protobuf::internal::InitSCC(
-      &protobuf_service_2eproto::scc_info_Void.base);
-  SharedCtor();
-  // @@protoc_insertion_point(constructor:algo.seemmo.Void)
-}
-Void::Void(const Void& from)
-  : ::google::protobuf::Message(),
-      _internal_metadata_(NULL) {
-  _internal_metadata_.MergeFrom(from._internal_metadata_);
-  // @@protoc_insertion_point(copy_constructor:algo.seemmo.Void)
-}
-
-void Void::SharedCtor() {
-}
-
-Void::~Void() {
-  // @@protoc_insertion_point(destructor:algo.seemmo.Void)
-  SharedDtor();
-}
-
-void Void::SharedDtor() {
-}
-
-void Void::SetCachedSize(int size) const {
-  _cached_size_.Set(size);
-}
-const ::google::protobuf::Descriptor* Void::descriptor() {
-  ::protobuf_service_2eproto::protobuf_AssignDescriptorsOnce();
-  return ::protobuf_service_2eproto::file_level_metadata[kIndexInFileMessages].descriptor;
-}
-
-const Void& Void::default_instance() {
-  ::google::protobuf::internal::InitSCC(&protobuf_service_2eproto::scc_info_Void.base);
-  return *internal_default_instance();
-}
-
-
-void Void::Clear() {
-// @@protoc_insertion_point(message_clear_start:algo.seemmo.Void)
-  ::google::protobuf::uint32 cached_has_bits = 0;
-  // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
-
-  _internal_metadata_.Clear();
-}
-
-bool Void::MergePartialFromCodedStream(
-    ::google::protobuf::io::CodedInputStream* input) {
-#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
-  ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:algo.seemmo.Void)
-  for (;;) {
-    ::std::pair<::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
-    tag = p.first;
-    if (!p.second) goto handle_unusual;
-  handle_unusual:
-    if (tag == 0) {
-      goto success;
-    }
-    DO_(::google::protobuf::internal::WireFormat::SkipField(
-          input, tag, _internal_metadata_.mutable_unknown_fields()));
-  }
-success:
-  // @@protoc_insertion_point(parse_success:algo.seemmo.Void)
-  return true;
-failure:
-  // @@protoc_insertion_point(parse_failure:algo.seemmo.Void)
-  return false;
-#undef DO_
-}
-
-void Void::SerializeWithCachedSizes(
-    ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:algo.seemmo.Void)
-  ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
-
-  if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
-    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
-        (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()), output);
-  }
-  // @@protoc_insertion_point(serialize_end:algo.seemmo.Void)
-}
-
-::google::protobuf::uint8* Void::InternalSerializeWithCachedSizesToArray(
-    bool deterministic, ::google::protobuf::uint8* target) const {
-  (void)deterministic; // Unused
-  // @@protoc_insertion_point(serialize_to_array_start:algo.seemmo.Void)
-  ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
-
-  if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
-    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
-        (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()), target);
-  }
-  // @@protoc_insertion_point(serialize_to_array_end:algo.seemmo.Void)
-  return target;
-}
-
-size_t Void::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:algo.seemmo.Void)
-  size_t total_size = 0;
-
-  if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
-    total_size +=
-      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
-        (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()));
-  }
-  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
-  SetCachedSize(cached_size);
-  return total_size;
-}
-
-void Void::MergeFrom(const ::google::protobuf::Message& from) {
-// @@protoc_insertion_point(generalized_merge_from_start:algo.seemmo.Void)
-  GOOGLE_DCHECK_NE(&from, this);
-  const Void* source =
-      ::google::protobuf::internal::DynamicCastToGenerated<const Void>(
-          &from);
-  if (source == NULL) {
-  // @@protoc_insertion_point(generalized_merge_from_cast_fail:algo.seemmo.Void)
-    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
-  } else {
-  // @@protoc_insertion_point(generalized_merge_from_cast_success:algo.seemmo.Void)
-    MergeFrom(*source);
-  }
-}
-
-void Void::MergeFrom(const Void& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:algo.seemmo.Void)
-  GOOGLE_DCHECK_NE(&from, this);
-  _internal_metadata_.MergeFrom(from._internal_metadata_);
-  ::google::protobuf::uint32 cached_has_bits = 0;
-  (void) cached_has_bits;
-
-}
-
-void Void::CopyFrom(const ::google::protobuf::Message& from) {
-// @@protoc_insertion_point(generalized_copy_from_start:algo.seemmo.Void)
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
-}
-
-void Void::CopyFrom(const Void& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:algo.seemmo.Void)
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
-}
-
-bool Void::IsInitialized() const {
-  return true;
-}
-
-void Void::Swap(Void* other) {
-  if (other == this) return;
-  InternalSwap(other);
-}
-void Void::InternalSwap(Void* other) {
-  using std::swap;
-  _internal_metadata_.Swap(&other->_internal_metadata_);
-}
-
-::google::protobuf::Metadata Void::GetMetadata() const {
-  protobuf_service_2eproto::protobuf_AssignDescriptorsOnce();
-  return ::protobuf_service_2eproto::file_level_metadata[kIndexInFileMessages];
-}
-
 
 // ===================================================================
 
@@ -1711,14 +1506,121 @@ void RecognizeReply::InternalSwap(RecognizeReply* other) {
 }
 
 
+// ===================================================================
+
+VideoProcService::~VideoProcService() {}
+
+const ::google::protobuf::ServiceDescriptor* VideoProcService::descriptor() {
+  protobuf_service_2eproto::protobuf_AssignDescriptorsOnce();
+  return protobuf_service_2eproto::file_level_service_descriptors[0];
+}
+
+const ::google::protobuf::ServiceDescriptor* VideoProcService::GetDescriptor() {
+  return descriptor();
+}
+
+void VideoProcService::Trail(::google::protobuf::RpcController* controller,
+                         const ::algo::seemmo::TrailRequest*,
+                         ::algo::seemmo::TrailReply*,
+                         ::google::protobuf::Closure* done) {
+  controller->SetFailed("Method Trail() not implemented.");
+  done->Run();
+}
+
+void VideoProcService::Recognize(::google::protobuf::RpcController* controller,
+                         const ::algo::seemmo::RecognizeRequest*,
+                         ::algo::seemmo::RecognizeReply*,
+                         ::google::protobuf::Closure* done) {
+  controller->SetFailed("Method Recognize() not implemented.");
+  done->Run();
+}
+
+void VideoProcService::CallMethod(const ::google::protobuf::MethodDescriptor* method,
+                             ::google::protobuf::RpcController* controller,
+                             const ::google::protobuf::Message* request,
+                             ::google::protobuf::Message* response,
+                             ::google::protobuf::Closure* done) {
+  GOOGLE_DCHECK_EQ(method->service(), protobuf_service_2eproto::file_level_service_descriptors[0]);
+  switch(method->index()) {
+    case 0:
+      Trail(controller,
+             ::google::protobuf::down_cast<const ::algo::seemmo::TrailRequest*>(request),
+             ::google::protobuf::down_cast< ::algo::seemmo::TrailReply*>(response),
+             done);
+      break;
+    case 1:
+      Recognize(controller,
+             ::google::protobuf::down_cast<const ::algo::seemmo::RecognizeRequest*>(request),
+             ::google::protobuf::down_cast< ::algo::seemmo::RecognizeReply*>(response),
+             done);
+      break;
+    default:
+      GOOGLE_LOG(FATAL) << "Bad method index; this should never happen.";
+      break;
+  }
+}
+
+const ::google::protobuf::Message& VideoProcService::GetRequestPrototype(
+    const ::google::protobuf::MethodDescriptor* method) const {
+  GOOGLE_DCHECK_EQ(method->service(), descriptor());
+  switch(method->index()) {
+    case 0:
+      return ::algo::seemmo::TrailRequest::default_instance();
+    case 1:
+      return ::algo::seemmo::RecognizeRequest::default_instance();
+    default:
+      GOOGLE_LOG(FATAL) << "Bad method index; this should never happen.";
+      return *::google::protobuf::MessageFactory::generated_factory()
+          ->GetPrototype(method->input_type());
+  }
+}
+
+const ::google::protobuf::Message& VideoProcService::GetResponsePrototype(
+    const ::google::protobuf::MethodDescriptor* method) const {
+  GOOGLE_DCHECK_EQ(method->service(), descriptor());
+  switch(method->index()) {
+    case 0:
+      return ::algo::seemmo::TrailReply::default_instance();
+    case 1:
+      return ::algo::seemmo::RecognizeReply::default_instance();
+    default:
+      GOOGLE_LOG(FATAL) << "Bad method index; this should never happen.";
+      return *::google::protobuf::MessageFactory::generated_factory()
+          ->GetPrototype(method->output_type());
+  }
+}
+
+VideoProcService_Stub::VideoProcService_Stub(::google::protobuf::RpcChannel* channel)
+  : channel_(channel), owns_channel_(false) {}
+VideoProcService_Stub::VideoProcService_Stub(
+    ::google::protobuf::RpcChannel* channel,
+    ::google::protobuf::Service::ChannelOwnership ownership)
+  : channel_(channel),
+    owns_channel_(ownership == ::google::protobuf::Service::STUB_OWNS_CHANNEL) {}
+VideoProcService_Stub::~VideoProcService_Stub() {
+  if (owns_channel_) delete channel_;
+}
+
+void VideoProcService_Stub::Trail(::google::protobuf::RpcController* controller,
+                              const ::algo::seemmo::TrailRequest* request,
+                              ::algo::seemmo::TrailReply* response,
+                              ::google::protobuf::Closure* done) {
+  channel_->CallMethod(descriptor()->method(0),
+                       controller, request, response, done);
+}
+void VideoProcService_Stub::Recognize(::google::protobuf::RpcController* controller,
+                              const ::algo::seemmo::RecognizeRequest* request,
+                              ::algo::seemmo::RecognizeReply* response,
+                              ::google::protobuf::Closure* done) {
+  channel_->CallMethod(descriptor()->method(1),
+                       controller, request, response, done);
+}
+
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace seemmo
 }  // namespace algo
 namespace google {
 namespace protobuf {
-template<> GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE ::algo::seemmo::Void* Arena::CreateMaybeMessage< ::algo::seemmo::Void >(Arena* arena) {
-  return Arena::CreateInternal< ::algo::seemmo::Void >(arena);
-}
 template<> GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE ::algo::seemmo::TrailRequest* Arena::CreateMaybeMessage< ::algo::seemmo::TrailRequest >(Arena* arena) {
   return Arena::CreateInternal< ::algo::seemmo::TrailRequest >(arena);
 }

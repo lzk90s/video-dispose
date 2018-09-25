@@ -9,3 +9,4 @@ obj/
 pkg/
 .vs/
 thirdparty/opencv
+thirdparty/brpc

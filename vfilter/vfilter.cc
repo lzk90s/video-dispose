@@ -6,6 +6,7 @@
 #include "vfilter/app.h"
 #include "vfilter/vfilter.h"
 #include "vfilter/vsink.h"
+#include "vfilter/async_algo_proc.h"
 
 using namespace std;
 
@@ -13,7 +14,10 @@ namespace vf {
 
 class VFilter {
 public:
-    VFilter(uint32_t channelId) : channelId_(channelId), vsink_(channelId) {
+    VFilter(uint32_t channelId)
+        : channelId_(channelId),
+          vsink_(channelId),
+          algoProcessor(vsink_) {
 
     }
     void SetChannelId(uint32_t channelId) {
@@ -22,12 +26,13 @@ public:
 
     uint32_t FilterFlow(uint8_t *bgr24, uint32_t width, uint32_t height) {
         cv::Mat frame = cv::Mat(height, width, CV_8UC3, (void*)bgr24);
-        return vsink_.OnReceivedFrame(frame);
+        return vsink_.HandleReceivedFrame(frame);
     }
 
 private:
     uint32_t channelId_;
     VSink vsink_;
+    AsyncAlgoProcessor algoProcessor;
 };
 
 class VFilterManager {
@@ -45,7 +50,7 @@ typedef Singleton<vf::VFilterManager> VFilterManagerSingleton;
 
 int32_t VFilter_Init() {
     //≥ı ºªØ
-    vf::ThisApp::getInstance();
+    //vf::ThisApp::getInstance();
     vf::VFilterManagerSingleton::getInstance();
     return 0;
 }

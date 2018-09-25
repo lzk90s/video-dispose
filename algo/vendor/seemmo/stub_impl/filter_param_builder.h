@@ -17,10 +17,10 @@ public:
         {
         "Detect": {
             "DetectRegion": [
-                0,
-                0,
-                0,
-                0
+				[0,0],
+				[1920,0],
+				[1920,1080],
+				[0,1080]
             ],
             "IsDet": true,
             "MaxCarWidth": 0,

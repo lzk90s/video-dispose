@@ -1,6 +1,6 @@
 #pragma once
 
-template<typename T>
+template<class T>
 class Singleton {
 public:
     static T& getInstance() {
@@ -8,6 +8,6 @@ public:
         return value;
     }
 private:
-    Singleton();
-    ~Singleton();
+    Singleton() {};
+    ~Singleton() {};
 };

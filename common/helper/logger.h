@@ -4,15 +4,15 @@
 #include <memory>
 #include <iostream>
 
-#include "spdlog/spdlog.h"
 #include "common/helper/singleton.h"
+#include "spdlog/spdlog.h"
 
 namespace spd = spdlog;
 using namespace std;
 
 class Logger {
 public:
-    Logger() : Logger("ALGO") {
+    Logger() : Logger("video") {
 
     }
 

@@ -52,7 +52,7 @@ public:
 
 class AlgoStub {
 public:
-    AlgoStub(const string &vendor)  {
+    AlgoStub(const string &vendor) {
         vendor_ = vendor;
     }
 
@@ -66,7 +66,9 @@ public:
         const TrailParam &param,
         DetectResult &detect,
         FilterResult &filter
-    );
+    ) {
+        throw runtime_error("unimplemented method");
+    };
 
     //Ê¶±ð
     virtual int32_t Recognize(
@@ -75,7 +77,9 @@ public:
         uint32_t height,
         const RecogParam &param,
         RecogResult &rec
-    );
+    ) {
+        throw runtime_error("unimplemented method");
+    };
 
     string GetVendor() {
         return this->vendor_;

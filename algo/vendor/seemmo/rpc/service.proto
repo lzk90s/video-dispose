@@ -2,8 +2,7 @@ syntax = "proto3";
 
 package algo.seemmo;
 
-message Void {
-}
+option cc_generic_services = true;
 
 message TrailRequest {
     uint32 videoChl = 1;
@@ -29,7 +28,7 @@ message RecognizeReply{
     string data = 1;
 }
 
-service VideoProc{
+service VideoProcService{
     rpc Trail(TrailRequest) returns (TrailReply) {}
     rpc Recognize(RecognizeRequest) returns (RecognizeReply){}
 }

@@ -11,7 +11,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\algo\vendor\seemmo\rpc\service.grpc.pb.h" />
     <ClInclude Include="..\..\algo\vendor\seemmo\rpc\service.pb.h" />
     <ClInclude Include="..\..\algo\vendor\seemmo\server\algo_loader.h" />
     <ClInclude Include="..\..\algo\vendor\seemmo\server\server.h" />
@@ -32,7 +31,6 @@
     <None Include="..\..\algo\vendor\seemmo\wrapper\Makefile" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\algo\vendor\seemmo\rpc\service.grpc.pb.cc" />
     <ClCompile Include="..\..\algo\vendor\seemmo\rpc\service.pb.cc" />
     <ClCompile Include="..\..\algo\vendor\seemmo\server\main.cc" />
     <ClCompile Include="..\..\algo\vendor\seemmo\server\server_impl.cc" />
@@ -99,7 +97,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\;..\..\thirdparty;..\..\algo\gosun\vendor</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\;..\..\thirdparty;..\..\thirdparty\brpc</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

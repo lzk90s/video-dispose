@@ -85,7 +85,6 @@
   <ItemGroup>
     <ClCompile Include="..\..\vfilter\mixer\cvx_text.cc" />
     <ClCompile Include="..\..\vfilter\vfilter.cc" />
-    <ClCompile Include="..\..\vfilter\vsink.cc" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\vfilter\async_algo_proc.h" />

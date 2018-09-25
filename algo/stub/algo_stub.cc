@@ -3,31 +3,10 @@
 
 namespace algo {
 
-int32_t AlgoStub::Trail(
-    uint32_t channelId,
-    uint64_t frameId,
-    uint8_t *bgr24,
-    uint32_t width,
-    uint32_t height,
-    const TrailParam &param,
-    DetectResult &detect,
-    FilterResult &filter) {
-    throw runtime_error("unimplemented method: AlgoStub::Trail");
-}
-
-int32_t AlgoStub::Recognize(
-    uint8_t *bgr24,
-    uint32_t width,
-    uint32_t height,
-    const RecogParam &param,
-    RecogResult &rec) {
-    throw runtime_error("unimplemented method: AlgoStub::Recognize");
-}
-
 
 AlgoStub* AlgoStubFactory::CreateStub(const string &vendor) {
     if (vendor == "seemmo") {
-        return algo::seemmo::NewAlgoStub();
+        return new algo::seemmo::SeemmoAlgoStub();
     } else if (vendor == "gosun") {
         return nullptr;
     } else {
@@ -36,8 +15,13 @@ AlgoStub* AlgoStubFactory::CreateStub(const string &vendor) {
 }
 
 void AlgoStubFactory::FreeStub(AlgoStub *&stub) {
+    if (nullptr == stub) {
+        return;
+    }
+
     if (stub->GetVendor() == "seemmo") {
-        return algo::seemmo::FreeAlgoStub(stub);
+        delete stub;
+        stub = nullptr;
     } else if (stub->GetVendor() == "gosun") {
         //
     } else {

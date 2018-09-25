@@ -36,7 +36,8 @@ class threadpool {
     thr_ondestroy_cb _ondestroy_cb;
 
 public:
-    inline threadpool(unsigned short size = 4, thr_oncreate_cb oncreate_cb = nullptr, thr_ondestroy_cb ondestroy_cb = nullptr) {
+    inline threadpool(unsigned short size = 4, thr_oncreate_cb oncreate_cb = nullptr,
+                      thr_ondestroy_cb ondestroy_cb = nullptr) {
         _oncreate_cb = oncreate_cb;
         _ondestroy_cb = ondestroy_cb;
         addThread(size);
@@ -115,7 +116,7 @@ private:
                             return !_run || !_tasks.empty();
                         }); // wait 直到有 task
                         if (!_run && _tasks.empty()) {
-                            return;
+                            break;
                         }
                         task = move(_tasks.front()); // 按先进先出从队列取一个 task
                         _tasks.pop();

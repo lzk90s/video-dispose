@@ -3,29 +3,30 @@
 #include <string>
 #include <cassert>
 
-#include <grpc/grpc.h>
-#include <grpc++/support/channel_arguments.h>
-#include <grpc++/impl/codegen/channel_interface.h>
-#include <grpc++/client_context.h>
-#include <grpc++/create_channel.h>
-#include <grpc++/security/credentials.h>
-#include <grpc++/support/status.h>
+#include <gflags/gflags.h>
+#include <butil/logging.h>
+#include <butil/time.h>
+#include <brpc/channel.h>
 
 #include "common/helper/logger.h"
-
 #include "algo/vendor/seemmo/stub_impl/seemmo_stub.h"
 #include "algo/vendor/seemmo/rpc/service.pb.h"
-#include "algo/vendor/seemmo/rpc/service.grpc.pb.h"
 #include "algo/vendor/seemmo/stub_impl/filter_param_builder.h"
 #include "algo/vendor/seemmo/stub_impl/filter_result_parser.h"
 #include "algo/vendor/seemmo/stub_impl/rec_param_builder.h"
 #include "algo/vendor/seemmo/stub_impl/rec_result_parser.h"
 #include "algo/vendor/seemmo/stub_impl/detect_result_parser.h"
 
-using grpc::ChannelArguments;
-using grpc::ChannelInterface;
-using grpc::ClientContext;
-using grpc::Status;
+// service param
+DEFINE_string(attachment, "foo", "Carry this along with requests");
+DEFINE_string(protocol, "baidu_std", "Protocol type. Defined in src/brpc/options.proto");
+DEFINE_string(connection_type, "", "Connection type. Available values: single, pooled, short");
+DEFINE_string(server, "0.0.0.0:7000", "IP Address of server");
+DEFINE_string(load_balancer, "", "The algorithm for load balancing");
+DEFINE_int32(timeout_ms, 100, "RPC timeout in milliseconds");
+DEFINE_int32(max_retry, 3, "Max retries(not including the first RPC)");
+DEFINE_int32(interval_ms, 1000, "Milliseconds between consecutive requests");
+DEFINE_string(http_content_type, "application/json", "Content type of http request");
 
 using namespace std;
 
@@ -34,45 +35,43 @@ namespace seemmo {
 
 class VideoProcClient {
 public:
-    VideoProcClient(std::shared_ptr<ChannelInterface> channel) : stub_(VideoProc::NewStub(channel)) {}
+    VideoProcClient() {
+        init();
+    }
 
-    void Shutdown() {
+    ~VideoProcClient() {
         stub_.reset();
+        channel_.reset();
     }
 
     int32_t Trail(
-        int32_t videoChl,
-        uint64_t timestamp,
-        const uint8_t *bgr24,
+        uint32_t channelId,
+        uint64_t frameId,
+        uint8_t *bgr24,
         uint32_t width,
         uint32_t height,
         const TrailParam &param,
         DetectResult &detect,
         FilterResult &filter
     ) {
-
-        // set timeout
-        gpr_timespec timespec;
-        timespec.tv_sec = 2;
-        timespec.tv_nsec = 0;
-        timespec.clock_type = GPR_TIMESPAN;
-
         TrailRequest request;
-        request.set_videochl(videoChl);
-        request.set_timestamp(timestamp);
-        request.set_bgr24((char*)bgr24, width*height*3);		//bgr24图片字节大小为h*w*3
+        TrailReply reply;
+        brpc::Controller cntl;
+
+        static int log_id = 0;
+        cntl.set_log_id(log_id++);  // set by user
+
+        request.set_videochl(channelId);
+        request.set_timestamp(frameId);
+        request.set_bgr24((char*)bgr24, width*height * 3);		//bgr24图片字节大小为h*w*3
         request.set_width(width);
         request.set_height(height);
         request.set_param(trail::FilterParamBuilder().Build().c_str());
 
-        // RPC
-        TrailReply reply;
-        ClientContext context;
-        context.set_deadline(timespec);
-        Status status = stub_->Trail(&context, request, &reply);
-        if (!status.ok()) {
-            LOG_ERROR("call trail method error, status {}, error {}", status.error_code(), status.error_message());
-            return -1;
+        stub_->Trail(&cntl, &request, &reply, NULL);
+        if (cntl.Failed()) {
+            LOG_ERROR("Trail error, {}", cntl.ErrorText());
+            return cntl.ErrorCode();
         }
 
         // parse response message
@@ -94,13 +93,13 @@ public:
         const RecogParam &param,
         RecogResult &rec
     ) {
-        // set timeout
-        gpr_timespec timespec;
-        timespec.tv_sec = 2;
-        timespec.tv_nsec = 0;
-        timespec.clock_type = GPR_TIMESPAN;
-
         RecognizeRequest request;
+        RecognizeReply reply;
+        brpc::Controller cntl;
+
+        static int log_id = 0;
+        cntl.set_log_id(log_id++);  // set by user
+
         request.set_bgr24((char*)bgr24, width*height * 3);		//bgr24图片字节大小为h*w*3
         request.set_width(width);
         request.set_height(height);
@@ -109,14 +108,10 @@ public:
         fillLocations(param, locations);
         request.set_param(rec::RecParamBuilder().Build(locations).c_str());
 
-        // RPC
-        RecognizeReply reply;
-        ClientContext context;
-        context.set_deadline(timespec);
-        Status status = stub_->Recognize(&context, request, &reply);
-        if (!status.ok()) {
-            LOG_ERROR("call trail method error, status {}, error {}", status.error_code(), status.error_message());
-            return -1;
+        stub_->Recognize(&cntl, &request, &reply, NULL);
+        if (cntl.Failed()) {
+            LOG_ERROR("Recognize error, {}", cntl.ErrorText());
+            return cntl.ErrorCode();
         }
 
         // parse response message
@@ -130,7 +125,25 @@ public:
         return 0;
     }
 
+
 private:
+    void init() {
+        channel_.reset(new brpc::Channel);
+
+        brpc::ChannelOptions options;
+        options.protocol = FLAGS_protocol;
+        options.connection_type = FLAGS_connection_type;
+        options.timeout_ms = FLAGS_timeout_ms/*milliseconds*/;
+        options.max_retry = FLAGS_max_retry;
+        if (channel_->Init(FLAGS_server.c_str(), FLAGS_load_balancer.c_str(), &options) != 0) {
+            LOG_ERROR("Fail to initialize channel");
+            throw runtime_error("brpc init error");
+        }
+
+        stub_.reset(new VideoProcService_Stub(channel_.get()));
+        LOG_INFO("succeed to init seemmo algo stub");
+    }
+
     void fillDetectResult(DetectResult &r, detect::DetectReplyPO &p) {
         if (p.Code != 0) {
             LOG_ERROR("detect reply error, code {}, msg {}", p.Code, p.Message);
@@ -313,64 +326,43 @@ private:
         loc.push_back(l);
     }
 
+
 private:
-    std::unique_ptr<VideoProc::Stub> stub_;
+    unique_ptr<brpc::Channel> channel_;
+    unique_ptr<VideoProcService_Stub> stub_;
 };
 
+VideoProcClient videoProcClient;
 
-class SeemmoAlgoStub : public algo::AlgoStub {
-public:
-    SeemmoAlgoStub(): algo::AlgoStub("seemmo") {
-        init();
-    }
-
-    ~SeemmoAlgoStub() {
-        client_->Shutdown();
-        grpc_shutdown();
-    }
-
-    int32_t Trail(
-        uint32_t channelId,
-        uint64_t frameId,
-        uint8_t *bgr24,
-        uint32_t width,
-        uint32_t height,
-        const TrailParam &param,
-        DetectResult &detect,
-        FilterResult &filter)  override {
-        return  client_->Trail(channelId, frameId, bgr24, width, height, param, detect, filter);
-    }
-
-    int32_t Recognize(
-        uint8_t *bgr24,
-        uint32_t width,
-        uint32_t height,
-        const RecogParam &param,
-        RecogResult &rec) override  {
-        return client_->Recognize(bgr24, width, height, param, rec);
-    }
-
-private:
-    void init() {
-        string address = "unix:/tmp/a.sock";
-        assert(!address.empty());
-        grpc_init();
-        client_.reset(new VideoProcClient(grpc::CreateChannel(address, grpc::InsecureChannelCredentials())));
-    }
-
-private:
-    unique_ptr<VideoProcClient> client_;
-};
-
-algo::AlgoStub* NewAlgoStub() {
-    return new SeemmoAlgoStub();
+SeemmoAlgoStub::SeemmoAlgoStub()
+    : algo::AlgoStub("seemmo") {
 }
 
-void FreeAlgoStub(algo::AlgoStub *&stub) {
-    if (stub->GetVendor() == "seemmo") {
-        delete stub;
-        stub = nullptr;
-    }
+SeemmoAlgoStub::~SeemmoAlgoStub() {
 }
+
+int32_t SeemmoAlgoStub::Trail(
+    uint32_t channelId,
+    uint64_t frameId,
+    uint8_t *bgr24,
+    uint32_t width,
+    uint32_t height,
+    const TrailParam &param,
+    DetectResult &detect,
+    FilterResult &filter
+) {
+    return videoProcClient.Trail(channelId, frameId, bgr24, width, height, param, detect, filter);
+}
+
+int32_t SeemmoAlgoStub::Recognize(
+    uint8_t *bgr24,
+    uint32_t width,
+    uint32_t height,
+    const RecogParam &param,
+    RecogResult &rec
+) {
+    return videoProcClient.Recognize(bgr24, width, height, param, rec);
+}
+
 }
 }

@@ -3,10 +3,12 @@
 #include <map>
 #include <string>
 
+#include "common/helper/logger.h"
 #include "algo/stub/object_type.h"
 #include "vfilter/mixer/vmixer.h"
 
 using namespace std;
+using namespace algo;
 
 namespace vf {
 class PersonMixer : public VMixer {
@@ -15,7 +17,7 @@ public:
         unique_lock<mutex> lck(mutex_);
         detect_.clear();
         for (auto o : objs) {
-            LOG_INFO("DDD: {}", o.guid);
+            LOG_INFO("DetectResult: {}", o.guid);
             detect_[o.guid] = o;
         }
     }
@@ -26,11 +28,11 @@ public:
             bool f = true;
             if (detect_.find(o.guid) == detect_.end()) {
                 for (auto s : detect_) {
-                    LOG_INFO("SSS : {}", s.second.guid);
+                    //LOG_INFO("SSS : {}", s.second.guid);
                 }
                 f = false;
             }
-            LOG_INFO("---KKKKKKKKKKK {}, {} {}", o.guid, f, detect_.size());
+            LOG_INFO("---RecognizeResult {}, {} {}", o.guid, f, detect_.size());
             recog_[o.guid] = o;
         }
     }

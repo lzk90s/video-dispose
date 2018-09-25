@@ -25,16 +25,6 @@ typedef struct tagAttributePO {
         memset(this, 0, sizeof(tagAttributePO));
     }
 } AttributePO;
-//
-// typedef struct tagAttributeTopListPO {
-//     int32_t Code;
-//     string Message;
-//     vector<AttributePO> TopList;
-//
-//     tagAttributeTopListPO() {
-//         memset(this, 0, sizeof(tagAttributeTopListPO));
-//     }
-// } AttributeTopListPO;
 
 typedef struct tagVehicleAttributeGroup {
     AttributePO Color;
@@ -159,18 +149,6 @@ void from_json(const json& j, AttributePO& p) {
         LOG_ERROR("Parse json error, {}, {}", j.dump(), e.what());
     }
 }
-
-// void from_json(const json& j, AttributeTopListPO& p) {
-//     try {
-//         p.Code = j.at("Code").get<int32_t>();
-//         p.Message = j.at("Message").get<string>();
-//         if (0 == p.Code) {
-//             p.TopList = j.at("TopList").get<vector<AttributePO>>();
-//         }
-//     } catch (exception &e) {
-//         LOG_ERROR("Parse json error, {}, {}", j.dump(), e.what());
-//     }
-// }
 
 void from_json(const json& j, VehicleAttributeGroup& p) {
     try {
