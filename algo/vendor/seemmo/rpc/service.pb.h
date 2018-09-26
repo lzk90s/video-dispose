@@ -427,9 +427,9 @@ class RecognizeRequest : public ::google::protobuf::Message /* @@protoc_insertio
 
   // accessors -------------------------------------------------------
 
-  // bytes bgr24 = 1;
+  // bytes bgr24 = 2;
   void clear_bgr24();
-  static const int kBgr24FieldNumber = 1;
+  static const int kBgr24FieldNumber = 2;
   const ::std::string& bgr24() const;
   void set_bgr24(const ::std::string& value);
   #if LANG_CXX11
@@ -441,9 +441,9 @@ class RecognizeRequest : public ::google::protobuf::Message /* @@protoc_insertio
   ::std::string* release_bgr24();
   void set_allocated_bgr24(::std::string* bgr24);
 
-  // string param = 4;
+  // string param = 5;
   void clear_param();
-  static const int kParamFieldNumber = 4;
+  static const int kParamFieldNumber = 5;
   const ::std::string& param() const;
   void set_param(const ::std::string& value);
   #if LANG_CXX11
@@ -455,15 +455,21 @@ class RecognizeRequest : public ::google::protobuf::Message /* @@protoc_insertio
   ::std::string* release_param();
   void set_allocated_param(::std::string* param);
 
-  // uint32 height = 2;
+  // uint32 videoChl = 1;
+  void clear_videochl();
+  static const int kVideoChlFieldNumber = 1;
+  ::google::protobuf::uint32 videochl() const;
+  void set_videochl(::google::protobuf::uint32 value);
+
+  // uint32 height = 3;
   void clear_height();
-  static const int kHeightFieldNumber = 2;
+  static const int kHeightFieldNumber = 3;
   ::google::protobuf::uint32 height() const;
   void set_height(::google::protobuf::uint32 value);
 
-  // uint32 width = 3;
+  // uint32 width = 4;
   void clear_width();
-  static const int kWidthFieldNumber = 3;
+  static const int kWidthFieldNumber = 4;
   ::google::protobuf::uint32 width() const;
   void set_width(::google::protobuf::uint32 value);
 
@@ -473,6 +479,7 @@ class RecognizeRequest : public ::google::protobuf::Message /* @@protoc_insertio
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::internal::ArenaStringPtr bgr24_;
   ::google::protobuf::internal::ArenaStringPtr param_;
+  ::google::protobuf::uint32 videochl_;
   ::google::protobuf::uint32 height_;
   ::google::protobuf::uint32 width_;
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
@@ -890,7 +897,21 @@ inline void TrailReply::set_allocated_data(::std::string* data) {
 
 // RecognizeRequest
 
-// bytes bgr24 = 1;
+// uint32 videoChl = 1;
+inline void RecognizeRequest::clear_videochl() {
+  videochl_ = 0u;
+}
+inline ::google::protobuf::uint32 RecognizeRequest::videochl() const {
+  // @@protoc_insertion_point(field_get:algo.seemmo.RecognizeRequest.videoChl)
+  return videochl_;
+}
+inline void RecognizeRequest::set_videochl(::google::protobuf::uint32 value) {
+  
+  videochl_ = value;
+  // @@protoc_insertion_point(field_set:algo.seemmo.RecognizeRequest.videoChl)
+}
+
+// bytes bgr24 = 2;
 inline void RecognizeRequest::clear_bgr24() {
   bgr24_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -943,7 +964,7 @@ inline void RecognizeRequest::set_allocated_bgr24(::std::string* bgr24) {
   // @@protoc_insertion_point(field_set_allocated:algo.seemmo.RecognizeRequest.bgr24)
 }
 
-// uint32 height = 2;
+// uint32 height = 3;
 inline void RecognizeRequest::clear_height() {
   height_ = 0u;
 }
@@ -957,7 +978,7 @@ inline void RecognizeRequest::set_height(::google::protobuf::uint32 value) {
   // @@protoc_insertion_point(field_set:algo.seemmo.RecognizeRequest.height)
 }
 
-// uint32 width = 3;
+// uint32 width = 4;
 inline void RecognizeRequest::clear_width() {
   width_ = 0u;
 }
@@ -971,7 +992,7 @@ inline void RecognizeRequest::set_width(::google::protobuf::uint32 value) {
   // @@protoc_insertion_point(field_set:algo.seemmo.RecognizeRequest.width)
 }
 
-// string param = 4;
+// string param = 5;
 inline void RecognizeRequest::clear_param() {
   param_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }

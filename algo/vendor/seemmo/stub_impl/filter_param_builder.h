@@ -10,57 +10,26 @@ namespace algo {
 namespace seemmo {
 namespace trail {
 
+typedef struct tagDetectRegionPO {
+    // [[x1,y1], [x2,y2], [x3,y3]....]
+    vector<vector<int32_t>> regions;
+} DetectRegionPO;
+
 class FilterParamBuilder {
 public:
-    string Build() {
+    string Build(DetectRegionPO &r) {
         json j = R"(
         {
         "Detect": {
-            "DetectRegion": [
-				[0,0],
-				[1920,0],
-				[1920,1080],
-				[0,1080]
-            ],
             "IsDet": true,
-            "MaxCarWidth": 0,
-            "MinCarWidth": 0,
             "Mode": 0,
             "Threshold": 20,
-            "Version": 1001
-        },
-        "Recognize": {
-            "Person": {
-                "Age": {
-                    "IsRec": true
-                },
-                "Bag": {
-                    "IsRec": true
-                },
-                "BottomColor": {
-                    "IsRec": true
-                },
-                "Hat": {
-                    "IsRec": true
-                },
-                "Mistake": {
-                    "IsRec": true
-                },
-                "Sex": {
-                    "IsRec": true
-                },
-                "UpperColor": {
-                    "IsRec": true
-                },
-                "Feature": {
-                    "IsRec": false
-                },
-                "Knapsack": {
-                    "IsRec": true
-                }
-            }
+            "Version": 1002
             }
         })"_json;
+
+        j["Detect"]["DetectRegion"] = r.regions;
+
         return j.dump();
     }
 

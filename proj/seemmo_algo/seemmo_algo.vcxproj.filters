@@ -45,29 +45,17 @@
     <ClInclude Include="..\..\algo\vendor\seemmo\server\algo_loader.h">
       <Filter>源文件\server</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\algo\vendor\seemmo\server\server.h">
-      <Filter>源文件\server</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\algo\vendor\seemmo\server\setting.h">
-      <Filter>源文件\server</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\algo\vendor\seemmo\wrapper\algo_wrapper.h">
       <Filter>源文件\wrapper</Filter>
     </ClInclude>
     <ClInclude Include="..\..\algo\vendor\seemmo\stub_impl\detect_result_parser.h">
       <Filter>源文件\stub_impl</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\algo\vendor\seemmo\rpc\service.grpc.pb.h">
-      <Filter>源文件\rpc</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\algo\vendor\seemmo\rpc\service.pb.h">
       <Filter>源文件\rpc</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\algo\vendor\seemmo\server\protoc.sh">
-      <Filter>源文件\server</Filter>
-    </None>
     <None Include="..\..\algo\vendor\seemmo\wrapper\Makefile">
       <Filter>源文件\wrapper</Filter>
     </None>
@@ -80,25 +68,22 @@
     <None Include="..\..\algo\vendor\seemmo\rpc\service.proto">
       <Filter>源文件\rpc</Filter>
     </None>
+    <None Include="..\..\algo\vendor\seemmo\Makefile_server">
+      <Filter>源文件\server</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\algo\vendor\seemmo\server\main.cc">
-      <Filter>源文件\server</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\algo\vendor\seemmo\server\server_impl.cc">
-      <Filter>源文件\server</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\algo\vendor\seemmo\wrapper\algo_wrapper.cc">
       <Filter>源文件\wrapper</Filter>
     </ClCompile>
     <ClCompile Include="..\..\algo\vendor\seemmo\stub_impl\seemmo_stub.cc">
       <Filter>源文件\stub_impl</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\algo\vendor\seemmo\rpc\service.grpc.pb.cc">
-      <Filter>源文件\rpc</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\algo\vendor\seemmo\rpc\service.pb.cc">
       <Filter>源文件\rpc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\algo\vendor\seemmo\server\main.cc">
+      <Filter>源文件\server</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

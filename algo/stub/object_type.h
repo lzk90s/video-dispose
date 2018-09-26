@@ -11,44 +11,33 @@ using namespace std;
 
 namespace algo {
 
-//位移
-class Shift {
-public:
-    int32_t sx, sy;	//位移X,Y
+enum ObjectType {
+    UNKNOWN = 0,		//未知
+    PEDESTRAIN = 1,		//行人
+    BIKE = 2,			//自行车
+    MOTOBIKE = 3,		//摩托车
+    CAR = 4,			//小汽车
+    TRICYCLE = 5,		//三轮车
+    BUS = 6,			//公交车
+    VAN = 7,			//面包车
+    TRUCK = 8,			//卡车
+    FACE = 100,			//人脸
 };
 
-//举行区域
-class Rect {
+typedef vector<int32_t> Rect;		//矩形[x,y,w,h]
+typedef vector<int32_t> Shift;		//位移[x,y]
+typedef vector<int32_t> Point;		//点[x,y]
+
+// 目标基础类型
+class BaseObject {
 public:
-    int32_t x, y, w, h;		//x,y  w,h
+    string guid;				// 目标guid
+    ObjectType type;			// 目标类型
+    Rect detect;				// 目标所在区域
+    Shift trail;				// 目标跟踪变化
 
-    Rect(int32_t x, int32_t y, int32_t w, int32_t h) {
-        this->x = x;
-        this->y = y;
-        this->w = w;
-        this->h = h;
-    }
-
-    Rect(const Rect &rhs) {
-        this->x = rhs.x;
-        this->y = rhs.y;
-        this->w = rhs.w;
-        this->h = rhs.h;
-    }
-
-    Rect() {
-        x = y = w = h = -1;
-    }
-
-    void Reset() {
-        x = y = w = h = -1;
-    }
-
-    void Set(int32_t x, int32_t y, int32_t w, int32_t h) {
-        this->x = x;
-        this->y = y;
-        this->w = w;
-        this->h = h;
+    BaseObject() {
+        memset(this, 0, sizeof(BaseObject));
     }
 };
 
@@ -70,32 +59,6 @@ public:
     Attribute &WithName(const string &name) {
         this->name = name;
         return *this;
-    }
-};
-
-enum ObjectType {
-    UNKNOWN = 0,		//未知
-    PEDESTRAIN = 1,		//行人
-    BIKE = 2,			//自行车
-    MOTOBIKE = 3,		//摩托车
-    CAR = 4,			//小汽车
-    TRICYCLE = 5,		//三轮车
-    BUS = 6,			//公交车
-    VAN = 7,			//面包车
-    TRUCK = 8,			//卡车
-    FACE = 100,			//人脸
-};
-
-// 目标基础类型
-class BaseObject {
-public:
-    string guid;				// 目标guid
-    ObjectType type;			// 目标类型
-    Rect detect;				// 目标所在区域
-    vector<int32_t> trail;		// 目标跟踪变化
-
-    BaseObject() {
-        memset(this, 0, sizeof(BaseObject));
     }
 };
 

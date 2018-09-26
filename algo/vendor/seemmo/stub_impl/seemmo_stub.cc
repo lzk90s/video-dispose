@@ -16,6 +16,7 @@
 #include "algo/vendor/seemmo/stub_impl/rec_param_builder.h"
 #include "algo/vendor/seemmo/stub_impl/rec_result_parser.h"
 #include "algo/vendor/seemmo/stub_impl/detect_result_parser.h"
+#include "algo/vendor/seemmo/shm/shmdata.h"
 
 // service param
 DEFINE_string(attachment, "foo", "Carry this along with requests");
@@ -51,22 +52,31 @@ public:
         uint32_t width,
         uint32_t height,
         const TrailParam &param,
-        DetectResult &detect,
-        FilterResult &filter
+        ImageResult &imageResult,
+        FilterResult &filterResult
     ) {
         TrailRequest request;
         TrailReply reply;
         brpc::Controller cntl;
 
-        static int log_id = 0;
-        cntl.set_log_id(log_id++);  // set by user
+        // 初始化共享内存
+        if (!SIMMNG::getInstance().Exist(channelId)) {
+            SIMMNG::getInstance().Create(channelId);
+        }
+
+        uint8_t *bgr24Dst = SIMMNG::getInstance().Get(channelId)->GetBuffer().bgr24Buff1;
 
         request.set_videochl(channelId);
         request.set_timestamp(frameId);
-        request.set_bgr24((char*)bgr24, width*height * 3);		//bgr24图片字节大小为h*w*3
+        //request.set_bgr24((char*)bgr24, width*height * 3);		//bgr24图片字节大小为h*w*3
+        memcpy(bgr24Dst, bgr24, width*height * 3);	//拷贝到共享内存中
+        bgr24Dst[width*height * 3] = '\0';
         request.set_width(width);
         request.set_height(height);
-        request.set_param(trail::FilterParamBuilder().Build().c_str());
+
+        trail::DetectRegionPO regionPO;
+        fillDetectRegion(param, regionPO);
+        request.set_param(trail::FilterParamBuilder().Build(regionPO).c_str());
 
         stub_->Trail(&cntl, &request, &reply, NULL);
         if (cntl.Failed()) {
@@ -75,32 +85,40 @@ public:
         }
 
         // parse response message
-        detect::DetectReplyPO detectRspPO;
-        detect::DetectResponseParser().Parse(reply.data(), detectRspPO);
+        algo::seemmo::detect::DetectReplyPO detectRspPO;
+        algo::seemmo::detect::DetectResponseParser().Parse(reply.data(), detectRspPO);
         trail::TrailReplyPO trailRspPO;
         trail::FilterResponseParser().Parse(reply.data(), trailRspPO);
+
         // convert
-        fillDetectResult(detect, detectRspPO);
-        fillFilterResult(filter, trailRspPO);
+        fillDetectResult(imageResult, detectRspPO);
+        fillFilterResult(filterResult, trailRspPO);
 
         return 0;
     }
 
     int32_t Recognize(
+        uint32_t channelId,
         uint8_t *bgr24,
         uint32_t width,
         uint32_t height,
         const RecogParam &param,
-        RecogResult &rec
+        ImageResult &imageResult
     ) {
         RecognizeRequest request;
         RecognizeReply reply;
         brpc::Controller cntl;
 
-        static int log_id = 0;
-        cntl.set_log_id(log_id++);  // set by user
+        if (!SIMMNG::getInstance().Exist(channelId)) {
+            SIMMNG::getInstance().Create(channelId);
+        }
 
-        request.set_bgr24((char*)bgr24, width*height * 3);		//bgr24图片字节大小为h*w*3
+        uint8_t *bgr24Dst = SIMMNG::getInstance().Get(channelId)->GetBuffer().bgr24Buff2;
+
+        request.set_videochl(channelId);
+        //request.set_bgr24((char*)bgr24, width*height * 3);		//bgr24图片字节大小为h*w*3
+        memcpy(bgr24Dst, bgr24, width*height * 3);	//图片拷贝到共享内存中
+        bgr24Dst[width*height * 3] = '\0';
         request.set_width(width);
         request.set_height(height);
 
@@ -119,8 +137,7 @@ public:
         rec::RecResultParser().Parse(reply.data(), recRspPO);
 
         //convert
-        // 深瞐返回的识别结果中没有guid，这里根据入参手动填进去
-        fillRecogResult(rec, recRspPO, param.obj.guid);
+        fillRecogResult(imageResult, recRspPO);
 
         return 0;
     }
@@ -144,7 +161,7 @@ private:
         LOG_INFO("succeed to init seemmo algo stub");
     }
 
-    void fillDetectResult(DetectResult &r, detect::DetectReplyPO &p) {
+    void fillDetectResult(ImageResult &r, detect::DetectReplyPO &p) {
         if (p.Code != 0) {
             LOG_ERROR("detect reply error, code {}, msg {}", p.Code, p.Message);
             return;
@@ -162,7 +179,7 @@ private:
             tmp.guid = a.GUID;
             tmp.trail = a.Trail;
             if (a.Detect.Body.Rect.size() == 4) {
-                tmp.detect.Set(a.Detect.Body.Rect[0], a.Detect.Body.Rect[1], a.Detect.Body.Rect[2], a.Detect.Body.Rect[3]);
+                tmp.detect = a.Detect.Body.Rect;
             }
             r.bikes.push_back(tmp);
         }
@@ -172,7 +189,7 @@ private:
             tmp.guid = a.GUID;
             tmp.trail = a.Trail;
             if (a.Detect.Body.Rect.size() == 4) {
-                tmp.detect.Set(a.Detect.Body.Rect[0], a.Detect.Body.Rect[1], a.Detect.Body.Rect[2], a.Detect.Body.Rect[3]);
+                tmp.detect = a.Detect.Body.Rect;
             }
             r.pedestrains.push_back(tmp);
         }
@@ -182,7 +199,7 @@ private:
             tmp.guid = a.GUID;
             tmp.trail = a.Trail;
             if (a.Detect.Body.Rect.size() == 4) {
-                tmp.detect.Set(a.Detect.Body.Rect[0], a.Detect.Body.Rect[1], a.Detect.Body.Rect[2], a.Detect.Body.Rect[3]);
+                tmp.detect = a.Detect.Body.Rect;
             }
             r.vehicles.push_back(tmp);
         }
@@ -208,7 +225,7 @@ private:
             tmp.contextCode = a.ContextCode;
             tmp.frameId = a.Timestamp;
             if (a.Detect.Body.Rect.size() == 4) {
-                tmp.detect.Set(a.Detect.Body.Rect[0], a.Detect.Body.Rect[1], a.Detect.Body.Rect[2], a.Detect.Body.Rect[3]);
+                tmp.detect = a.Detect.Body.Rect;
             }
             r.bikes.push_back(tmp);
         }
@@ -220,7 +237,7 @@ private:
             tmp.contextCode = a.ContextCode;
             tmp.frameId = a.Timestamp;
             if (a.Detect.Body.Rect.size() == 4) {
-                tmp.detect.Set(a.Detect.Body.Rect[0], a.Detect.Body.Rect[1], a.Detect.Body.Rect[2], a.Detect.Body.Rect[3]);
+                tmp.detect = a.Detect.Body.Rect;
             }
             r.pedestrains.push_back(tmp);
         }
@@ -232,13 +249,13 @@ private:
             tmp.contextCode = a.ContextCode;
             tmp.frameId = a.Timestamp;
             if (a.Detect.Body.Rect.size() == 4) {
-                tmp.detect.Set(a.Detect.Body.Rect[0], a.Detect.Body.Rect[1], a.Detect.Body.Rect[2], a.Detect.Body.Rect[3]);
+                tmp.detect = a.Detect.Body.Rect;
             }
             r.vehicles.push_back(tmp);
         }
     }
 
-    void fillRecogResult(RecogResult &r, rec::RecogReplyPO &p, const string objId) {
+    void fillRecogResult(ImageResult &r, rec::RecogReplyPO &p) {
         if (p.Code != 0) {
             LOG_ERROR("filter reply error, code {}, msg {}", p.Code, p.Message);
             return;
@@ -253,9 +270,8 @@ private:
         for (auto a : root.Bikes) {
             algo::BikeObject tmp;
             tmp.type = (algo::ObjectType)a.Type;
-            tmp.guid = objId;
             if (a.Detect.Body.Rect.size() == 4) {
-                tmp.detect.Set(a.Detect.Body.Rect[0], a.Detect.Body.Rect[1], a.Detect.Body.Rect[2], a.Detect.Body.Rect[3]);
+                tmp.detect = a.Detect.Body.Rect;
             }
 
             if (!a.Persons.empty()) {
@@ -270,9 +286,8 @@ private:
         for (auto a : root.Pedestrains) {
             algo::PersonObject tmp;
             tmp.type = (algo::ObjectType)a.Type;
-            tmp.guid = objId;
             if (a.Detect.Body.Rect.size() == 4) {
-                tmp.detect.Set(a.Detect.Body.Rect[0], a.Detect.Body.Rect[1], a.Detect.Body.Rect[2], a.Detect.Body.Rect[3]);
+                tmp.detect = a.Detect.Body.Rect;
             }
 
             tmp.attrs.age.WithName(a.Recognize.Age.Name);
@@ -301,9 +316,8 @@ private:
         for (auto a : root.Vehicles) {
             algo::VehicleObject tmp;
             tmp.type = (algo::ObjectType)a.Type;
-            tmp.guid = objId;
             if (a.Detect.Body.Rect.size() == 4) {
-                tmp.detect.Set(a.Detect.Body.Rect[0], a.Detect.Body.Rect[1], a.Detect.Body.Rect[2], a.Detect.Body.Rect[3]);
+                tmp.detect = a.Detect.Body.Rect;
             }
             tmp.attrs.brand.WithName(a.Recognize.Brand.Name);
             tmp.attrs.color.WithName(a.Recognize.Color.Name);
@@ -313,19 +327,20 @@ private:
         }
     }
 
-    void fillLocations(const RecogParam &r, vector<rec::LocationPO> &loc) {
-        rec::LocationPO l;
-        l.GUID = r.obj.guid;
-        l.ContextCode = r.ContextCode;
-        l.Rect.push_back(r.obj.detect.x);
-        l.Rect.push_back(r.obj.detect.y);
-        l.Rect.push_back(r.obj.detect.w);
-        l.Rect.push_back(r.obj.detect.h);
-        l.Trail = r.obj.trail;
-        l.Type = r.obj.type;
-        loc.push_back(l);
+    void fillDetectRegion(const TrailParam &r, trail::DetectRegionPO &regionPO) {
+        regionPO.regions = r.roi;
     }
 
+    void fillLocations(const RecogParam &r, vector<rec::LocationPO> &locPOArray) {
+        for (auto loc : r.locations) {
+            rec::LocationPO l;
+            l.ContextCode = loc.ContextCode;
+            l.Rect = loc.detect;
+            l.Trail = loc.trail;
+            l.Type = loc.type;
+            locPOArray.push_back(l);
+        }
+    }
 
 private:
     unique_ptr<brpc::Channel> channel_;
@@ -348,20 +363,21 @@ int32_t SeemmoAlgoStub::Trail(
     uint32_t width,
     uint32_t height,
     const TrailParam &param,
-    DetectResult &detect,
-    FilterResult &filter
+    ImageResult &imageResult,
+    FilterResult &filterResult
 ) {
-    return videoProcClient.Trail(channelId, frameId, bgr24, width, height, param, detect, filter);
+    return videoProcClient.Trail(channelId, frameId, bgr24, width, height, param, imageResult, filterResult);
 }
 
 int32_t SeemmoAlgoStub::Recognize(
+    uint32_t channelId,
     uint8_t *bgr24,
     uint32_t width,
     uint32_t height,
     const RecogParam &param,
-    RecogResult &rec
+    ImageResult &imageResult
 ) {
-    return videoProcClient.Recognize(bgr24, width, height, param, rec);
+    return videoProcClient.Recognize(channelId, bgr24, width, height, param, imageResult);
 }
 
 }

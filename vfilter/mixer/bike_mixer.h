@@ -15,35 +15,25 @@ namespace vf {
 class BikeMixer : public VMixer {
 public:
 
-    void SetDetectedObjects(vector<algo::BikeObject> &objs) {
+    void SetObjects(vector<algo::BikeObject> &objs) {
         unique_lock<mutex> lck(mutex_);
-        detect_.clear();
-        for (auto o : objs) {
-            detect_[o.guid] = o;
-        }
-    }
-
-    void SetRecognizedObjects(vector<algo::BikeObject> &objs) {
-        unique_lock<mutex> lck(mutex_);
-        for (auto o : objs) {
-            recog_[o.guid] = o;
-        }
+        objs_.clear();
+        objs_ = objs;
     }
 
     void MixFrame(cv::Mat &frame) {
-        ObjectMap tmpDetect, tmpRecog;
+        vector<algo::BikeObject> tmpObjs;
         {
             unique_lock<mutex> lck(mutex_);
-            tmpDetect = detect_;
-            tmpRecog = recog_;
+            tmpObjs = objs_;
         }
 
-        for (auto t : tmpDetect) {
+        for (auto t : tmpObjs) {
             // »­¾ØÐÎ¿ò
-            algo::Rect &rect = t.second.detect;
+            algo::Rect &rect = t.detect;
             int32_t thickness = 2;
-            cv::rectangle(frame, cvPoint(rect.x, rect.y), cvPoint(rect.x + rect.w, rect.y + rect.h), CV_RGB(0, 0, 255), thickness,
-                          1, 0);
+            int32_t x = rect[0], y = rect[1], w=rect[2], h=rect[3];
+            cv::rectangle(frame, cvPoint(x, y), cvPoint(x + w, y + h), CV_RGB(0, 0, 255), thickness, 1, 0);
 
 //             if (recog_.find(t.first) != recog_.end()) {
 //                 auto persons = recog_[t.first].persons;
@@ -65,9 +55,7 @@ public:
     }
 
 private:
-    typedef map<string, algo::BikeObject> ObjectMap;
-    ObjectMap detect_;		// ¼ì²â
-    ObjectMap recog_;		// Ê¶±ð
+    vector<algo::BikeObject> objs_;
     mutex mutex_;
 };
 

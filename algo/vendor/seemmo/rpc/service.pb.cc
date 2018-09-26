@@ -133,6 +133,7 @@ const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUT
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::algo::seemmo::RecognizeRequest, videochl_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::algo::seemmo::RecognizeRequest, bgr24_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::algo::seemmo::RecognizeRequest, height_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::algo::seemmo::RecognizeRequest, width_),
@@ -148,7 +149,7 @@ static const ::google::protobuf::internal::MigrationSchema schemas[] GOOGLE_PROT
   { 0, -1, sizeof(::algo::seemmo::TrailRequest)},
   { 11, -1, sizeof(::algo::seemmo::TrailReply)},
   { 17, -1, sizeof(::algo::seemmo::RecognizeRequest)},
-  { 26, -1, sizeof(::algo::seemmo::RecognizeReply)},
+  { 27, -1, sizeof(::algo::seemmo::RecognizeReply)},
 };
 
 static ::google::protobuf::Message const * const file_default_instances[] = {
@@ -183,17 +184,17 @@ void AddDescriptorsImpl() {
       "uest\022\020\n\010videoChl\030\001 \001(\r\022\021\n\ttimestamp\030\002 \001("
       "\004\022\r\n\005bgr24\030\003 \001(\014\022\016\n\006height\030\004 \001(\r\022\r\n\005widt"
       "h\030\005 \001(\r\022\r\n\005param\030\006 \001(\t\"\032\n\nTrailReply\022\014\n\004"
-      "data\030\001 \001(\t\"O\n\020RecognizeRequest\022\r\n\005bgr24\030"
-      "\001 \001(\014\022\016\n\006height\030\002 \001(\r\022\r\n\005width\030\003 \001(\r\022\r\n\005"
-      "param\030\004 \001(\t\"\036\n\016RecognizeReply\022\014\n\004data\030\001 "
-      "\001(\t2\234\001\n\020VideoProcService\022=\n\005Trail\022\031.algo"
-      ".seemmo.TrailRequest\032\027.algo.seemmo.Trail"
-      "Reply\"\000\022I\n\tRecognize\022\035.algo.seemmo.Recog"
-      "nizeRequest\032\033.algo.seemmo.RecognizeReply"
-      "\"\000B\003\200\001\001b\006proto3"
+      "data\030\001 \001(\t\"a\n\020RecognizeRequest\022\020\n\010videoC"
+      "hl\030\001 \001(\r\022\r\n\005bgr24\030\002 \001(\014\022\016\n\006height\030\003 \001(\r\022"
+      "\r\n\005width\030\004 \001(\r\022\r\n\005param\030\005 \001(\t\"\036\n\016Recogni"
+      "zeReply\022\014\n\004data\030\001 \001(\t2\234\001\n\020VideoProcServi"
+      "ce\022=\n\005Trail\022\031.algo.seemmo.TrailRequest\032\027"
+      ".algo.seemmo.TrailReply\"\000\022I\n\tRecognize\022\035"
+      ".algo.seemmo.RecognizeRequest\032\033.algo.see"
+      "mmo.RecognizeReply\"\000B\003\200\001\001b\006proto3"
   };
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-      descriptor, 455);
+      descriptor, 473);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "service.proto", &protobuf_RegisterTypes);
 }
@@ -900,6 +901,7 @@ void TrailReply::InternalSwap(TrailReply* other) {
 void RecognizeRequest::InitAsDefaultInstance() {
 }
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int RecognizeRequest::kVideoChlFieldNumber;
 const int RecognizeRequest::kBgr24FieldNumber;
 const int RecognizeRequest::kHeightFieldNumber;
 const int RecognizeRequest::kWidthFieldNumber;
@@ -925,18 +927,18 @@ RecognizeRequest::RecognizeRequest(const RecognizeRequest& from)
   if (from.param().size() > 0) {
     param_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.param_);
   }
-  ::memcpy(&height_, &from.height_,
+  ::memcpy(&videochl_, &from.videochl_,
     static_cast<size_t>(reinterpret_cast<char*>(&width_) -
-    reinterpret_cast<char*>(&height_)) + sizeof(width_));
+    reinterpret_cast<char*>(&videochl_)) + sizeof(width_));
   // @@protoc_insertion_point(copy_constructor:algo.seemmo.RecognizeRequest)
 }
 
 void RecognizeRequest::SharedCtor() {
   bgr24_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   param_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  ::memset(&height_, 0, static_cast<size_t>(
+  ::memset(&videochl_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&width_) -
-      reinterpret_cast<char*>(&height_)) + sizeof(width_));
+      reinterpret_cast<char*>(&videochl_)) + sizeof(width_));
 }
 
 RecognizeRequest::~RecognizeRequest() {
@@ -971,9 +973,9 @@ void RecognizeRequest::Clear() {
 
   bgr24_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   param_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  ::memset(&height_, 0, static_cast<size_t>(
+  ::memset(&videochl_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&width_) -
-      reinterpret_cast<char*>(&height_)) + sizeof(width_));
+      reinterpret_cast<char*>(&videochl_)) + sizeof(width_));
   _internal_metadata_.Clear();
 }
 
@@ -987,10 +989,24 @@ bool RecognizeRequest::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // bytes bgr24 = 1;
+      // uint32 videoChl = 1;
       case 1: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
+            static_cast< ::google::protobuf::uint8>(8u /* 8 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &videochl_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bytes bgr24 = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(18u /* 18 & 0xFF */)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
                 input, this->mutable_bgr24()));
         } else {
@@ -999,10 +1015,10 @@ bool RecognizeRequest::MergePartialFromCodedStream(
         break;
       }
 
-      // uint32 height = 2;
-      case 2: {
+      // uint32 height = 3;
+      case 3: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(16u /* 16 & 0xFF */)) {
+            static_cast< ::google::protobuf::uint8>(24u /* 24 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
@@ -1013,10 +1029,10 @@ bool RecognizeRequest::MergePartialFromCodedStream(
         break;
       }
 
-      // uint32 width = 3;
-      case 3: {
+      // uint32 width = 4;
+      case 4: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(24u /* 24 & 0xFF */)) {
+            static_cast< ::google::protobuf::uint8>(32u /* 32 & 0xFF */)) {
 
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
@@ -1027,10 +1043,10 @@ bool RecognizeRequest::MergePartialFromCodedStream(
         break;
       }
 
-      // string param = 4;
-      case 4: {
+      // string param = 5;
+      case 5: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(34u /* 34 & 0xFF */)) {
+            static_cast< ::google::protobuf::uint8>(42u /* 42 & 0xFF */)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadString(
                 input, this->mutable_param()));
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
@@ -1069,30 +1085,35 @@ void RecognizeRequest::SerializeWithCachedSizes(
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // bytes bgr24 = 1;
+  // uint32 videoChl = 1;
+  if (this->videochl() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->videochl(), output);
+  }
+
+  // bytes bgr24 = 2;
   if (this->bgr24().size() > 0) {
     ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
-      1, this->bgr24(), output);
+      2, this->bgr24(), output);
   }
 
-  // uint32 height = 2;
+  // uint32 height = 3;
   if (this->height() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt32(2, this->height(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(3, this->height(), output);
   }
 
-  // uint32 width = 3;
+  // uint32 width = 4;
   if (this->width() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt32(3, this->width(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(4, this->width(), output);
   }
 
-  // string param = 4;
+  // string param = 5;
   if (this->param().size() > 0) {
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->param().data(), static_cast<int>(this->param().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
       "algo.seemmo.RecognizeRequest.param");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
-      4, this->param(), output);
+      5, this->param(), output);
   }
 
   if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
@@ -1109,24 +1130,29 @@ void RecognizeRequest::SerializeWithCachedSizes(
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // bytes bgr24 = 1;
+  // uint32 videoChl = 1;
+  if (this->videochl() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->videochl(), target);
+  }
+
+  // bytes bgr24 = 2;
   if (this->bgr24().size() > 0) {
     target =
       ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
-        1, this->bgr24(), target);
+        2, this->bgr24(), target);
   }
 
-  // uint32 height = 2;
+  // uint32 height = 3;
   if (this->height() != 0) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(2, this->height(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(3, this->height(), target);
   }
 
-  // uint32 width = 3;
+  // uint32 width = 4;
   if (this->width() != 0) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(3, this->width(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(4, this->width(), target);
   }
 
-  // string param = 4;
+  // string param = 5;
   if (this->param().size() > 0) {
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->param().data(), static_cast<int>(this->param().length()),
@@ -1134,7 +1160,7 @@ void RecognizeRequest::SerializeWithCachedSizes(
       "algo.seemmo.RecognizeRequest.param");
     target =
       ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
-        4, this->param(), target);
+        5, this->param(), target);
   }
 
   if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
@@ -1154,28 +1180,35 @@ size_t RecognizeRequest::ByteSizeLong() const {
       ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
         (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()));
   }
-  // bytes bgr24 = 1;
+  // bytes bgr24 = 2;
   if (this->bgr24().size() > 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::BytesSize(
         this->bgr24());
   }
 
-  // string param = 4;
+  // string param = 5;
   if (this->param().size() > 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::StringSize(
         this->param());
   }
 
-  // uint32 height = 2;
+  // uint32 videoChl = 1;
+  if (this->videochl() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt32Size(
+        this->videochl());
+  }
+
+  // uint32 height = 3;
   if (this->height() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::UInt32Size(
         this->height());
   }
 
-  // uint32 width = 3;
+  // uint32 width = 4;
   if (this->width() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::UInt32Size(
@@ -1217,6 +1250,9 @@ void RecognizeRequest::MergeFrom(const RecognizeRequest& from) {
 
     param_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.param_);
   }
+  if (from.videochl() != 0) {
+    set_videochl(from.videochl());
+  }
   if (from.height() != 0) {
     set_height(from.height());
   }
@@ -1253,6 +1289,7 @@ void RecognizeRequest::InternalSwap(RecognizeRequest* other) {
     GetArenaNoVirtual());
   param_.Swap(&other->param_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
     GetArenaNoVirtual());
+  swap(videochl_, other->videochl_);
   swap(height_, other->height_);
   swap(width_, other->width_);
   _internal_metadata_.Swap(&other->_internal_metadata_);

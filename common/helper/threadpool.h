@@ -29,6 +29,7 @@ class threadpool {
     condition_variable _task_cv;   //条件阻塞
     atomic<bool> _run{ true };     //线程池是否执行
     atomic<int>  _idlThrNum{ 0 };  //空闲线程数量
+    bool _detachable;
 
     using thr_oncreate_cb = function<void()>;
     using thr_ondestroy_cb = function<void()>;
@@ -37,16 +38,26 @@ class threadpool {
 
 public:
     inline threadpool(unsigned short size = 4, thr_oncreate_cb oncreate_cb = nullptr,
-                      thr_ondestroy_cb ondestroy_cb = nullptr) {
+                      thr_ondestroy_cb ondestroy_cb = nullptr, bool detachable=false) {
         _oncreate_cb = oncreate_cb;
         _ondestroy_cb = ondestroy_cb;
+        this->_detachable = detachable;
         addThread(size);
     }
+
     inline ~threadpool() {
+        if (_run) {
+            reset();
+        }
+    }
+
+    inline void reset() {
         _run = false;
         _task_cv.notify_all(); // 唤醒所有线程执行
         for (thread &thread : _pool) {
-            //thread.detach(); // 让线程“自生自灭”
+            if (_detachable) {
+                thread.detach(); // 让线程“自生自灭”
+            }
             if (thread.joinable()) {
                 thread.join();    // 等待任务结束， 前提：线程一定会执行完
             }

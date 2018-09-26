@@ -5,9 +5,8 @@
 #include <butil/logging.h>
 #include <brpc/server.h>
 
-#include "common/helper/logger.h"
-#include "algo/vendor/seemmo/rpc/service.pb.h"
 #include "algo/vendor/seemmo/server/algo_loader.h"
+#include "algo/vendor/seemmo/server/video_service_impl.h"
 
 //----------------server params----------------
 DEFINE_bool(echo_attachment, true, "Echo attachment as well");
@@ -18,84 +17,20 @@ DEFINE_int32(idle_timeout_s, -1, "Connection will be closed if there is no "
 //----------------algo params----------------
 DEFINE_string(base_dir, "../../", "the base dir");
 DEFINE_string(auth_server, "192.168.1.198:12821", "the address of auth server");
+DEFINE_int32(img_core_num, 1, "the number of image core");
+DEFINE_int32(video_core_num, 1, "the number of video core");
 DEFINE_int32(gpu_dev, 0, "the gpu device");
 DEFINE_int32(auth_type, 1, "the auth_type");
 
 
 using namespace std;
 
-namespace algo {
-namespace seemmo {
-
-class VideoProcServiceImpl : public VideoProcService {
-public:
-    VideoProcServiceImpl(algo::seemmo::AlgoLoader &algo) : algo_(algo) {
-    };
-
-    virtual ~VideoProcServiceImpl() {};
-
-    virtual void Trail(::google::protobuf::RpcController* controller, const ::algo::seemmo::TrailRequest* request,
-                       ::algo::seemmo::TrailReply* response, ::google::protobuf::Closure* done) {
-
-        brpc::ClosureGuard done_guard(done);
-
-        brpc::Controller* cntl =
-            static_cast<brpc::Controller*>(controller);
-
-        uint32_t bufLen = 1024 * 1024 * 5;
-        unique_ptr<char[]> buf(new char[bufLen]);
-        int ret = algo_.Trail(
-                      request->videochl(),
-                      request->timestamp(),
-                      (const uint8_t*)request->bgr24().data(),
-                      request->height(),
-                      request->width(),
-                      request->param(),
-                      buf.get(),
-                      bufLen);
-        if (0 != ret) {
-            LOG_ERROR("Trail error, {}", ret);
-            return;
-        }
-        response->set_data(buf.get(), bufLen);
-    }
-
-    virtual void Recognize(::google::protobuf::RpcController* controller, const ::algo::seemmo::RecognizeRequest* request,
-                           ::algo::seemmo::RecognizeReply* response, ::google::protobuf::Closure* done) {
-        brpc::ClosureGuard done_guard(done);
-
-        brpc::Controller* cntl =
-            static_cast<brpc::Controller*>(controller);
-
-        uint32_t bufLen = 1024 * 1024 * 5;
-        unique_ptr<char[]> buf(new char[bufLen]);
-        int ret = algo_.Recognize(
-                      (const uint8_t*)request->bgr24().data(),
-                      request->width(),
-                      request->height(),
-                      request->param(),
-                      buf.get(),
-                      bufLen);
-        if (0 != ret) {
-            LOG_ERROR("Recognize error, {}", ret);
-            return;
-        }
-        response->set_data(buf.get(), bufLen);
-    }
-
-private:
-    AlgoLoader &algo_;
-};
-}
-}
-
-
 int main(int argc, char* argv[]) {
     GFLAGS_NAMESPACE::ParseCommandLineFlags(&argc, &argv, true);
 
     // load algorithm
     algo::seemmo::AlgoLoader algo;
-    algo.Load(FLAGS_base_dir, 4, 4, FLAGS_auth_type, FLAGS_auth_server, FLAGS_gpu_dev);
+    algo.Load(FLAGS_base_dir, FLAGS_img_core_num, FLAGS_video_core_num, FLAGS_auth_type, FLAGS_auth_server, FLAGS_gpu_dev);
 
     // create rpc server
     brpc::Server server;

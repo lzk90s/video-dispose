@@ -26,27 +26,21 @@
     <ClCompile Include="..\..\vfilter\vfilter.cc">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\vfilter\vsink.cc">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\vfilter\mixer\cvx_text.cc">
       <Filter>源文件\mixer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\vfilter\async_algo_proc.h">
+      <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\vfilter\vfilter.h">
       <Filter>源文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\vfilter\vsink.h">
-      <Filter>源文件</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\vfilter\app.h">
       <Filter>源文件</Filter>
     </ClInclude>
     <ClInclude Include="..\..\vfilter\frame_cache.h">
-      <Filter>源文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\vfilter\async_algo_proc.h">
       <Filter>源文件</Filter>
     </ClInclude>
     <ClInclude Include="..\..\vfilter\mixer\vmixer.h">
@@ -63,6 +57,9 @@
     </ClInclude>
     <ClInclude Include="..\..\vfilter\mixer\bike_mixer.h">
       <Filter>源文件\mixer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\vfilter\vsink.h">
+      <Filter>源文件</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

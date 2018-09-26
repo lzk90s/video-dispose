@@ -83,11 +83,11 @@
     <None Include="..\..\vfilter\Makefile" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\vfilter\async_algo_proc.h" />
     <ClCompile Include="..\..\vfilter\mixer\cvx_text.cc" />
     <ClCompile Include="..\..\vfilter\vfilter.cc" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\vfilter\async_algo_proc.h" />
     <ClInclude Include="..\..\vfilter\app.h" />
     <ClInclude Include="..\..\vfilter\frame_cache.h" />
     <ClInclude Include="..\..\vfilter\mixer\bike_mixer.h" />

@@ -24,16 +24,17 @@ public:
         uint32_t width,
         uint32_t height,
         const TrailParam &param,
-        DetectResult &detect,
+        ImageResult &image,
         FilterResult &filter
     ) override;
 
     int32_t Recognize(
+        uint32_t channelId,
         uint8_t *bgr24,
         uint32_t width,
         uint32_t height,
         const RecogParam &param,
-        RecogResult &rec
+        ImageResult &rec
     ) override;
 };
 

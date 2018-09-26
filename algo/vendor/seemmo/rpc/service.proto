@@ -18,10 +18,11 @@ message TrailReply {
 }
 
 message RecognizeRequest{
-    bytes bgr24 = 1;
-    uint32 height = 2;
-    uint32 width = 3;
-    string param = 4;
+    uint32 videoChl = 1;
+    bytes bgr24 = 2;
+    uint32 height = 3;
+    uint32 width = 4;
+    string param = 5;
 }
 
 message RecognizeReply{

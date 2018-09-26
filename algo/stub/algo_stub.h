@@ -14,17 +14,24 @@ namespace algo {
 //检测跟踪参数
 class TrailParam {
 public:
+    vector<Point> roi;	//ROI区域，每一个point是ROI多边形区域的一个点
 };
 
 //识别参数
 class RecogParam {
 public:
-    string ContextCode;
-    BaseObject obj;		//需要识别的目标
+    typedef struct tagObjLocation {
+        string ContextCode;
+        ObjectType type;			// 目标类型
+        Rect detect;		// 目标所在区域(x,y,w,h)
+        Shift trail;		// 目标跟踪变化(x,y)
+    } ObjLocation;
+
+    vector<ObjLocation> locations;
 };
 
 //检测结果
-class DetectResult {
+class ImageResult {
 public:
     vector<VehicleObject> vehicles;		// 机动车
     vector<PersonObject> pedestrains;		// 行人
@@ -41,15 +48,6 @@ public:
     vector<FaceFilter> faces;			// 人脸
 };
 
-//识别结果
-class RecogResult {
-public:
-    vector<VehicleObject> vehicles;		// 机动车
-    vector<PersonObject> pedestrains;		// 行人
-    vector<BikeObject> bikes;			// 非机动车
-    vector<FaceObject> faces;			// 人脸
-};
-
 class AlgoStub {
 public:
     AlgoStub(const string &vendor) {
@@ -64,19 +62,20 @@ public:
         uint32_t width,
         uint32_t height,
         const TrailParam &param,
-        DetectResult &detect,
-        FilterResult &filter
+        ImageResult &imageResult,
+        FilterResult &filterResult
     ) {
         throw runtime_error("unimplemented method");
     };
 
     //识别
     virtual int32_t Recognize(
+        uint32_t channelId,
         uint8_t *bgr24,
         uint32_t width,
         uint32_t height,
         const RecogParam &param,
-        RecogResult &rec
+        ImageResult &imageResult
     ) {
         throw runtime_error("unimplemented method");
     };

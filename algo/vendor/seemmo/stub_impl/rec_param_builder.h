@@ -21,7 +21,19 @@ typedef struct tagLocationPO {
 } LocationPO;
 
 void to_json(json& j, const LocationPO& p) {
-    j = json{ { "Type", p.Type },{ "GUID", p.GUID },{ "ContextCode", p.ContextCode },{ "Rect", p.Rect },{ "Trail", p.Trail } };
+    j["Type"] = p.Type;
+    if (!p.GUID.empty()) {
+        j["GUID"] = p.GUID;
+    }
+    if (!p.ContextCode.empty()) {
+        j["ContextCode"] = p.ContextCode;
+    }
+    if (!p.Rect.empty()) {
+        j["Rect"] = p.Rect;
+    }
+    if (!p.Trail.empty()) {
+        j["Trail"] = p.Trail;
+    }
 }
 
 class RecParamBuilder {
