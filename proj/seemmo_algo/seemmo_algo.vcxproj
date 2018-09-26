@@ -13,6 +13,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\algo\vendor\seemmo\rpc\service.pb.h" />
     <ClInclude Include="..\..\algo\vendor\seemmo\server\algo_loader.h" />
+    <ClInclude Include="..\..\algo\vendor\seemmo\server\video_service_impl.h" />
     <ClInclude Include="..\..\algo\vendor\seemmo\stub_impl\detect_result_parser.h" />
     <ClInclude Include="..\..\algo\vendor\seemmo\stub_impl\filter_param_builder.h" />
     <ClInclude Include="..\..\algo\vendor\seemmo\stub_impl\filter_result_parser.h" />
@@ -20,6 +21,7 @@
     <ClInclude Include="..\..\algo\vendor\seemmo\stub_impl\rec_result_parser.h" />
     <ClInclude Include="..\..\algo\vendor\seemmo\stub_impl\seemmo_stub.h" />
     <ClInclude Include="..\..\algo\vendor\seemmo\wrapper\algo_wrapper.h" />
+    <ClInclude Include="..\..\algo\vendor\seemmo\wrapper\workers.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\algo\vendor\seemmo\Makefile_server" />
