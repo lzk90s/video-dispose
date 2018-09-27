@@ -12,15 +12,12 @@ cp -rf libavfilter/* ${FFMPEG_HOME}/libavfilter
 
 # patch 
 allfilters_c_file=${FFMPEG_HOME}/libavfilter/allfilters.c
-libavfilter_makefile=${FFMPEG_HOME}/libavfilter/Makefile
 fftool_makefile=${FFMPEG_HOME}/fftools/Makefile
 already_exist=`grep ff_vf_algo ${allfilters_c_file} | wc -w`
 if [ 0 -eq ${already_exist} ]; then
 	echo "Patch allfilters.c"
 	sed -i 's/extern AVFilter ff_af_abench;/extern AVFilter ff_af_abench;\nextern AVFilter ff_vf_algo;/g' ${allfilters_c_file}
-	sed -i 's/vsink_nullsink.o/vsink_nullsink.o\nOBJS-$(CONFIG_ALGO_FILTER) += vf_algo.o\n/g' ${libavfilter_makefile}
-	sed -i '1 s/^/EXTRALIBS-ffmpeg += -lvideo_filter\n/g' ${fftool_makefile}
-	sed -i '2 s/^/EXTRALIBS-ffprobe += -lvideo_filter\n/g' ${fftool_makefile}
+	sed -i 's/vsink_nullsink.o/vsink_nullsink.o\nOBJS-$(CONFIG_ALGO_FILTER) += vf_algo.o\n/g' 
 else
 	echo "Alreay patch, skip"
 fi
