@@ -25,16 +25,22 @@ namespace seemmo {
 
 class SharedImageMemory {
 public:
-    SharedImageMemory(int32_t channelId) {
+    SharedImageMemory(int32_t channelId, bool autoDelete = false) {
         this->channelId_ = channelId;
         shm_ = nullptr;
+        autoDelete_ = autoDelete;
 
         //加一个大数，避免冲突
         key_t key = (key_t)(channelId_ + 20000);
 
-        shmid_ = shmget(key, sizeof(SharedImageBuffer), 0666 | IPC_CREAT);
+        shmid_ = shmget(key, sizeof(SharedImageBuffer),  0666 | IPC_CREAT | IPC_EXCL);
         if (shmid_ == -1) {
-            throw runtime_error("Get shared memory failed");
+            cout << "Shared memory already exist" << endl;
+            //已经存在，直接get
+            shmid_ = shmget(key, sizeof(SharedImageBuffer), 0666 | IPC_CREAT);
+            if (shmid_ == -1) {
+                throw runtime_error("Create shared memory failed");
+            }
         }
 
         shm_ = shmat(shmid_, 0, 0);
@@ -50,7 +56,9 @@ public:
     ~SharedImageMemory() {
         // 把共享内存从当前进程中分离
         shmdt(shm_);
-        shmctl(shmid_, IPC_RMID, 0);
+        if (autoDelete_) {
+            shmctl(shmid_, IPC_RMID, 0);
+        }
     }
 
     SharedImageBuffer& GetBuffer() {
@@ -60,6 +68,7 @@ public:
 private:
     int32_t shmid_;
     int32_t channelId_;
+    bool autoDelete_;
     SharedImageBuffer *buffer_;
     void *shm_;
 };
@@ -71,12 +80,12 @@ public:
         sharedMemMap_.clear();
     }
 
-    void Create(int32_t channelId) {
+    void Create(int32_t channelId, bool autoDelete=false) {
         unique_lock<mutex> lck(mutex_);
         if (sharedMemMap_.find(channelId) != sharedMemMap_.end()) {
             return;
         }
-        sharedMemMap_[channelId] = make_shared<SharedImageMemory>(channelId);
+        sharedMemMap_[channelId] = make_shared<SharedImageMemory>(channelId, autoDelete);
     }
 
     void Delete(int32_t channelId) {

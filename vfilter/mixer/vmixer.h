@@ -31,7 +31,7 @@ protected:
     //画目标的矩形框
     virtual void mixObjectRectangle(cv::Mat &frame, int32_t x, int32_t y, int32_t w, int32_t h,
                                     CvScalar color= CV_RGB(255,255,255)) {
-        int32_t thickness = 2;
+        int32_t thickness = 3;
         cv::rectangle(frame, cvPoint(x, y), cvPoint(x + w, y + h), color, thickness, 1, 0);
     }
 
@@ -69,9 +69,31 @@ protected:
             //字体的开始坐标x，y
             int x1 = sx + MARGIN_LEFT;
             int y1 = sy + idx * (fontSize + MARGIN_TOP);
+            int w1 = maxFontNum * fontSize;
+            int h1 = fontSize;
+
+            //截断处理
+            if (x1 >= frame.cols) {
+                x1 = frame.cols;
+            }
+            if (y1 >= frame.rows) {
+                y1 = frame.rows;
+            }
+            if (x1 + w1 >= frame.cols) {
+                w1 = frame.cols - x1;
+            }
+            if (y1 + h1 >= frame.rows) {
+                h1 = frame.rows - y1;
+            }
+
+            // 超过最大，不显示
+            if (y1 + fontSize > frame.rows) {
+                LOG_WARN("Ignore attribute {}", a.name.c_str());
+                continue;
+            }
 
             //画字体阴影背景(x1,y1,字体最大宽度,字体高度)
-            cv::Rect rect = cv::Rect(x1, y1, maxFontNum*fontSize, fontSize);
+            cv::Rect rect = cv::Rect(x1, y1, w1, h1);
             cv::Mat roi = frame(rect);
             cv::Mat mask = roi.clone();
             cv::rectangle(mask, { 0,0, mask.cols, mask.rows }, CV_RGB(50, 50, 50), -1);

@@ -22,8 +22,8 @@ public:
     AlgoController() {
     }
 
-    void Init(const string &basedir, uint32_t imgCoreNum, uint32_t videoCoreNum, const string &authServer,
-              uint32_t authType, uint32_t hwDevId) {
+    void Init(const string &basedir, uint32_t workerThrNum, uint32_t imgCoreNum, uint32_t videoCoreNum,
+              const string &authServer, uint32_t authType, uint32_t hwDevId) {
         basedir_ = basedir;
         imgCoreNum_ = imgCoreNum;
         videoCoreNum_ = videoCoreNum;
@@ -31,20 +31,20 @@ public:
         authType_ = authType;
         gpuDevId_ = hwDevId;
 
-        LOG_INFO("Init seemmo sdk, basedir={}, imgCoreNum={}, videoCoreNum={}, authServer={}, authType={}, hwDevId={}",
-                 basedir_, imgCoreNum_, videoCoreNum_, authServer_, authType_, gpuDevId_);
+        LOG_INFO("Init seemmo sdk, basedir={}, workerThrNum={}, imgCoreNum={}, videoCoreNum={}, authServer={}, authType={}, hwDevId={}",
+                 basedir_, workerThrNum, imgCoreNum_, videoCoreNum_, authServer_, authType_, gpuDevId_);
 
         // 深瞐sdk进程初始化
         int ret = seemmo_process_init(basedir_.c_str(), imgCoreNum_, videoCoreNum_, authServer_.c_str(), authType_, true);
         if (0 != ret) {
-            throw runtime_error("init seemmo sdk error, ret " + std::to_string(ret));
+            throw runtime_error("Init seemmo sdk error, ret " + std::to_string(ret));
         }
 
         LOG_INFO("Init seemmo sdk succeed");
 
         // 初始化worker
-        trailWorker = std::make_shared<TrailWorker>(gpuDevId_, videoCoreNum_);
-        recWorker = std::make_shared<RecognizeWorker>(gpuDevId_, imgCoreNum_);
+        trailWorker = std::make_shared<TrailWorker>(gpuDevId_, workerThrNum);
+        recWorker = std::make_shared<RecognizeWorker>(gpuDevId_, workerThrNum);
 
         // 等待所有worker启动完成
         trailWorker->WaitStartOk();
@@ -110,9 +110,9 @@ typedef Singleton<AlgoController> AlgoSingleton;
 
 using algo::seemmo::AlgoSingleton;
 
-int32_t Seemmo_AlgoInit(const char *basedir, uint32_t imgCoreNum, uint32_t videoCoreNum, const char *authServer,
-                        uint32_t authType, uint32_t hwDevId) {
-    AlgoSingleton::getInstance().Init(basedir, imgCoreNum, videoCoreNum, authServer, authType, hwDevId);
+int32_t Seemmo_AlgoInit(const char *basedir, uint32_t workerThrNum, uint32_t imgCoreNum, uint32_t videoCoreNum,
+                        const char *authServer, uint32_t authType, uint32_t hwDevId) {
+    AlgoSingleton::getInstance().Init(basedir, workerThrNum, imgCoreNum, videoCoreNum, authServer, authType, hwDevId);
     return ERR_OK;
 }
 

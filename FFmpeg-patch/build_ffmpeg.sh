@@ -45,6 +45,6 @@ echo "Configure ffmpeg"
 
 echo "Build ffmpeg, please wait"
 
-make clean && make -j$(nproc)
+make clean && make -j$(nproc) && make install
 
 echo "Build commplete"

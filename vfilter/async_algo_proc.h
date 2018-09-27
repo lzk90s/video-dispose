@@ -115,6 +115,11 @@ public:
             sink_.GetPersonMixer().SetObjects(recImageResult.pedestrains);
             sink_.GetVehicleMixer().SetObjects(recImageResult.vehicles);
             sink_.GetBikeMixer().SetObjects(recImageResult.bikes);
+        } else {
+            ImageResult recImageResult;	 // empty
+            sink_.GetPersonMixer().SetObjects(recImageResult.pedestrains);
+            sink_.GetVehicleMixer().SetObjects(recImageResult.vehicles);
+            sink_.GetBikeMixer().SetObjects(recImageResult.bikes);
         }
 
         return 0;

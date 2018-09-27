@@ -34,7 +34,7 @@ public:
 
         //没有共享内存时，创建共享内存
         if (!SIMMNG::getInstance().Exist(request->videochl())) {
-            SIMMNG::getInstance().Create(request->videochl());
+            SIMMNG::getInstance().Create(request->videochl(), true);
         }
 
         uint8_t *bgr24 = SIMMNG::getInstance().Get(request->videochl())->GetBuffer().bgr24Buff1;
@@ -66,7 +66,7 @@ public:
 
         // 没有共享内存时，创建
         if (!SIMMNG::getInstance().Exist(request->videochl())) {
-            SIMMNG::getInstance().Create(request->videochl());
+            SIMMNG::getInstance().Create(request->videochl(), true);
         }
 
         uint8_t *bgr24 = SIMMNG::getInstance().Get(request->videochl())->GetBuffer().bgr24Buff2;

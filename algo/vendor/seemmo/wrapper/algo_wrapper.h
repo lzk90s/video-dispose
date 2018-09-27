@@ -15,6 +15,7 @@ enum ErrType {
 };
 
 int32_t Seemmo_AlgoInit(const char *basedir,
+                        uint32_t workerThrNum,
                         uint32_t imgCoreNum,
                         uint32_t videoCoreNum,
                         const char *authServer,

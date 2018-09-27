@@ -12,6 +12,7 @@ namespace algo {
 namespace seemmo {
 
 typedef int32_t (*PF_Seemmo_AlgoInit)(const char *basedir,
+                                      uint32_t workerThrNum,
                                       uint32_t imgCoreNum,
                                       uint32_t videoCoreNum,
                                       const char *authServer,
@@ -54,6 +55,7 @@ public:
     }
 
     void Load(const string &baseDir,
+              uint32_t workerThrNum,
               uint32_t imgCoreNum,
               uint32_t videoCoreNum,
               uint32_t authType,
