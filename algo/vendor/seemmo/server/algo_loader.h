@@ -78,7 +78,8 @@ public:
             throw runtime_error("invalid symbol in dll");
         }
 
-        int ret = pf_Seemmo_AlgoInit_(baseDir.c_str(), imgCoreNum,videoCoreNum, authServer.c_str(),authType,gpuDevId);
+        int ret = pf_Seemmo_AlgoInit_(baseDir.c_str(), workerThrNum, imgCoreNum,videoCoreNum, authServer.c_str(),authType,
+                                      gpuDevId);
         if (0 != ret) {
             throw runtime_error("init algorithm error, ret " + std::to_string(ret));
         }

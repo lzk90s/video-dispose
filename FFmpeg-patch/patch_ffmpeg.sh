@@ -22,26 +22,3 @@ else
 	echo "Alreay patch, skip"
 fi
 # patch success
-
-
-cd ${FFMPEG_HOME}
-
-echo "Configure ffmpeg"
-
-./configure \
-    --enable-static \
-    --enable-gpl \
-    --enable-nvenc \
-    --enable-cuda \
-    --enable-cuvid \
-    --enable-nonfree \
-    --enable-libnpp \
-    --enable-libx264 \
-    --extra-cflags=-I/usr/local/cuda/include \
-    --extra-ldflags=-L/usr/local/cuda/lib64
-
-echo "Build ffmpeg, please wait"
-
-make clean && make -j$(nproc) && make install
-
-echo "Build commplete"

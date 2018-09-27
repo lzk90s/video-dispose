@@ -130,14 +130,14 @@ RUN \
 
     
 #------------ ffmpeg ------------
-FROM nvidia/cuda:10.0-devel-ubuntu16.04 as FFmpeg_builder
+FROM nvidia/cuda:9.2-devel-ubuntu16.04 as FFmpeg_builder
 
 WORKDIR /root
 
 #编译x264
 RUN sed -i 's/archive.ubuntu.com/mirrors.aliyun.com/g' /etc/apt/sources.list && \
     apt-get update && \
-    apt-get install -y curl pkg-config && \
+    apt-get install -y curl pkg-config git && \
     cd /root && \
     curl -O https://www.nasm.us/pub/nasm/releasebuilds/2.13.03/nasm-2.13.03.tar.gz && \
     tar -xzvf nasm-2.13.03.tar.gz && \
@@ -145,6 +145,7 @@ RUN sed -i 's/archive.ubuntu.com/mirrors.aliyun.com/g' /etc/apt/sources.list && 
     ./configure  --prefix=/usr &&\
     make -j$(nproc) && \
     make install && \
+    cd /root && \
     git clone http://git.videolan.org/git/x264.git && \
     cd /root/x264 && \
     ./configure --enable-shared && \
@@ -165,15 +166,19 @@ RUN cd /root && \
 
 #编译FFmpeg补丁
 RUN cd /root && \
-    git clone http://47.97.174.151:10080/service/video-dispose.git && \
+    git clone http://docker:docker123456@47.97.174.151:10080/service/video-dispose.git && \
     cd /root/video-dispose && \
     export FFMPEG_HOME='/root/FFmpeg' && \
     cd FFmpeg-patch && \
-    sh build_ffmpeg.sh
+    sh patch_ffmpeg.sh && \
+    cd /root/FFmpeg && \
+    ./configure  --enable-gpl --enable-nvenc --enable-cuda --enable-cuvid --enable-nonfree --enable-libnpp --enable-libx264 --extra-cflags=-I/usr/local/cuda/include --extra-ldflags=-L/usr/local/cuda/lib64 && \
+    make -j$(nproc) && \
+    make install 
 
 
 #------------ 深瞐sdk ------------
-FROM registry.cn-hangzhou.aliyuncs.com/gosun/seemmo_sdk:latest as seemmo_sdk
+FROM registry.cn-hangzhou.aliyuncs.com/gosun/seemmo_sdk:v1.4.0.7 as seemmo_sdk
 
    
 #------------ 高创sdk ------------
@@ -194,11 +199,33 @@ COPY --from=opencv_builder /usr/local/bin /usr/local/bin
 COPY --from=opencv_builder /usr/local/lib /usr/local/lib
 COPY --from=opencv_builder /usr/local/include /usr/local/include
 
+#拷贝ffmpeg
+COPY --from=FFmpeg_builder /usr/local/bin /usr/local/bin
+COPY --from=FFmpeg_builder /usr/local/include /usr/local/include
+COPY --from=FFmpeg_builder /usr/local/lib /usr/local/lib
+
 #拷贝深瞐算法
-COPY --from=seemmo_sdk /root/seemmo_sdk /opt/seemmo_sdk
+COPY --from=seemmo_sdk /root/seemmo_sdk /root/seemmo_sdk
 
-#拷贝高创算法
+env SEEMMO_SDK_HOME /root/seemmo_sdk
+env GOSUN_SDK_HOME /root/gosun_sdk
+ENV CFLAGS -fPIC
+ENV CXXFLAGS -fPIC
 
-RUN cd /root && \
-    git clone http://47.97.174.151:10080/service/video-dispose.git
+#编译libjpeg
+RUN sed -i 's/archive.ubuntu.com/mirrors.aliyun.com/g' /etc/apt/sources.list && \
+    apt-get update --fix-missing && \
+    apt-get install -y build-essential git pkg-config make g++ cmake automake \
+      libtool nasm vim libssl-dev libfreetype6 libfreetype6-dev && \
+    apt-get autoclean && apt-get clean && \
+    cd /root/ && \
+    git clone https://github.com/libjpeg-turbo/libjpeg-turbo.git && \
+    cd /root/libjpeg-turbo && \
+    mkdir build && cd build && cmake .. -DENABLE_SHARED=0 -DCMAKE_INSTALL_PREFIX=/usr/local && make install
+
+#编译视频处理插件    
+RUN rm -rf /usr/local/lib/libbrpc.so && \
+    cd /root && \
+    git clone http://docker:docker123456@47.97.174.151:10080/service/video-dispose.git
+       
     
