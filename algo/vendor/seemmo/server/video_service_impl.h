@@ -52,6 +52,7 @@ public:
                       bufLen);
         if (0 != ret) {
             LOG_ERROR("Trail error, {}", ret);
+            cntl->SetFailed("Trail error, code " + std::to_string(ret));
             return;
         }
         response->set_data(buf.get(), bufLen);
@@ -82,6 +83,7 @@ public:
                       bufLen);
         if (0 != ret) {
             LOG_ERROR("Recognize error, {}", ret);
+            cntl->SetFailed("Trail error, code " + std::to_string(ret));
             return;
         }
         response->set_data(buf.get(), bufLen);

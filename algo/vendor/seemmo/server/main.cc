@@ -7,6 +7,7 @@
 
 #include "algo/vendor/seemmo/server/algo_loader.h"
 #include "algo/vendor/seemmo/server/video_service_impl.h"
+#include "algo/vendor/seemmo/server/img_service_impl.h"
 
 //----------------server params----------------
 DEFINE_bool(echo_attachment, true, "Echo attachment as well");
@@ -39,11 +40,17 @@ int main(int argc, char* argv[]) {
 
     // Instance of your service.
     algo::seemmo::VideoProcServiceImpl videoProcServiceImpl(algo);
+    algo::seemmo::ImgProcServiceImpl imgProcServiceImpl(algo);
 
     // Add the service into server. Notice the second parameter, because the
     // service is put on stack, we don't want server to delete it, otherwise
     // use brpc::SERVER_OWNS_SERVICE.
     if (server.AddService(&videoProcServiceImpl,
+                          brpc::SERVER_DOESNT_OWN_SERVICE) != 0) {
+        LOG(ERROR) << "Fail to add service";
+        return -1;
+    }
+    if (server.AddService(&imgProcServiceImpl,
                           brpc::SERVER_DOESNT_OWN_SERVICE) != 0) {
         LOG(ERROR) << "Fail to add service";
         return -1;

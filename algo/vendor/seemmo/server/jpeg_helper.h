@@ -17,6 +17,11 @@
 namespace algo {
 namespace seemmo {
 
+struct my_error_mgr {
+    struct jpeg_error_mgr pub;
+    jmp_buf setjmp_buffer;
+};
+
 typedef struct my_error_mgr * my_error_ptr;
 
 void my_error_exit(j_common_ptr cinfo) {
@@ -27,10 +32,11 @@ void my_error_exit(j_common_ptr cinfo) {
     longjmp(myerr->setjmp_buffer, 1);
 }
 
-class JPGHelper {
+class JpegHelper {
 public:
 
-    int jpeg2rgb(unsigned char* jpeg_buffer, int jpeg_size, unsigned char* rgb_buffer, int* size, int* width, int* height) {
+    static int jpeg2rgb(unsigned char* jpeg_buffer, int jpeg_size, unsigned char* rgb_buffer, int* size, int* width,
+                        int* height) {
         struct jpeg_decompress_struct cinfo;
         struct my_error_mgr jerr;
 
@@ -79,11 +85,11 @@ public:
 
         buffer = (*cinfo.mem->alloc_sarray)((j_common_ptr)&cinfo, JPOOL_IMAGE, row_stride, 1);
 
-        printf("debug--:\nrgb_size: %d, size: %d w: %d h: %d row_stride: %d \n", rgb_size,
-               cinfo.image_width*cinfo.image_height * 3,
-               cinfo.image_width,
-               cinfo.image_height,
-               row_stride);
+//         printf("debug--:\nrgb_size: %d, size: %d w: %d h: %d row_stride: %d \n", rgb_size,
+//                cinfo.image_width*cinfo.image_height * 3,
+//                cinfo.image_width,
+//                cinfo.image_height,
+//                row_stride);
 
         tmp_buffer = rgb_buffer;
         while (cinfo.output_scanline < cinfo.output_height) { // 解压每一行
@@ -99,8 +105,8 @@ public:
         return 0;
     }
 
-    int rgb2jpeg(unsigned char* rgb_buffer, int width, int height, int quality, unsigned char** jpeg_buffer,
-                 unsigned long* jpeg_size) {
+    static int rgb2jpeg(unsigned char* rgb_buffer, int width, int height, int quality, unsigned char** jpeg_buffer,
+                        unsigned long* jpeg_size) {
         struct jpeg_compress_struct cinfo;
         struct jpeg_error_mgr jerr;
         int row_stride = 0;

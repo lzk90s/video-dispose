@@ -12,9 +12,9 @@ AR = ar
 
 VENDOR_DIR=$(TOP_DIR)/algo/gosun/vendor
 INC =-I$(VENDOR_DIR) -I$(TOP_DIR) -I$(TOP_DIR)/thirdparty -I$(TOP_DIR)/common
-LIB =-lbrpc -lprotobuf -lgflags -lz -lleveldb -lpthread -ldl -lssl -lcrypto
+LIB =-lbrpc -lprotobuf -lgflags -lz -lleveldb -lpthread -ldl -lssl -lcrypto -ljpeg
 
-CXX_FLAGS = $(INC) -std=c++11 -fPIC
+CXX_FLAGS = $(INC) -std=c++11 -fPIC -Wall
 LD_FLAGS = $(LIB)
 
 ifdef DEBUG

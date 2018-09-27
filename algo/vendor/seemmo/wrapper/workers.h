@@ -88,14 +88,14 @@ public:
     future<int32_t> commitAsyncTask(
         int32_t videoChl,
         uint64_t timeStamp,
-        const uint8_t *rgbImg,
+        const uint8_t *bgr24,
         uint32_t width,
         uint32_t height,
         const string &param,
         char *jsonRsp,
         uint32_t *rspLen
     ) {
-        return tp_->commit(trail, videoChl, timeStamp, rgbImg, width, height, param, jsonRsp, rspLen);
+        return tp_->commit(trail, videoChl, timeStamp, bgr24, width, height, param, jsonRsp, rspLen);
     }
 
 private:
@@ -130,19 +130,59 @@ public:
     }
 
     future<uint32_t> CommitAsyncTask(
-        const uint8_t *rgbImg,
+        const uint8_t *bgr24,
         uint32_t width,
         uint32_t height,
         const string &param,
         char *jsonRsp,
         uint32_t *rspLen
     ) {
-        return tp_->commit(rec, rgbImg, height, width, param, jsonRsp, rspLen);
+        return tp_->commit(rec, bgr24, height, width, param, jsonRsp, rspLen);
     }
 
 private:
 
     static uint32_t rec(
+        const uint8_t *bgr24,
+        uint32_t width,
+        uint32_t height,
+        const string &param,
+        char *jsonRsp,
+        uint32_t *rspLen
+    ) {
+        int32_t len = *rspLen;
+        int ret = seemmo_pvc_recog(1, &bgr24, &height, &width, param.c_str(), jsonRsp, len, 2);
+        if (0 != ret) {
+            LOG_ERROR("Call seemmo_pvc_recog error, ret {}", ret);
+            return ret;
+        }
+        *rspLen = len;
+        return ERR_OK;
+    }
+};
+
+
+//Í¼Æ¬¼ì²â+Ê¶±ðworker
+class DetectRecognizeWorker : public BusinessWorker {
+public:
+    DetectRecognizeWorker(uint32_t gpuDevId, uint32_t thrNum)
+        : BusinessWorker(gpuDevId, SEEMMO_LOAD_TYPE_ALL, thrNum) {
+    }
+
+    future<uint32_t> CommitAsyncTask(
+        const uint8_t *bgr24,
+        uint32_t width,
+        uint32_t height,
+        const string &param,
+        char *jsonRsp,
+        uint32_t *rspLen
+    ) {
+        return tp_->commit(detectAndRecog, bgr24, height, width, param, jsonRsp, rspLen);
+    }
+
+private:
+
+    static uint32_t detectAndRecog(
         const uint8_t *rgbImg,
         uint32_t width,
         uint32_t height,
@@ -160,6 +200,7 @@ private:
         return ERR_OK;
     }
 };
+
 
 }
 }

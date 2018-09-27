@@ -45,10 +45,12 @@ public:
         // 初始化worker
         trailWorker = std::make_shared<TrailWorker>(gpuDevId_, workerThrNum);
         recWorker = std::make_shared<RecognizeWorker>(gpuDevId_, workerThrNum);
+        decRecWorker = std::make_shared<DetectRecognizeWorker>(gpuDevId_, workerThrNum);
 
         // 等待所有worker启动完成
         trailWorker->WaitStartOk();
         recWorker->WaitStartOk();
+        decRecWorker->WaitStartOk();
     }
 
     void Destroy() {
@@ -56,10 +58,12 @@ public:
         //深瞐sdk需要并发退出，不能串行停，否则会死锁
         trailWorker->Close();
         recWorker->Close();
+        decRecWorker->Close();
 
         //等待各个worker退出完成
         trailWorker->WaitStopOk();
         recWorker->WaitStopOk();
+        decRecWorker->WaitStopOk();
 
         // 卸载深瞐sdk
         seemmo_uninit();
@@ -80,7 +84,7 @@ public:
     }
 
     uint32_t Recognize(
-        uint8_t *bgr24,
+        const uint8_t *bgr24,
         uint32_t width,
         uint32_t height,
         const string &param,
@@ -88,6 +92,18 @@ public:
         uint32_t *rspLen
     ) {
         auto f = recWorker->CommitAsyncTask(bgr24, height, width, param, jsonRsp, rspLen);
+        return f.get();
+    }
+
+    uint32_t DetectRecognize(
+        const uint8_t *bgr24,
+        uint32_t width,
+        uint32_t height,
+        const char *param,
+        char *jsonRsp,
+        uint32_t *rspLen
+    ) {
+        auto f = decRecWorker->CommitAsyncTask(bgr24, height, width, param, jsonRsp, rspLen);
         return f.get();
     }
 
@@ -100,6 +116,7 @@ private:
     uint32_t gpuDevId_;
     shared_ptr<TrailWorker> trailWorker;
     shared_ptr<RecognizeWorker> recWorker;
+    shared_ptr<DetectRecognizeWorker> decRecWorker;
 };
 
 typedef Singleton<AlgoController> AlgoSingleton;
@@ -110,25 +127,55 @@ typedef Singleton<AlgoController> AlgoSingleton;
 
 using algo::seemmo::AlgoSingleton;
 
-int32_t Seemmo_AlgoInit(const char *basedir, uint32_t workerThrNum, uint32_t imgCoreNum, uint32_t videoCoreNum,
-                        const char *authServer, uint32_t authType, uint32_t hwDevId) {
+int32_t SeemmoAlgo_Init(
+    const char *basedir,
+    uint32_t workerThrNum,
+    uint32_t imgCoreNum,
+    uint32_t videoCoreNum,
+    const char *authServer,
+    uint32_t authType,
+    uint32_t hwDevId
+) {
     AlgoSingleton::getInstance().Init(basedir, workerThrNum, imgCoreNum, videoCoreNum, authServer, authType, hwDevId);
     return ERR_OK;
 }
 
-int32_t Seemmo_AlgoDestroy(void) {
+int32_t SeemmoAlgo_Destroy(void) {
     AlgoSingleton::getInstance().Destroy();
     return ERR_OK;
 }
 
-int32_t Seemmo_AlgoTrail(int32_t videoChl, uint64_t timeStamp, const uint8_t *bgr24,
-                         uint32_t width, uint32_t height, const char *param, char *jsonRsp, uint32_t &rspLen) {
+int32_t SeemmoAlgo_Trail(
+    int32_t videoChl,
+    uint64_t timeStamp,
+    const uint8_t *bgr24,
+    uint32_t width,
+    uint32_t height,
+    const char *param,
+    char *jsonRsp,
+    uint32_t &rspLen
+) {
     return AlgoSingleton::getInstance().Trail(videoChl, timeStamp, bgr24, height, width, param, jsonRsp, &rspLen);
 }
 
-int32_t Seemmo_AlgoRecognize(uint8_t *bgr24, uint32_t width, uint32_t height, const char *param, char *jsonRsp,
-                             uint32_t &rspLen) {
+int32_t SeemmoAlgo_Recognize(
+    const uint8_t *bgr24,
+    uint32_t width,
+    uint32_t height,
+    const char *param,
+    char *jsonRsp,
+    uint32_t &rspLen
+) {
     return AlgoSingleton::getInstance().Recognize(bgr24, width, height, param, jsonRsp, &rspLen);
 }
 
-
+int32_t SeemmoAlgo_DetectRecognize(
+    const uint8_t *bgr24,
+    uint32_t width,
+    uint32_t height,
+    const char *param,
+    char *jsonRsp,
+    uint32_t &rspLen
+) {
+    return AlgoSingleton::getInstance().DetectRecognize(bgr24, width, height, param, jsonRsp, &rspLen);
+}

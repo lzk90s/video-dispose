@@ -133,10 +133,12 @@ RUN \
 FROM nvidia/cuda:9.2-devel-ubuntu16.04 as FFmpeg_builder
 
 WORKDIR /root
+ENV CFLAGS -fPIC
+ENV CXXFLAGS -fPIC
 
 #编译x264
 RUN sed -i 's/archive.ubuntu.com/mirrors.aliyun.com/g' /etc/apt/sources.list && \
-    apt-get update && \
+    apt-get update --fix-missing && \
     apt-get install -y curl pkg-config git && \
     cd /root && \
     curl -O https://www.nasm.us/pub/nasm/releasebuilds/2.13.03/nasm-2.13.03.tar.gz && \
@@ -148,7 +150,7 @@ RUN sed -i 's/archive.ubuntu.com/mirrors.aliyun.com/g' /etc/apt/sources.list && 
     cd /root && \
     git clone http://git.videolan.org/git/x264.git && \
     cd /root/x264 && \
-    ./configure --enable-shared && \
+    ./configure --enable-static && \
     make -j$(nproc) && \
     make install
 
@@ -160,7 +162,7 @@ RUN cd /root && \
     cd /root && \
     git clone -b n4.0.2 https://github.com/FFmpeg/FFmpeg.git && \
     cd /root/FFmpeg && \
-    ./configure  --enable-gpl --enable-nvenc --enable-cuda --enable-cuvid --enable-nonfree --enable-libnpp --enable-libx264 --extra-cflags=-I/usr/local/cuda/include --extra-ldflags=-L/usr/local/cuda/lib64 && \
+    ./configure --enable-static --enable-gpl --enable-nvenc --enable-cuda --enable-cuvid --enable-nonfree --enable-libnpp --enable-libx264 --extra-cflags=-I/usr/local/cuda/include --extra-ldflags=-L/usr/local/cuda/lib64 && \
     make -j$(nproc) && \
     make install 
 
@@ -172,7 +174,7 @@ RUN cd /root && \
     cd FFmpeg-patch && \
     sh patch_ffmpeg.sh && \
     cd /root/FFmpeg && \
-    ./configure  --enable-gpl --enable-nvenc --enable-cuda --enable-cuvid --enable-nonfree --enable-libnpp --enable-libx264 --extra-cflags=-I/usr/local/cuda/include --extra-ldflags=-L/usr/local/cuda/lib64 && \
+    ./configure --enable-static --enable-gpl --enable-nvenc --enable-cuda --enable-cuvid --enable-nonfree --enable-libnpp --enable-libx264 --extra-cflags=-I/usr/local/cuda/include --extra-ldflags=-L/usr/local/cuda/lib64 && \
     make -j$(nproc) && \
     make install 
 

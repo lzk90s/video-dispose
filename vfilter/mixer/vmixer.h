@@ -15,13 +15,13 @@ using namespace std;
 
 namespace vf {
 static const char *DEFAULT_FONT = "/usr/share/fonts/truetype/simsun.ttf";
-static const int FONT_MIN_SIZE = 20;	//字体最小号
+static const int FONT_MIN_SIZE = 18;	//字体最小号
 static const int FONT_MAX_SIZE = 40;	//字体最大号
 
 class VMixer {
 public:
     VMixer() : text_(DEFAULT_FONT) {
-        cv::Scalar size{ 18, 0.5, 0.1, 0 };
+        cv::Scalar size{ FONT_MIN_SIZE, 0.5, 0.1, 0 };
         text_.setFont(nullptr, &size, nullptr, nullptr);
     }
 
@@ -45,7 +45,7 @@ protected:
         text_.setFont(nullptr, &size, nullptr, nullptr);
 
         // 计算所有属性最大字符个数
-        int32_t maxFontNum = 0;
+        uint32_t maxFontNum = 0;
         for (auto a : attrs) {
             wchar_t msg[200] = { 0 };
             swprintf(msg, 200, L"%hs", a.name.c_str());
@@ -62,7 +62,7 @@ protected:
             //start x, start y
             int32_t sx = x + w, sy = y;
             //如果框的右边离图像的右边距离太近，避免字被截断，则字写在框的左边
-            if ((frame.cols - sx) < (maxFontNum*fontSize)) {
+            if ((uint32_t)(frame.cols - sx) < (maxFontNum*fontSize)) {
                 sx = x;
             }
 

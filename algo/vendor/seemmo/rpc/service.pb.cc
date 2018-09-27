@@ -41,6 +41,16 @@ class RecognizeReplyDefaultTypeInternal {
   ::google::protobuf::internal::ExplicitlyConstructed<RecognizeReply>
       _instance;
 } _RecognizeReply_default_instance_;
+class ImgRecognizeRequestDefaultTypeInternal {
+ public:
+  ::google::protobuf::internal::ExplicitlyConstructed<ImgRecognizeRequest>
+      _instance;
+} _ImgRecognizeRequest_default_instance_;
+class ImgRecognizeReplyDefaultTypeInternal {
+ public:
+  ::google::protobuf::internal::ExplicitlyConstructed<ImgRecognizeReply>
+      _instance;
+} _ImgRecognizeReply_default_instance_;
 }  // namespace seemmo
 }  // namespace algo
 namespace protobuf_service_2eproto {
@@ -100,15 +110,45 @@ static void InitDefaultsRecognizeReply() {
 ::google::protobuf::internal::SCCInfo<0> scc_info_RecognizeReply =
     {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsRecognizeReply}, {}};
 
+static void InitDefaultsImgRecognizeRequest() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+  {
+    void* ptr = &::algo::seemmo::_ImgRecognizeRequest_default_instance_;
+    new (ptr) ::algo::seemmo::ImgRecognizeRequest();
+    ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::algo::seemmo::ImgRecognizeRequest::InitAsDefaultInstance();
+}
+
+::google::protobuf::internal::SCCInfo<0> scc_info_ImgRecognizeRequest =
+    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsImgRecognizeRequest}, {}};
+
+static void InitDefaultsImgRecognizeReply() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+  {
+    void* ptr = &::algo::seemmo::_ImgRecognizeReply_default_instance_;
+    new (ptr) ::algo::seemmo::ImgRecognizeReply();
+    ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::algo::seemmo::ImgRecognizeReply::InitAsDefaultInstance();
+}
+
+::google::protobuf::internal::SCCInfo<0> scc_info_ImgRecognizeReply =
+    {{ATOMIC_VAR_INIT(::google::protobuf::internal::SCCInfoBase::kUninitialized), 0, InitDefaultsImgRecognizeReply}, {}};
+
 void InitDefaults() {
   ::google::protobuf::internal::InitSCC(&scc_info_TrailRequest.base);
   ::google::protobuf::internal::InitSCC(&scc_info_TrailReply.base);
   ::google::protobuf::internal::InitSCC(&scc_info_RecognizeRequest.base);
   ::google::protobuf::internal::InitSCC(&scc_info_RecognizeReply.base);
+  ::google::protobuf::internal::InitSCC(&scc_info_ImgRecognizeRequest.base);
+  ::google::protobuf::internal::InitSCC(&scc_info_ImgRecognizeReply.base);
 }
 
-::google::protobuf::Metadata file_level_metadata[4];
-const ::google::protobuf::ServiceDescriptor* file_level_service_descriptors[1];
+::google::protobuf::Metadata file_level_metadata[6];
+const ::google::protobuf::ServiceDescriptor* file_level_service_descriptors[2];
 
 const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
   ~0u,  // no _has_bits_
@@ -144,12 +184,27 @@ const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUT
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::algo::seemmo::RecognizeReply, data_),
+  ~0u,  // no _has_bits_
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::algo::seemmo::ImgRecognizeRequest, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::algo::seemmo::ImgRecognizeRequest, imageid_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::algo::seemmo::ImgRecognizeRequest, jpeg_),
+  ~0u,  // no _has_bits_
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::algo::seemmo::ImgRecognizeReply, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::algo::seemmo::ImgRecognizeReply, data_),
 };
 static const ::google::protobuf::internal::MigrationSchema schemas[] GOOGLE_PROTOBUF_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, sizeof(::algo::seemmo::TrailRequest)},
   { 11, -1, sizeof(::algo::seemmo::TrailReply)},
   { 17, -1, sizeof(::algo::seemmo::RecognizeRequest)},
   { 27, -1, sizeof(::algo::seemmo::RecognizeReply)},
+  { 33, -1, sizeof(::algo::seemmo::ImgRecognizeRequest)},
+  { 40, -1, sizeof(::algo::seemmo::ImgRecognizeReply)},
 };
 
 static ::google::protobuf::Message const * const file_default_instances[] = {
@@ -157,6 +212,8 @@ static ::google::protobuf::Message const * const file_default_instances[] = {
   reinterpret_cast<const ::google::protobuf::Message*>(&::algo::seemmo::_TrailReply_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&::algo::seemmo::_RecognizeRequest_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&::algo::seemmo::_RecognizeReply_default_instance_),
+  reinterpret_cast<const ::google::protobuf::Message*>(&::algo::seemmo::_ImgRecognizeRequest_default_instance_),
+  reinterpret_cast<const ::google::protobuf::Message*>(&::algo::seemmo::_ImgRecognizeReply_default_instance_),
 };
 
 void protobuf_AssignDescriptors() {
@@ -174,7 +231,7 @@ void protobuf_AssignDescriptorsOnce() {
 void protobuf_RegisterTypes(const ::std::string&) GOOGLE_PROTOBUF_ATTRIBUTE_COLD;
 void protobuf_RegisterTypes(const ::std::string&) {
   protobuf_AssignDescriptorsOnce();
-  ::google::protobuf::internal::RegisterAllTypes(file_level_metadata, 4);
+  ::google::protobuf::internal::RegisterAllTypes(file_level_metadata, 6);
 }
 
 void AddDescriptorsImpl() {
@@ -187,14 +244,19 @@ void AddDescriptorsImpl() {
       "data\030\001 \001(\t\"a\n\020RecognizeRequest\022\020\n\010videoC"
       "hl\030\001 \001(\r\022\r\n\005bgr24\030\002 \001(\014\022\016\n\006height\030\003 \001(\r\022"
       "\r\n\005width\030\004 \001(\r\022\r\n\005param\030\005 \001(\t\"\036\n\016Recogni"
-      "zeReply\022\014\n\004data\030\001 \001(\t2\234\001\n\020VideoProcServi"
-      "ce\022=\n\005Trail\022\031.algo.seemmo.TrailRequest\032\027"
-      ".algo.seemmo.TrailReply\"\000\022I\n\tRecognize\022\035"
-      ".algo.seemmo.RecognizeRequest\032\033.algo.see"
-      "mmo.RecognizeReply\"\000B\003\200\001\001b\006proto3"
+      "zeReply\022\014\n\004data\030\001 \001(\t\"4\n\023ImgRecognizeReq"
+      "uest\022\017\n\007imageId\030\001 \001(\r\022\014\n\004jpeg\030\002 \001(\014\"!\n\021I"
+      "mgRecognizeReply\022\014\n\004data\030\001 \001(\t2\234\001\n\020Video"
+      "ProcService\022=\n\005Trail\022\031.algo.seemmo.Trail"
+      "Request\032\027.algo.seemmo.TrailReply\"\000\022I\n\tRe"
+      "cognize\022\035.algo.seemmo.RecognizeRequest\032\033"
+      ".algo.seemmo.RecognizeReply\"\0002a\n\016ImgProc"
+      "Service\022O\n\tRecognize\022 .algo.seemmo.ImgRe"
+      "cognizeRequest\032\036.algo.seemmo.ImgRecogniz"
+      "eReply\"\000B\003\200\001\001b\006proto3"
   };
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-      descriptor, 473);
+      descriptor, 661);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "service.proto", &protobuf_RegisterTypes);
 }
@@ -1545,6 +1607,517 @@ void RecognizeReply::InternalSwap(RecognizeReply* other) {
 
 // ===================================================================
 
+void ImgRecognizeRequest::InitAsDefaultInstance() {
+}
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int ImgRecognizeRequest::kImageIdFieldNumber;
+const int ImgRecognizeRequest::kJpegFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+ImgRecognizeRequest::ImgRecognizeRequest()
+  : ::google::protobuf::Message(), _internal_metadata_(NULL) {
+  ::google::protobuf::internal::InitSCC(
+      &protobuf_service_2eproto::scc_info_ImgRecognizeRequest.base);
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:algo.seemmo.ImgRecognizeRequest)
+}
+ImgRecognizeRequest::ImgRecognizeRequest(const ImgRecognizeRequest& from)
+  : ::google::protobuf::Message(),
+      _internal_metadata_(NULL) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  jpeg_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.jpeg().size() > 0) {
+    jpeg_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.jpeg_);
+  }
+  imageid_ = from.imageid_;
+  // @@protoc_insertion_point(copy_constructor:algo.seemmo.ImgRecognizeRequest)
+}
+
+void ImgRecognizeRequest::SharedCtor() {
+  jpeg_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  imageid_ = 0u;
+}
+
+ImgRecognizeRequest::~ImgRecognizeRequest() {
+  // @@protoc_insertion_point(destructor:algo.seemmo.ImgRecognizeRequest)
+  SharedDtor();
+}
+
+void ImgRecognizeRequest::SharedDtor() {
+  jpeg_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+
+void ImgRecognizeRequest::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+const ::google::protobuf::Descriptor* ImgRecognizeRequest::descriptor() {
+  ::protobuf_service_2eproto::protobuf_AssignDescriptorsOnce();
+  return ::protobuf_service_2eproto::file_level_metadata[kIndexInFileMessages].descriptor;
+}
+
+const ImgRecognizeRequest& ImgRecognizeRequest::default_instance() {
+  ::google::protobuf::internal::InitSCC(&protobuf_service_2eproto::scc_info_ImgRecognizeRequest.base);
+  return *internal_default_instance();
+}
+
+
+void ImgRecognizeRequest::Clear() {
+// @@protoc_insertion_point(message_clear_start:algo.seemmo.ImgRecognizeRequest)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  jpeg_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  imageid_ = 0u;
+  _internal_metadata_.Clear();
+}
+
+bool ImgRecognizeRequest::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:algo.seemmo.ImgRecognizeRequest)
+  for (;;) {
+    ::std::pair<::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // uint32 imageId = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(8u /* 8 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &imageid_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // bytes jpeg = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(18u /* 18 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
+                input, this->mutable_jpeg()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, _internal_metadata_.mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:algo.seemmo.ImgRecognizeRequest)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:algo.seemmo.ImgRecognizeRequest)
+  return false;
+#undef DO_
+}
+
+void ImgRecognizeRequest::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:algo.seemmo.ImgRecognizeRequest)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // uint32 imageId = 1;
+  if (this->imageid() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->imageid(), output);
+  }
+
+  // bytes jpeg = 2;
+  if (this->jpeg().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
+      2, this->jpeg(), output);
+  }
+
+  if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()), output);
+  }
+  // @@protoc_insertion_point(serialize_end:algo.seemmo.ImgRecognizeRequest)
+}
+
+::google::protobuf::uint8* ImgRecognizeRequest::InternalSerializeWithCachedSizesToArray(
+    bool deterministic, ::google::protobuf::uint8* target) const {
+  (void)deterministic; // Unused
+  // @@protoc_insertion_point(serialize_to_array_start:algo.seemmo.ImgRecognizeRequest)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // uint32 imageId = 1;
+  if (this->imageid() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->imageid(), target);
+  }
+
+  // bytes jpeg = 2;
+  if (this->jpeg().size() > 0) {
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
+        2, this->jpeg(), target);
+  }
+
+  if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:algo.seemmo.ImgRecognizeRequest)
+  return target;
+}
+
+size_t ImgRecognizeRequest::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:algo.seemmo.ImgRecognizeRequest)
+  size_t total_size = 0;
+
+  if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()));
+  }
+  // bytes jpeg = 2;
+  if (this->jpeg().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::BytesSize(
+        this->jpeg());
+  }
+
+  // uint32 imageId = 1;
+  if (this->imageid() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt32Size(
+        this->imageid());
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void ImgRecognizeRequest::MergeFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:algo.seemmo.ImgRecognizeRequest)
+  GOOGLE_DCHECK_NE(&from, this);
+  const ImgRecognizeRequest* source =
+      ::google::protobuf::internal::DynamicCastToGenerated<const ImgRecognizeRequest>(
+          &from);
+  if (source == NULL) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:algo.seemmo.ImgRecognizeRequest)
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:algo.seemmo.ImgRecognizeRequest)
+    MergeFrom(*source);
+  }
+}
+
+void ImgRecognizeRequest::MergeFrom(const ImgRecognizeRequest& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:algo.seemmo.ImgRecognizeRequest)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.jpeg().size() > 0) {
+
+    jpeg_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.jpeg_);
+  }
+  if (from.imageid() != 0) {
+    set_imageid(from.imageid());
+  }
+}
+
+void ImgRecognizeRequest::CopyFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:algo.seemmo.ImgRecognizeRequest)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void ImgRecognizeRequest::CopyFrom(const ImgRecognizeRequest& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:algo.seemmo.ImgRecognizeRequest)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool ImgRecognizeRequest::IsInitialized() const {
+  return true;
+}
+
+void ImgRecognizeRequest::Swap(ImgRecognizeRequest* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void ImgRecognizeRequest::InternalSwap(ImgRecognizeRequest* other) {
+  using std::swap;
+  jpeg_.Swap(&other->jpeg_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+  swap(imageid_, other->imageid_);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+}
+
+::google::protobuf::Metadata ImgRecognizeRequest::GetMetadata() const {
+  protobuf_service_2eproto::protobuf_AssignDescriptorsOnce();
+  return ::protobuf_service_2eproto::file_level_metadata[kIndexInFileMessages];
+}
+
+
+// ===================================================================
+
+void ImgRecognizeReply::InitAsDefaultInstance() {
+}
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int ImgRecognizeReply::kDataFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+ImgRecognizeReply::ImgRecognizeReply()
+  : ::google::protobuf::Message(), _internal_metadata_(NULL) {
+  ::google::protobuf::internal::InitSCC(
+      &protobuf_service_2eproto::scc_info_ImgRecognizeReply.base);
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:algo.seemmo.ImgRecognizeReply)
+}
+ImgRecognizeReply::ImgRecognizeReply(const ImgRecognizeReply& from)
+  : ::google::protobuf::Message(),
+      _internal_metadata_(NULL) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  data_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.data().size() > 0) {
+    data_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.data_);
+  }
+  // @@protoc_insertion_point(copy_constructor:algo.seemmo.ImgRecognizeReply)
+}
+
+void ImgRecognizeReply::SharedCtor() {
+  data_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+
+ImgRecognizeReply::~ImgRecognizeReply() {
+  // @@protoc_insertion_point(destructor:algo.seemmo.ImgRecognizeReply)
+  SharedDtor();
+}
+
+void ImgRecognizeReply::SharedDtor() {
+  data_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+
+void ImgRecognizeReply::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+const ::google::protobuf::Descriptor* ImgRecognizeReply::descriptor() {
+  ::protobuf_service_2eproto::protobuf_AssignDescriptorsOnce();
+  return ::protobuf_service_2eproto::file_level_metadata[kIndexInFileMessages].descriptor;
+}
+
+const ImgRecognizeReply& ImgRecognizeReply::default_instance() {
+  ::google::protobuf::internal::InitSCC(&protobuf_service_2eproto::scc_info_ImgRecognizeReply.base);
+  return *internal_default_instance();
+}
+
+
+void ImgRecognizeReply::Clear() {
+// @@protoc_insertion_point(message_clear_start:algo.seemmo.ImgRecognizeReply)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  data_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  _internal_metadata_.Clear();
+}
+
+bool ImgRecognizeReply::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:algo.seemmo.ImgRecognizeReply)
+  for (;;) {
+    ::std::pair<::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // string data = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(10u /* 10 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_data()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->data().data(), static_cast<int>(this->data().length()),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "algo.seemmo.ImgRecognizeReply.data"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, _internal_metadata_.mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:algo.seemmo.ImgRecognizeReply)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:algo.seemmo.ImgRecognizeReply)
+  return false;
+#undef DO_
+}
+
+void ImgRecognizeReply::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:algo.seemmo.ImgRecognizeReply)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string data = 1;
+  if (this->data().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->data().data(), static_cast<int>(this->data().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "algo.seemmo.ImgRecognizeReply.data");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      1, this->data(), output);
+  }
+
+  if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()), output);
+  }
+  // @@protoc_insertion_point(serialize_end:algo.seemmo.ImgRecognizeReply)
+}
+
+::google::protobuf::uint8* ImgRecognizeReply::InternalSerializeWithCachedSizesToArray(
+    bool deterministic, ::google::protobuf::uint8* target) const {
+  (void)deterministic; // Unused
+  // @@protoc_insertion_point(serialize_to_array_start:algo.seemmo.ImgRecognizeReply)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string data = 1;
+  if (this->data().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->data().data(), static_cast<int>(this->data().length()),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "algo.seemmo.ImgRecognizeReply.data");
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        1, this->data(), target);
+  }
+
+  if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:algo.seemmo.ImgRecognizeReply)
+  return target;
+}
+
+size_t ImgRecognizeReply::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:algo.seemmo.ImgRecognizeReply)
+  size_t total_size = 0;
+
+  if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()));
+  }
+  // string data = 1;
+  if (this->data().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->data());
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void ImgRecognizeReply::MergeFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:algo.seemmo.ImgRecognizeReply)
+  GOOGLE_DCHECK_NE(&from, this);
+  const ImgRecognizeReply* source =
+      ::google::protobuf::internal::DynamicCastToGenerated<const ImgRecognizeReply>(
+          &from);
+  if (source == NULL) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:algo.seemmo.ImgRecognizeReply)
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:algo.seemmo.ImgRecognizeReply)
+    MergeFrom(*source);
+  }
+}
+
+void ImgRecognizeReply::MergeFrom(const ImgRecognizeReply& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:algo.seemmo.ImgRecognizeReply)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.data().size() > 0) {
+
+    data_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.data_);
+  }
+}
+
+void ImgRecognizeReply::CopyFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:algo.seemmo.ImgRecognizeReply)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void ImgRecognizeReply::CopyFrom(const ImgRecognizeReply& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:algo.seemmo.ImgRecognizeReply)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool ImgRecognizeReply::IsInitialized() const {
+  return true;
+}
+
+void ImgRecognizeReply::Swap(ImgRecognizeReply* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void ImgRecognizeReply::InternalSwap(ImgRecognizeReply* other) {
+  using std::swap;
+  data_.Swap(&other->data_, &::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+}
+
+::google::protobuf::Metadata ImgRecognizeReply::GetMetadata() const {
+  protobuf_service_2eproto::protobuf_AssignDescriptorsOnce();
+  return ::protobuf_service_2eproto::file_level_metadata[kIndexInFileMessages];
+}
+
+
+// ===================================================================
+
 VideoProcService::~VideoProcService() {}
 
 const ::google::protobuf::ServiceDescriptor* VideoProcService::descriptor() {
@@ -1652,6 +2225,90 @@ void VideoProcService_Stub::Recognize(::google::protobuf::RpcController* control
   channel_->CallMethod(descriptor()->method(1),
                        controller, request, response, done);
 }
+// ===================================================================
+
+ImgProcService::~ImgProcService() {}
+
+const ::google::protobuf::ServiceDescriptor* ImgProcService::descriptor() {
+  protobuf_service_2eproto::protobuf_AssignDescriptorsOnce();
+  return protobuf_service_2eproto::file_level_service_descriptors[1];
+}
+
+const ::google::protobuf::ServiceDescriptor* ImgProcService::GetDescriptor() {
+  return descriptor();
+}
+
+void ImgProcService::Recognize(::google::protobuf::RpcController* controller,
+                         const ::algo::seemmo::ImgRecognizeRequest*,
+                         ::algo::seemmo::ImgRecognizeReply*,
+                         ::google::protobuf::Closure* done) {
+  controller->SetFailed("Method Recognize() not implemented.");
+  done->Run();
+}
+
+void ImgProcService::CallMethod(const ::google::protobuf::MethodDescriptor* method,
+                             ::google::protobuf::RpcController* controller,
+                             const ::google::protobuf::Message* request,
+                             ::google::protobuf::Message* response,
+                             ::google::protobuf::Closure* done) {
+  GOOGLE_DCHECK_EQ(method->service(), protobuf_service_2eproto::file_level_service_descriptors[1]);
+  switch(method->index()) {
+    case 0:
+      Recognize(controller,
+             ::google::protobuf::down_cast<const ::algo::seemmo::ImgRecognizeRequest*>(request),
+             ::google::protobuf::down_cast< ::algo::seemmo::ImgRecognizeReply*>(response),
+             done);
+      break;
+    default:
+      GOOGLE_LOG(FATAL) << "Bad method index; this should never happen.";
+      break;
+  }
+}
+
+const ::google::protobuf::Message& ImgProcService::GetRequestPrototype(
+    const ::google::protobuf::MethodDescriptor* method) const {
+  GOOGLE_DCHECK_EQ(method->service(), descriptor());
+  switch(method->index()) {
+    case 0:
+      return ::algo::seemmo::ImgRecognizeRequest::default_instance();
+    default:
+      GOOGLE_LOG(FATAL) << "Bad method index; this should never happen.";
+      return *::google::protobuf::MessageFactory::generated_factory()
+          ->GetPrototype(method->input_type());
+  }
+}
+
+const ::google::protobuf::Message& ImgProcService::GetResponsePrototype(
+    const ::google::protobuf::MethodDescriptor* method) const {
+  GOOGLE_DCHECK_EQ(method->service(), descriptor());
+  switch(method->index()) {
+    case 0:
+      return ::algo::seemmo::ImgRecognizeReply::default_instance();
+    default:
+      GOOGLE_LOG(FATAL) << "Bad method index; this should never happen.";
+      return *::google::protobuf::MessageFactory::generated_factory()
+          ->GetPrototype(method->output_type());
+  }
+}
+
+ImgProcService_Stub::ImgProcService_Stub(::google::protobuf::RpcChannel* channel)
+  : channel_(channel), owns_channel_(false) {}
+ImgProcService_Stub::ImgProcService_Stub(
+    ::google::protobuf::RpcChannel* channel,
+    ::google::protobuf::Service::ChannelOwnership ownership)
+  : channel_(channel),
+    owns_channel_(ownership == ::google::protobuf::Service::STUB_OWNS_CHANNEL) {}
+ImgProcService_Stub::~ImgProcService_Stub() {
+  if (owns_channel_) delete channel_;
+}
+
+void ImgProcService_Stub::Recognize(::google::protobuf::RpcController* controller,
+                              const ::algo::seemmo::ImgRecognizeRequest* request,
+                              ::algo::seemmo::ImgRecognizeReply* response,
+                              ::google::protobuf::Closure* done) {
+  channel_->CallMethod(descriptor()->method(0),
+                       controller, request, response, done);
+}
 
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace seemmo
@@ -1669,6 +2326,12 @@ template<> GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE ::algo::seemmo::RecognizeRequest* 
 }
 template<> GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE ::algo::seemmo::RecognizeReply* Arena::CreateMaybeMessage< ::algo::seemmo::RecognizeReply >(Arena* arena) {
   return Arena::CreateInternal< ::algo::seemmo::RecognizeReply >(arena);
+}
+template<> GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE ::algo::seemmo::ImgRecognizeRequest* Arena::CreateMaybeMessage< ::algo::seemmo::ImgRecognizeRequest >(Arena* arena) {
+  return Arena::CreateInternal< ::algo::seemmo::ImgRecognizeRequest >(arena);
+}
+template<> GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE ::algo::seemmo::ImgRecognizeReply* Arena::CreateMaybeMessage< ::algo::seemmo::ImgRecognizeReply >(Arena* arena) {
+  return Arena::CreateInternal< ::algo::seemmo::ImgRecognizeReply >(arena);
 }
 }  // namespace protobuf
 }  // namespace google

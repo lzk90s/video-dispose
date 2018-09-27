@@ -39,7 +39,7 @@ namespace protobuf_service_2eproto {
 struct TableStruct {
   static const ::google::protobuf::internal::ParseTableField entries[];
   static const ::google::protobuf::internal::AuxillaryParseTableField aux[];
-  static const ::google::protobuf::internal::ParseTable schema[4];
+  static const ::google::protobuf::internal::ParseTable schema[6];
   static const ::google::protobuf::internal::FieldMetadata field_metadata[];
   static const ::google::protobuf::internal::SerializationTable serialization_table[];
   static const ::google::protobuf::uint32 offsets[];
@@ -48,6 +48,12 @@ void AddDescriptors();
 }  // namespace protobuf_service_2eproto
 namespace algo {
 namespace seemmo {
+class ImgRecognizeReply;
+class ImgRecognizeReplyDefaultTypeInternal;
+extern ImgRecognizeReplyDefaultTypeInternal _ImgRecognizeReply_default_instance_;
+class ImgRecognizeRequest;
+class ImgRecognizeRequestDefaultTypeInternal;
+extern ImgRecognizeRequestDefaultTypeInternal _ImgRecognizeRequest_default_instance_;
 class RecognizeReply;
 class RecognizeReplyDefaultTypeInternal;
 extern RecognizeReplyDefaultTypeInternal _RecognizeReply_default_instance_;
@@ -64,6 +70,8 @@ extern TrailRequestDefaultTypeInternal _TrailRequest_default_instance_;
 }  // namespace algo
 namespace google {
 namespace protobuf {
+template<> ::algo::seemmo::ImgRecognizeReply* Arena::CreateMaybeMessage<::algo::seemmo::ImgRecognizeReply>(Arena*);
+template<> ::algo::seemmo::ImgRecognizeRequest* Arena::CreateMaybeMessage<::algo::seemmo::ImgRecognizeRequest>(Arena*);
 template<> ::algo::seemmo::RecognizeReply* Arena::CreateMaybeMessage<::algo::seemmo::RecognizeReply>(Arena*);
 template<> ::algo::seemmo::RecognizeRequest* Arena::CreateMaybeMessage<::algo::seemmo::RecognizeRequest>(Arena*);
 template<> ::algo::seemmo::TrailReply* Arena::CreateMaybeMessage<::algo::seemmo::TrailReply>(Arena*);
@@ -596,6 +604,235 @@ class RecognizeReply : public ::google::protobuf::Message /* @@protoc_insertion_
   mutable ::google::protobuf::internal::CachedSize _cached_size_;
   friend struct ::protobuf_service_2eproto::TableStruct;
 };
+// -------------------------------------------------------------------
+
+class ImgRecognizeRequest : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:algo.seemmo.ImgRecognizeRequest) */ {
+ public:
+  ImgRecognizeRequest();
+  virtual ~ImgRecognizeRequest();
+
+  ImgRecognizeRequest(const ImgRecognizeRequest& from);
+
+  inline ImgRecognizeRequest& operator=(const ImgRecognizeRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  ImgRecognizeRequest(ImgRecognizeRequest&& from) noexcept
+    : ImgRecognizeRequest() {
+    *this = ::std::move(from);
+  }
+
+  inline ImgRecognizeRequest& operator=(ImgRecognizeRequest&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const ImgRecognizeRequest& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const ImgRecognizeRequest* internal_default_instance() {
+    return reinterpret_cast<const ImgRecognizeRequest*>(
+               &_ImgRecognizeRequest_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    4;
+
+  void Swap(ImgRecognizeRequest* other);
+  friend void swap(ImgRecognizeRequest& a, ImgRecognizeRequest& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline ImgRecognizeRequest* New() const final {
+    return CreateMaybeMessage<ImgRecognizeRequest>(NULL);
+  }
+
+  ImgRecognizeRequest* New(::google::protobuf::Arena* arena) const final {
+    return CreateMaybeMessage<ImgRecognizeRequest>(arena);
+  }
+  void CopyFrom(const ::google::protobuf::Message& from) final;
+  void MergeFrom(const ::google::protobuf::Message& from) final;
+  void CopyFrom(const ImgRecognizeRequest& from);
+  void MergeFrom(const ImgRecognizeRequest& from);
+  void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) final;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const final;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* target) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(ImgRecognizeRequest* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // bytes jpeg = 2;
+  void clear_jpeg();
+  static const int kJpegFieldNumber = 2;
+  const ::std::string& jpeg() const;
+  void set_jpeg(const ::std::string& value);
+  #if LANG_CXX11
+  void set_jpeg(::std::string&& value);
+  #endif
+  void set_jpeg(const char* value);
+  void set_jpeg(const void* value, size_t size);
+  ::std::string* mutable_jpeg();
+  ::std::string* release_jpeg();
+  void set_allocated_jpeg(::std::string* jpeg);
+
+  // uint32 imageId = 1;
+  void clear_imageid();
+  static const int kImageIdFieldNumber = 1;
+  ::google::protobuf::uint32 imageid() const;
+  void set_imageid(::google::protobuf::uint32 value);
+
+  // @@protoc_insertion_point(class_scope:algo.seemmo.ImgRecognizeRequest)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::google::protobuf::internal::ArenaStringPtr jpeg_;
+  ::google::protobuf::uint32 imageid_;
+  mutable ::google::protobuf::internal::CachedSize _cached_size_;
+  friend struct ::protobuf_service_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
+
+class ImgRecognizeReply : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:algo.seemmo.ImgRecognizeReply) */ {
+ public:
+  ImgRecognizeReply();
+  virtual ~ImgRecognizeReply();
+
+  ImgRecognizeReply(const ImgRecognizeReply& from);
+
+  inline ImgRecognizeReply& operator=(const ImgRecognizeReply& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  ImgRecognizeReply(ImgRecognizeReply&& from) noexcept
+    : ImgRecognizeReply() {
+    *this = ::std::move(from);
+  }
+
+  inline ImgRecognizeReply& operator=(ImgRecognizeReply&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const ImgRecognizeReply& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const ImgRecognizeReply* internal_default_instance() {
+    return reinterpret_cast<const ImgRecognizeReply*>(
+               &_ImgRecognizeReply_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    5;
+
+  void Swap(ImgRecognizeReply* other);
+  friend void swap(ImgRecognizeReply& a, ImgRecognizeReply& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline ImgRecognizeReply* New() const final {
+    return CreateMaybeMessage<ImgRecognizeReply>(NULL);
+  }
+
+  ImgRecognizeReply* New(::google::protobuf::Arena* arena) const final {
+    return CreateMaybeMessage<ImgRecognizeReply>(arena);
+  }
+  void CopyFrom(const ::google::protobuf::Message& from) final;
+  void MergeFrom(const ::google::protobuf::Message& from) final;
+  void CopyFrom(const ImgRecognizeReply& from);
+  void MergeFrom(const ImgRecognizeReply& from);
+  void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) final;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const final;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* target) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(ImgRecognizeReply* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // string data = 1;
+  void clear_data();
+  static const int kDataFieldNumber = 1;
+  const ::std::string& data() const;
+  void set_data(const ::std::string& value);
+  #if LANG_CXX11
+  void set_data(::std::string&& value);
+  #endif
+  void set_data(const char* value);
+  void set_data(const char* value, size_t size);
+  ::std::string* mutable_data();
+  ::std::string* release_data();
+  void set_allocated_data(::std::string* data);
+
+  // @@protoc_insertion_point(class_scope:algo.seemmo.ImgRecognizeReply)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::google::protobuf::internal::ArenaStringPtr data_;
+  mutable ::google::protobuf::internal::CachedSize _cached_size_;
+  friend struct ::protobuf_service_2eproto::TableStruct;
+};
 // ===================================================================
 
 class VideoProcService_Stub;
@@ -660,6 +897,65 @@ class VideoProcService_Stub : public VideoProcService {
   ::google::protobuf::RpcChannel* channel_;
   bool owns_channel_;
   GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(VideoProcService_Stub);
+};
+
+
+// -------------------------------------------------------------------
+
+class ImgProcService_Stub;
+
+class ImgProcService : public ::google::protobuf::Service {
+ protected:
+  // This class should be treated as an abstract interface.
+  inline ImgProcService() {};
+ public:
+  virtual ~ImgProcService();
+
+  typedef ImgProcService_Stub Stub;
+
+  static const ::google::protobuf::ServiceDescriptor* descriptor();
+
+  virtual void Recognize(::google::protobuf::RpcController* controller,
+                       const ::algo::seemmo::ImgRecognizeRequest* request,
+                       ::algo::seemmo::ImgRecognizeReply* response,
+                       ::google::protobuf::Closure* done);
+
+  // implements Service ----------------------------------------------
+
+  const ::google::protobuf::ServiceDescriptor* GetDescriptor();
+  void CallMethod(const ::google::protobuf::MethodDescriptor* method,
+                  ::google::protobuf::RpcController* controller,
+                  const ::google::protobuf::Message* request,
+                  ::google::protobuf::Message* response,
+                  ::google::protobuf::Closure* done);
+  const ::google::protobuf::Message& GetRequestPrototype(
+    const ::google::protobuf::MethodDescriptor* method) const;
+  const ::google::protobuf::Message& GetResponsePrototype(
+    const ::google::protobuf::MethodDescriptor* method) const;
+
+ private:
+  GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(ImgProcService);
+};
+
+class ImgProcService_Stub : public ImgProcService {
+ public:
+  ImgProcService_Stub(::google::protobuf::RpcChannel* channel);
+  ImgProcService_Stub(::google::protobuf::RpcChannel* channel,
+                   ::google::protobuf::Service::ChannelOwnership ownership);
+  ~ImgProcService_Stub();
+
+  inline ::google::protobuf::RpcChannel* channel() { return channel_; }
+
+  // implements ImgProcService ------------------------------------------
+
+  void Recognize(::google::protobuf::RpcController* controller,
+                       const ::algo::seemmo::ImgRecognizeRequest* request,
+                       ::algo::seemmo::ImgRecognizeReply* response,
+                       ::google::protobuf::Closure* done);
+ private:
+  ::google::protobuf::RpcChannel* channel_;
+  bool owns_channel_;
+  GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(ImgProcService_Stub);
 };
 
 
@@ -1102,9 +1398,141 @@ inline void RecognizeReply::set_allocated_data(::std::string* data) {
   // @@protoc_insertion_point(field_set_allocated:algo.seemmo.RecognizeReply.data)
 }
 
+// -------------------------------------------------------------------
+
+// ImgRecognizeRequest
+
+// uint32 imageId = 1;
+inline void ImgRecognizeRequest::clear_imageid() {
+  imageid_ = 0u;
+}
+inline ::google::protobuf::uint32 ImgRecognizeRequest::imageid() const {
+  // @@protoc_insertion_point(field_get:algo.seemmo.ImgRecognizeRequest.imageId)
+  return imageid_;
+}
+inline void ImgRecognizeRequest::set_imageid(::google::protobuf::uint32 value) {
+  
+  imageid_ = value;
+  // @@protoc_insertion_point(field_set:algo.seemmo.ImgRecognizeRequest.imageId)
+}
+
+// bytes jpeg = 2;
+inline void ImgRecognizeRequest::clear_jpeg() {
+  jpeg_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& ImgRecognizeRequest::jpeg() const {
+  // @@protoc_insertion_point(field_get:algo.seemmo.ImgRecognizeRequest.jpeg)
+  return jpeg_.GetNoArena();
+}
+inline void ImgRecognizeRequest::set_jpeg(const ::std::string& value) {
+  
+  jpeg_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:algo.seemmo.ImgRecognizeRequest.jpeg)
+}
+#if LANG_CXX11
+inline void ImgRecognizeRequest::set_jpeg(::std::string&& value) {
+  
+  jpeg_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:algo.seemmo.ImgRecognizeRequest.jpeg)
+}
+#endif
+inline void ImgRecognizeRequest::set_jpeg(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  jpeg_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:algo.seemmo.ImgRecognizeRequest.jpeg)
+}
+inline void ImgRecognizeRequest::set_jpeg(const void* value, size_t size) {
+  
+  jpeg_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:algo.seemmo.ImgRecognizeRequest.jpeg)
+}
+inline ::std::string* ImgRecognizeRequest::mutable_jpeg() {
+  
+  // @@protoc_insertion_point(field_mutable:algo.seemmo.ImgRecognizeRequest.jpeg)
+  return jpeg_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* ImgRecognizeRequest::release_jpeg() {
+  // @@protoc_insertion_point(field_release:algo.seemmo.ImgRecognizeRequest.jpeg)
+  
+  return jpeg_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void ImgRecognizeRequest::set_allocated_jpeg(::std::string* jpeg) {
+  if (jpeg != NULL) {
+    
+  } else {
+    
+  }
+  jpeg_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), jpeg);
+  // @@protoc_insertion_point(field_set_allocated:algo.seemmo.ImgRecognizeRequest.jpeg)
+}
+
+// -------------------------------------------------------------------
+
+// ImgRecognizeReply
+
+// string data = 1;
+inline void ImgRecognizeReply::clear_data() {
+  data_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& ImgRecognizeReply::data() const {
+  // @@protoc_insertion_point(field_get:algo.seemmo.ImgRecognizeReply.data)
+  return data_.GetNoArena();
+}
+inline void ImgRecognizeReply::set_data(const ::std::string& value) {
+  
+  data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:algo.seemmo.ImgRecognizeReply.data)
+}
+#if LANG_CXX11
+inline void ImgRecognizeReply::set_data(::std::string&& value) {
+  
+  data_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:algo.seemmo.ImgRecognizeReply.data)
+}
+#endif
+inline void ImgRecognizeReply::set_data(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:algo.seemmo.ImgRecognizeReply.data)
+}
+inline void ImgRecognizeReply::set_data(const char* value, size_t size) {
+  
+  data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:algo.seemmo.ImgRecognizeReply.data)
+}
+inline ::std::string* ImgRecognizeReply::mutable_data() {
+  
+  // @@protoc_insertion_point(field_mutable:algo.seemmo.ImgRecognizeReply.data)
+  return data_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* ImgRecognizeReply::release_data() {
+  // @@protoc_insertion_point(field_release:algo.seemmo.ImgRecognizeReply.data)
+  
+  return data_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void ImgRecognizeReply::set_allocated_data(::std::string* data) {
+  if (data != NULL) {
+    
+  } else {
+    
+  }
+  data_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), data);
+  // @@protoc_insertion_point(field_set_allocated:algo.seemmo.ImgRecognizeReply.data)
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

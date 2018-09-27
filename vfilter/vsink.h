@@ -38,6 +38,7 @@ public:
             onFrameHandler_(channelId_, (uint64_t)fid, cloneFrame.data, cloneFrame.cols, cloneFrame.rows);
         }
         mixFrame(frame);
+        return 0;
     }
 
     FrameCache::FrameId CacheFrame(cv::Mat &frame) {

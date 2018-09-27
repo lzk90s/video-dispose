@@ -39,13 +39,6 @@ private:
 
 typedef Singleton<Logger> LoggerSingleton;
 
-//
-// #ifndef suffix
-// #define suffix()  std::string(msg).append("  //")\
-//     .append(__FILENAME__).append(":").append(__func__)\
-//     .append("()#").append(std::to_string(__LINE__))\
-//     .append(".").c_str()
-// #endif
 
 #define LOG_TRACE(...) LoggerSingleton::getInstance().getLogger()->trace(__VA_ARGS__)
 #define LOG_DEBUG(...) LoggerSingleton::getInstance().getLogger()->debug(__VA_ARGS__)

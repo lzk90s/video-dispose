@@ -13,7 +13,7 @@ AR = ar
 INC =-I$(TOP_DIR) -I$(TOP_DIR)/thirdparty -I$(TOP_DIR)/common
 LIB =-lbrpc -lprotobuf -lgflags -lz -lleveldb -lpthread -ldl -lssl -lcrypto
 
-CXX_FLAGS = $(INC) -std=c++11 -fPIC
+CXX_FLAGS = $(INC) -std=c++11 -fPIC -Wall
 LD_FLAGS = $(LIB)
 
 ifdef DEBUG
