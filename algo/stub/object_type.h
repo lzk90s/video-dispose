@@ -66,7 +66,7 @@ public:
 // 机动车
 class VehicleObject : public BaseObject {
 public:
-    struct {
+    struct tagAttributeGroup {
         Attribute color;
         Attribute type;
         Attribute brand;
@@ -85,7 +85,7 @@ public:
 // 人
 class PersonObject : public BaseObject {
 public:
-    struct {
+    struct tagAttributeGroup {
         Attribute sex;
         Attribute age;
         Attribute upperColor;

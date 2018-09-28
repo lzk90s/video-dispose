@@ -35,22 +35,22 @@ public:
             int32_t x = rect[0], y = rect[1], w=rect[2], h=rect[3];
             cv::rectangle(frame, cvPoint(x, y), cvPoint(x + w, y + h), CV_RGB(0, 0, 255), thickness, 1, 0);
 
-//             if (recog_.find(t.first) != recog_.end()) {
-//                 auto persons = recog_[t.first].persons;
-//                 int idx = 0;
-//                 for (auto p : persons) {
-//                     for (auto a : p.attrs) {
-//                         if (!a.visable) {
-//                             continue;
-//                         }
-//                         // 写属性
-//                         int x = rect.x + rect.w + 2;
-//                         int y = rect.y + (idx * DEFAULT_FONT_SIZE) + 2;
-//                         std::wstring msg = StringConv::StringToWString(a.value);
-//                         text_.putText(frame, msg.c_str(), cvPoint(x, y), CV_RGB(255, 0, 0));
-//                     }
-//                 }
-//             }
+            //如果机动车上有人，则输出人的信息
+            if (!t.persons.empty()) {
+                // 只输出一个人
+                for (auto p : t.persons) {
+                    // 需要混到流中的属性
+                    vector<Attribute> mixableAttrs;
+                    mixableAttrs.push_back(p.attrs.sex);
+                    mixableAttrs.push_back(p.attrs.age);
+                    mixableAttrs.push_back(p.attrs.hair);
+                    mixableAttrs.push_back(p.attrs.hat);
+                    mixableAttrs.push_back(p.attrs.upperColor);
+
+                    mixObjectAttributeText(frame, x, y, w, h, mixableAttrs);
+                    break;
+                }
+            }
         }
     }
 

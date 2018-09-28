@@ -21,12 +21,11 @@
 // service param
 DEFINE_string(attachment, "foo", "Carry this along with requests");
 DEFINE_string(protocol, "baidu_std", "Protocol type. Defined in src/brpc/options.proto");
-DEFINE_string(connection_type, "", "Connection type. Available values: single, pooled, short");
-DEFINE_string(server, "127.0.0.1:7000", "IP Address of server");
+DEFINE_string(connection_type, "single", "Connection type. Available values: single, pooled, short");
+DEFINE_string(server, "0.0.0.0:7000", "IP Address of server");
 DEFINE_string(load_balancer, "", "The algorithm for load balancing");
-DEFINE_int32(timeout_ms, 100, "RPC timeout in milliseconds");
-DEFINE_int32(max_retry, 3, "Max retries(not including the first RPC)");
-DEFINE_int32(interval_ms, 1000, "Milliseconds between consecutive requests");
+DEFINE_int32(timeout_ms, 2000, "RPC timeout in milliseconds");
+DEFINE_int32(max_retry, 0, "Max retries(not including the first RPC)");
 DEFINE_string(http_content_type, "application/json", "Content type of http request");
 
 using namespace std;
@@ -178,9 +177,7 @@ private:
             tmp.type = (algo::ObjectType)a.Type;
             tmp.guid = a.GUID;
             tmp.trail = a.Trail;
-            if (a.Detect.Body.Rect.size() == 4) {
-                tmp.detect = a.Detect.Body.Rect;
-            }
+            tmp.detect = a.Detect.Body.Rect;
             r.bikes.push_back(tmp);
         }
         for (auto a : root.Pedestrains) {
@@ -188,9 +185,7 @@ private:
             tmp.type = (algo::ObjectType)a.Type;
             tmp.guid = a.GUID;
             tmp.trail = a.Trail;
-            if (a.Detect.Body.Rect.size() == 4) {
-                tmp.detect = a.Detect.Body.Rect;
-            }
+            tmp.detect = a.Detect.Body.Rect;
             r.pedestrains.push_back(tmp);
         }
         for (auto a : root.Vehicles) {
@@ -198,9 +193,7 @@ private:
             tmp.type = (algo::ObjectType)a.Type;
             tmp.guid = a.GUID;
             tmp.trail = a.Trail;
-            if (a.Detect.Body.Rect.size() == 4) {
-                tmp.detect = a.Detect.Body.Rect;
-            }
+            tmp.detect = a.Detect.Body.Rect;
             r.vehicles.push_back(tmp);
         }
     }
@@ -224,9 +217,7 @@ private:
             tmp.trail = a.Trail;
             tmp.contextCode = a.ContextCode;
             tmp.frameId = a.Timestamp;
-            if (a.Detect.Body.Rect.size() == 4) {
-                tmp.detect = a.Detect.Body.Rect;
-            }
+            tmp.detect = a.Detect.Body.Rect;
             r.bikes.push_back(tmp);
         }
         for (auto a : root.Pedestrains) {
@@ -236,9 +227,7 @@ private:
             tmp.trail = a.Trail;
             tmp.contextCode = a.ContextCode;
             tmp.frameId = a.Timestamp;
-            if (a.Detect.Body.Rect.size() == 4) {
-                tmp.detect = a.Detect.Body.Rect;
-            }
+            tmp.detect = a.Detect.Body.Rect;
             r.pedestrains.push_back(tmp);
         }
         for (auto a : root.Vehicles) {
@@ -248,9 +237,7 @@ private:
             tmp.trail = a.Trail;
             tmp.contextCode = a.ContextCode;
             tmp.frameId = a.Timestamp;
-            if (a.Detect.Body.Rect.size() == 4) {
-                tmp.detect = a.Detect.Body.Rect;
-            }
+            tmp.detect = a.Detect.Body.Rect;
             r.vehicles.push_back(tmp);
         }
     }
@@ -270,55 +257,30 @@ private:
         for (auto a : root.Bikes) {
             algo::BikeObject tmp;
             tmp.type = (algo::ObjectType)a.Type;
-            if (a.Detect.Body.Rect.size() == 4) {
-                tmp.detect = a.Detect.Body.Rect;
-            }
-
+            tmp.detect = a.Detect.Body.Rect;
             if (!a.Persons.empty()) {
                 algo::Attribute attr;
                 for (auto b : a.Persons) {
-
+                    algo::PersonObject tmpPerson;
+                    tmpPerson.type = (algo::ObjectType)a.Type;
+                    tmpPerson.detect = a.Detect.Body.Rect;
+                    recogAttributesConv(b.Recognize, tmpPerson.attrs);
+                    tmp.persons.push_back(tmpPerson);
                 }
             }
-
             r.bikes.push_back(tmp);
         }
         for (auto a : root.Pedestrains) {
             algo::PersonObject tmp;
             tmp.type = (algo::ObjectType)a.Type;
-            if (a.Detect.Body.Rect.size() == 4) {
-                tmp.detect = a.Detect.Body.Rect;
-            }
-
-            tmp.attrs.age.WithName(a.Recognize.Age.Name);
-            tmp.attrs.sex.WithName(a.Recognize.Sex.Name);
-            tmp.attrs.upperColor.WithName(a.Recognize.UpperColor.Name);
-            tmp.attrs.bottomColor.WithName(a.Recognize.BottomColor.Name);
-            tmp.attrs.orientation.WithName(a.Recognize.Orientation.Name);
-            tmp.attrs.hair.WithName(a.Recognize.Hair.Name);
-            tmp.attrs.umbrella.WithName(a.Recognize.Umbrella.Name);
-            tmp.attrs.hat.WithName(a.Recognize.Hat.Name);
-            tmp.attrs.upperType.WithName(a.Recognize.UpperType.Name);
-            tmp.attrs.bottomType.WithName(a.Recognize.BottomType.Name);
-            tmp.attrs.knapsack.WithName(a.Recognize.Knapsack.Name);
-            tmp.attrs.bag.WithName(a.Recognize.Bag.Name);
-            tmp.attrs.baby.WithName(a.Recognize.Baby.Name);
-            tmp.attrs.messengerBag.WithName(a.Recognize.MessengerBag.Name);
-            tmp.attrs.shoulderBag.WithName(a.Recognize.ShoulderBag.Name);
-            tmp.attrs.glasses.WithName(a.Recognize.Glasses.Name);
-            tmp.attrs.mask.WithName(a.Recognize.Mask.Name);
-            tmp.attrs.upperTexture.WithName(a.Recognize.UpperTexture.Name);
-            tmp.attrs.barrow.WithName(a.Recognize.Barrow.Name);
-            tmp.attrs.trolleyCase.WithName(a.Recognize.TrolleyCase.Name);
-
+            tmp.detect = a.Detect.Body.Rect;
+            recogAttributesConv(a.Recognize, tmp.attrs);
             r.pedestrains.push_back(tmp);
         }
         for (auto a : root.Vehicles) {
             algo::VehicleObject tmp;
             tmp.type = (algo::ObjectType)a.Type;
-            if (a.Detect.Body.Rect.size() == 4) {
-                tmp.detect = a.Detect.Body.Rect;
-            }
+            tmp.detect = a.Detect.Body.Rect;
             tmp.attrs.brand.WithName(a.Recognize.Brand.Name);
             tmp.attrs.color.WithName(a.Recognize.Color.Name);
             tmp.attrs.type.WithName(a.Recognize.Type.Name);
@@ -340,6 +302,36 @@ private:
             l.Type = loc.type;
             locPOArray.push_back(l);
         }
+    }
+
+    void recogAttributesConv(algo::seemmo::rec::PersonAttributeGroupPO &in, algo::PersonObject::tagAttributeGroup &out) {
+        out.age.WithName(in.Age.Name);
+        out.sex.WithName(in.Sex.Name);
+        out.upperColor.WithName(in.UpperColor.Name);
+        out.bottomColor.WithName(in.BottomColor.Name);
+        out.orientation.WithName(in.Orientation.Name);
+        out.hair.WithName(in.Hair.Name);
+        out.umbrella.WithName(in.Umbrella.Name);
+        out.hat.WithName(in.Hat.Name);
+        out.upperType.WithName(in.UpperType.Name);
+        out.bottomType.WithName(in.BottomType.Name);
+        out.knapsack.WithName(in.Knapsack.Name);
+        out.bag.WithName(in.Bag.Name);
+        out.baby.WithName(in.Baby.Name);
+        out.messengerBag.WithName(in.MessengerBag.Name);
+        out.shoulderBag.WithName(in.ShoulderBag.Name);
+        out.glasses.WithName(in.Glasses.Name);
+        out.mask.WithName(in.Mask.Name);
+        out.upperTexture.WithName(in.UpperTexture.Name);
+        out.barrow.WithName(in.Barrow.Name);
+        out.trolleyCase.WithName(in.TrolleyCase.Name);
+    }
+
+    void recogAttributesConv(algo::seemmo::rec::VehicleAttributeGroup &in, algo::VehicleObject::tagAttributeGroup &out) {
+        out.brand.WithName(in.Brand.Name);
+        out.color.WithName(in.Color.Name);
+        out.type.WithName(in.Type.Name);
+        out.plate.WithName(in.Plate.Name);
     }
 
 private:

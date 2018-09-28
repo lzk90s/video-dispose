@@ -16,9 +16,11 @@ public:
     typedef uint64_t FrameId;
 
     // 抽帧时间间隔（毫秒）
-    const static int32_t FRAME_PICK_INTERNAL_MS = 80;
+    const static int32_t FRAME_PICK_INTERNAL_MS = 100;
+    // 抽帧间隔数目
+    const static int32_t FRAME_PICK_INTERNAL_NUM = 3;
     // 缓存的最大帧数(30秒的帧数)
-    const static int32_t FRAME_CACHE_MAX_NUM = 20 * (1000 / FRAME_PICK_INTERNAL_MS);
+    const static int32_t FRAME_CACHE_MAX_NUM = 10 * (1000 / FRAME_PICK_INTERNAL_MS);
 
 public:
     FrameCache() : currFrameId_(0) {}

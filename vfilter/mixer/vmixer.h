@@ -59,6 +59,10 @@ protected:
 
         int idx = 0;
         for (auto a : attrs) {
+            if (a.name.empty()) {
+                continue;
+            }
+
             //start x, start y
             int32_t sx = x + w, sy = y;
             //如果框的右边离图像的右边距离太近，避免字被截断，则字写在框的左边

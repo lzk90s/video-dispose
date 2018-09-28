@@ -26,7 +26,8 @@ public:
     VSink(uint32_t channelId)
         : channelId_(channelId),
           lastTime_(chrono::steady_clock::now()),
-          currTime_(chrono::steady_clock::now()) {
+          currTime_(chrono::steady_clock::now()),
+          pickCnt(0) {
     }
 
     // 处理接收到的帧
@@ -70,11 +71,15 @@ protected:
     bool needPickFrame() {
         bool pickFlag = false;
         currTime_ = chrono::steady_clock::now();
+        pickCnt++;
         auto diffTime = std::chrono::duration_cast<std::chrono::milliseconds>(currTime_ - lastTime_).count();
-        if (diffTime >= FrameCache::FRAME_PICK_INTERNAL_MS) {
+        //当时间和数量都达到的时候，才抽帧。
+        //做时间限制，是为了避免高帧率的时候，疯狂抽帧。做数量限制，是为了避免低帧率的时候，抽到相同帧
+        if (pickCnt>= FrameCache::FRAME_PICK_INTERNAL_NUM && diffTime >= FrameCache::FRAME_PICK_INTERNAL_MS) {
             pickFlag = true;
             // 更新当前时间
             lastTime_ = currTime_;
+            pickCnt = 0;
         }
         return pickFlag;
     }
@@ -100,6 +105,7 @@ private:
     //time for pick frame
     chrono::steady_clock::time_point lastTime_;
     chrono::steady_clock::time_point currTime_;
+    uint32_t pickCnt;
 
     //callback
     OnFrameHandler onFrameHandler_;
