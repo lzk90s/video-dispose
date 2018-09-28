@@ -17,7 +17,7 @@ class AsyncAlgoProcessor  {
 public:
 
     AsyncAlgoProcessor(VSink &sink)
-        : tp_(2),
+        : tp_(1),
           sink_(sink) {
         recogFrameCnt = 0;
         seemmoStub_ = AlgoStubFactory::CreateStub("seemmo");
@@ -43,39 +43,42 @@ public:
         FilterResult filterResult;
         int32_t ret = 0;
 
-        // 检测+跟踪
-        if (true) {
-            TrailParam trailParam;
-            // roi区域设置为全图
-            trailParam.roi.push_back(Point{ 0, 0 });
-            trailParam.roi.push_back(Point{ 0, (int32_t)height });
-            trailParam.roi.push_back(Point{ (int32_t)width, (int32_t)height });
-            trailParam.roi.push_back(Point{ (int32_t)width, 0 });
-            ret = seemmoStub_->Trail(channelId, frameId, bgr24, width, height, trailParam, imageResult, filterResult);
-            if (0 != ret) {
-                LOG_ERROR("Trail error, ret {}", ret);
-                return ret;
-            }
+        TrailParam trailParam;
+        // roi区域设置为全图
+        trailParam.roi.push_back(Point{ 0, 0 });
+        trailParam.roi.push_back(Point{ 0, (int32_t)height });
+        trailParam.roi.push_back(Point{ (int32_t)width, (int32_t)height });
+        trailParam.roi.push_back(Point{ (int32_t)width, 0 });
+        ret = seemmoStub_->Trail(channelId, frameId, bgr24, width, height, trailParam, imageResult, filterResult);
+        if (0 != ret) {
+            LOG_ERROR("Trail error, ret {}", ret);
+            return ret;
         }
 
+        //更新混合器中的对象
+        sink_.GetPersonMixer().SetDetectedObjects(imageResult.pedestrains);
+        sink_.GetVehicleMixer().SetDetectedObjects(imageResult.vehicles);
+        sink_.GetBikeMixer().SetDetectedObjects(imageResult.bikes);
+
         // 跳帧识别，不关心处理结果
-        if (++recogFrameCnt >= 2) {
+        if (++recogFrameCnt >= 6) {
             recogFrameCnt = 0;
-            auto f2 = std::bind(&AsyncAlgoProcessor::AsyncRecognizeByImageResult, this, channelId, bgr24, width, height,
-                                imageResult);
-            tp_.commit(f2);
+            SyncRecognizeByImageResult(channelId, bgr24, width, height, imageResult);
         }
 
         // 对filterresult结果进行异步识别
         if (true) {
+            //             auto f2 = std::bind(&AsyncAlgoProcessor::AsyncRecognizeByImageResult, this, channelId, bgr24, width, height,
+            //                                 imageResult);
+            //             tp_.commit(f2);
         }
 
         return 0;
     }
 
     //根据imageresult进行异步识别
-    int32_t AsyncRecognizeByImageResult(uint32_t channelId, uint8_t *bgr24, uint32_t width, uint32_t height,
-                                        ImageResult &imageResult) {
+    int32_t SyncRecognizeByImageResult(uint32_t channelId, uint8_t *bgr24, uint32_t width, uint32_t height,
+                                       ImageResult &imageResult) {
         int32_t ret = 0;
         RecogParam recParam;
 
@@ -102,25 +105,31 @@ public:
             recParam.locations.push_back(loc);
         }
 
+        ImageResult recImageResult;
         //如果存在识别区域，则进行识别
         if (!recParam.locations.empty()) {
-            ImageResult recImageResult;
             ret = seemmoStub_->Recognize(channelId, bgr24, width, height, recParam, recImageResult);
             if (0 != ret) {
                 LOG_ERROR("Recognize error, ret {}", ret);
                 return ret;
             }
-
-            // 更新mixer中的检测结果缓存
-            sink_.GetPersonMixer().SetObjects(recImageResult.pedestrains);
-            sink_.GetVehicleMixer().SetObjects(recImageResult.vehicles);
-            sink_.GetBikeMixer().SetObjects(recImageResult.bikes);
-        } else {
-            ImageResult recImageResult;	 // empty
-            sink_.GetPersonMixer().SetObjects(recImageResult.pedestrains);
-            sink_.GetVehicleMixer().SetObjects(recImageResult.vehicles);
-            sink_.GetBikeMixer().SetObjects(recImageResult.bikes);
         }
+
+        //更新guid，深瞐识别时没有返回guid
+        for (uint32_t idx = 0; idx < recImageResult.bikes.size(); idx++) {
+            recImageResult.bikes[idx].guid = imageResult.bikes[idx].guid;
+        }
+        for (uint32_t idx = 0; idx < recImageResult.vehicles.size(); idx++) {
+            recImageResult.vehicles[idx].guid = imageResult.vehicles[idx].guid;
+        }
+        for (uint32_t idx = 0; idx < recImageResult.pedestrains.size(); idx++) {
+            recImageResult.pedestrains[idx].guid = imageResult.pedestrains[idx].guid;
+        }
+
+        // 更新mixer中的检测结果缓存
+        sink_.GetPersonMixer().SetRecognizedObjects(recImageResult.pedestrains);
+        sink_.GetVehicleMixer().SetRecognizedObjects(recImageResult.vehicles);
+        sink_.GetBikeMixer().SetRecognizedObjects(recImageResult.bikes);
 
         return 0;
     }

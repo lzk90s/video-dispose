@@ -20,10 +20,6 @@ typedef struct tagAttributePO {
     string Code;
     string Name;
     int32_t Score;
-
-    tagAttributePO() {
-        memset(this, 0, sizeof(tagAttributePO));
-    }
 } AttributePO;
 
 typedef struct tagVehicleAttributeGroup {
@@ -31,10 +27,6 @@ typedef struct tagVehicleAttributeGroup {
     AttributePO Type;
     AttributePO Brand;
     AttributePO Plate;
-
-    tagVehicleAttributeGroup() {
-        memset(this, 0, sizeof(tagVehicleAttributeGroup));
-    }
 } VehicleAttributeGroup;
 
 typedef struct tagPersonAttributeGroup {
@@ -58,10 +50,6 @@ typedef struct tagPersonAttributeGroup {
     AttributePO UpperTexture;
     AttributePO Barrow;
     AttributePO TrolleyCase;
-
-    tagPersonAttributeGroup() {
-        memset(this, 0, sizeof(tagPersonAttributeGroup));
-    }
 } PersonAttributeGroupPO;
 
 typedef struct tagDetectRectPO {
@@ -75,10 +63,6 @@ typedef struct tagDetectRectPO {
     struct tagCar {
         vector<int32_t> Rect;
     } Car;
-
-    tagDetectRectPO() {
-        memset(this, 0, sizeof(tagDetectRectPO));
-    }
 } DetectRectPO;
 
 // 人
@@ -87,10 +71,6 @@ typedef struct tagPersonObjectPO {
     string GUID;
     DetectRectPO Detect;
     PersonAttributeGroupPO Recognize;
-
-    tagPersonObjectPO() {
-        memset(this, 0, sizeof(tagPersonObjectPO));
-    }
 } PersonObjectPO;
 
 // 非机动车
@@ -99,10 +79,6 @@ typedef struct tagBikeObjectPO {
     string GUID;
     DetectRectPO Detect;
     vector<PersonObjectPO> Persons;	//非机动车上的人
-
-    tagBikeObjectPO() {
-        memset(this, 0, sizeof(tagBikeObjectPO));
-    }
 } BikeObjectPO;
 
 // 机动车
@@ -111,10 +87,6 @@ typedef struct tagVehicleObjectPO {
     string GUID;
     DetectRectPO Detect;
     VehicleAttributeGroup Recognize;
-
-    tagVehicleObjectPO() {
-        memset(this, 0, sizeof(tagVehicleObjectPO));
-    }
 } VehicleObjectPO;
 
 

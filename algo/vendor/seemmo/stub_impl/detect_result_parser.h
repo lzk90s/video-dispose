@@ -21,10 +21,6 @@ typedef struct tagDetectPO {
         vector<int32_t> Rect;
         int32_t Score;
     } Body;
-
-    tagDetectPO() {
-        memset(this, 0, sizeof(tagDetectPO));
-    }
 } DetectPO;
 
 typedef struct tagObjectPO {
@@ -34,10 +30,6 @@ typedef struct tagObjectPO {
     string GUID;
     vector<int32_t> Trail;
     DetectPO Detect;
-
-    tagObjectPO() {
-        memset(this, 0, sizeof(tagObjectPO));
-    }
 } ObjectPO;
 
 
@@ -47,20 +39,12 @@ typedef struct tagImageResultPO {
     vector<ObjectPO> Vehicles;
     vector<ObjectPO> Pedestrains;
     vector<ObjectPO> Bikes;
-
-    tagImageResultPO() {
-        memset(this, 0, sizeof(tagImageResultPO));
-    }
 } ImageResultPO;
 
 typedef struct tagDetectReplyPO {
     int32_t Code;
     string Message;
     vector<ImageResultPO> ImageResults;
-
-    tagDetectReplyPO() {
-        memset(this, 0, sizeof(tagDetectReplyPO));
-    }
 } DetectReplyPO;
 
 

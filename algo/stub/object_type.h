@@ -12,6 +12,7 @@ using namespace std;
 namespace algo {
 
 enum ObjectType {
+    INVALID = -1,
     UNKNOWN = 0,		//未知
     PEDESTRAIN = 1,		//行人
     BIKE = 2,			//自行车
@@ -28,6 +29,7 @@ typedef vector<int32_t> Rect;		//矩形[x,y,w,h]
 typedef vector<int32_t> Shift;		//位移[x,y]
 typedef vector<int32_t> Point;		//点[x,y]
 
+
 // 目标基础类型
 class BaseObject {
 public:
@@ -37,7 +39,14 @@ public:
     Shift trail;				// 目标跟踪变化
 
     BaseObject() {
-        memset(this, 0, sizeof(BaseObject));
+        type = UNKNOWN;
+    }
+
+    BaseObject(const BaseObject &rhs) {
+        this->guid = rhs.guid;
+        this->type = rhs.type;
+        this->detect = rhs.detect;
+        this->trail = rhs.trail;
     }
 };
 

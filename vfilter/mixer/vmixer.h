@@ -3,7 +3,7 @@
 #include <string>
 #include <map>
 #include <mutex>
-
+#include <vector>
 
 #include "opencv/cv.h"
 #include "opencv2/opencv.hpp"
@@ -18,16 +18,86 @@ static const char *DEFAULT_FONT = "/usr/share/fonts/truetype/simsun.ttf";
 static const int FONT_MIN_SIZE = 18;	//字体最小号
 static const int FONT_MAX_SIZE = 40;	//字体最大号
 
+template<class T>
 class VMixer {
 public:
-    VMixer() : text_(DEFAULT_FONT) {
+    VMixer(const string &type)
+        : text_(DEFAULT_FONT),
+          type_(type) {
         cv::Scalar size{ FONT_MIN_SIZE, 0.5, 0.1, 0 };
         text_.setFont(nullptr, &size, nullptr, nullptr);
     }
 
-    virtual void MixFrame(cv::Mat &frame) = 0;
+    //设置目标
+    virtual void SetDetectedObjects(vector<T> &objs) {
+        unique_lock<mutex> lck(mutex_);
+
+        for (auto &o : objs) {
+            //如果没有找到，则添加到已存在目标容器中
+            if (existObjs_.find(o.guid) == existObjs_.end()) {
+                ObjectWithCounter newObj;
+                newObj.obj1 = o;
+                existObjs_[o.guid] = newObj;
+            } else {
+                existObjs_[o.guid].obj1 = o;
+            }
+        }
+
+        vector<string> disappearedObjs;
+        for (auto &o : existObjs_) {
+            bool exist = false;
+            for (auto &i : objs) {
+                if (i.guid == o.second.obj1.guid) {
+                    exist = true;
+                    break;
+                }
+            }
+            if (!exist) {
+                /*
+                * 在最新的目标中不存在，有两种情况
+                * 1. 目标已经完全消失
+                * 2. 目标只是在刚好这一帧中没有检测到，并不代表目标已经消失了
+                * 针对这两种情况，通过减少目标的计数，当目标计数为0的时候，表示目标真的消失了。就删除掉
+                */
+                o.second.cnt = o.second.cnt-1;
+                if (o.second.cnt == 0) {
+                    disappearedObjs.push_back(o.first);
+                }
+            }
+        }
+
+        //删掉消失的目标
+        for (auto &o : disappearedObjs) {
+            existObjs_.erase(o);
+        }
+    }
+
+    virtual void SetRecognizedObjects(vector<T> &objs) {
+        unique_lock<mutex> lck(mutex_);
+        for (auto o : objs) {
+            if (existObjs_.find(o.guid) != existObjs_.end()) {
+                existObjs_[o.guid].obj2 = o;
+            }
+        }
+    }
+
+    virtual void MixFrame(cv::Mat &frame) {
+        vector<T> tmpObjs1, tmpObjs2;
+        {
+            unique_lock<mutex> lck(mutex_);
+            for (auto o : existObjs_) {
+                tmpObjs1.push_back(o.second.obj1);
+                tmpObjs2.push_back(o.second.obj2);
+            }
+        }
+        doMixFrame(frame, tmpObjs1, tmpObjs2);
+    }
 
 protected:
+    virtual void doMixFrame(cv::Mat &frame, vector<T> &objs1, vector<T> &objs2) {
+
+    }
+
     //画目标的矩形框
     virtual void mixObjectRectangle(cv::Mat &frame, int32_t x, int32_t y, int32_t w, int32_t h,
                                     CvScalar color= CV_RGB(255,255,255)) {
@@ -40,13 +110,12 @@ protected:
                                         vector<algo::Attribute> &attrs, CvScalar color= CV_RGB(255,255,255)) {
         // 根据目标的远近，计算字体大小
         int32_t fontSize = FONT_MIN_SIZE + (w / (frame.cols / (FONT_MAX_SIZE - FONT_MIN_SIZE)));
-
         cv::Scalar size{ (double)fontSize, 0.5, 0.1, 0 };
         text_.setFont(nullptr, &size, nullptr, nullptr);
 
         // 计算所有属性最大字符个数
         uint32_t maxFontNum = 0;
-        for (auto a : attrs) {
+        for (auto &a : attrs) {
             wchar_t msg[200] = { 0 };
             swprintf(msg, 200, L"%hs", a.name.c_str());
             if (wcslen(msg) > maxFontNum) {
@@ -58,7 +127,7 @@ protected:
         const int32_t MARGIN_TOP = 6;	//字体与上边界的间隔
 
         int idx = 0;
-        for (auto a : attrs) {
+        for (auto &a : attrs) {
             if (a.name.empty()) {
                 continue;
             }
@@ -114,7 +183,26 @@ protected:
     }
 
 protected:
+
+    class ObjectWithCounter {
+        const static int32_t INIT_OBJECT_DISAPPEAR_COUNT = 10;	//目标消失初始计数
+        typedef int32_t OjbectDisappearCounter;
+
+    public:
+        T obj1;		//obj1 存储检测结果
+        T obj2;		//obj2 存储识别结果
+        OjbectDisappearCounter cnt;
+
+        ObjectWithCounter() {
+            cnt = INIT_OBJECT_DISAPPEAR_COUNT;
+        }
+    };
+
     CvxText text_;
+    string type_;
+    mutex mutex_;
+    //已经存在的目标
+    map<string, ObjectWithCounter> existObjs_;
 };
 
 
