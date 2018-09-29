@@ -60,6 +60,9 @@
     <ClInclude Include="..\..\algo\vendor\seemmo\wrapper\workers.h">
       <Filter>源文件\wrapper</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\algo\vendor\seemmo\server\img_service_impl.h">
+      <Filter>源文件\server</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\algo\vendor\seemmo\wrapper\Makefile">

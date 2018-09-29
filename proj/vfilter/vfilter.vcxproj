@@ -89,6 +89,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\vfilter\app.h" />
+    <ClInclude Include="..\..\vfilter\setting.h" />
     <ClInclude Include="..\..\vfilter\frame_cache.h" />
     <ClInclude Include="..\..\vfilter\mixer\bike_mixer.h" />
     <ClInclude Include="..\..\vfilter\mixer\cvx_text.h" />

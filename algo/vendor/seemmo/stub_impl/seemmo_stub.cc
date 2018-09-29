@@ -47,7 +47,7 @@ public:
     int32_t Trail(
         uint32_t channelId,
         uint64_t frameId,
-        uint8_t *bgr24,
+        const uint8_t *bgr24,
         uint32_t width,
         uint32_t height,
         const TrailParam &param,
@@ -98,7 +98,7 @@ public:
 
     int32_t Recognize(
         uint32_t channelId,
-        uint8_t *bgr24,
+        const uint8_t *bgr24,
         uint32_t width,
         uint32_t height,
         const RecogParam &param,
@@ -351,7 +351,7 @@ SeemmoAlgoStub::~SeemmoAlgoStub() {
 int32_t SeemmoAlgoStub::Trail(
     uint32_t channelId,
     uint64_t frameId,
-    uint8_t *bgr24,
+    const uint8_t *bgr24,
     uint32_t width,
     uint32_t height,
     const TrailParam &param,
@@ -363,7 +363,7 @@ int32_t SeemmoAlgoStub::Trail(
 
 int32_t SeemmoAlgoStub::Recognize(
     uint32_t channelId,
-    uint8_t *bgr24,
+    const uint8_t *bgr24,
     uint32_t width,
     uint32_t height,
     const RecogParam &param,

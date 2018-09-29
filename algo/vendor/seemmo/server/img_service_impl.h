@@ -30,10 +30,12 @@ public:
         brpc::Controller* cntl =
             static_cast<brpc::Controller*>(controller);
 
-        int32_t len = 10 * 1024 * 1024;
-        int32_t width = 0, height = 0;
-        unique_ptr<uint8_t[]> bgr24(new uint8_t[len] {0});
-        JpegHelper::jpeg2rgb((uint8_t*)request->jpeg().c_str(), request->jpeg().length(), bgr24.get(), &len, &width, &height);
+        Jpeg2BgrConverter converter;
+        if (0 != converter.Convert((uint8_t*)request->jpeg().c_str(), request->jpeg().length())) {
+            LOG_INFO("Failed to convert jpeg image");
+            cntl->SetFailed("jpeg decompress error");
+            return;
+        }
 
         //识别参数写死
         string param =
@@ -42,9 +44,9 @@ public:
         uint32_t bufLen = 1024 * 1024 * 5;
         unique_ptr<char[]> buf(new char[bufLen]);
         int ret = algo_.DetectRecognize(
-                      /*((const uint8_t*)request->bgr24().data()*/ bgr24.get(),
-                      width,
-                      height,
+                      /*((const uint8_t*)request->bgr24().data()*/ converter.GetImgBuffer(),
+                      converter.GetWidth(),
+                      converter.GetHeight(),
                       param.c_str(),
                       buf.get(),
                       bufLen);
