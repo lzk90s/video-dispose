@@ -8,8 +8,7 @@
 #include "algo/stub/algo_stub.h"
 #include "vfilter/frame_cache.h"
 #include "vfilter/vsink.h"
-#include "notify/http_client.h"
-#include "json/json.hpp"
+
 
 using namespace std;
 using namespace algo;
@@ -230,14 +229,13 @@ private:
             }
 
             for (auto &p : imageResult.bikes) {
-                string url = GlobalSettings::getInstance().notifyServerHost + "/internal/snap/face";
-                HttpClient::SendReq(url, [](const string &msg) {});
+                sink_.GetBikeNotifier().OnRecognizedObject((cv::Mat)frame, p);
             }
             for (auto &p : imageResult.pedestrains) {
-
+                sink_.GetPersonNotifier().OnRecognizedObject((cv::Mat)frame, p);
             }
             for (auto &p : imageResult.vehicles) {
-
+                sink_.GetVehicleNotifier().OnRecognizedObject((cv::Mat)frame, p);
             }
 
             return 0;

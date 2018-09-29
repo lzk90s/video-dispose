@@ -16,6 +16,9 @@
     <Filter Include="源文件\mixer">
       <UniqueIdentifier>{cffbb90f-f6f6-4d02-8edb-eec93741a82c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="源文件\notifier">
+      <UniqueIdentifier>{b428b955-8ec9-44cf-b913-55c2aa8bdd20}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\vfilter\Makefile">
@@ -31,6 +34,12 @@
     </ClCompile>
     <ClCompile Include="..\..\vfilter\async_algo_proc.h">
       <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\vfilter\notifier\http_client.cc">
+      <Filter>源文件\notifier</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\vfilter\notifier\notifier_impl.cc">
+      <Filter>源文件\notifier</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -63,6 +72,21 @@
     </ClInclude>
     <ClInclude Include="..\..\vfilter\setting.h">
       <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\vfilter\notifier\bike_notifier.h">
+      <Filter>源文件\notifier</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\vfilter\notifier\http_client.h">
+      <Filter>源文件\notifier</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\vfilter\notifier\notifier.h">
+      <Filter>源文件\notifier</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\vfilter\notifier\person_notifier.h">
+      <Filter>源文件\notifier</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\vfilter\notifier\vehicle_notifier.h">
+      <Filter>源文件\notifier</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

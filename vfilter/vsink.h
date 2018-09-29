@@ -11,9 +11,14 @@
 
 #include "vfilter/setting.h"
 #include "vfilter/frame_cache.h"
+
 #include "vfilter/mixer/bike_mixer.h"
 #include "vfilter/mixer/person_mixer.h"
 #include "vfilter/mixer/vehicle_mixer.h"
+
+#include "vfilter/notifier/bike_notifier.h"
+#include "vfilter/notifier/person_notifier.h"
+#include "vfilter/notifier/vehicle_notifier.h"
 
 using namespace std;
 
@@ -63,6 +68,18 @@ public:
         return this->personMixer_;
     }
 
+    VehicleNotifier &GetVehicleNotifier() {
+        return this->vehicleNotifier_;
+    }
+
+    BikeNotifier &GetBikeNotifier() {
+        return this->bikeNotifier_;
+    }
+
+    PersonNotifier &GetPersonNotifier() {
+        return this->personNotifier_;
+    }
+
 protected:
 
     bool needPickFrame() {
@@ -96,6 +113,11 @@ private:
     VehicleMixer vehicleMixer_;
     BikeMixer bikeMixer_;
     PersonMixer personMixer_;
+
+    //notifier
+    VehicleNotifier vehicleNotifier_;
+    BikeNotifier bikeNotifier_;
+    PersonNotifier personNotifier_;
 
     //frame cache
     FrameCache frameCache_;
