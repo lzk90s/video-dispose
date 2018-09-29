@@ -6,8 +6,16 @@
 
 #include <ft2build.h>
 #include <freetype/freetype.h>
+#include <freetype/ftcache.h>
 
 #include <opencv2/opencv.hpp>
+
+
+typedef struct MyFaceRec_ {
+    const char* file_path;
+    int face_index;
+} MyFaceRec, *MyFace;
+
 
 class CvxText {
 public:
@@ -100,14 +108,24 @@ private:
     // 输出当前字符, 更新m_pos位置
     void putWChar(cv::Mat& img, wchar_t wc, cv::Point& pos, cv::Scalar color);
 
+
+private:
     FT_Library   m_library;   // 字库
     FT_Face      m_face;      // 字体
 
+    //字体缓存
+    MyFaceRec	  m_myface;
+    FTC_FaceID    m_myfaceId;
+    FTC_Manager   m_cacheManager;
+    FTC_CMapCache m_mapCache;
+    FTC_SBitCache m_sbitCache;
+    FTC_ScalerRec m_scaler;
+
     // 默认的字体输出参数
     int         m_fontType;
-    cv::Scalar   m_fontSize;
-    bool      m_fontUnderline;
-    float      m_fontDiaphaneity;
+    cv::Scalar  m_fontSize;
+    bool		m_fontUnderline;
+    float		m_fontDiaphaneity;
 };
 
 #endif // OPENCV_CVX_TEXT_HPP_

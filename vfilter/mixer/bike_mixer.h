@@ -20,17 +20,17 @@ protected:
 
     void doMixFrame(cv::Mat &frame, vector<algo::BikeObject> &objs1, vector<algo::BikeObject> &objs2) override {
         for (uint32_t idx = 0; idx < objs1.size() && idx < objs2.size(); idx++) {
-            // »­¾ØÐÎ¿ò
+            // ç”»çŸ©å½¢æ¡†
             algo::Rect &rect = objs1[idx].detect;
             int32_t thickness = 2;
             int32_t x = rect[0], y = rect[1], w=rect[2], h=rect[3];
             cv::rectangle(frame, cvPoint(x, y), cvPoint(x + w, y + h), CV_RGB(0, 0, 255), thickness, 1, 0);
 
-            //Èç¹û»ú¶¯³µÉÏÓÐÈË£¬ÔòÊä³öÈËµÄÐÅÏ¢
+            //å¦‚æžœæœºåŠ¨è½¦ä¸Šæœ‰äººï¼Œåˆ™è¾“å‡ºäººçš„ä¿¡æ¯
             if (!objs2[idx].persons.empty()) {
-                // Ö»Êä³öÒ»¸öÈË
+                // åªè¾“å‡ºä¸€ä¸ªäºº
                 for (auto &p : objs2[idx].persons) {
-                    // ÐèÒª»ìµ½Á÷ÖÐµÄÊôÐÔ
+                    // éœ€è¦æ··åˆ°æµä¸­çš„å±žæ€§
                     vector<Attribute> mixableAttrs;
                     mixableAttrs.push_back(algo::Attribute().WithName(getTypeString(objs1[idx].type)));
                     mixableAttrs.push_back(p.attrs.sex);
@@ -49,13 +49,13 @@ protected:
     string getTypeString(algo::ObjectType type) {
         switch (type) {
         case BIKE:
-            return "×ÔÐÐ³µ";
+            return "è‡ªè¡Œè½¦";
             break;
         case MOTOBIKE:
-            return "Ä¦ÍÐ³µ";
+            return "æ‘©æ‰˜è½¦";
             break;
         case TRICYCLE:
-            return "ÈýÂÖ³µ";
+            return "ä¸‰è½®è½¦";
             break;
         default:
             return "";

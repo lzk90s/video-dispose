@@ -70,7 +70,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;VFILTER_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\;..\..\thirdparty;..\..\thirdparty\libyuv\include;..\..\thirdparty\opencv\include;E:\github\FFmpeg\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\;..\..\thirdparty;..\..\thirdparty\libyuv\include;..\..\thirdparty\opencv\include;E:\github\FFmpeg\;..\..\thirdparty\freetype2</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

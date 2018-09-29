@@ -2,8 +2,10 @@
 #include <memory>
 
 #include "common/helper/singleton.h"
+#include "common/helper/counttimer.h"
 
 #include "vfilter/app.h"
+#include "vfilter/setting.h"
 #include "vfilter/vfilter.h"
 #include "vfilter/vsink.h"
 #include "vfilter/async_algo_proc.h"
@@ -51,6 +53,7 @@ typedef Singleton<vf::VFilterManager> VFilterManagerSingleton;
 int32_t VFilter_Init() {
     //≥ı ºªØ
     //vf::ThisApp::getInstance();
+    vf::GlobalSettings::getInstance();
     vf::VFilterManagerSingleton::getInstance();
     return 0;
 }

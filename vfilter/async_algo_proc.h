@@ -4,6 +4,7 @@
 #include "common/helper/threadpool.h"
 #include "common/helper/logger.h"
 
+#include "vfilter/setting.h"
 #include "algo/stub/algo_stub.h"
 #include "vfilter/frame_cache.h"
 #include "vfilter/vsink.h"
@@ -17,7 +18,7 @@ class AsyncAlgoProcessor  {
 public:
 
     AsyncAlgoProcessor(VSink &sink)
-        : tp_(1),
+        : tp_(2),
           sink_(sink) {
         recogFrameCnt = 0;
         seemmoStub_ = AlgoStubFactory::CreateStub("seemmo");
@@ -41,29 +42,18 @@ public:
     int32_t AlgoRoutine(uint32_t channelId, uint64_t frameId, uint8_t *bgr24, uint32_t width, uint32_t height) {
         ImageResult imageResult;
         FilterResult filterResult;
-        int32_t ret = 0;
+        int ret = 0;
 
-        TrailParam trailParam;
-        // roi区域设置为全图
-        trailParam.roi.push_back(Point{ 0, 0 });
-        trailParam.roi.push_back(Point{ 0, (int32_t)height });
-        trailParam.roi.push_back(Point{ (int32_t)width, (int32_t)height });
-        trailParam.roi.push_back(Point{ (int32_t)width, 0 });
-        ret = seemmoStub_->Trail(channelId, frameId, bgr24, width, height, trailParam, imageResult, filterResult);
+        // 跟踪目标
+        ret = TrailObjects(channelId, frameId, bgr24, width, height, imageResult, filterResult);
         if (0 != ret) {
-            LOG_ERROR("Trail error, ret {}", ret);
             return ret;
         }
 
-        //更新混合器中的对象
-        sink_.GetPersonMixer().SetDetectedObjects(imageResult.pedestrains);
-        sink_.GetVehicleMixer().SetDetectedObjects(imageResult.vehicles);
-        sink_.GetBikeMixer().SetDetectedObjects(imageResult.bikes);
-
-        // 跳帧识别，不关心处理结果
-        if (++recogFrameCnt >= 6) {
+        // 跳帧识别
+        if (++recogFrameCnt >= GlobalSettings::getInstance().frameRecogPickInternalNum) {
             recogFrameCnt = 0;
-            SyncRecognizeByImageResult(channelId, bgr24, width, height, imageResult);
+            RecognizeByImageResult(channelId, bgr24, width, height, imageResult);
         }
 
         // 对filterresult结果进行异步识别
@@ -76,13 +66,35 @@ public:
         return 0;
     }
 
-    //根据imageresult进行异步识别
-    int32_t SyncRecognizeByImageResult(uint32_t channelId, uint8_t *bgr24, uint32_t width, uint32_t height,
-                                       ImageResult &imageResult) {
+    int32_t TrailObjects(uint32_t channelId, uint64_t frameId, const uint8_t *bgr24, uint32_t width, uint32_t height,
+                         ImageResult &imageResult, FilterResult &filterResult) {
+
+        TrailParam trailParam;
+        // roi区域设置为全图
+        trailParam.roi.push_back(Point{ 0, 0 });
+        trailParam.roi.push_back(Point{ 0, (int32_t)height });
+        trailParam.roi.push_back(Point{ (int32_t)width, (int32_t)height });
+        trailParam.roi.push_back(Point{ (int32_t)width, 0 });
+        int32_t ret = seemmoStub_->Trail(channelId, frameId, bgr24, width, height, trailParam, imageResult, filterResult);
+        if (0 != ret) {
+            LOG_ERROR("Trail error, ret {}", ret);
+            return ret;
+        }
+
+        //更新混合器中的对象
+        sink_.GetPersonMixer().SetDetectedObjects(imageResult.pedestrains);
+        sink_.GetVehicleMixer().SetDetectedObjects(imageResult.vehicles);
+        sink_.GetBikeMixer().SetDetectedObjects(imageResult.bikes);
+
+        return 0;
+    }
+
+    int32_t RecognizeByImageResult(uint32_t channelId, const uint8_t *bgr24, uint32_t width, uint32_t height,
+                                   ImageResult &imageResult) {
         int32_t ret = 0;
         RecogParam recParam;
 
-        //根据深瞐的sdk手册，单张图的识别，只设置type和trail
+        //根据深瞐的sdk手册，单张图的识别，只设置type和trail,detect
         for (auto p : imageResult.bikes) {
             RecogParam::ObjLocation loc;
             loc.type = p.type;
@@ -135,7 +147,7 @@ public:
     }
 
     //根据filterresult进行异步识别
-    int32_t AsyncRecognizeByFilterResult(uint32_t channelId, uint8_t *bgr24, uint32_t width, uint32_t height,
+    int32_t AsyncRecognizeByFilterResult(uint32_t channelId, const uint8_t *bgr24, uint32_t width, uint32_t height,
                                          FilterResult &filterResult) {
         int32_t ret = 0;
         RecogParam recParam;
@@ -188,7 +200,7 @@ private:
     //sink
     VSink &sink_;
     //识别帧计数
-    int32_t recogFrameCnt;
+    uint32_t recogFrameCnt;
 };
 
 }

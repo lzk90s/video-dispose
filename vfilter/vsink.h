@@ -8,6 +8,8 @@
 #include <mutex>
 
 #include "opencv/cv.h"
+
+#include "vfilter/setting.h"
 #include "vfilter/frame_cache.h"
 #include "vfilter/mixer/bike_mixer.h"
 #include "vfilter/mixer/person_mixer.h"
@@ -75,9 +77,10 @@ protected:
         auto diffTime = std::chrono::duration_cast<std::chrono::milliseconds>(currTime_ - lastTime_).count();
         //当时间和数量都达到的时候，才抽帧。
         //做时间限制，是为了避免高帧率的时候，疯狂抽帧。做数量限制，是为了避免低帧率的时候，抽到相同帧
-        if (pickCnt>= FrameCache::FRAME_PICK_INTERNAL_NUM && diffTime >= FrameCache::FRAME_PICK_INTERNAL_MS) {
+        if (pickCnt>= GlobalSettings::getInstance().framePickInternalNum &&
+                diffTime >= GlobalSettings::getInstance().framePickInternalMs) {
+            // 时间更新&计数归零
             pickFlag = true;
-            // 更新当前时间
             lastTime_ = currTime_;
             pickCnt = 0;
         }

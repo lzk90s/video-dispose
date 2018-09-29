@@ -14,7 +14,8 @@ public:
 
     ~CountTimer() {
         end_ = std::chrono::steady_clock::now();
-        cout << "[" << name_ << "] -> " << std::chrono::duration_cast<std::chrono::milliseconds>(end_ - start_).count() << "ms" << endl;
+        cout << "[" << name_ << "] -> " << std::chrono::duration_cast<std::chrono::microseconds>
+             (end_ - start_).count() << "us" << endl;
     }
 
 private:

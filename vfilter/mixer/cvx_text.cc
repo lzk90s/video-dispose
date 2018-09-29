@@ -5,14 +5,27 @@
 #include <cmath>
 
 #include "vfilter/mixer/cvx_text.h"
+#include "freetype/ftcache.h"
+
+
+FT_Error my_face_requester(FTC_FaceID face_id, FT_Library library, FT_Pointer req_data, FT_Face* aface) {
+    MyFace face = (MyFace)face_id; // simple typecase
+    return FT_New_Face(library, face->file_path, face->face_index, aface);
+}
 
 // 打开字库
 CvxText::CvxText(const char* freeType) {
     assert(freeType != NULL);
+    m_myface.file_path = freeType;
+    m_myface.face_index = 0;
+    m_myfaceId = (FTC_FaceID)&m_myface;
 
     // 打开字库文件, 创建一个字体
     if (FT_Init_FreeType(&m_library)) throw;
-    if (FT_New_Face(m_library, freeType, 0, &m_face)) throw;
+    if (FTC_Manager_New(m_library, 0, 0, 0, my_face_requester, nullptr, &m_cacheManager)) throw;
+    if (FTC_CMapCache_New(m_cacheManager, &m_mapCache)) throw;
+    if (FTC_SBitCache_New(m_cacheManager, &m_sbitCache)) throw;
+    if (FTC_Manager_LookupFace(m_cacheManager, m_myfaceId, &m_face)) throw;
 
     // 设置字体输出参数
     restoreFont();
@@ -25,9 +38,11 @@ CvxText::CvxText(const char* freeType) {
 CvxText::~CvxText() {
     FT_Done_Face(m_face);
     FT_Done_FreeType(m_library);
+    FTC_Manager_RemoveFaceID(m_cacheManager, m_myfaceId);
+    FTC_Manager_Done(m_cacheManager);
 }
 
-// 设置字体参数:
+// 获取字体参数:
 //
 // font         - 字体类型, 目前不支持
 // size         - 字体大小/空白比例/间隔比例/旋转角度
@@ -58,24 +73,27 @@ void CvxText::setFont(int* type, cv::Scalar* size, bool* underline, float* diaph
         m_fontDiaphaneity = *diaphaneity;
     }
 
-    FT_Set_Pixel_Sizes(m_face, (int)m_fontSize.val[0], 0);
+    m_scaler.height = m_fontSize.val[0];
+    m_scaler.width = m_fontSize.val[0];
+
+    FTC_Manager_LookupSize(m_cacheManager, &m_scaler, nullptr);
 }
 
 // 恢复原始的字体设置
 void CvxText::restoreFont() {
     m_fontType = 0;            // 字体类型(不支持)
-
-    m_fontSize.val[0] = 20;      // 字体大小
-    m_fontSize.val[1] = 0.5;   // 空白字符大小比例
-    m_fontSize.val[2] = 0.1;   // 间隔大小比例
-    m_fontSize.val[3] = 0;      // 旋转角度(不支持)
-
     m_fontUnderline = false;   // 下画线(不支持)
-
     m_fontDiaphaneity = 1.0;   // 色彩比例(可产生透明效果)
 
+    m_scaler.face_id = m_myfaceId;
+    m_scaler.width = 20;
+    m_scaler.height = 20;
+    m_scaler.pixel = 1;
+    m_scaler.x_res = 0;
+    m_scaler.y_res = 0;
+
     // 设置字符大小
-    FT_Set_Pixel_Sizes(m_face, (int)m_fontSize.val[0], 0);
+    FTC_Manager_LookupSize(m_cacheManager, &m_scaler, nullptr);
 }
 
 // 输出函数(颜色默认为白色)
@@ -120,22 +138,23 @@ int CvxText::putText(cv::Mat& img, const wchar_t* text, cv::Point pos, cv::Scala
 
 // 输出当前字符, 更新m_pos位置
 void CvxText::putWChar(cv::Mat& img, wchar_t wc, cv::Point& pos, cv::Scalar color) {
-    // 根据unicode生成字体的二值位图
-    FT_UInt glyph_index = FT_Get_Char_Index(m_face, wc);
-    FT_Load_Glyph(m_face, glyph_index, FT_LOAD_DEFAULT);
-    FT_Render_Glyph(m_face->glyph, FT_RENDER_MODE_MONO);
+    FTC_SBit bitmap;
 
-    FT_GlyphSlot slot = m_face->glyph;
+    FT_UInt glyph_idx = FTC_CMapCache_Lookup(m_mapCache, m_scaler.face_id, -1, (FT_UInt32)wc);
+    if (0 == glyph_idx) {
+        return;
+    }
+    FTC_SBitCache_LookupScaler(m_sbitCache, &m_scaler, FT_LOAD_MONOCHROME, glyph_idx, &bitmap, nullptr);
 
     // 行列数
-    int rows = slot->bitmap.rows;
-    int cols = slot->bitmap.width;
+    int rows = bitmap->height;
+    int cols = bitmap->width;
 
     for (int i = 0; i < rows; ++i) {
         for (int j = 0; j < cols; ++j) {
-            int off = i * slot->bitmap.pitch + j / 8;
+            int off = i * bitmap->pitch + j / 8;
 
-            if (slot->bitmap.buffer[off] & (0xC0 >> (j % 8))) {
+            if (bitmap->buffer[off] & (0xC0 >> (j % 8))) {
                 int r = pos.y - (rows - 1 - i);
                 int c = pos.x + j;
 

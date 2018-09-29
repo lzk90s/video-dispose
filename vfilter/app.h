@@ -15,10 +15,6 @@ public:
 
 public:
     App() {
-        char *appHome = ::getenv(VFILTER_HOME_ENV);
-        if (nullptr == appHome) {
-            throw runtime_error(string(VFILTER_HOME_ENV) + " is null, please set it at first");
-        }
     }
     ~App() {}
 

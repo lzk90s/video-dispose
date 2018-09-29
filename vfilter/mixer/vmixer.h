@@ -7,6 +7,8 @@
 
 #include "opencv/cv.h"
 #include "opencv2/opencv.hpp"
+
+#include "vfilter/setting.h"
 #include "vfilter/mixer/cvx_text.h"
 #include "vfilter/mixer/cvx_text.h"
 #include "algo/stub/object_type.h"
@@ -15,8 +17,8 @@ using namespace std;
 
 namespace vf {
 static const char *DEFAULT_FONT = "/usr/share/fonts/truetype/simsun.ttf";
-static const int FONT_MIN_SIZE = 18;	//×ÖÌå×îĞ¡ºÅ
-static const int FONT_MAX_SIZE = 40;	//×ÖÌå×î´óºÅ
+static const int FONT_MIN_SIZE = 20;	//å­—ä½“æœ€å°å·
+static const int FONT_MAX_SIZE = 40;	//å­—ä½“æœ€å¤§å·
 
 template<class T>
 class VMixer {
@@ -28,12 +30,12 @@ public:
         text_.setFont(nullptr, &size, nullptr, nullptr);
     }
 
-    //ÉèÖÃÄ¿±ê
+    //è®¾ç½®ç›®æ ‡
     virtual void SetDetectedObjects(vector<T> &objs) {
         unique_lock<mutex> lck(mutex_);
 
         for (auto &o : objs) {
-            //Èç¹ûÃ»ÓĞÕÒµ½£¬ÔòÌí¼Óµ½ÒÑ´æÔÚÄ¿±êÈİÆ÷ÖĞ
+            //å¦‚æœæ²¡æœ‰æ‰¾åˆ°ï¼Œåˆ™æ·»åŠ åˆ°å·²å­˜åœ¨ç›®æ ‡å®¹å™¨ä¸­
             if (existObjs_.find(o.guid) == existObjs_.end()) {
                 ObjectWithCounter newObj;
                 newObj.obj1 = o;
@@ -54,10 +56,10 @@ public:
             }
             if (!exist) {
                 /*
-                * ÔÚ×îĞÂµÄÄ¿±êÖĞ²»´æÔÚ£¬ÓĞÁ½ÖÖÇé¿ö
-                * 1. Ä¿±êÒÑ¾­ÍêÈ«ÏûÊ§
-                * 2. Ä¿±êÖ»ÊÇÔÚ¸ÕºÃÕâÒ»Ö¡ÖĞÃ»ÓĞ¼ì²âµ½£¬²¢²»´ú±íÄ¿±êÒÑ¾­ÏûÊ§ÁË
-                * Õë¶ÔÕâÁ½ÖÖÇé¿ö£¬Í¨¹ı¼õÉÙÄ¿±êµÄ¼ÆÊı£¬µ±Ä¿±ê¼ÆÊıÎª0µÄÊ±ºò£¬±íÊ¾Ä¿±êÕæµÄÏûÊ§ÁË¡£¾ÍÉ¾³ıµô
+                * åœ¨æœ€æ–°çš„ç›®æ ‡ä¸­ä¸å­˜åœ¨ï¼Œæœ‰ä¸¤ç§æƒ…å†µ
+                * 1. ç›®æ ‡å·²ç»å®Œå…¨æ¶ˆå¤±
+                * 2. ç›®æ ‡åªæ˜¯åœ¨åˆšå¥½è¿™ä¸€å¸§ä¸­æ²¡æœ‰æ£€æµ‹åˆ°ï¼Œå¹¶ä¸ä»£è¡¨ç›®æ ‡å·²ç»æ¶ˆå¤±äº†
+                * é’ˆå¯¹è¿™ä¸¤ç§æƒ…å†µï¼Œé€šè¿‡å‡å°‘ç›®æ ‡çš„è®¡æ•°ï¼Œå½“ç›®æ ‡è®¡æ•°ä¸º0çš„æ—¶å€™ï¼Œè¡¨ç¤ºç›®æ ‡çœŸçš„æ¶ˆå¤±äº†ã€‚å°±åˆ é™¤æ‰
                 */
                 o.second.cnt = o.second.cnt-1;
                 if (o.second.cnt == 0) {
@@ -66,7 +68,7 @@ public:
             }
         }
 
-        //É¾µôÏûÊ§µÄÄ¿±ê
+        //åˆ æ‰æ¶ˆå¤±çš„ç›®æ ‡
         for (auto &o : disappearedObjs) {
             existObjs_.erase(o);
         }
@@ -74,7 +76,7 @@ public:
 
     virtual void SetRecognizedObjects(vector<T> &objs) {
         unique_lock<mutex> lck(mutex_);
-        for (auto o : objs) {
+        for (auto &o : objs) {
             if (existObjs_.find(o.guid) != existObjs_.end()) {
                 existObjs_[o.guid].obj2 = o;
             }
@@ -85,7 +87,7 @@ public:
         vector<T> tmpObjs1, tmpObjs2;
         {
             unique_lock<mutex> lck(mutex_);
-            for (auto o : existObjs_) {
+            for (auto &o : existObjs_) {
                 tmpObjs1.push_back(o.second.obj1);
                 tmpObjs2.push_back(o.second.obj2);
             }
@@ -94,28 +96,29 @@ public:
     }
 
 protected:
-    virtual void doMixFrame(cv::Mat &frame, vector<T> &objs1, vector<T> &objs2) {
+    virtual void doMixFrame(cv::Mat &frame, vector<T> &objs1, vector<T> &objs2) {}
 
-    }
-
-    //»­Ä¿±êµÄ¾ØĞÎ¿ò
+    //ç”»ç›®æ ‡çš„çŸ©å½¢æ¡†
     virtual void mixObjectRectangle(cv::Mat &frame, int32_t x, int32_t y, int32_t w, int32_t h,
                                     CvScalar color= CV_RGB(255,255,255)) {
         int32_t thickness = 3;
         cv::rectangle(frame, cvPoint(x, y), cvPoint(x + w, y + h), color, thickness, 1, 0);
     }
 
-    //»­Ä¿±êµÄÊôĞÔÎÄ×Ö
+    //ç”»ç›®æ ‡çš„å±æ€§æ–‡å­—
     virtual void mixObjectAttributeText(cv::Mat &frame, int32_t x, int32_t y, int32_t w, int32_t h,
                                         vector<algo::Attribute> &attrs, CvScalar color= CV_RGB(255,255,255)) {
-        // ¸ù¾İÄ¿±êµÄÔ¶½ü£¬¼ÆËã×ÖÌå´óĞ¡
+        // æ ¹æ®ç›®æ ‡çš„è¿œè¿‘ï¼Œè®¡ç®—å­—ä½“å¤§å°
         int32_t fontSize = FONT_MIN_SIZE + (w / (frame.cols / (FONT_MAX_SIZE - FONT_MIN_SIZE)));
         cv::Scalar size{ (double)fontSize, 0.5, 0.1, 0 };
         text_.setFont(nullptr, &size, nullptr, nullptr);
 
-        // ¼ÆËãËùÓĞÊôĞÔ×î´ó×Ö·û¸öÊı
+        // è®¡ç®—æ‰€æœ‰å±æ€§æœ€å¤§å­—ç¬¦ä¸ªæ•°
         uint32_t maxFontNum = 0;
         for (auto &a : attrs) {
+            if (a.name.empty()) {
+                continue;
+            }
             wchar_t msg[200] = { 0 };
             swprintf(msg, 200, L"%hs", a.name.c_str());
             if (wcslen(msg) > maxFontNum) {
@@ -123,8 +126,8 @@ protected:
             }
         }
 
-        const int32_t MARGIN_LEFT = 8;	//×ÖÌåÓë×ó±ß½çµÄ¼ä¸ô
-        const int32_t MARGIN_TOP = 6;	//×ÖÌåÓëÉÏ±ß½çµÄ¼ä¸ô
+        const int32_t MARGIN_LEFT = 8;	//å­—ä½“ä¸å·¦è¾¹ç•Œçš„é—´éš”
+        const int32_t MARGIN_TOP = 6;	//å­—ä½“ä¸ä¸Šè¾¹ç•Œçš„é—´éš”
 
         int idx = 0;
         for (auto &a : attrs) {
@@ -134,18 +137,18 @@ protected:
 
             //start x, start y
             int32_t sx = x + w, sy = y;
-            //Èç¹û¿òµÄÓÒ±ßÀëÍ¼ÏñµÄÓÒ±ß¾àÀëÌ«½ü£¬±ÜÃâ×Ö±»½Ø¶Ï£¬Ôò×ÖĞ´ÔÚ¿òµÄ×ó±ß
+            //å¦‚æœæ¡†çš„å³è¾¹ç¦»å›¾åƒçš„å³è¾¹è·ç¦»å¤ªè¿‘ï¼Œé¿å…å­—è¢«æˆªæ–­ï¼Œåˆ™å­—å†™åœ¨æ¡†çš„å·¦è¾¹
             if ((uint32_t)(frame.cols - sx) < (maxFontNum*fontSize)) {
                 sx = x;
             }
 
-            //×ÖÌåµÄ¿ªÊ¼×ø±êx£¬y
+            //å­—ä½“çš„å¼€å§‹åæ ‡xï¼Œy
             int x1 = sx + MARGIN_LEFT;
             int y1 = sy + idx * (fontSize + MARGIN_TOP);
             int w1 = maxFontNum * fontSize;
             int h1 = fontSize;
 
-            //½Ø¶Ï´¦Àí
+            //æˆªæ–­å¤„ç†
             if (x1 >= frame.cols) {
                 x1 = frame.cols;
             }
@@ -159,23 +162,23 @@ protected:
                 h1 = frame.rows - y1;
             }
 
-            // ³¬¹ı×î´ó£¬²»ÏÔÊ¾
+            // è¶…è¿‡æœ€å¤§ï¼Œä¸æ˜¾ç¤º
             if (y1 + fontSize > frame.rows) {
-                LOG_WARN("Ignore attribute {}", a.name.c_str());
+                LOG_DEBUG("Ignore attribute {} to mix", a.name.c_str());
                 continue;
             }
 
-            //»­×ÖÌåÒõÓ°±³¾°(x1,y1,×ÖÌå×î´ó¿í¶È,×ÖÌå¸ß¶È)
+            //ç”»å­—ä½“é˜´å½±èƒŒæ™¯(x1,y1,å­—ä½“æœ€å¤§å®½åº¦,å­—ä½“é«˜åº¦)
             cv::Rect rect = cv::Rect(x1, y1, w1, h1);
             cv::Mat roi = frame(rect);
             cv::Mat mask = roi.clone();
             cv::rectangle(mask, { 0,0, mask.cols, mask.rows }, CV_RGB(50, 50, 50), -1);
             cv::addWeighted(roi, 0.3, mask, 0.7, 0, roi);
 
-            //µş¼ÓÎÄ×Ö
+            //å åŠ æ–‡å­—
             wchar_t msg[200] = { 0 };
             swprintf(msg, 200, L"%hs", a.name.c_str());
-            //×ÖÌåÊÇÒÔ×ÖµÄÏÂÃæ×÷Îª×ø±êµÄ£¬ËùÒÔ£¬y1ÊÇ×ÖµÄÉÏ²¿×ø±ê£¬ËùÒÔ×ø±êÔÙÍùÏÂÒÆ¶¯Ò»¸ö×ÖµÄ¸ß¶È
+            //å­—ä½“æ˜¯ä»¥å­—çš„ä¸‹é¢ä½œä¸ºåæ ‡çš„ï¼Œæ‰€ä»¥ï¼Œy1æ˜¯å­—çš„ä¸Šéƒ¨åæ ‡ï¼Œæ‰€ä»¥åæ ‡å†å¾€ä¸‹ç§»åŠ¨ä¸€ä¸ªå­—çš„é«˜åº¦
             text_.putText(frame, msg, cvPoint(x1, y1+ fontSize), color);
 
             idx++;
@@ -185,23 +188,22 @@ protected:
 protected:
 
     class ObjectWithCounter {
-        const static int32_t INIT_OBJECT_DISAPPEAR_COUNT = 10;	//Ä¿±êÏûÊ§³õÊ¼¼ÆÊı
         typedef int32_t OjbectDisappearCounter;
 
     public:
-        T obj1;		//obj1 ´æ´¢¼ì²â½á¹û
-        T obj2;		//obj2 ´æ´¢Ê¶±ğ½á¹û
+        T obj1;		//obj1 å­˜å‚¨æ£€æµ‹ç»“æœ
+        T obj2;		//obj2 å­˜å‚¨è¯†åˆ«ç»“æœ
         OjbectDisappearCounter cnt;
 
         ObjectWithCounter() {
-            cnt = INIT_OBJECT_DISAPPEAR_COUNT;
+            cnt = GlobalSettings::getInstance().objectDisappearCount;
         }
     };
 
     CvxText text_;
     string type_;
     mutex mutex_;
-    //ÒÑ¾­´æÔÚµÄÄ¿±ê
+    //å·²ç»å­˜åœ¨çš„ç›®æ ‡
     map<string, ObjectWithCounter> existObjs_;
 };
 

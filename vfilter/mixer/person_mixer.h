@@ -23,7 +23,7 @@ protected:
             int32_t x = rect[0], y = rect[1], w = rect[2], h = rect[3];
             mixObjectRectangle(frame, x, y, w, h, CV_RGB(255, 0, 0));
 
-            // ĞèÒª»ìµ½Á÷ÖĞµÄÊôĞÔ
+            // éœ€è¦æ··åˆ°æµä¸­çš„å±æ€§
             vector<Attribute> mixableAttrs;
             mixableAttrs.push_back(algo::Attribute().WithName(getTypeString(objs1[idx].type)));
             mixableAttrs.push_back(objs2[idx].attrs.sex);
@@ -37,7 +37,7 @@ protected:
     }
 
     string getTypeString(algo::ObjectType type) {
-        return "ĞĞÈË";
+        return "è¡Œäºº";
     }
 };
 
