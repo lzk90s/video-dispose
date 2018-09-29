@@ -46,6 +46,7 @@ public:
     vector<PersonFilter> pedestrains;		// 行人
     vector<BikeFilter> bikes;			// 非机动车
     vector<FaceFilter> faces;			// 人脸
+    vector<int32_t> releasedFrames;	// 可以释放的帧
 };
 
 class AlgoStub {

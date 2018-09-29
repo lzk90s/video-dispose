@@ -38,6 +38,7 @@ typedef struct tagFilterResultPO {
     vector<ObjectPO> Vehicles;
     vector<ObjectPO> Pedestrains;
     vector<ObjectPO> Bikes;
+    vector<int32_t> ReleaseCacheFrames;
 } FilterResultPO;
 
 typedef struct tagTrailReplyPO {
@@ -82,6 +83,7 @@ void from_json(const json &j, FilterResultPO &p) {
             p.Vehicles = j.at("Vehicles").get<vector<ObjectPO>>();
             p.Bikes = j.at("Bikes").get<vector<ObjectPO>>();
             p.Pedestrains = j.at("Pedestrains").get<vector<ObjectPO>>();
+            p.ReleaseCacheFrames = j.at("ReleaseCacheFrames").get<vector<int32_t>>();
         }
     } catch (exception &e) {
         LOG_ERROR("Parse json error, {}, {}", j.dump(), e.what());

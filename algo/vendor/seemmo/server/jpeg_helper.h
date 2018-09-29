@@ -70,7 +70,10 @@ public:
 
         cinfo.out_color_space = JCS_EXT_BGR; //JCS_YCbCr;  // 设置输出格式
 
-        jpeg_start_decompress(&cinfo);
+        if (!jpeg_start_decompress(&cinfo)) {
+            printf("decompress error");
+            return -1;
+        }
 
         row_stride = cinfo.output_width * cinfo.output_components;
         width = cinfo.output_width;

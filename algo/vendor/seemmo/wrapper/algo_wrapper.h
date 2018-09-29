@@ -17,7 +17,8 @@ enum ErrType {
 //深瞐算法初始化
 int32_t SeemmoAlgo_Init(
     const char *basedir,
-    uint32_t workerThrNum,
+    uint32_t imgThrNum,
+    uint32_t videoThrNum,
     uint32_t imgCoreNum,
     uint32_t videoCoreNum,
     const char *authServer,

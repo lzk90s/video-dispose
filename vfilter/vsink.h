@@ -21,8 +21,7 @@ namespace vf {
 
 class VSink {
 public:
-    using OnFrameHandler =
-        function<void (uint32_t chanelId, uint64_t frameId, uint8_t *bgr24, uint32_t width, uint32_t height)>;
+    using OnFrameHandler = function<void (uint32_t chanelId, uint64_t frameId, cv::Mat &frame)>;
 
 public:
     VSink(uint32_t channelId)
@@ -37,19 +36,15 @@ public:
         if (needPickFrame()) {
             //≥È÷°&“Ï≤Ω¥¶¿ÌÕºœÒ÷°
             cv::Mat cloneFrame = frame.clone();
-            FrameCache::FrameId fid = CacheFrame(cloneFrame);
-            onFrameHandler_(channelId_, (uint64_t)fid, cloneFrame.data, cloneFrame.cols, cloneFrame.rows);
+            FrameCache::FrameId fid = frameCache_.Put(cloneFrame);
+            onFrameHandler_(channelId_, (uint64_t)fid, cloneFrame);
         }
         mixFrame(frame);
         return 0;
     }
 
-    FrameCache::FrameId CacheFrame(cv::Mat &frame) {
-        return frameCache_.Put(frame);
-    }
-
-    cv::Mat GetFrame(FrameCache::FrameId id, bool &exist) {
-        return frameCache_.Get(id, exist);
+    FrameCache &GetFrameCache() {
+        return frameCache_;
     }
 
     void SetFrameHandler(OnFrameHandler h) {

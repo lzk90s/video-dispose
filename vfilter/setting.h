@@ -1,30 +1,46 @@
-#pragma once
+ï»¿#pragma once
 
 #include <cstdint>
+#include <string>
+#include <iostream>
 
 #include "common/helper/singleton.h"
+
+using namespace std;
 
 namespace vf {
 
 class Settings {
 public:
-    uint32_t framePickInternalMs = FRAME_PICK_INTERNAL_MS;
-    uint32_t framePickInternalNum = FRAME_PICK_INTERNAL_NUM;
-    uint32_t frameRecogPickInternalNum = FRAME_RECOG_PICK_INTERNAL_NUM;
-    uint32_t frameCacheMaxNum = FRAME_CACHE_MAX_NUM;
-    uint32_t objectDisappearCount = OBJECT_DISAPPEAR_COUNT;
+    // é»˜è®¤æŠ½å¸§æ—¶é—´é—´éš”ï¼ˆæ¯«ç§’ï¼‰
+    uint32_t framePickInternalMs = 100;
+    // é»˜è®¤æŠ½å¸§é—´éš”æ•°ç›®ï¼ˆæŠ½å¸§æ£€æµ‹ï¼‰
+    uint32_t framePickInternalNum = 3;
+    // é»˜è®¤å¸§è¯†åˆ«é—´éš”æ•°ï¼ˆåœ¨æ£€æµ‹æŠ½å¸§åŸºç¡€ä¸Šï¼Œå†æŠ½å¸§è¯†åˆ«ï¼‰
+    uint32_t frameRecogPickInternalNum = 6;
+    // é»˜è®¤ç¼“å­˜çš„æœ€å¤§å¸§æ•°(30ç§’çš„å¸§æ•°)
+    uint32_t frameCacheMaxNum = 30 * (1000 / framePickInternalMs);
+    //ç›®æ ‡æ¶ˆå¤±åˆå§‹è®¡æ•°(å½“æŸä¸ªç›®æ ‡åœ¨è¶…è¿‡è®¾ç½®çš„å¸§åï¼Œè¿˜æ²¡æœ‰æ£€æµ‹åˆ°ï¼Œåˆ™è®¤ä¸ºç›®æ ‡å·²ç»æ¶ˆå¤±ï¼Œéœ€è¦ä»å†…å­˜ä¸­åˆ æ‰)
+    uint32_t objectDisappearCount = 10;
+    //é€šçŸ¥æœåŠ¡æ¥æ”¶åœ°å€
+    string notifyServerHost = (std::getenv("NOTIFY_SERVER_HOST")) ? string(std::getenv("NOTIFY_SERVER_HOST")) :
+                              string("http://message-transfer:9091");
+
+    Settings() {
+        dump();
+    }
 
 private:
-    // Ä¬ÈÏ³éÖ¡Ê±¼ä¼ä¸ô£¨ºÁÃë£©
-    const static uint32_t FRAME_PICK_INTERNAL_MS = 100;
-    // Ä¬ÈÏ³éÖ¡¼ä¸ôÊıÄ¿£¨³éÖ¡¼ì²â£©
-    const static uint32_t FRAME_PICK_INTERNAL_NUM = 3;
-    // Ä¬ÈÏÖ¡Ê¶±ğ¼ä¸ôÊı£¨ÔÚ¼ì²â³éÖ¡»ù´¡ÉÏ£¬ÔÙ³éÖ¡Ê¶±ğ£©
-    const static uint32_t FRAME_RECOG_PICK_INTERNAL_NUM = 6;
-    // Ä¬ÈÏ»º´æµÄ×î´óÖ¡Êı(30ÃëµÄÖ¡Êı)
-    const static uint32_t FRAME_CACHE_MAX_NUM = 10 * (1000 / FRAME_PICK_INTERNAL_MS);
-    //Ä¿±êÏûÊ§³õÊ¼¼ÆÊı(µ±Ä³¸öÄ¿±êÔÚ³¬¹ıÉèÖÃµÄÖ¡ºó£¬»¹Ã»ÓĞ¼ì²âµ½£¬ÔòÈÏÎªÄ¿±êÒÑ¾­ÏûÊ§£¬ĞèÒª´ÓÄÚ´æÖĞÉ¾µô)
-    const static uint32_t OBJECT_DISAPPEAR_COUNT = 10;
+    void dump() {
+        cout << "Settings -> {"
+             << "framePickInternalMs: " << framePickInternalMs << ", "
+             << "framePickInternalNum: " << framePickInternalNum << ", "
+             << "frameRecogPickInternalNum: " << frameRecogPickInternalNum << ", "
+             << "frameCacheMaxNum: " << frameCacheMaxNum << ", "
+             << "objectDisappearCount: " << objectDisappearCount << ", "
+             << "notifyServerHost: " << notifyServerHost << "}"
+             << endl;
+    }
 };
 
 typedef Singleton<Settings> GlobalSettings;

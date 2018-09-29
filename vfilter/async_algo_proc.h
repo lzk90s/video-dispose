@@ -8,6 +8,8 @@
 #include "algo/stub/algo_stub.h"
 #include "vfilter/frame_cache.h"
 #include "vfilter/vsink.h"
+#include "notify/http_client.h"
+#include "json/json.hpp"
 
 using namespace std;
 using namespace algo;
@@ -19,35 +21,33 @@ public:
 
     AsyncAlgoProcessor(VSink &sink)
         : tp_(1),	//业务线程是单线程，这样就不需要加锁，也避免后面的图片先比前面的图片去检测
-          tpNotify_(2),	//通知线程，启2个。避免阻塞
+          tpNotify_(1),	//通知线程，启1个。
           sink_(sink) {
         recogFrameCnt = 0;
         seemmoStub_ = AlgoStubFactory::CreateStub("seemmo");
         sink.SetFrameHandler(std::bind(&AsyncAlgoProcessor::AsyncProcessFrame, this,
                                        std::placeholders::_1,
                                        std::placeholders::_2,
-                                       std::placeholders::_3,
-                                       std::placeholders::_4,
-                                       std::placeholders::_5));
+                                       std::placeholders::_3));
     }
 
     ~AsyncAlgoProcessor() {
         AlgoStubFactory::FreeStub(seemmoStub_);
     }
 
-    void AsyncProcessFrame(uint32_t chanelId, uint64_t frameId, uint8_t *bgr24, uint32_t width, uint32_t height)  {
-        auto f1 = std::bind(&AsyncAlgoProcessor::algoRoutine, this, chanelId, frameId, bgr24, width, height);
+    void AsyncProcessFrame(uint32_t chanelId, uint64_t frameId, cv::Mat &frame)  {
+        auto f1 = std::bind(&AsyncAlgoProcessor::algoRoutine, this, chanelId, frameId, frame);
         tp_.commit(f1);
     }
 
 private:
-    int32_t algoRoutine(uint32_t channelId, uint64_t frameId, uint8_t *bgr24, uint32_t width, uint32_t height) {
+    int32_t algoRoutine(uint32_t channelId, uint64_t frameId, cv::Mat &frame) {
         ImageResult imageResult;
         FilterResult filterResult;
         int ret = 0;
 
         // 跟踪目标
-        ret = trailObjects(channelId, frameId, bgr24, width, height, imageResult, filterResult);
+        ret = trailObjects(channelId, frameId, frame, imageResult, filterResult);
         if (0 != ret) {
             return ret;
         }
@@ -55,7 +55,7 @@ private:
         // 跳帧识别
         if (++recogFrameCnt >= GlobalSettings::getInstance().frameRecogPickInternalNum) {
             recogFrameCnt = 0;
-            recognizeByImageResult(channelId, bgr24, width, height, imageResult);
+            recognizeByImageResult(channelId, frame, imageResult);
         }
 
         // 对filterresult结果进行异步识别，不关心结果
@@ -64,8 +64,12 @@ private:
         return 0;
     }
 
-    int32_t trailObjects(uint32_t channelId, uint64_t frameId, const uint8_t *bgr24, uint32_t width, uint32_t height,
-                         ImageResult &imageResult, FilterResult &filterResult) {
+    int32_t trailObjects(uint32_t channelId, uint64_t frameId, cv::Mat &frame, ImageResult &imageResult,
+                         FilterResult &filterResult) {
+
+        const uint8_t *bgr24 = frame.data;
+        uint32_t width = frame.cols;
+        uint32_t height = frame.rows;
 
         TrailParam trailParam;
         // roi区域设置为全图
@@ -87,10 +91,12 @@ private:
         return 0;
     }
 
-    int32_t recognizeByImageResult(uint32_t channelId, const uint8_t *bgr24, uint32_t width, uint32_t height,
-                                   ImageResult &imageResult) {
+    int32_t recognizeByImageResult(uint32_t channelId, cv::Mat &frame, ImageResult &imageResult) {
         int32_t ret = 0;
         RecogParam recParam;
+        const uint8_t *bgr24 = frame.data;
+        uint32_t width = frame.cols;
+        uint32_t height = frame.rows;
 
         //根据深瞐的sdk手册，单张图的识别，只设置type和trail,detect
         for (auto &p : imageResult.bikes) {
@@ -146,7 +152,6 @@ private:
 
     //根据filterresult进行异步识别
     int32_t recognizeByFilterResult(uint32_t channelId, FilterResult &filterResult) {
-
         //根据深瞐的sdk手册，识别跟踪结果，需要设置type，trail，rect，contextcode
         for (auto &p : filterResult.bikes) {
             RecogParam recParam;
@@ -158,12 +163,12 @@ private:
             recParam.locations.push_back(loc);
 
             bool exist = false;
-            cv::Mat frame = sink_.GetFrame(p.frameId, exist);
+            cv::Mat frame = sink_.GetFrameCache().Get(p.frameId, exist);
             if (!exist) {
                 LOG_WARN("The saved frame {} not exist", p.frameId);
                 return 0;
             }
-            asyncRecognizeByFilterResult(channelId, frame.data, frame.cols, frame.rows, recParam);
+            recognizeByFilterResultInner(channelId, frame, recParam);
         }
 
         for (auto &p : filterResult.vehicles) {
@@ -176,12 +181,12 @@ private:
             recParam.locations.push_back(loc);
 
             bool exist = false;
-            cv::Mat frame = sink_.GetFrame(p.frameId, exist);
+            cv::Mat frame = sink_.GetFrameCache().Get(p.frameId, exist);
             if (!exist) {
                 LOG_WARN("The saved frame {} not exist", p.frameId);
                 return 0;
             }
-            asyncRecognizeByFilterResult(channelId, frame.data, frame.cols, frame.rows, recParam);
+            recognizeByFilterResultInner(channelId, frame, recParam);
         }
 
         for (auto &p : filterResult.pedestrains) {
@@ -194,21 +199,29 @@ private:
             recParam.locations.push_back(loc);
 
             bool exist = false;
-            cv::Mat frame = sink_.GetFrame(p.frameId, exist);
+            cv::Mat frame = sink_.GetFrameCache().Get(p.frameId, exist);
             if (!exist) {
                 LOG_WARN("The saved frame {} not exist", p.frameId);
                 return 0;
             }
-            asyncRecognizeByFilterResult(channelId, frame.data, frame.cols, frame.rows, recParam);
+            recognizeByFilterResultInner(channelId, frame, recParam);
+        }
+
+        //把不需要的帧手动释放掉
+        for (auto &fid : filterResult.releasedFrames) {
+            sink_.GetFrameCache().ManualRelase(fid);
         }
 
         return 0;
     }
 
-    int32_t asyncRecognizeByFilterResult(uint32_t channelId, const uint8_t *bgr24, uint32_t width, uint32_t height,
-                                         RecogParam &recParam) {
-        tpNotify_.commit([this, channelId, bgr24, width, height, recParam]() {
-            //调用算法接口识别
+    int32_t recognizeByFilterResultInner(uint32_t channelId, cv::Mat &frame, RecogParam &recParam) {
+        //异步处理
+        tpNotify_.commit([this, channelId, frame, recParam]() {
+            const uint8_t *bgr24 = frame.data;
+            uint32_t width = frame.cols;
+            uint32_t height = frame.rows;
+
             ImageResult imageResult;
             int32_t ret = seemmoStub_->Recognize(channelId, bgr24, width, height, recParam, imageResult);
             if (0 != ret) {
@@ -216,9 +229,16 @@ private:
                 return ret;
             }
 
-            //根据识别结果抠图
-            LOG_INFO("-----------RECOG RESULT {} {} {}", imageResult.pedestrains.size(), imageResult.vehicles.size(),
-                     imageResult.bikes.size());
+            for (auto &p : imageResult.bikes) {
+                string url = GlobalSettings::getInstance().notifyServerHost + "/internal/snap/face";
+                HttpClient::SendReq(url, [](const string &msg) {});
+            }
+            for (auto &p : imageResult.pedestrains) {
+
+            }
+            for (auto &p : imageResult.vehicles) {
+
+            }
 
             return 0;
         });
@@ -227,14 +247,14 @@ private:
     }
 
 private:
-    //深瞐算法stub
+//深瞐算法stub
     AlgoStub * seemmoStub_;
     threadpool tp_;
-    //通知线程池
+//通知线程池
     threadpool tpNotify_;
-    //sink
+//sink
     VSink &sink_;
-    //识别帧计数
+//识别帧计数
     uint32_t recogFrameCnt;
 };
 

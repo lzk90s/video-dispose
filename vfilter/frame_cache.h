@@ -50,6 +50,21 @@ public:
         return mat;
     }
 
+    //手动释放一帧
+    void ManualRelase(FrameCache::FrameId fid) {
+        unique_lock<mutex> lck(mutex_);
+
+        cache_.erase(fid);
+
+        for (auto it = deq_.begin(); it != deq_.end();) {
+            if (fid == *it) {
+                deq_.erase(it++);
+            } else {
+                ++it;
+            }
+        }
+    }
+
 private:
     void freeExpiredFrame() {
         while (deq_.size() > GlobalSettings::getInstance().frameCacheMaxNum) {

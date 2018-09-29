@@ -13,7 +13,8 @@ namespace seemmo {
 
 typedef int32_t (*PF_SeemmoAlgo_Init)(
     const char *basedir,
-    uint32_t workerThrNum,
+    uint32_t imgThrNum,
+    uint32_t videoThrNum,
     uint32_t imgCoreNum,
     uint32_t videoCoreNum,
     const char *authServer,
@@ -73,7 +74,8 @@ public:
     }
 
     void Load(const string &baseDir,
-              uint32_t workerThrNum,
+              uint32_t imgThrNum,
+              uint32_t videoThrNum,
               uint32_t imgCoreNum,
               uint32_t videoCoreNum,
               uint32_t authType,
@@ -100,8 +102,8 @@ public:
             throw runtime_error("invalid symbol in dll");
         }
 
-        int ret = pf_SeemmoAlgo_Init_(baseDir.c_str(), workerThrNum, imgCoreNum,videoCoreNum, authServer.c_str(),authType,
-                                      gpuDevId);
+        int ret = pf_SeemmoAlgo_Init_(baseDir.c_str(), imgThrNum, videoThrNum, imgCoreNum,videoCoreNum, authServer.c_str(),
+                                      authType, gpuDevId);
         if (0 != ret) {
             throw runtime_error("init algorithm error, ret " + std::to_string(ret));
         }

@@ -240,6 +240,7 @@ private:
             tmp.detect = a.Detect.Body.Rect;
             r.vehicles.push_back(tmp);
         }
+        r.releasedFrames = root.ReleaseCacheFrames;
     }
 
     void fillRecogResult(ImageResult &r, rec::RecogReplyPO &p) {

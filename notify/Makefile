@@ -1,6 +1,6 @@
 TOP_DIR=../
 
-MODULE_NAME=libnotify
+MODULE_NAME=libhttp_notify
 MODULE_SUFFIX=.so
 
 INSTALL_PREFIX=/usr/local
