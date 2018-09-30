@@ -91,7 +91,6 @@
     <ClInclude Include="..\..\vfilter\app.h" />
     <ClInclude Include="..\..\vfilter\notifier\bike_notifier.h" />
     <ClInclude Include="..\..\vfilter\notifier\httplib.h" />
-    <ClInclude Include="..\..\vfilter\notifier\http_client.h" />
     <ClInclude Include="..\..\vfilter\notifier\notifier.h" />
     <ClInclude Include="..\..\vfilter\notifier\person_notifier.h" />
     <ClInclude Include="..\..\vfilter\notifier\vehicle_notifier.h" />

@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include "common/helper/base64.h"
 #include "common/helper/jpeg_helper.h"
@@ -79,7 +79,7 @@ public:
     }
 
 protected:
-    string buildNotifyMsg(cv::Mat &img, algo::BikeObject &obj) override {
+    string buildNotifyMsg(uint32_t channelId, cv::Mat &img, algo::BikeObject &obj) override {
         BikeNotifyMsg msg;
 
         Bgr2JpegConverter converter;
@@ -88,10 +88,10 @@ protected:
         msg.image = (uint8_t*)converter.GetImgBuffer();
         msg.imageSize = converter.GetSize();
         msg.flag = "1";
-        msg.channelId = 2;
+        msg.channelId = channelId;
         msg.type = obj.type;
 
-        //·Ç»ú¶¯³µÏÔÊ¾ÆäÉÏÈËµÄÊôĞÔ
+        //éæœºåŠ¨è½¦æ˜¾ç¤ºå…¶ä¸Šäººçš„å±æ€§
         for (auto &p : obj.persons) {
             msg.sexCodeName = p.attrs.sex.name;
             msg.ageCodeName = p.attrs.age.name;

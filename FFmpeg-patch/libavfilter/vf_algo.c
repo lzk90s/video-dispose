@@ -14,8 +14,8 @@
 
 #include <dlfcn.h>
 
-typedef int32_t (*PF_VFilter_Init)();
-typedef int32_t (*PF_VFilter_Destroy)();
+typedef int32_t (*PF_VFilter_Init)(void);
+typedef int32_t (*PF_VFilter_Destroy)(void);
 typedef int32_t (*PF_VFilter_Routine)(uint32_t channelId, uint8_t *bgr24, uint32_t width, uint32_t height);
 
 static void *handle = NULL;
@@ -24,11 +24,11 @@ static PF_VFilter_Init pf_VFilter_Init = NULL;
 static PF_VFilter_Destroy pf_VFilter_Destroy = NULL;
 static PF_VFilter_Routine pf_VFilter_Routine = NULL;
 
-typedef struct TransformContext {
+typedef struct AlgoContext {
     const AVClass *class;
-    int backUp;
+    int cid;	// channel id
     //add some private data if you want
-} TransformContext;
+} AlgoContext;
 
 typedef struct ThreadData {
     AVFrame *in, *out;
@@ -134,6 +134,8 @@ static void image_copy_plane(uint8_t *dst, int dst_linesize,
 //for YUV data, frame->data[0] save Y, frame->data[1] save U, frame->data[2] save V
 static int frame_copy_video(AVFrame *dst, const AVFrame *src) {
     int i, planes;
+    const AVPixFmtDescriptor *desc = NULL;
+    int planes_nb = 0;
 
     if (dst->width  > src->width ||
             dst->height > src->height)
@@ -145,8 +147,7 @@ static int frame_copy_video(AVFrame *dst, const AVFrame *src) {
         if (!dst->data[i] || !src->data[i])
             return AVERROR(EINVAL);
 
-    const AVPixFmtDescriptor *desc = av_pix_fmt_desc_get(dst->format);
-    int planes_nb = 0;
+    desc = av_pix_fmt_desc_get(dst->format);
     for (i = 0; i < desc->nb_components; i++)
         planes_nb = FFMAX(planes_nb, desc->comp[i].plane + 1);
 
@@ -169,14 +170,13 @@ static int frame_copy_video(AVFrame *dst, const AVFrame *src) {
 
 static int do_conversion(AVFilterContext *ctx, void *arg, int jobnr,
                          int nb_jobs) {
-    //TransformContext *privCtx = ctx->priv;
+    AlgoContext *privCtx = ctx->priv;
     ThreadData *td = arg;
     AVFrame *dst = td->out;
     AVFrame *src = td->in;
 
     // video filter, data[0] (bgr24 data)
-    int32_t channelId = 0;
-    pf_VFilter_Routine(channelId, src->data[0], src->width, src->height);
+    pf_VFilter_Routine(privCtx->cid, src->data[0], src->width, src->height);
 
     // copy video
     frame_copy_video(dst, src);
@@ -188,6 +188,8 @@ static int filter_frame(AVFilterLink *link, AVFrame *in) {
     AVFilterContext *avctx = link->dst;
     AVFilterLink *outlink = avctx->outputs[0];
     AVFrame *out;
+    ThreadData td;
+    int res;
 
     //allocate a new buffer, data is null
     out = ff_get_video_buffer(outlink, outlink->w, outlink->h);
@@ -200,10 +202,8 @@ static int filter_frame(AVFilterLink *link, AVFrame *in) {
     out->width  = outlink->w;
     out->height = outlink->h;
 
-    ThreadData td;
     td.in = in;
     td.out = out;
-    int res;
     if(res = avctx->internal->execute(avctx, do_conversion, &td, NULL, FFMIN(outlink->h, avctx->graph->nb_threads))) {
         return res;
     }
@@ -226,8 +226,21 @@ static av_cold int config_output(AVFilterLink *outlink) {
 }
 
 static av_cold int init(AVFilterContext *ctx) {
+    int ret = 0;
+    AlgoContext *privCtx = ctx->priv;
+
+    uint32_t channel_id = 0;
+    //解析通道号参数
+    char *val_str = (char*)av_malloc(50);
+    av_opt_get(privCtx, "cid", 0, (uint8_t**)&val_str);
+    channel_id = atoi(val_str);
+    av_free(val_str);
+
     av_log(NULL, AV_LOG_DEBUG, "init \n");
-    //TransformContext *privCtx = ctx->priv;
+
+    av_log(NULL, AV_LOG_INFO, "Channel id %d\n", channel_id);
+    privCtx->cid = channel_id;
+
     handle = dlopen(VFILTER_DLL_NAME, RTLD_LAZY);
     if (NULL == handle) {
         av_log(NULL, AV_LOG_ERROR, "load library %s failed, error %s\n", VFILTER_DLL_NAME, dlerror());
@@ -244,11 +257,12 @@ static av_cold int init(AVFilterContext *ctx) {
         return AVERROR(EINVAL);
     }
 
-    int ret = pf_VFilter_Init();
+    ret = pf_VFilter_Init();
     if (0 != ret) {
         av_log(NULL, AV_LOG_ERROR, "failed to init vf\n");
         return AVERROR(ret);
     }
+
     return 0;
 }
 
@@ -273,14 +287,14 @@ static int query_formats(AVFilterContext *ctx) {
 }
 
 
-#define OFFSET(x) offsetof(TransformContext, x)
+#define OFFSET(x) offsetof(AlgoContext, x)
 #define FLAGS AV_OPT_FLAG_VIDEO_PARAM|AV_OPT_FLAG_FILTERING_PARAM
 
 static const AVOption algo_options[] = {
-    { "backUp", "a backup parameters, NOT use so far", OFFSET(backUp), AV_OPT_TYPE_STRING, {.str = "0"}, CHAR_MIN, CHAR_MAX, FLAGS },
+    { "cid", "the video channel id", OFFSET(cid), AV_OPT_TYPE_STRING, {.str = "0"}, CHAR_MIN, CHAR_MAX, FLAGS },
     { NULL }
 
-};// TODO: add something if needed
+};
 
 static const AVClass algo_class = {
     .class_name       = "algo",
@@ -311,11 +325,11 @@ static const AVFilterPad avfilter_vf_algo_outputs[] = {
 AVFilter ff_vf_algo = {
     .name           = "algo",
     .description    = NULL_IF_CONFIG_SMALL("cut a part of video"),
-    .priv_size      = sizeof(TransformContext),
+    .priv_size      = sizeof(AlgoContext),
     .priv_class     = &algo_class,
-    .init          = init,
-    .uninit        = uninit,
-    .query_formats = query_formats,
+    .init           = init,
+    .uninit         = uninit,
+    .query_formats  = query_formats,
     .inputs         = avfilter_vf_algo_inputs,
     .outputs        = avfilter_vf_algo_outputs,
 };

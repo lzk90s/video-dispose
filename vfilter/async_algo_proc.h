@@ -230,13 +230,13 @@ private:
 
             cv::Mat f = frame;
             for (auto &p : imageResult.bikes) {
-                sink_.GetBikeNotifier().OnRecognizedObject(f, p);
+                sink_.GetBikeNotifier().OnRecognizedObject(channelId, f, p);
             }
             for (auto &p : imageResult.pedestrains) {
-                sink_.GetPersonNotifier().OnRecognizedObject(f, p);
+                sink_.GetPersonNotifier().OnRecognizedObject(channelId, f, p);
             }
             for (auto &p : imageResult.vehicles) {
-                sink_.GetVehicleNotifier().OnRecognizedObject(f, p);
+                sink_.GetVehicleNotifier().OnRecognizedObject(channelId, f, p);
             }
 
             return 0;

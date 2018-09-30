@@ -63,7 +63,7 @@ public:
     }
 
 protected:
-    string buildNotifyMsg(cv::Mat &img, algo::VehicleObject &obj) override {
+    string buildNotifyMsg(uint32_t channelId, cv::Mat &img, algo::VehicleObject &obj) override {
         VehicleNotifyMsg msg;
 
         Bgr2JpegConverter converter;
@@ -72,12 +72,12 @@ protected:
         msg.image = (uint8_t*)converter.GetImgBuffer();
         msg.imageSize = converter.GetSize();
         msg.flag = "2";
-        msg.channelId = 2;
+        msg.channelId = channelId;
         msg.type = obj.type;
 
         msg.plateLicence = obj.attrs.plate.name;
-        msg.carPatternName = obj.attrs.type.name;
-        msg.plateTypeCodeName = "";
+        msg.carPatternName = obj.attrs.brand.name;
+        msg.plateTypeCodeName = obj.attrs.type.name;
         msg.colorCodeName = obj.attrs.color.name;
         msg.coDriverPersonCodeName = "";
         msg.callCodeName = "";

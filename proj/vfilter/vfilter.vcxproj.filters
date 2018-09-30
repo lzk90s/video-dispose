@@ -70,9 +70,6 @@
     <ClInclude Include="..\..\vfilter\notifier\bike_notifier.h">
       <Filter>源文件\notifier</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\vfilter\notifier\http_client.h">
-      <Filter>源文件\notifier</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\vfilter\notifier\notifier.h">
       <Filter>源文件\notifier</Filter>
     </ClInclude>

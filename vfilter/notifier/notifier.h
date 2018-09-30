@@ -30,7 +30,7 @@ public:
         cli_.reset(new httplib::Client(addr.c_str(), atoi(port.c_str())));
     }
 
-    void OnRecognizedObject(cv::Mat &frame, T &obj) {
+    void OnRecognizedObject(uint32_t channelId, cv::Mat &frame, T &obj) {
         if (obj.detect.empty() || obj.detect.size() != 4) {
             return;
         }
@@ -42,15 +42,15 @@ public:
         cv::Mat img = roi.clone();
 
         //生成通知消息，并通过http发送通知消息
-        string msg = buildNotifyMsg(img, obj);
+        string msg = buildNotifyMsg(channelId, img, obj);
         if (!msg.empty()) {
             cli_->Post(getRequestURL().c_str(), msg, "application/json");
-            LOG_INFO("Send {} notify msg {}", type_, msg);
+            LOG_DEBUG("Send {} notify msg {}", type_, msg);
         }
     }
 
 protected:
-    virtual string buildNotifyMsg(cv::Mat &img, T &obj) {
+    virtual string buildNotifyMsg(uint32_t channelId, cv::Mat &img, T &obj) {
         return "";
     }
 

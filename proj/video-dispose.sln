@@ -15,8 +15,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "algo_stub", "algo_stub\algo
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "common", "common\common.vcxproj", "{1F92150B-85B1-4139-9297-88A3245D66AD}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "notify", "notify\notify.vcxproj", "{AD6C8523-D799-41F1-9168-6EBFB97674E6}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -65,14 +63,6 @@ Global
 		{1F92150B-85B1-4139-9297-88A3245D66AD}.Release|Win32.Build.0 = Release|Win32
 		{1F92150B-85B1-4139-9297-88A3245D66AD}.Release|x64.ActiveCfg = Release|x64
 		{1F92150B-85B1-4139-9297-88A3245D66AD}.Release|x64.Build.0 = Release|x64
-		{AD6C8523-D799-41F1-9168-6EBFB97674E6}.Debug|Win32.ActiveCfg = Debug|Win32
-		{AD6C8523-D799-41F1-9168-6EBFB97674E6}.Debug|Win32.Build.0 = Debug|Win32
-		{AD6C8523-D799-41F1-9168-6EBFB97674E6}.Debug|x64.ActiveCfg = Debug|x64
-		{AD6C8523-D799-41F1-9168-6EBFB97674E6}.Debug|x64.Build.0 = Debug|x64
-		{AD6C8523-D799-41F1-9168-6EBFB97674E6}.Release|Win32.ActiveCfg = Release|Win32
-		{AD6C8523-D799-41F1-9168-6EBFB97674E6}.Release|Win32.Build.0 = Release|Win32
-		{AD6C8523-D799-41F1-9168-6EBFB97674E6}.Release|x64.ActiveCfg = Release|x64
-		{AD6C8523-D799-41F1-9168-6EBFB97674E6}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

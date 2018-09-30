@@ -66,6 +66,7 @@ int32_t VFilter_Routine(uint32_t channelId, uint8_t *bgr24, uint32_t width, uint
     //暂不加锁，目前不是多线程，后续有需求再加
     if (vf::VFilterManagerSingleton::getInstance().vfMap.find(channelId) ==
             vf::VFilterManagerSingleton::getInstance().vfMap.end()) {
+        LOG_INFO("New channel {}", channelId);
         vf::VFilterManagerSingleton::getInstance().vfMap[channelId] = make_shared<vf::VFilter>(channelId);
     }
     return vf::VFilterManagerSingleton::getInstance().vfMap[channelId]->FilterFlow(bgr24, width, height);
