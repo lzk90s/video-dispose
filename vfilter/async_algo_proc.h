@@ -228,14 +228,15 @@ private:
                 return ret;
             }
 
+            cv::Mat f = frame;
             for (auto &p : imageResult.bikes) {
-                sink_.GetBikeNotifier().OnRecognizedObject((cv::Mat)frame, p);
+                sink_.GetBikeNotifier().OnRecognizedObject(f, p);
             }
             for (auto &p : imageResult.pedestrains) {
-                sink_.GetPersonNotifier().OnRecognizedObject((cv::Mat)frame, p);
+                sink_.GetPersonNotifier().OnRecognizedObject(f, p);
             }
             for (auto &p : imageResult.vehicles) {
-                sink_.GetVehicleNotifier().OnRecognizedObject((cv::Mat)frame, p);
+                sink_.GetVehicleNotifier().OnRecognizedObject(f, p);
             }
 
             return 0;

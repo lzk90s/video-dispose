@@ -8,9 +8,10 @@
 #include <brpc/server.h>
 
 #include "common/helper/logger.h"
+#include "common/helper/jpeg_helper.h"
+
 #include "algo/vendor/seemmo/rpc/service.pb.h"
 #include "algo/vendor/seemmo/server/algo_loader.h"
-#include "algo/vendor/seemmo/server/jpeg_helper.h"
 
 namespace algo {
 namespace seemmo {

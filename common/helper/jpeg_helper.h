@@ -15,8 +15,6 @@
 #include "jpeglib.h"
 #include "jerror.h"
 
-namespace algo {
-namespace seemmo {
 
 struct my_error_mgr {
     struct jpeg_error_mgr pub;
@@ -83,7 +81,7 @@ public:
 
         buffer = (*cinfo.mem->alloc_sarray)((j_common_ptr)&cinfo, JPOOL_IMAGE, row_stride, 1);
 
-        rgb_buffer.reset(new unsigned char[rgb_size+1]);
+        rgb_buffer.reset(new unsigned char[rgb_size + 1]);
         tmp_buffer = rgb_buffer.get();
         while (cinfo.output_scanline < cinfo.output_height) { // 解压每一行
             jpeg_read_scanlines(&cinfo, buffer, 1);
@@ -117,5 +115,62 @@ private:
 };
 
 
-}
-}
+class Bgr2JpegConverter {
+public:
+    ~Bgr2JpegConverter() {
+        free(jpeg_buffer);
+        jpeg_buffer = nullptr;
+        jpeg_size = 0;
+    }
+
+    int Convert(unsigned char* rgb_buffer, int width, int height, int quality) {
+        struct jpeg_compress_struct cinfo;
+        struct jpeg_error_mgr jerr;
+        int row_stride = 0;
+        JSAMPROW row_pointer[1];
+
+        if (jpeg_buffer == NULL) {
+            printf("you need a pointer for jpeg buffer.\n");
+            return -1;
+        }
+
+        cinfo.err = jpeg_std_error(&jerr);
+
+        jpeg_create_compress(&cinfo);
+
+        jpeg_mem_dest(&cinfo, &jpeg_buffer, &jpeg_size);
+
+        cinfo.image_width = width;
+        cinfo.image_height = height;
+        cinfo.input_components = 3;
+        cinfo.in_color_space = JCS_EXT_BGR;
+
+        jpeg_set_defaults(&cinfo);
+        jpeg_set_quality(&cinfo, quality, 1);  // todo 1 == true
+        jpeg_start_compress(&cinfo, TRUE);
+        row_stride = width * cinfo.input_components;
+
+        while (cinfo.next_scanline < cinfo.image_height) {
+            row_pointer[0] = &rgb_buffer[cinfo.next_scanline * row_stride];
+            jpeg_write_scanlines(&cinfo, row_pointer, 1);
+        }
+
+        jpeg_finish_compress(&cinfo);
+        jpeg_destroy_compress(&cinfo);
+
+        return 0;
+    }
+
+
+    unsigned char *GetImgBuffer() {
+        return jpeg_buffer;
+    }
+
+    unsigned long GetSize() {
+        return jpeg_size;
+    }
+
+private:
+    unsigned char* jpeg_buffer;
+    unsigned long jpeg_size;
+};

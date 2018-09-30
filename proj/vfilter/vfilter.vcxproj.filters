@@ -35,12 +35,6 @@
     <ClCompile Include="..\..\vfilter\async_algo_proc.h">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\vfilter\notifier\http_client.cc">
-      <Filter>源文件\notifier</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\vfilter\notifier\notifier_impl.cc">
-      <Filter>源文件\notifier</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\vfilter\vfilter.h">
@@ -86,6 +80,9 @@
       <Filter>源文件\notifier</Filter>
     </ClInclude>
     <ClInclude Include="..\..\vfilter\notifier\vehicle_notifier.h">
+      <Filter>源文件\notifier</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\vfilter\notifier\httplib.h">
       <Filter>源文件\notifier</Filter>
     </ClInclude>
   </ItemGroup>
