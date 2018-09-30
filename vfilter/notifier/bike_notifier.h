@@ -16,6 +16,7 @@ namespace vf {
 
 typedef struct tagBikeNotifyMsg {
     uint8_t *image;
+    uint64_t imageSize;
     string flag;
     int32_t channelId;
     int32_t type;
@@ -41,8 +42,10 @@ typedef struct tagBikeNotifyMsg {
 } BikeNotifyMsg;
 
 void to_json(json& j, const BikeNotifyMsg& p) {
+    string img((char*)p.image, p.imageSize);
     string base64Img;
-    Base64::Encode((char*)p.image, &base64Img);
+    Base64::Encode(img, &base64Img);
+
     j["image"] = base64Img;
     j["flag"] = p.flag;
     j["channelId"] = p.channelId;
@@ -83,6 +86,7 @@ protected:
         converter.Convert(img.data, img.cols, img.rows, 100);
 
         msg.image = (uint8_t*)converter.GetImgBuffer();
+        msg.imageSize = converter.GetSize();
         msg.flag = "1";
         msg.channelId = 2;
         msg.type = obj.type;

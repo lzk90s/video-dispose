@@ -36,6 +36,7 @@ public:
     Jpeg2BgrConverter() {
         height = 0;
         width = 0;
+        rgb_buffer = nullptr;
     }
 
     int Convert(unsigned char* jpeg_buffer, int jpeg_size) {
@@ -117,6 +118,11 @@ private:
 
 class Bgr2JpegConverter {
 public:
+    Bgr2JpegConverter() {
+        jpeg_buffer = nullptr;
+        jpeg_size = 0;
+    }
+
     ~Bgr2JpegConverter() {
         free(jpeg_buffer);
         jpeg_buffer = nullptr;
@@ -129,8 +135,8 @@ public:
         int row_stride = 0;
         JSAMPROW row_pointer[1];
 
-        if (jpeg_buffer == NULL) {
-            printf("you need a pointer for jpeg buffer.\n");
+        if (rgb_buffer == NULL) {
+            printf("you need a pointer for rgb buffer.\n");
             return -1;
         }
 
@@ -146,7 +152,7 @@ public:
         cinfo.in_color_space = JCS_EXT_BGR;
 
         jpeg_set_defaults(&cinfo);
-        jpeg_set_quality(&cinfo, quality, 1);  // todo 1 == true
+        jpeg_set_quality(&cinfo, quality, true);  // todo 1 == true
         jpeg_start_compress(&cinfo, TRUE);
         row_stride = width * cinfo.input_components;
 
