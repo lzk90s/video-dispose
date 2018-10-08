@@ -24,7 +24,7 @@ public:
     uint32_t objectDisappearCount = 10;
     //通知服务接收地址
     string notifyServerHost = (std::getenv("NOTIFY_SERVER_HOST")) ? string(std::getenv("NOTIFY_SERVER_HOST")) :
-                              string("http://message-transfer:9091");
+                              string("message-transfer:9091");
 
     Settings() {
         dump();
