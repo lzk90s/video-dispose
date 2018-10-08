@@ -49,7 +49,7 @@ $(DEPS) : $(OUT_OBJ_DIR)/%$(SRC_SUFFIX).d : %$(SRC_SUFFIX)
 
 install: $(TARGET)
 	@mkdir -p $(TOP_DIR)/pkg
-	@cp resource/* $(OUT_PKG_DIR) -rf
+	@\cp $(TARGET)
 
 clean:
 	@rm -rf $(OUT_OBJ_DIR)

@@ -228,6 +228,8 @@ RUN sed -i 's/archive.ubuntu.com/mirrors.aliyun.com/g' /etc/apt/sources.list && 
 #编译视频处理插件    
 RUN rm -rf /usr/local/lib/libbrpc.so && \
     cd /root && \
-    git clone http://docker:docker123456@47.97.174.151:10080/service/video-dispose.git
+    git clone http://docker:docker123456@47.97.174.151:10080/service/video-dispose.git && \
+    cd video-dispose && \
+    
        
     
