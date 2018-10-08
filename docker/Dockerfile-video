@@ -21,8 +21,7 @@ RUN sed -i 's/archive.ubuntu.com/mirrors.aliyun.com/g' /etc/apt/sources.list && 
     apt-get install -y libssl-dev libfreetype6 libfreetype6-dev && \
     apt-get autoclean && apt-get clean
 
-RUN rm -rf /usr/local/lib/libbrpc.so && \
-    cd /root && \
+RUN cd /root && \
     git clone http://docker:docker123456@47.97.174.151:10080/service/video-dispose.git && \
     cd /root/video-dispose && \
     cd FFmpeg-patch && \
@@ -53,10 +52,11 @@ ENV LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${SEEMMO_SDK_HOME}/lib:$GOSUN_SDK_HOME}/l
 ENV LC_ALL en_US.UTF-8
 
 RUN sed -i 's/archive.ubuntu.com/mirrors.aliyun.com/g' /etc/apt/sources.list && \
-    ##nvidia-ml下载会失败，直接删除掉
-    rm -rf /etc/apt/sources.list.d/nvidia-ml.list && \
+    ##cuda和nvidia-ml下载会失败，直接删除掉
+    rm -rf /etc/apt/sources.list.d/* && \
     apt-get update  --fix-missing && \ 
-    apt-get install --fix-missing -y --no-install-recommends openjdk-8-jdk tzdata net-tools inetutils-ping libgomp1 locales && \
+    apt-get install --fix-missing -y --no-install-recommends openjdk-8-jdk libfreetype6 \
+      tzdata net-tools inetutils-ping libgomp1 locales && \
     apt-get autoclean && apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
     ##修改时区
