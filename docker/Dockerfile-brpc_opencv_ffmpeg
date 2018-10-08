@@ -44,7 +44,8 @@ RUN  cd ~ && \
 RUN  cd ~ && \
   	git clone -v https://github.com/brpc/brpc.git && \ 
 	cd brpc && \
-	mkdir build && cd build && cmake .. -DBUILD_SHARED_LIBS=0 -DBUILD_STATIC_LIBS=1 -DWITH_DEBUG_SYMBOLS=OFF && make  -j$(nproc) && make install
+	mkdir build && cd build && cmake .. -DBUILD_SHARED_LIBS=0 -DBUILD_STATIC_LIBS=1 -DWITH_DEBUG_SYMBOLS=OFF && make  -j$(nproc) && make install && \
+    rm -rf /usr/local/lib/libbrpc.so
 
 
 #------------ opencv ------------

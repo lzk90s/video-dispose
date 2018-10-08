@@ -1,8 +1,8 @@
 # 镜像说明
 
-## Dockerfile
+## Dockerfile-brpc_opencv_ffmpeg
 
-编译ffmpeg，流处理插件
+brpc + opencv + ffmpeg 开发环境
 
 
 ## Dockerfile-gosun_sdk
@@ -22,3 +22,7 @@
 > docker build -t registry.cn-hangzhou.aliyuncs.com/gosun/seemmo_sdk:latest .
 > docker push registry.cn-hangzhou.aliyuncs.com/gosun/seemmo_sdk:latest
 
+
+## Dockerfile-video
+
+视频处理插件
