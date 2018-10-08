@@ -1,0 +1,40 @@
+#------------ 算法sdk ------------
+FROM registry.cn-hangzhou.aliyuncs.com/gosun/seemmo_sdk:v1.4.0.7 as seemmo_sdk
+#FROM registry.cn-hangzhou.aliyuncs.com/gosun/gosun_sdk:latest as gosun_sdk
+
+#------------ 编译video-dispose ------------
+FROM registry.cn-hangzhou.aliyuncs.com/gosun/brpc_opencv_ffmpeg:latest as base_builder
+
+WORKDIR /root
+ENV CFLAGS -fPIC
+ENV CXXFLAGS -fPIC
+env SEEMMO_SDK_HOME /root/seemmo_sdk
+env GOSUN_SDK_HOME /root/gosun_sdk
+env FFMPEG_HOME /root/FFmpeg
+
+#拷贝算法sdk
+COPY --from=seemmo_sdk $SEEMMO_SDK_HOME $SEEMMO_SDK_HOME
+#COPY --from=gosun_sdk $GOSUN_SDK_HOME $GOSUN_SDK_HOME
+
+RUN rm -rf /usr/local/lib/libbrpc.so && \
+    cd /root && \
+    git clone http://docker:docker123456@47.97.174.151:10080/service/video-dispose.git && \
+    cd /root/video-dispose && \
+    cd FFmpeg-patch && \
+    sh patch_ffmpeg.sh && \
+    ##打补丁后重新编译ffmpeg
+    cd /root/FFmpeg && \
+    ./configure --enable-static --enable-gpl --enable-nvenc --enable-cuda --enable-cuvid --enable-nonfree --enable-libnpp --enable-libx264 --extra-cflags=-I/usr/local/cuda/include --extra-ldflags=-L/usr/local/cuda/lib64 && \
+    make -j$(nproc) && \
+    make install && \
+    ##编译video-dispose插件
+    cd /root/video-dispose && \
+    sh build.sh
+    
+#生成runtime包
+FROM nvidia/cuda:9.2-runtime-ubuntu16.04 as cuda_runtime
+COPY --from=base_builder /root/seemmo_sdk /root/seemmo_sdk
+#COPY --from=base_builder /root/gosun_sdk /root/gosun_sdk
+COPY --from=base_builder /usr/local/bin/ /usr/local/bin
+COPY --from=base_builder /usr/local/lib/*.so /usr/local/lib
+COPY --from=base_builder /root/video-dispose/vfilter/fonts/* /usr/share/fonts/truetype/
