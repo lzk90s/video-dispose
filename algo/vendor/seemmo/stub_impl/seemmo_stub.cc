@@ -342,13 +342,6 @@ private:
 
 VideoProcClient videoProcClient;
 
-SeemmoAlgoStub::SeemmoAlgoStub()
-    : algo::AlgoStub("seemmo") {
-}
-
-SeemmoAlgoStub::~SeemmoAlgoStub() {
-}
-
 int32_t SeemmoAlgoStub::Trail(
     uint32_t channelId,
     uint64_t frameId,

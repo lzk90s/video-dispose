@@ -8,7 +8,8 @@
 #include "vfilter/setting.h"
 #include "vfilter/vfilter.h"
 #include "vfilter/vsink.h"
-#include "vfilter/async_algo_proc.h"
+
+#include "vfilter/algo_proc.h"
 
 using namespace std;
 
@@ -19,7 +20,7 @@ public:
     VFilter(uint32_t channelId)
         : channelId_(channelId),
           vsink_(channelId),
-          algoProcessor(vsink_) {
+          defAlgoProcessor_(vsink_) {
 
     }
     void SetChannelId(uint32_t channelId) {
@@ -34,7 +35,7 @@ public:
 private:
     uint32_t channelId_;
     VSink vsink_;
-    AsyncAlgoProcessor algoProcessor;
+    DefaultAlgoProcessor defAlgoProcessor_;
 };
 
 class VFilterManager {

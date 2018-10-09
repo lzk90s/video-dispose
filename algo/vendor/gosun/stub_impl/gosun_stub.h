@@ -6,16 +6,15 @@
 
 #include "algo/stub/algo_stub.h"
 
-using namespace  std;
-
 namespace algo {
-namespace seemmo {
+namespace gosun {
 
-class SeemmoAlgoStub : public algo::AlgoStub {
+
+class GosunAlgoStub : public algo::AlgoStub {
 public:
-    SeemmoAlgoStub() {};
+    GosunAlgoStub();
 
-    ~SeemmoAlgoStub() {};
+    ~GosunAlgoStub();
 
     int32_t Trail(
         uint32_t channelId,

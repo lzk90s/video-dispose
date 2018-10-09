@@ -22,7 +22,7 @@ RUN sed -i 's/archive.ubuntu.com/mirrors.aliyun.com/g' /etc/apt/sources.list && 
     apt-get autoclean && apt-get clean
 
 RUN cd /root && \
-    git clone http://docker:docker123456@47.97.174.151:10080/service/video-dispose.git && \
+    git  clone http://docker:docker123456@47.97.174.151:10080/service/video-dispose.git && \
     cd /root/video-dispose && \
     cd FFmpeg-patch && \
     sh patch_ffmpeg.sh && \
@@ -33,7 +33,7 @@ RUN cd /root && \
     make install && \
     ##编译video-dispose插件
     cd /root/video-dispose && \
-    sh build.sh
+    sh build.sh 
     
 #生成runtime包
 FROM nvidia/cuda:9.2-runtime-ubuntu16.04 as cuda_runtime

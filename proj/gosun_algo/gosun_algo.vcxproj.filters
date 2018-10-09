@@ -14,20 +14,4 @@
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
   </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\algo\gosun\service\algo_service.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\algo\gosun\stub\algo_stub.cc">
-      <Filter>源文件</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\algo\gosun\stub\algo_stub.h">
-      <Filter>源文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\algo\gosun\stub\object_type.h">
-      <Filter>源文件</Filter>
-    </ClInclude>
-  </ItemGroup>
 </Project>

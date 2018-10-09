@@ -79,14 +79,6 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\algo\gosun\service\algo_service.cpp" />
-    <ClCompile Include="..\..\algo\gosun\stub\algo_stub.cc" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\algo\gosun\stub\algo_stub.h" />
-    <ClInclude Include="..\..\algo\gosun\stub\object_type.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

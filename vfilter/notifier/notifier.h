@@ -59,13 +59,9 @@ public:
     }
 
 protected:
-    virtual string buildNotifyMsg(uint32_t channelId, cv::Mat &img, T &obj) {
-        return "";
-    }
+    virtual string buildNotifyMsg(uint32_t channelId, cv::Mat &img, T &obj) = 0;
 
-    virtual string getRequestURL() {
-        return "";
-    }
+    virtual string getRequestURL() = 0;
 
 private:
     string type_;

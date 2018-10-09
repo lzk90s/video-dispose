@@ -12,6 +12,7 @@ using namespace std;
 using namespace algo;
 
 namespace vf {
+
 class BikeMixer : public VMixer<algo::BikeObject> {
 public:
     BikeMixer() : VMixer("bike") {}

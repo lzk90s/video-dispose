@@ -8,6 +8,7 @@
 #include "algo/stub/algo_stub.h"
 #include "vfilter/frame_cache.h"
 #include "vfilter/vsink.h"
+#include "vfilter/frame_handler.h"
 
 
 using namespace std;
@@ -15,27 +16,27 @@ using namespace algo;
 
 namespace vf {
 
-class AsyncAlgoProcessor  {
+class DefaultAlgoProcessor : public  FrameHandler {
 public:
 
-    AsyncAlgoProcessor(VSink &sink)
+    DefaultAlgoProcessor(VSink &sink)
         : tp_(1),	//业务线程是单线程，这样就不需要加锁，也避免后面的图片先比前面的图片去检测
-          tpNotify_(1),	//通知线程，启1个。
+          tpNtf_(1),	//通知线程，启1个。
           sink_(sink) {
         recogFrameCnt = 0;
-        seemmoStub_ = AlgoStubFactory::CreateStub("seemmo");
-        sink.SetFrameHandler(std::bind(&AsyncAlgoProcessor::AsyncProcessFrame, this,
-                                       std::placeholders::_1,
-                                       std::placeholders::_2,
-                                       std::placeholders::_3));
+        algo_ = NewAlgoStub();
+        sink_.RegisterFrameHandler(std::bind(&DefaultAlgoProcessor::OnFrame, this,
+                                             std::placeholders::_1,
+                                             std::placeholders::_2,
+                                             std::placeholders::_3));
     }
 
-    ~AsyncAlgoProcessor() {
-        AlgoStubFactory::FreeStub(seemmoStub_);
+    ~DefaultAlgoProcessor() {
+        FreeAlgoStub(algo_);
     }
 
-    void AsyncProcessFrame(uint32_t chanelId, uint64_t frameId, cv::Mat &frame)  {
-        auto f1 = std::bind(&AsyncAlgoProcessor::algoRoutine, this, chanelId, frameId, frame);
+    void OnFrame(uint32_t chanelId, uint64_t frameId, cv::Mat &frame) override  {
+        auto f1 = std::bind(&DefaultAlgoProcessor::algoRoutine, this, chanelId, frameId, frame);
         tp_.commit(f1);
     }
 
@@ -76,16 +77,24 @@ private:
         trailParam.roi.push_back(Point{ 0, (int32_t)height });
         trailParam.roi.push_back(Point{ (int32_t)width, (int32_t)height });
         trailParam.roi.push_back(Point{ (int32_t)width, 0 });
-        int32_t ret = seemmoStub_->Trail(channelId, frameId, bgr24, width, height, trailParam, imageResult, filterResult);
+        int32_t ret = algo_->Trail(channelId, frameId, bgr24, width, height, trailParam, imageResult, filterResult);
         if (0 != ret) {
             LOG_ERROR("Trail error, ret {}", ret);
             return ret;
         }
 
-        //更新混合器中的对象
-        sink_.GetPersonMixer().SetDetectedObjects(imageResult.pedestrains);
-        sink_.GetVehicleMixer().SetDetectedObjects(imageResult.vehicles);
-        sink_.GetBikeMixer().SetDetectedObjects(imageResult.bikes);
+        //更新目标池
+        sink_.personObjectSink.SetDetectedObjects(imageResult.pedestrains);
+        sink_.vehicleObjectSink.SetDetectedObjects(imageResult.vehicles);
+        sink_.bikeObjectSink.SetDetectedObjects(imageResult.bikes);
+
+        //针对人脸特殊处理，目前人脸算法中没有去重，需要自己去重
+        for (auto &p : imageResult.faces) {
+            if (!sink_.faceObjectSink.ObjectExist(p.guid)) {
+                sink_.faceNotifier.OnRecognizedObject(channelId, frame, p);
+            }
+        }
+        sink_.faceObjectSink.SetDetectedObjects(imageResult.faces);
 
         return 0;
     }
@@ -123,7 +132,7 @@ private:
         ImageResult recImageResult;
         //如果存在识别区域，则进行识别
         if (!recParam.locations.empty()) {
-            ret = seemmoStub_->Recognize(channelId, bgr24, width, height, recParam, recImageResult);
+            ret = algo_->Recognize(channelId, bgr24, width, height, recParam, recImageResult);
             if (0 != ret) {
                 LOG_ERROR("Recognize error, ret {}", ret);
                 return ret;
@@ -141,10 +150,11 @@ private:
             recImageResult.pedestrains[idx].guid = imageResult.pedestrains[idx].guid;
         }
 
-        // 更新mixer中的检测结果缓存
-        sink_.GetPersonMixer().SetRecognizedObjects(recImageResult.pedestrains);
-        sink_.GetVehicleMixer().SetRecognizedObjects(recImageResult.vehicles);
-        sink_.GetBikeMixer().SetRecognizedObjects(recImageResult.bikes);
+        //更新目标池
+        sink_.personObjectSink.SetRecognizedObjects(recImageResult.pedestrains);
+        sink_.vehicleObjectSink.SetRecognizedObjects(recImageResult.vehicles);
+        sink_.bikeObjectSink.SetRecognizedObjects(recImageResult.bikes);
+        sink_.faceObjectSink.SetRecognizedObjects(recImageResult.faces);
 
         return 0;
     }
@@ -162,7 +172,7 @@ private:
             recParam.locations.push_back(loc);
 
             bool exist = false;
-            cv::Mat frame = sink_.GetFrameCache().Get(p.frameId, exist);
+            cv::Mat frame = sink_.frameCache.Get(p.frameId, exist);
             if (!exist) {
                 LOG_WARN("The saved frame {} not exist", p.frameId);
                 return 0;
@@ -180,7 +190,7 @@ private:
             recParam.locations.push_back(loc);
 
             bool exist = false;
-            cv::Mat frame = sink_.GetFrameCache().Get(p.frameId, exist);
+            cv::Mat frame = sink_.frameCache.Get(p.frameId, exist);
             if (!exist) {
                 LOG_WARN("The saved frame {} not exist", p.frameId);
                 return 0;
@@ -198,7 +208,7 @@ private:
             recParam.locations.push_back(loc);
 
             bool exist = false;
-            cv::Mat frame = sink_.GetFrameCache().Get(p.frameId, exist);
+            cv::Mat frame = sink_.frameCache.Get(p.frameId, exist);
             if (!exist) {
                 LOG_WARN("The saved frame {} not exist", p.frameId);
                 return 0;
@@ -208,7 +218,7 @@ private:
 
         //把不需要的帧手动释放掉
         for (auto &fid : filterResult.releasedFrames) {
-            sink_.GetFrameCache().ManualRelase(fid);
+            sink_.frameCache.ManualRelase(fid);
         }
 
         return 0;
@@ -216,13 +226,13 @@ private:
 
     int32_t recognizeByFilterResultInner(uint32_t channelId, cv::Mat &frame, RecogParam &recParam) {
         //异步处理
-        tpNotify_.commit([this, channelId, frame, recParam]() {
+        tpNtf_.commit([this, channelId, frame, recParam]() {
             const uint8_t *bgr24 = frame.data;
             uint32_t width = frame.cols;
             uint32_t height = frame.rows;
 
             ImageResult imageResult;
-            int32_t ret = seemmoStub_->Recognize(channelId, bgr24, width, height, recParam, imageResult);
+            int32_t ret = algo_->Recognize(channelId, bgr24, width, height, recParam, imageResult);
             if (0 != ret) {
                 LOG_ERROR("Recognize error, ret {}", ret);
                 return ret;
@@ -230,13 +240,16 @@ private:
 
             cv::Mat f = frame;
             for (auto &p : imageResult.bikes) {
-                sink_.GetBikeNotifier().OnRecognizedObject(channelId, f, p);
+                sink_.bikeNotifier.OnRecognizedObject(channelId, f, p);
             }
             for (auto &p : imageResult.pedestrains) {
-                sink_.GetPersonNotifier().OnRecognizedObject(channelId, f, p);
+                sink_.personNotifier.OnRecognizedObject(channelId, f, p);
             }
             for (auto &p : imageResult.vehicles) {
-                sink_.GetVehicleNotifier().OnRecognizedObject(channelId, f, p);
+                sink_.vehicleNotifier.OnRecognizedObject(channelId, f, p);
+            }
+            for (auto &p : imageResult.faces) {
+                sink_.faceNotifier.OnRecognizedObject(channelId, f, p);
             }
 
             return 0;
@@ -246,14 +259,14 @@ private:
     }
 
 private:
-//深瞐算法stub
-    AlgoStub * seemmoStub_;
+    //深瞐算法stub
+    AlgoStub * algo_;
     threadpool tp_;
-//通知线程池
-    threadpool tpNotify_;
-//sink
+    //通知线程池
+    threadpool tpNtf_;
+    //sink
     VSink &sink_;
-//识别帧计数
+    //识别帧计数
     uint32_t recogFrameCnt;
 };
 

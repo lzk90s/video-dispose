@@ -51,10 +51,6 @@ public:
 
 class AlgoStub {
 public:
-    AlgoStub(const string &vendor) {
-        vendor_ = vendor;
-    }
-
     //¼ì²â¸ú×Ù + È¥ÖØÔñÓÅ
     virtual int32_t Trail(
         uint32_t channelId,
@@ -80,20 +76,10 @@ public:
     ) {
         throw runtime_error("unimplemented method");
     };
-
-    string GetVendor() {
-        return this->vendor_;
-    }
-
-private:
-    string vendor_;
 };
 
-class AlgoStubFactory {
-public:
-    static AlgoStub* CreateStub(const string &vendor);
+AlgoStub *NewAlgoStub();
 
-    static void FreeStub(AlgoStub *&stub);
-};
+void FreeAlgoStub(AlgoStub *&stub);
 
 }

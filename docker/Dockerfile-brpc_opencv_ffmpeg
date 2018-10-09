@@ -88,16 +88,8 @@ RUN  sed -i 's/archive.ubuntu.com/mirrors.aliyun.com/g' /etc/apt/sources.list &&
 # step 10 
 RUN \
     cd ~ && \
-    wget https://github.com/Itseez/opencv/archive/3.2.0.zip && \
-    unzip 3.2.0.zip && \
-    mv ~/opencv-3.2.0/ ~/opencv/ && \
-    rm -rf ~/3.2.0.zip && \
-    #download opencv
-    cd ~ && \
-    wget https://github.com/opencv/opencv_contrib/archive/3.2.0.zip -O 3.2.0-contrib.zip && \
-    unzip 3.2.0-contrib.zip && \
-    mv opencv_contrib-3.2.0 opencv_contrib && \
-    rm -rf ~/3.2.0-contrib.zip && \
+    git clone -b 3.4.3 https://github.com/opencv/opencv.git && \
+    git clone -b 3.4.3 https://github.com/opencv/opencv_contrib.git && \
     #configure opencv
     cd /root/opencv && \
     mkdir build && \

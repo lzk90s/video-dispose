@@ -1,0 +1,16 @@
+TOP_DIR=../../../
+
+MODULE_NAME=libgosun_stub_impl
+MODULE_SUFFIX=.so
+
+INC =-I$(GOSUN_SDK_HOME)/include -I$(TOP_DIR) -I$(TOP_DIR)/thirdparty -I$(TOP_DIR)/common
+LIB =-L$(GOSUN_SDK_HOME)/lib -lpthread -lSmartface -luuid /usr/lib/libopenblas.so $(GOSUN_SDK_HOME)/lib/libopencv_world.so.3.4
+#LIB =-L$(GOSUN_SDK_HOME)/lib -lpthread `pkg-config --libs opencv` -lopenblas -lSmartface 
+
+CXXFLAGS = $(INC) -std=c++11 -fPIC -Wall
+LDFLAGS = $(LIB)
+
+SRC_DIRS=stub_impl 
+
+include $(TOP_DIR)/makefiles/rule.mk
+

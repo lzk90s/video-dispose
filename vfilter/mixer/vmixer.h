@@ -12,6 +12,7 @@
 #include "vfilter/mixer/cvx_text.h"
 #include "vfilter/mixer/cvx_text.h"
 #include "algo/stub/object_type.h"
+#include "vfilter/object_sink.h"
 
 using namespace std;
 
@@ -19,6 +20,7 @@ namespace vf {
 static const char *DEFAULT_FONT = "/usr/share/fonts/truetype/simsun.ttf";
 static const int FONT_MIN_SIZE = 20;	//字体最小号
 static const int FONT_MAX_SIZE = 40;	//字体最大号
+
 
 template<class T>
 class VMixer {
@@ -30,68 +32,9 @@ public:
         text_.setFont(nullptr, &size, nullptr, nullptr);
     }
 
-    //设置目标
-    virtual void SetDetectedObjects(vector<T> &objs) {
-        unique_lock<mutex> lck(mutex_);
-
-        for (auto &o : objs) {
-            //如果没有找到，则添加到已存在目标容器中
-            if (existObjs_.find(o.guid) == existObjs_.end()) {
-                ObjectWithCounter newObj;
-                newObj.obj1 = o;
-                existObjs_[o.guid] = newObj;
-            } else {
-                existObjs_[o.guid].obj1 = o;
-            }
-        }
-
-        vector<string> disappearedObjs;
-        for (auto &o : existObjs_) {
-            bool exist = false;
-            for (auto &i : objs) {
-                if (i.guid == o.second.obj1.guid) {
-                    exist = true;
-                    break;
-                }
-            }
-            if (!exist) {
-                /*
-                * 在最新的目标中不存在，有两种情况
-                * 1. 目标已经完全消失
-                * 2. 目标只是在刚好这一帧中没有检测到，并不代表目标已经消失了
-                * 针对这两种情况，通过减少目标的计数，当目标计数为0的时候，表示目标真的消失了。就删除掉
-                */
-                o.second.cnt = o.second.cnt-1;
-                if (o.second.cnt == 0) {
-                    disappearedObjs.push_back(o.first);
-                }
-            }
-        }
-
-        //删掉消失的目标
-        for (auto &o : disappearedObjs) {
-            existObjs_.erase(o);
-        }
-    }
-
-    virtual void SetRecognizedObjects(vector<T> &objs) {
-        unique_lock<mutex> lck(mutex_);
-        for (auto &o : objs) {
-            if (existObjs_.find(o.guid) != existObjs_.end()) {
-                existObjs_[o.guid].obj2 = o;
-            }
-        }
-    }
-
-    virtual void MixFrame(cv::Mat &frame) {
+    virtual void MixFrame(cv::Mat &frame, ObjectSink<T> &objSink) {
         vector<T> tmpObjs1, tmpObjs2;
-        {
-            unique_lock<mutex> lck(mutex_);
-            for (auto &o : existObjs_) {
-                tmpObjs1.push_back(o.second.obj1);
-                tmpObjs2.push_back(o.second.obj2);
-            }
-        }
+        objSink.GetLatestObjects(tmpObjs1, tmpObjs2);
         doMixFrame(frame, tmpObjs1, tmpObjs2);
     }
 
@@ -185,26 +128,9 @@ protected:
         }
     }
 
-protected:
-
-    class ObjectWithCounter {
-        typedef int32_t OjbectDisappearCounter;
-
-    public:
-        T obj1;		//obj1 存储检测结果
-        T obj2;		//obj2 存储识别结果
-        OjbectDisappearCounter cnt;
-
-        ObjectWithCounter() {
-            cnt = GlobalSettings::getInstance().objectDisappearCount;
-        }
-    };
-
+private:
     CvxText text_;
     string type_;
-    mutex mutex_;
-    //已经存在的目标
-    map<string, ObjectWithCounter> existObjs_;
 };
 
 

@@ -6,19 +6,25 @@
 #include <chrono>
 #include <map>
 #include <mutex>
+#include <vector>
 
 #include "opencv/cv.h"
 
 #include "vfilter/setting.h"
 #include "vfilter/frame_cache.h"
+#include "vfilter/frame_handler.h"
+#include "vfilter/object_sink.h"
 
 #include "vfilter/mixer/bike_mixer.h"
 #include "vfilter/mixer/person_mixer.h"
 #include "vfilter/mixer/vehicle_mixer.h"
+#include "vfilter/mixer/face_mixer.h"
 
 #include "vfilter/notifier/bike_notifier.h"
 #include "vfilter/notifier/person_notifier.h"
 #include "vfilter/notifier/vehicle_notifier.h"
+#include "vfilter/notifier/face_notifier.h"
+
 
 using namespace std;
 
@@ -26,7 +32,27 @@ namespace vf {
 
 class VSink {
 public:
-    using OnFrameHandler = function<void (uint32_t chanelId, uint64_t frameId, cv::Mat &frame)>;
+
+    //object sink
+    VehicleObjectSink vehicleObjectSink;
+    BikeObjectSink bikeObjectSink;
+    PersonObjectSink personObjectSink;
+    FaceObjectSink faceObjectSink;
+
+    //mixer
+    VehicleMixer vehicleMixer;
+    BikeMixer bikeMixer;
+    PersonMixer personMixer;
+    FaceMixer faceMixer;
+
+    //notifier
+    VehicleNotifier vehicleNotifier;
+    BikeNotifier bikeNotifier;
+    PersonNotifier personNotifier;
+    FaceNotifier faceNotifier;
+
+    //frame cache
+    FrameCache frameCache;
 
 public:
     VSink(uint32_t channelId)
@@ -41,43 +67,21 @@ public:
         if (needPickFrame()) {
             //³éÖ¡&Òì²½´¦ÀíÍ¼ÏñÖ¡
             cv::Mat cloneFrame = frame.clone();
-            FrameCache::FrameId fid = frameCache_.Put(cloneFrame);
-            onFrameHandler_(channelId_, (uint64_t)fid, cloneFrame);
+            FrameCache::FrameId fid = frameCache.Put(cloneFrame);
+            for (auto &h : onFrameHandlers_) {
+                h(channelId_, (uint64_t)fid, cloneFrame);
+            }
         }
         mixFrame(frame);
         return 0;
     }
 
-    FrameCache &GetFrameCache() {
-        return frameCache_;
+    void RegisterFrameHandler(OnFrameHandler h) {
+        onFrameHandlers_.push_back(h);
     }
 
-    void SetFrameHandler(OnFrameHandler h) {
-        this->onFrameHandler_ = h;
-    }
-
-    VehicleMixer &GetVehicleMixer() {
-        return this->vehicleMixer_;
-    }
-
-    BikeMixer &GetBikeMixer() {
-        return this->bikeMixer_;
-    }
-
-    PersonMixer &GetPersonMixer() {
-        return this->personMixer_;
-    }
-
-    VehicleNotifier &GetVehicleNotifier() {
-        return this->vehicleNotifier_;
-    }
-
-    BikeNotifier &GetBikeNotifier() {
-        return this->bikeNotifier_;
-    }
-
-    PersonNotifier &GetPersonNotifier() {
-        return this->personNotifier_;
+    uint32_t GetChannelId() {
+        return this->channelId_;
     }
 
 protected:
@@ -100,27 +104,15 @@ protected:
     }
 
     void mixFrame(cv::Mat &frame) {
-        vehicleMixer_.MixFrame(frame);
-        personMixer_.MixFrame(frame);
-        bikeMixer_.MixFrame(frame);
+        vehicleMixer.MixFrame(frame, vehicleObjectSink);
+        personMixer.MixFrame(frame, personObjectSink);
+        bikeMixer.MixFrame(frame, bikeObjectSink);
+        faceMixer.MixFrame(frame, faceObjectSink);
     }
 
 private:
     //channel id
     uint32_t channelId_;
-
-    //mixer
-    VehicleMixer vehicleMixer_;
-    BikeMixer bikeMixer_;
-    PersonMixer personMixer_;
-
-    //notifier
-    VehicleNotifier vehicleNotifier_;
-    BikeNotifier bikeNotifier_;
-    PersonNotifier personNotifier_;
-
-    //frame cache
-    FrameCache frameCache_;
 
     //time for pick frame
     chrono::steady_clock::time_point lastTime_;
@@ -128,7 +120,7 @@ private:
     uint32_t pickCnt;
 
     //callback
-    OnFrameHandler onFrameHandler_;
+    vector<OnFrameHandler> onFrameHandlers_;
 };
 
 
