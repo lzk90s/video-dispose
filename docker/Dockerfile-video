@@ -1,6 +1,6 @@
 #------------ 算法sdk ------------
 FROM registry.cn-hangzhou.aliyuncs.com/gosun/seemmo_sdk:v1.4.0.7 as seemmo_sdk
-#FROM registry.cn-hangzhou.aliyuncs.com/gosun/gosun_sdk:latest as gosun_sdk
+FROM registry.cn-hangzhou.aliyuncs.com/gosun/gosun_sdk:latest as gosun_sdk
 
 #------------ 编译video-dispose ------------
 FROM registry.cn-hangzhou.aliyuncs.com/gosun/brpc_opencv_ffmpeg:latest as base_builder
@@ -38,7 +38,7 @@ RUN cd /root && \
 #生成runtime包
 FROM nvidia/cuda:9.2-runtime-ubuntu16.04 as cuda_runtime
 COPY --from=base_builder /root/seemmo_sdk /root/seemmo_sdk
-#COPY --from=base_builder /root/gosun_sdk /root/gosun_sdk
+COPY --from=base_builder /root/gosun_sdk /root/gosun_sdk
 COPY --from=base_builder /usr/local/bin/ /usr/local/bin/
 COPY --from=base_builder /usr/local/lib/*.so /usr/local/lib/
 COPY --from=base_builder /root/video-dispose/vfilter/fonts/* /usr/share/fonts/truetype/
@@ -56,7 +56,9 @@ RUN sed -i 's/archive.ubuntu.com/mirrors.aliyun.com/g' /etc/apt/sources.list && 
     rm -rf /etc/apt/sources.list.d/* && \
     apt-get update  --fix-missing && \ 
     apt-get install --fix-missing -y --no-install-recommends openjdk-8-jdk libfreetype6 \
-      tzdata net-tools inetutils-ping libgomp1 locales && \
+      tzdata net-tools inetutils-ping libgomp1 locales libjasper1 libjasper-dev \ 
+      libdc1394-22 libavcodec-ffmpeg56 libswscale-ffmpeg3 libavformat-ffmpeg56 \
+      libcairo2 libgdk-pixbuf2.0-0 libgtk2.0-0 libopenexr22 uuid-dev && \
     apt-get autoclean && apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
     ##修改时区

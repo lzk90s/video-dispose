@@ -57,8 +57,6 @@ int32_t GosunAlgoStub::Trail(
         o.guid = id;
         o.type = ObjectType::FACE;
 
-        LOG_INFO("---------GET {}", cur->id);
-
         imageResult.faces.push_back(o);
     }
 
