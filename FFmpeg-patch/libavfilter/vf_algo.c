@@ -168,28 +168,11 @@ static int frame_copy_video(AVFrame *dst, const AVFrame *src) {
     return 0;
 }
 
-static int do_conversion(AVFilterContext *ctx, void *arg, int jobnr,
-                         int nb_jobs) {
-    AlgoContext *privCtx = ctx->priv;
-    ThreadData *td = arg;
-    AVFrame *dst = td->out;
-    AVFrame *src = td->in;
-
-    // video filter, data[0] (bgr24 data)
-    pf_VFilter_Routine(privCtx->cid, src->data[0], src->width, src->height);
-
-    // copy video
-    frame_copy_video(dst, src);
-
-    return 0;
-}
-
 static int filter_frame(AVFilterLink *link, AVFrame *in) {
     AVFilterContext *avctx = link->dst;
     AVFilterLink *outlink = avctx->outputs[0];
     AVFrame *out;
-    ThreadData td;
-    int res;
+    AlgoContext *privCtx = avctx->priv;
 
     //allocate a new buffer, data is null
     out = ff_get_video_buffer(outlink, outlink->w, outlink->h);
@@ -202,11 +185,11 @@ static int filter_frame(AVFilterLink *link, AVFrame *in) {
     out->width  = outlink->w;
     out->height = outlink->h;
 
-    td.in = in;
-    td.out = out;
-    if(res = avctx->internal->execute(avctx, do_conversion, &td, NULL, FFMIN(outlink->h, avctx->graph->nb_threads))) {
-        return res;
-    }
+    // filter routine
+    pf_VFilter_Routine(privCtx->cid, in->data[0], in->width, in->height);
+
+    // copy video
+    frame_copy_video(out, in);
 
     av_frame_free(&in);
 

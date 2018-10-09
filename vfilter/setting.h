@@ -22,6 +22,8 @@ public:
     uint32_t frameCacheMaxNum = 30 * (1000 / framePickInternalMs);
     //目标消失初始计数(当某个目标在超过设置的帧后，还没有检测到，则认为目标已经消失，需要从内存中删掉)
     uint32_t objectDisappearCount = 10;
+    //有效图片的最小宽度，小于这个宽度的图片，比较模糊，不予显示
+    uint32_t validPictureMinWidth = 80;
     //通知服务接收地址
     string notifyServerHost = (std::getenv("NOTIFY_SERVER_HOST")) ? string(std::getenv("NOTIFY_SERVER_HOST")) :
                               string("message-transfer:9091");

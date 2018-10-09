@@ -3,9 +3,11 @@
 #include "opencv/cv.h"
 
 #include "algo/stub/object_type.h"
+#include "common/helper/logger.h"
+
 #include "vfilter/setting.h"
 #include "vfilter/notifier/httplib.h"
-#include "common/helper/logger.h"
+#include "vfilter/setting.h"
 
 
 namespace vf {
@@ -36,6 +38,13 @@ public:
         }
 
         int32_t x = obj.detect[0], y = obj.detect[1], w = obj.detect[2], h = obj.detect[3];
+
+        //过滤掉无效的图片
+        if ((uint32_t)w < GlobalSettings::getInstance().validPictureMinWidth) {
+            LOG_DEBUG("The picture is too small, ignore it, width {}, height{}", w, h);
+            return;
+        }
+
         //抠图
         cv::Rect  rect = cv::Rect(x, y, w, h);
         cv::Mat roi = frame(rect);
