@@ -34,7 +34,7 @@ public:
         Jpeg2BgrConverter converter;
         if (0 != converter.Convert((uint8_t*)request->jpeg().c_str(), request->jpeg().length())) {
             LOG_INFO("Failed to convert jpeg image");
-            cntl->SetFailed("jpeg decompress error");
+            cntl->SetFailed(400, "jpeg decompress error");
             return;
         }
 
