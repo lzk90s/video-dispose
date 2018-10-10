@@ -32,9 +32,6 @@
     <ClCompile Include="..\..\vfilter\mixer\cvx_text.cc">
       <Filter>源文件\mixer</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\vfilter\async_algo_proc.h">
-      <Filter>源文件</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\vfilter\vfilter.h">
@@ -81,6 +78,21 @@
     </ClInclude>
     <ClInclude Include="..\..\vfilter\notifier\httplib.h">
       <Filter>源文件\notifier</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\vfilter\frame_handler.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\vfilter\mixer\face_mixer.h">
+      <Filter>源文件\mixer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\vfilter\notifier\face_notifier.h">
+      <Filter>源文件\notifier</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\vfilter\object_sink.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\vfilter\algo_proc.h">
+      <Filter>源文件</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

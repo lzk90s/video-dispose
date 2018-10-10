@@ -1,6 +1,6 @@
 #pragma once
 
-// code from:  https://blog.csdn.net/subfate/article/details/46700675
+// 代码参考:  https://blog.csdn.net/subfate/article/details/46700675
 
 #include <cstdint>
 #include <stdio.h>
@@ -167,6 +167,51 @@ public:
         return 0;
     }
 
+    int SaveJpeg(const char *filename, unsigned char *bits, int width, int height) {
+        struct jpeg_compress_struct jcinfo;  //申请jpeg压缩对象
+        struct jpeg_error_mgr jerr;
+        FILE * outfile;                 //target file
+        JSAMPROW row_pointer[1];        //pointer to JSAMPLE row[s] 一行位图
+        int     row_stride;             //每一行的字节数
+        jcinfo.err = jpeg_std_error(&jerr);   //指定错误处理器
+        jpeg_create_compress(&jcinfo);      //初始化jpeg压缩对象
+
+        //指定压缩后的图像所存放的目标文件，注意，目标文件应以二进制模式打开
+        if ((outfile = fopen(filename, "wb")) == NULL) {
+            fprintf(stderr, "can't open %s/n", filename);
+            return -1;
+        }
+        jpeg_stdio_dest(&jcinfo, outfile);   //指定压缩后的图像所存放的目标文件
+        jcinfo.image_width = width;      // 为图的宽和高，单位为像素
+        jcinfo.image_height = height;
+        jcinfo.input_components = 3;         // 在此为3,表示彩色位图， 如果是灰度图，则为1
+        jcinfo.in_color_space = JCS_EXT_BGR;         //JCS_GRAYSCALE表示灰度图，JCS_RGB表示彩色图像
+        /*
+        需要注意的是，jpeg_set_defaults函数一定要等设置好图像宽、高、色彩通道数计色彩空间四个参数后才能调用，因为这个函数要用到这四个值，调用jpeg_set_defaults函数后，jpeglib 库采用默认的设置对图像进行压缩
+        如果需要改变设置，如压缩质量，调用这个函数后，可以调用其它设置函数，如jpeg_set_quality函数。其实图像压缩时有好多参数可以设置
+        但大部分我们都用不着设置，只需调用jpeg_set_defaults函数值为默认值即可
+        */
+        jpeg_set_defaults(&jcinfo);
+        jpeg_set_quality(&jcinfo, 100, TRUE);//limit to baseline-JPEG values
+        /*
+        首先调用jpeg_start_compress，然后可以对每一行进行压缩，也可以对若干行进行压缩，甚至可以对整个的图像进行一次压缩，压缩完成后，记得要调用jpeg_finish_compress函数
+        */
+        jpeg_start_compress(&jcinfo, TRUE);
+
+        row_stride = width * jcinfo.input_components; // JSAMPLEs per row in image_buffer(如果是索引图则不需要乘以3)
+        //对每一行进行压缩
+        while (jcinfo.next_scanline < jcinfo.image_height) {
+            //这里我做过修改，由于jpg文件的图像是倒的，所以改了一下读的顺序
+            //这是原代码：
+            //row_pointer[0] = & bits[jcinfo.next_scanline * row_stride];
+            row_pointer[0] = &bits[(jcinfo.image_height - jcinfo.next_scanline - 1) * row_stride];
+            (void)jpeg_write_scanlines(&jcinfo, row_pointer, 1);
+        }
+        jpeg_finish_compress(&jcinfo);
+        fclose(outfile);
+        jpeg_destroy_compress(&jcinfo);
+        return 0;
+    }
 
     unsigned char *GetImgBuffer() {
         return jpeg_buffer;

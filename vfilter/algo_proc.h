@@ -226,7 +226,7 @@ private:
 
     int32_t recognizeByFilterResultInner(uint32_t channelId, cv::Mat &frame, RecogParam &recParam) {
         //“Ï≤Ω¥¶¿Ì
-        tpNtf_.commit([&]() {
+        tpNtf_.commit([=]() {
             const uint8_t *bgr24 = frame.data;
             uint32_t width = frame.cols;
             uint32_t height = frame.rows;

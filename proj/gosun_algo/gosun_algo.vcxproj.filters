@@ -13,5 +13,18 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="源文件\stub">
+      <UniqueIdentifier>{4ec97620-dec1-4e74-bac1-17a75b041b8f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\algo\vendor\gosun\stub_impl\gosun_stub.h">
+      <Filter>源文件\stub</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\algo\vendor\gosun\stub_impl\gosun_stub.cc">
+      <Filter>源文件\stub</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

@@ -3,6 +3,7 @@
 #include <locale.h>
 #include <ctype.h>
 #include <cmath>
+#include <exception>
 
 #include "vfilter/mixer/cvx_text.h"
 #include "freetype/ftcache.h"
@@ -21,11 +22,21 @@ CvxText::CvxText(const char* freeType) {
     m_myfaceId = (FTC_FaceID)&m_myface;
 
     // 打开字库文件, 创建一个字体
-    if (FT_Init_FreeType(&m_library)) throw;
-    if (FTC_Manager_New(m_library, 0, 0, 0, my_face_requester, nullptr, &m_cacheManager)) throw;
-    if (FTC_CMapCache_New(m_cacheManager, &m_mapCache)) throw;
-    if (FTC_SBitCache_New(m_cacheManager, &m_sbitCache)) throw;
-    if (FTC_Manager_LookupFace(m_cacheManager, m_myfaceId, &m_face)) throw;
+    if (FT_Init_FreeType(&m_library)) {
+        throw std::runtime_error("FT_Init_FreeType exception");
+    }
+    if (FTC_Manager_New(m_library, 0, 0, 0, my_face_requester, nullptr, &m_cacheManager)) {
+        throw std::runtime_error("FTC_Manager_New exception");
+    }
+    if (FTC_CMapCache_New(m_cacheManager, &m_mapCache)) {
+        throw std::runtime_error("FTC_CMapCache_New exception");
+    }
+    if (FTC_SBitCache_New(m_cacheManager, &m_sbitCache)) {
+        throw std::runtime_error("FTC_SBitCache_New exception");
+    }
+    if (FTC_Manager_LookupFace(m_cacheManager, m_myfaceId, &m_face)) {
+        throw std::runtime_error("FTC_Manager_LookupFace exception");
+    }
 
     // 设置字体输出参数
     restoreFont();

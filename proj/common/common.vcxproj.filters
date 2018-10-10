@@ -33,5 +33,8 @@
     <ClInclude Include="..\..\common\helper\threadpool.h">
       <Filter>源文件</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\common\helper\jpeg_helper.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

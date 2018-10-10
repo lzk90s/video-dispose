@@ -10,6 +10,12 @@
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\algo\vendor\gosun\stub_impl\gosun_stub.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\algo\vendor\gosun\stub_impl\gosun_stub.cc" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{A6CD701D-3703-4F83-9B3B-6167205CA89E}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>

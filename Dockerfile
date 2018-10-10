@@ -8,9 +8,11 @@ FROM registry.cn-hangzhou.aliyuncs.com/gosun/brpc_opencv_ffmpeg:latest as base_b
 WORKDIR /root
 ENV CFLAGS -fPIC
 ENV CXXFLAGS -fPIC
-env SEEMMO_SDK_HOME /root/seemmo_sdk
-env GOSUN_SDK_HOME /root/gosun_sdk
-env FFMPEG_HOME /root/FFmpeg
+ENV SEEMMO_SDK_HOME /root/seemmo_sdk
+ENV GOSUN_SDK_HOME /root/gosun_sdk
+ENV FFMPEG_HOME /root/FFmpeg
+ENV LC_ALL en_US.UTF-8
+ENV LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${SEEMMO_SDK_HOME}/lib:${GOSUN_SDK_HOME}/lib
 
 #拷贝算法sdk
 COPY --from=seemmo_sdk $SEEMMO_SDK_HOME $SEEMMO_SDK_HOME
@@ -19,14 +21,15 @@ COPY --from=gosun_sdk $GOSUN_SDK_HOME $GOSUN_SDK_HOME
 RUN sed -i 's/archive.ubuntu.com/mirrors.aliyun.com/g' /etc/apt/sources.list && \
     apt-get update --fix-missing && \
     apt-get install -y libssl-dev libfreetype6 libfreetype6-dev \
-    libgomp1 locales libjasper1 libjasper-dev \ 
-    libdc1394-22 libavcodec-ffmpeg56 libswscale-ffmpeg3 libavformat-ffmpeg56 \
-    libcairo2 libgdk-pixbuf2.0-0 libgtk2.0-0 libopenexr22 libopenblas-base libopenblas-dev uuid-dev && \
-    apt-get autoclean && apt-get clean
+      libgomp1 locales libjasper1 libjasper-dev libdc1394-22 libavcodec-ffmpeg56 \
+      libswscale-ffmpeg3 libavformat-ffmpeg56 libcairo2 libgdk-pixbuf2.0-0 \
+      libgtk2.0-0 libopenexr22 libopenblas-base libopenblas-dev uuid-dev && \
+    apt-get autoclean && apt-get clean && \
+    locale-gen $LC_ALL
 
-RUN cd /root && \
-    git  clone http://docker:docker123456@47.97.174.151:10080/service/video-dispose.git && \
-    cd /root/video-dispose && \
+ADD . /root/video-dispose
+    
+RUN cd /root/video-dispose && \
     cd FFmpeg-patch && \
     sh patch_ffmpeg.sh && \
     ##打补丁后重新编译ffmpeg
@@ -38,20 +41,20 @@ RUN cd /root && \
     cd /root/video-dispose && \
     sh build.sh 
     
-#生成runtime包
+#------------ 生成runtime包 ------------
 FROM nvidia/cuda:9.2-runtime-ubuntu16.04 as cuda_runtime
 COPY --from=base_builder /root/seemmo_sdk /root/seemmo_sdk
 COPY --from=base_builder /root/gosun_sdk /root/gosun_sdk
 COPY --from=base_builder /usr/local/bin/ /usr/local/bin/
 COPY --from=base_builder /usr/local/lib/*.so /usr/local/lib/
-COPY --from=base_builder /root/video-dispose/vfilter/fonts/* /usr/share/fonts/truetype/
+COPY --from=base_builder /usr/share/fonts/truetype /usr/share/fonts/truetype
 
 
 ENV SEEMMO_SDK_HOME /root/seemmo_sdk
 ENV GOSUN_SDK_HOME /root/gosun_sdk
 ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
 ENV PATH $PATH:${JAVA_HOME}/jre/bin:${JAVA_HOME}/bin
-ENV LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${SEEMMO_SDK_HOME}/lib:$GOSUN_SDK_HOME}/lib
+ENV LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${SEEMMO_SDK_HOME}/lib:${GOSUN_SDK_HOME}/lib
 ENV LC_ALL en_US.UTF-8
 
 RUN sed -i 's/archive.ubuntu.com/mirrors.aliyun.com/g' /etc/apt/sources.list && \

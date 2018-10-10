@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\common\helper\countdownlatch.h" />
     <ClInclude Include="..\..\common\helper\counttimer.h" />
+    <ClInclude Include="..\..\common\helper\jpeg_helper.h" />
     <ClInclude Include="..\..\common\helper\logger.h" />
     <ClInclude Include="..\..\common\helper\singleton.h" />
     <ClInclude Include="..\..\common\helper\stringconv.h" />

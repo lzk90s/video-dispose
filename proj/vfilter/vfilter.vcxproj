@@ -83,17 +83,21 @@
     <None Include="..\..\vfilter\Makefile" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\vfilter\async_algo_proc.h" />
     <ClCompile Include="..\..\vfilter\mixer\cvx_text.cc" />
     <ClCompile Include="..\..\vfilter\vfilter.cc" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\vfilter\app.h" />
+    <ClInclude Include="..\..\vfilter\algo_proc.h" />
+    <ClInclude Include="..\..\vfilter\frame_handler.h" />
+    <ClInclude Include="..\..\vfilter\mixer\face_mixer.h" />
     <ClInclude Include="..\..\vfilter\notifier\bike_notifier.h" />
+    <ClInclude Include="..\..\vfilter\notifier\face_notifier.h" />
     <ClInclude Include="..\..\vfilter\notifier\httplib.h" />
     <ClInclude Include="..\..\vfilter\notifier\notifier.h" />
     <ClInclude Include="..\..\vfilter\notifier\person_notifier.h" />
     <ClInclude Include="..\..\vfilter\notifier\vehicle_notifier.h" />
+    <ClInclude Include="..\..\vfilter\object_sink.h" />
     <ClInclude Include="..\..\vfilter\setting.h" />
     <ClInclude Include="..\..\vfilter\frame_cache.h" />
     <ClInclude Include="..\..\vfilter\mixer\bike_mixer.h" />

@@ -26,17 +26,29 @@ public:
         ImageResult &imageResult,
         FilterResult &filterResult
     ) {
-        auto f1 = tp_.commit([&]() {
-            return seemmoAlgo_->Trail(channelId, frameId, bgr24, width, height, param, imageResult, filterResult);
+        const TrailParam *paramPtr = &param;
+        ImageResult *imageResultPtr = &imageResult;
+        FilterResult *filterResultPtr = &filterResult;
+
+        //lamba捕获引用会出现莫名其妙的崩溃，所以，这里改为捕获值
+        auto f1 = tp_.commit([=]() {
+            return seemmoAlgo_->Trail(channelId, frameId, bgr24, width, height, *paramPtr, *imageResultPtr, *filterResultPtr);
         });
-        auto f2 = tp_.commit([&]() {
-            return gosunAlgo_->Trail(channelId, frameId, bgr24, width, height, param, imageResult, filterResult);
+        auto f2 = tp_.commit([=]() {
+            return gosunAlgo_->Trail(channelId, frameId, bgr24, width, height, *paramPtr, *imageResultPtr, *filterResultPtr);
         });
 
         int ret1 = f1.get();
+        if (0 != ret1) {
+            LOG_ERROR("SeemmoTrail error, ret {}", ret1);
+        }
         int ret2 = f2.get();
+        if (0 != ret2) {
+            LOG_ERROR("GosunTrail error, ret {}", ret1);
+        }
 
         return ret1 * ret2;	//只有2个都失败才认为失败，所以直接用*
+
     };
 
     int32_t Recognize(
@@ -47,15 +59,25 @@ public:
         const RecogParam &param,
         ImageResult &imageResult
     ) {
-        auto f1 = tp_.commit([&]() {
-            return seemmoAlgo_->Recognize(channelId,  bgr24, width, height, param, imageResult);
+        const RecogParam *paramPtr = &param;
+        ImageResult *imageResultPtr = &imageResult;
+
+        //lamba捕获引用会出现莫名其妙的崩溃，所以，这里改为捕获值
+        auto f1 = tp_.commit([=]() {
+            return seemmoAlgo_->Recognize(channelId,  bgr24, width, height, *paramPtr, *imageResultPtr);
         });
-        auto f2 = tp_.commit([&]() {
-            return gosunAlgo_->Recognize(channelId, bgr24, width, height, param, imageResult);
+        auto f2 = tp_.commit([=]() {
+            return gosunAlgo_->Recognize(channelId, bgr24, width, height, *paramPtr, *imageResultPtr);
         });
 
         int ret1 = f1.get();
+        if (0 != ret1) {
+            LOG_ERROR("SeemmoRecognize error, ret {}", ret1);
+        }
         int ret2 = f2.get();
+        if (0 != ret2) {
+            LOG_ERROR("GosunRecognize error, ret {}", ret1);
+        }
 
         return ret1 * ret2;	//只有2个都失败才认为失败，所以直接用*
     };
