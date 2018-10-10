@@ -44,6 +44,7 @@ private:
         frameRecogPickInternalNum = parseEnvNumValue("FRAME_RECOG_PICK_INTERNAL_NUM", frameRecogPickInternalNum);
         objectDisappearCount = parseEnvNumValue("OBJECT_DISAPPEAR_COUNT", objectDisappearCount);
         validPictureMinWidth = parseEnvNumValue("VALID_PICTURE_MIN_WIDTH", validPictureMinWidth);
+        frameCacheMaxNum = parseEnvNumValue("FRAME_CACHE_MAX_NUM", frameCacheMaxNum);
         notifyServerHost = parseEnvStringValue("NOTIFY_SERVER_HOST", notifyServerHost);
         enableGosunAlgo = parseEnvBoolValue("ENABLE_GOSUN_ALGO", enableGosunAlgo);
         enableSeemmoAlgo = parseEnvBoolValue("ENABLE_SEEMMO_ALGO", enableSeemmoAlgo);
