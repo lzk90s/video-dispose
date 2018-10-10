@@ -14,11 +14,11 @@ GosunAlgoStub::GosunAlgoStub() {
         h.append("/lib");
         chdir(h.c_str());
     }
-    //createSmartFace();
+    createSmartFace();
 }
 
 GosunAlgoStub::~GosunAlgoStub() {
-    //releaseSmartFace();
+    releaseSmartFace();
 }
 
 int32_t GosunAlgoStub::Trail(
@@ -33,8 +33,6 @@ int32_t GosunAlgoStub::Trail(
 ) {
     faceId faceIds[30] = { 0 };
     int32_t faceNum = 30;
-
-    return 0;
 
     int ret = faceTrack((uint8_t*)bgr24, height, width, faceIds, faceNum);
     if (0 != ret) {

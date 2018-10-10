@@ -91,6 +91,7 @@ private:
         //针对人脸特殊处理，目前人脸算法中没有去重，需要自己去重
         for (auto &p : imageResult.faces) {
             if (!sink_.faceObjectSink.ObjectExist(p.guid)) {
+                LOG_INFO("New face object {}", p.guid);
                 sink_.faceNotifier.OnRecognizedObject(channelId, frame, p);
             }
         }

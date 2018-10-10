@@ -13,7 +13,7 @@ namespace vf {
 class Settings {
 public:
     // 默认抽帧时间间隔（毫秒）
-    uint32_t framePickInternalMs = 100;
+    uint32_t framePickInternalMs = 80;
     // 默认抽帧间隔数目（抽帧检测）
     uint32_t framePickInternalNum = 3;
     // 默认帧识别间隔数（在检测抽帧基础上，再抽帧识别）
