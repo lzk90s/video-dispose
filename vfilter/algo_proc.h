@@ -24,7 +24,7 @@ public:
           tpNtf_(1),	//通知线程，启1个。
           sink_(sink) {
         recogFrameCnt = 0;
-        algo_ = NewAlgoStub();
+        algo_ = NewAlgoStub(GlobalSettings::getInstance().enableSeemmoAlgo, GlobalSettings::getInstance().enableGosunAlgo);
         sink_.RegisterFrameHandler(std::bind(&DefaultAlgoProcessor::OnFrame, this,
                                              std::placeholders::_1,
                                              std::placeholders::_2,

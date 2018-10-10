@@ -10,10 +10,17 @@ namespace algo {
 class AlgoStubDelegate : public AlgoStub {
 public:
 
-    AlgoStubDelegate()
-        : tp_(2),
-          seemmoAlgo_(new algo::seemmo::SeemmoAlgoStub()),
-          gosunAlgo_(new algo::gosun::GosunAlgoStub()) {
+    AlgoStubDelegate(bool enableSeemmoAlgo = true, bool enableGosunAlgo = true)
+        : tp_(2) {
+        enableSeemmoAlgo_ = enableSeemmoAlgo;
+        enableGosunAlgo_ = enableGosunAlgo;
+
+        if (enableSeemmoAlgo) {
+            seemmoAlgo_.reset(new algo::seemmo::SeemmoAlgoStub());
+        }
+        if (enableGosunAlgo) {
+            gosunAlgo_.reset(new algo::gosun::GosunAlgoStub());
+        }
     }
 
     int32_t Trail(
@@ -32,10 +39,18 @@ public:
 
         //lamba捕获引用会出现莫名其妙的崩溃，所以，这里改为捕获值
         auto f1 = tp_.commit([=]() {
-            return seemmoAlgo_->Trail(channelId, frameId, bgr24, width, height, *paramPtr, *imageResultPtr, *filterResultPtr);
+            if (enableSeemmoAlgo_) {
+                return seemmoAlgo_->Trail(channelId, frameId, bgr24, width, height, *paramPtr, *imageResultPtr, *filterResultPtr);
+            } else {
+                return 0;
+            }
         });
         auto f2 = tp_.commit([=]() {
-            return gosunAlgo_->Trail(channelId, frameId, bgr24, width, height, *paramPtr, *imageResultPtr, *filterResultPtr);
+            if (enableGosunAlgo_) {
+                return gosunAlgo_->Trail(channelId, frameId, bgr24, width, height, *paramPtr, *imageResultPtr, *filterResultPtr);
+            } else {
+                return 0;
+            }
         });
 
         int ret1 = f1.get();
@@ -64,10 +79,18 @@ public:
 
         //lamba捕获引用会出现莫名其妙的崩溃，所以，这里改为捕获值
         auto f1 = tp_.commit([=]() {
-            return seemmoAlgo_->Recognize(channelId,  bgr24, width, height, *paramPtr, *imageResultPtr);
+            if (enableSeemmoAlgo_) {
+                return seemmoAlgo_->Recognize(channelId, bgr24, width, height, *paramPtr, *imageResultPtr);
+            } else {
+                return 0;
+            }
         });
         auto f2 = tp_.commit([=]() {
-            return gosunAlgo_->Recognize(channelId, bgr24, width, height, *paramPtr, *imageResultPtr);
+            if (enableGosunAlgo_) {
+                return gosunAlgo_->Recognize(channelId, bgr24, width, height, *paramPtr, *imageResultPtr);
+            } else {
+                return 0;
+            }
         });
 
         int ret1 = f1.get();
@@ -86,11 +109,13 @@ private:
     unique_ptr<algo::seemmo::SeemmoAlgoStub> seemmoAlgo_;
     unique_ptr<algo::gosun::GosunAlgoStub> gosunAlgo_;
     threadpool tp_;
+    bool enableSeemmoAlgo_;
+    bool enableGosunAlgo_;
 };
 
 
-AlgoStub *NewAlgoStub() {
-    return new AlgoStubDelegate();
+AlgoStub *NewAlgoStub(bool enableSeemmoAlgo, bool enableGosunAlgo) {
+    return new AlgoStubDelegate(enableSeemmoAlgo, enableGosunAlgo);
 }
 
 void FreeAlgoStub(AlgoStub *&stub) {

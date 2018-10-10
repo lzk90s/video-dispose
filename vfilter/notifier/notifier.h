@@ -41,7 +41,7 @@ public:
 
         //过滤掉无效的图片
         if ((uint32_t)w < GlobalSettings::getInstance().validPictureMinWidth) {
-            LOG_INFO("The picture is too small, ignore it, width {}, height{}", w, h);
+            //LOG_INFO("The picture is too small, ignore it, width {}, height{}", w, h);
             return;
         }
 

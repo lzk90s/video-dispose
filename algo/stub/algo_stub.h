@@ -78,7 +78,7 @@ public:
     };
 };
 
-AlgoStub *NewAlgoStub();
+AlgoStub *NewAlgoStub(bool enableSeemmoAlgo = true, bool enableGosunAlgo = true);
 
 void FreeAlgoStub(AlgoStub *&stub);
 
