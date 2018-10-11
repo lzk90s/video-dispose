@@ -23,7 +23,6 @@ public:
         : tp_(1),	//业务线程是单线程，这样就不需要加锁，也避免后面的图片先比前面的图片去检测
           tpNtf_(1),	//通知线程，启1个。
           sink_(sink) {
-        recogFrameCnt = 0;
         algo_ = NewAlgoStub(GlobalSettings::getInstance().enableSeemmoAlgo, GlobalSettings::getInstance().enableGosunAlgo);
         sink_.RegisterFrameHandler(std::bind(&DefaultAlgoProcessor::OnFrame, this,
                                              std::placeholders::_1,
@@ -52,13 +51,10 @@ private:
             return ret;
         }
 
-        // 跳帧识别
-        if (++recogFrameCnt >= GlobalSettings::getInstance().frameRecogPickInternalNum) {
-            recogFrameCnt = 0;
-            recognizeByImageResult(channelId, frame, imageResult);
-        }
+        // 目标识别
+        recognizeByImageResult(channelId, frame, imageResult);
 
-        // 对filterresult结果进行异步识别，不关心结果
+        // 对择优结果进行识别
         recognizeByFilterResult(channelId, filterResult);
 
         return 0;
@@ -77,25 +73,12 @@ private:
         trailParam.roi.push_back(Point{ 0, (int32_t)height });
         trailParam.roi.push_back(Point{ (int32_t)width, (int32_t)height });
         trailParam.roi.push_back(Point{ (int32_t)width, 0 });
+
         int32_t ret = algo_->Trail(channelId, frameId, bgr24, width, height, trailParam, imageResult, filterResult);
         if (0 != ret) {
             LOG_ERROR("Trail error, ret {}", ret);
             return ret;
         }
-
-        //更新目标池
-        sink_.personObjectSink.SetDetectedObjects(imageResult.pedestrains);
-        sink_.vehicleObjectSink.SetDetectedObjects(imageResult.vehicles);
-        sink_.bikeObjectSink.SetDetectedObjects(imageResult.bikes);
-
-        //针对人脸特殊处理，目前人脸算法中没有去重，需要自己去重
-        for (auto &p : imageResult.faces) {
-            if (!sink_.faceObjectSink.ObjectExist(p.guid)) {
-                LOG_INFO("New face object {}", p.guid);
-                sink_.faceNotifier.OnRecognizedObject(channelId, frame, p);
-            }
-        }
-        sink_.faceObjectSink.SetDetectedObjects(imageResult.faces);
 
         return 0;
     }
@@ -107,28 +90,47 @@ private:
         uint32_t width = frame.cols;
         uint32_t height = frame.rows;
 
-        //根据深瞐的sdk手册，单张图的识别，只设置type和trail,detect
-        for (auto &p : imageResult.bikes) {
+        //根据检测结果，计算需要识别的目标
+        vector<algo::BikeObject> toRecogBikeObjs;
+        sink_.bikeObjectSink.CalcNeedRecognizeObjects(imageResult.bikes, toRecogBikeObjs);
+        for (auto &p : toRecogBikeObjs) {
             RecogParam::ObjLocation loc;
             loc.type = p.type;
             loc.trail = p.trail;
             loc.detect = p.detect;
             recParam.locations.push_back(loc);
         }
-        for (auto &p : imageResult.vehicles) {
+        vector<algo::VehicleObject> toRecogVehicleObjs;
+        sink_.vehicleObjectSink.CalcNeedRecognizeObjects(imageResult.vehicles, toRecogVehicleObjs);
+        for (auto &p : toRecogVehicleObjs) {
             RecogParam::ObjLocation loc;
             loc.type = p.type;
             loc.trail = p.trail;
             loc.detect = p.detect;
             recParam.locations.push_back(loc);
         }
-        for (auto &p : imageResult.pedestrains) {
+        vector<algo::PersonObject> toRecogPersonObjs;
+        sink_.personObjectSink.CalcNeedRecognizeObjects(imageResult.pedestrains, toRecogPersonObjs);
+        for (auto &p : toRecogPersonObjs) {
             RecogParam::ObjLocation loc;
             loc.type = p.type;
             loc.trail = p.trail;
             loc.detect = p.detect;
             recParam.locations.push_back(loc);
         }
+
+        //更新目标目标检测结果
+        sink_.personObjectSink.UpdateDetectedObjects(imageResult.pedestrains);
+        sink_.vehicleObjectSink.UpdateDetectedObjects(imageResult.vehicles);
+        sink_.bikeObjectSink.UpdateDetectedObjects(imageResult.bikes);
+        for (auto &p : imageResult.faces) {
+            //针对人脸特殊处理，目前人脸算法中没有去重，这样简单处理
+            if (!sink_.faceObjectSink.ObjectExist(p.guid)) {
+                LOG_INFO("New face object {}", p.guid);
+                sink_.faceNotifier.OnRecognizedObject(channelId, frame, p);
+            }
+        }
+        sink_.faceObjectSink.UpdateDetectedObjects(imageResult.faces);
 
         ImageResult recImageResult;
         //如果存在识别区域，则进行识别
@@ -138,24 +140,24 @@ private:
                 LOG_ERROR("Recognize error, ret {}", ret);
                 return ret;
             }
-        }
 
-        //更新guid，深瞐识别时没有返回guid
-        for (uint32_t idx = 0; idx < recImageResult.bikes.size(); idx++) {
-            recImageResult.bikes[idx].guid = imageResult.bikes[idx].guid;
-        }
-        for (uint32_t idx = 0; idx < recImageResult.vehicles.size(); idx++) {
-            recImageResult.vehicles[idx].guid = imageResult.vehicles[idx].guid;
-        }
-        for (uint32_t idx = 0; idx < recImageResult.pedestrains.size(); idx++) {
-            recImageResult.pedestrains[idx].guid = imageResult.pedestrains[idx].guid;
+            //更新guid，深瞐识别时没有返回guid
+            for (uint32_t idx = 0; idx < recImageResult.bikes.size(); idx++) {
+                recImageResult.bikes[idx].guid = imageResult.bikes[idx].guid;
+            }
+            for (uint32_t idx = 0; idx < recImageResult.vehicles.size(); idx++) {
+                recImageResult.vehicles[idx].guid = imageResult.vehicles[idx].guid;
+            }
+            for (uint32_t idx = 0; idx < recImageResult.pedestrains.size(); idx++) {
+                recImageResult.pedestrains[idx].guid = imageResult.pedestrains[idx].guid;
+            }
         }
 
         //更新目标池
-        sink_.personObjectSink.SetRecognizedObjects(recImageResult.pedestrains);
-        sink_.vehicleObjectSink.SetRecognizedObjects(recImageResult.vehicles);
-        sink_.bikeObjectSink.SetRecognizedObjects(recImageResult.bikes);
-        sink_.faceObjectSink.SetRecognizedObjects(recImageResult.faces);
+        sink_.personObjectSink.UpdateRecognizedObjects(recImageResult.pedestrains);
+        sink_.vehicleObjectSink.UpdateRecognizedObjects(recImageResult.vehicles);
+        sink_.bikeObjectSink.UpdateRecognizedObjects(recImageResult.bikes);
+        sink_.faceObjectSink.UpdateRecognizedObjects(recImageResult.faces);
 
         return 0;
     }
@@ -267,8 +269,6 @@ private:
     threadpool tpNtf_;
     //sink
     VSink &sink_;
-    //识别帧计数
-    uint32_t recogFrameCnt;
 };
 
 }

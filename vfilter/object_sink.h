@@ -5,6 +5,7 @@
 #include <mutex>
 #include <vector>
 
+#include "common/helper/logger.h"
 #include "algo/stub/object_type.h"
 #include "vfilter/setting.h"
 
@@ -27,8 +28,28 @@ public:
         this->objDisappearHandler_ = h;
     }
 
+    //计算需要识别的目标
+    void CalcNeedRecognizeObjects(vector<T> &objs, vector<T> &recognizableObjs) {
+        unique_lock<mutex> lck(mutex_);
+
+        for (auto &o : objs) {
+            // 1. 目标第一次出现
+            // 2. 目标最新的评分比上一次高
+            if (existObjs_.find(o.guid) == existObjs_.end()) {
+                recognizableObjs.push_back(o);
+            } else {
+                uint32_t currScore = o.score;
+                uint32_t lastScore = existObjs_[o.guid].obj1.score;
+                if ((currScore > lastScore) &&
+                        (currScore - lastScore > GlobalSettings::getInstance().scoreDiff4ReRecognize)) {
+                    recognizableObjs.push_back(o);
+                }
+            }
+        }
+    }
+
     //设置目标
-    void SetDetectedObjects(vector<T> &objs) {
+    void UpdateDetectedObjects(vector<T> &objs) {
         unique_lock<mutex> lck(mutex_);
 
         for (auto &o : objs) {
@@ -37,12 +58,13 @@ public:
                 ObjectWithCounter newObj;
                 newObj.obj1 = o;
                 existObjs_[o.guid] = newObj;
-                //callback
                 if (nullptr != objAppearHandler_) {
-                    objAppearHandler_(o.guid, (void*)&o);
+                    objAppearHandler_(o.guid, (void*)&o);	//callback
                 }
             } else {
                 existObjs_[o.guid].obj1 = o;
+                //重置计数
+                existObjs_[o.guid].ResetCounter();
             }
         }
 
@@ -72,13 +94,13 @@ public:
         //删掉消失的目标
         for (auto &o : disappearedObjs) {
             if (nullptr != objDisappearHandler_) {
-                objDisappearHandler_(o);
+                objDisappearHandler_(o);	//callback
             }
             existObjs_.erase(o);
         }
     }
 
-    void SetRecognizedObjects(vector<T> &objs) {
+    void UpdateRecognizedObjects(vector<T> &objs) {
         unique_lock<mutex> lck(mutex_);
         for (auto &o : objs) {
             if (existObjs_.find(o.guid) != existObjs_.end()) {
@@ -87,11 +109,13 @@ public:
         }
     }
 
-    void GetLatestObjects(vector<T> &t1, vector<T> &t2) {
+    void GetShowableObjects(vector<T> &t1, vector<T> &t2) {
         unique_lock<mutex> lck(mutex_);
         for (auto &o : existObjs_) {
-            t1.push_back(o.second.obj1);
-            t2.push_back(o.second.obj2);
+            if (o.second.Showable()) {
+                t1.push_back(o.second.obj1);
+                t2.push_back(o.second.obj2);
+            }
         }
     }
 
@@ -102,7 +126,7 @@ public:
 
 private:
     class ObjectWithCounter {
-        typedef int32_t OjbectDisappearCounter;
+        typedef uint32_t OjbectDisappearCounter;
 
     public:
         T obj1;		//obj1 存储检测结果
@@ -111,6 +135,14 @@ private:
 
         ObjectWithCounter() {
             cnt = GlobalSettings::getInstance().objectDisappearCount;
+        }
+
+        void ResetCounter() {
+            cnt = GlobalSettings::getInstance().objectDisappearCount;
+        }
+
+        bool Showable() {
+            return cnt >= GlobalSettings::getInstance().objectDisappearCount;
         }
     };
 

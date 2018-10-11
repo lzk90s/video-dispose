@@ -34,7 +34,7 @@ public:
 
     virtual void MixFrame(cv::Mat &frame, ObjectSink<T> &objSink) {
         vector<T> tmpObjs1, tmpObjs2;
-        objSink.GetLatestObjects(tmpObjs1, tmpObjs2);
+        objSink.GetShowableObjects(tmpObjs1, tmpObjs2);
         doMixFrame(frame, tmpObjs1, tmpObjs2);
     }
 
@@ -56,18 +56,31 @@ protected:
         cv::Scalar size{ (double)fontSize, 0.5, 0.1, 0 };
         text_.setFont(nullptr, &size, nullptr, nullptr);
 
-        // 计算所有属性最大字符个数
-        uint32_t maxFontNum = 0;
+        // 计算字符中的宽字符数目和ascii字符数目
+        uint32_t maxWcharFontNum = 0;
+        uint32_t maxAsciiFontNum = 0;
         for (auto &a : attrs) {
             if (a.name.empty()) {
                 continue;
             }
-            wchar_t msg[200] = { 0 };
-            swprintf(msg, 200, L"%hs", a.name.c_str());
-            if (wcslen(msg) > maxFontNum) {
-                maxFontNum = wcslen(msg);
+
+            wchar_t text[200] = { 0 };
+            swprintf(text, 200, L"%hs", a.name.c_str());
+
+            uint32_t lineWcharFontNum = 0;
+            uint32_t lineAsciiFontNum = 0;
+            for (int i = 0; text[i] != '\0'; ++i) {
+                if (!isascii(text[i])) {
+                    lineWcharFontNum++;
+                } else {
+                    lineAsciiFontNum++;
+                }
             }
+            maxWcharFontNum = (lineWcharFontNum > maxWcharFontNum) ? lineWcharFontNum : maxWcharFontNum;
+            maxAsciiFontNum = (lineAsciiFontNum > maxAsciiFontNum) ? lineAsciiFontNum : maxAsciiFontNum;
         }
+
+        uint32_t maxTextPixNum = (maxWcharFontNum * fontSize) + (maxAsciiFontNum * fontSize / 2);
 
         const int32_t MARGIN_LEFT = 8;	//字体与左边界的间隔
         const int32_t MARGIN_TOP = 6;	//字体与上边界的间隔
@@ -79,16 +92,16 @@ protected:
             }
 
             //start x, start y
-            int32_t sx = x + w, sy = y;
-            //如果框的右边离图像的右边距离太近，避免字被截断，则字写在框的左边
-            if ((uint32_t)(frame.cols - sx) < (maxFontNum*fontSize)) {
-                sx = x;
+            int32_t sx = x, sy = y;
+            //如果字体的宽度大于目标的宽度，把字体写在目标框右边
+            if (maxTextPixNum > (uint32_t)w) {
+                sx = x + w;
             }
 
             //字体的开始坐标x，y
             int x1 = sx + MARGIN_LEFT;
             int y1 = sy + idx * (fontSize + MARGIN_TOP);
-            int w1 = maxFontNum * fontSize;
+            int w1 = maxTextPixNum;
             int h1 = fontSize;
 
             //截断处理

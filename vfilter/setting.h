@@ -13,23 +13,23 @@ namespace vf {
 class Settings {
 public:
     // 默认抽帧时间间隔（毫秒）
-    uint32_t framePickInternalMs = 80;
+    uint32_t framePickInternalMs;
     // 默认抽帧间隔数目（抽帧检测）
-    uint32_t framePickInternalNum = 3;
-    // 默认帧识别间隔数（在检测抽帧基础上，再抽帧识别）
-    uint32_t frameRecogPickInternalNum = 6;
+    uint32_t framePickInternalNum;
     // 默认缓存的最大帧数(30秒的帧数)
-    uint32_t frameCacheMaxNum = 30 * (1000 / framePickInternalMs);
+    uint32_t frameCacheMaxNum;
     //目标消失初始计数(当某个目标在超过设置的帧后，还没有检测到，则认为目标已经消失，需要从内存中删掉)
-    uint32_t objectDisappearCount = 8;
+    uint32_t objectDisappearCount;
     //有效图片的最小宽度，小于这个宽度的图片，比较模糊，不予显示
-    uint32_t validPictureMinWidth = 80;
+    uint32_t validPictureMinWidth;
+    //目标评分差大于指定值时，需要重新识别
+    uint32_t scoreDiff4ReRecognize;
     //使能高创算法
-    bool enableGosunAlgo = true;
+    bool enableGosunAlgo;
     //使能深瞐算法
-    bool enableSeemmoAlgo = true;
+    bool enableSeemmoAlgo;
     //通知服务接收地址
-    string notifyServerHost = string("message-transfer:9091");
+    string notifyServerHost;
 
     Settings() {
         init();
@@ -39,15 +39,15 @@ public:
 private:
     void init() {
         //根据环境变量重新设置值
-        framePickInternalMs = parseEnvNumValue("FRAME_PICK_INTERNAL_MS", framePickInternalMs);
-        framePickInternalNum = parseEnvNumValue("FRAME_PICK_INTERNAL_NUM", framePickInternalNum);
-        frameRecogPickInternalNum = parseEnvNumValue("FRAME_RECOG_PICK_INTERNAL_NUM", frameRecogPickInternalNum);
-        objectDisappearCount = parseEnvNumValue("OBJECT_DISAPPEAR_COUNT", objectDisappearCount);
-        validPictureMinWidth = parseEnvNumValue("VALID_PICTURE_MIN_WIDTH", validPictureMinWidth);
-        frameCacheMaxNum = parseEnvNumValue("FRAME_CACHE_MAX_NUM", frameCacheMaxNum);
-        notifyServerHost = parseEnvStringValue("NOTIFY_SERVER_HOST", notifyServerHost);
-        enableGosunAlgo = parseEnvBoolValue("ENABLE_GOSUN_ALGO", enableGosunAlgo);
-        enableSeemmoAlgo = parseEnvBoolValue("ENABLE_SEEMMO_ALGO", enableSeemmoAlgo);
+        framePickInternalMs = parseEnvNumValue("FRAME_PICK_INTERNAL_MS", 80);
+        framePickInternalNum = parseEnvNumValue("FRAME_PICK_INTERNAL_NUM", 3);
+        objectDisappearCount = parseEnvNumValue("OBJECT_DISAPPEAR_COUNT", 10);
+        validPictureMinWidth = parseEnvNumValue("VALID_PICTURE_MIN_WIDTH", 80);
+        frameCacheMaxNum = parseEnvNumValue("FRAME_CACHE_MAX_NUM", 30 * (1000 / framePickInternalMs));
+        notifyServerHost = parseEnvStringValue("NOTIFY_SERVER_HOST", "message-transfer:9091");
+        scoreDiff4ReRecognize = parseEnvNumValue("SCORE_DIFF_4_RE_RECOGNIZE", 5);
+        enableGosunAlgo = parseEnvBoolValue("ENABLE_GOSUN_ALGO", true);
+        enableSeemmoAlgo = parseEnvBoolValue("ENABLE_SEEMMO_ALGO", true);
     }
 
     uint32_t parseEnvNumValue(const string &env, uint32_t defValue) {
@@ -79,11 +79,11 @@ private:
         cout << "Settings -> {"
              << "framePickInternalMs: " << framePickInternalMs << ", "
              << "framePickInternalNum: " << framePickInternalNum << ", "
-             << "frameRecogPickInternalNum: " << frameRecogPickInternalNum << ", "
              << "frameCacheMaxNum: " << frameCacheMaxNum << ", "
              << "objectDisappearCount: " << objectDisappearCount << ", "
              << "enableGosunAlgo: " << enableGosunAlgo << ", "
              << "enableSeemmoAlgo: " << enableSeemmoAlgo << ", "
+             << "scoreDiff4ReRecognize: " << scoreDiff4ReRecognize << ", "
              << "notifyServerHost: " << notifyServerHost << "}"
              << endl;
     }

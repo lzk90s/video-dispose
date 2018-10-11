@@ -37,16 +37,11 @@ public:
     ObjectType type;			// 目标类型
     Rect detect;				// 目标所在区域
     Shift trail;				// 目标跟踪变化
+    uint32_t score;				// 目标评分
 
     BaseObject() {
         type = UNKNOWN;
-    }
-
-    BaseObject(const BaseObject &rhs) {
-        this->guid = rhs.guid;
-        this->type = rhs.type;
-        this->detect = rhs.detect;
-        this->trail = rhs.trail;
+        score = 0;
     }
 };
 
@@ -54,10 +49,12 @@ public:
 class Attribute {
 public:
     string name;	// 属性值
-    bool visable;	//是否在流中可见（流叠加）
+    bool visable;	// 是否在流中可见（流叠加）
+    uint32_t score;	// 评分
 
     Attribute() {
         visable = true;
+        score = 0;
     }
 
     Attribute(const Attribute &rhs) {
@@ -67,6 +64,11 @@ public:
 
     Attribute &WithName(const string &name) {
         this->name = name;
+        return *this;
+    }
+
+    Attribute &WithScore(uint32_t score) {
+        this->score = score;
         return *this;
     }
 };

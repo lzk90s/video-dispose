@@ -178,6 +178,7 @@ private:
             tmp.guid = a.GUID;
             tmp.trail = a.Trail;
             tmp.detect = a.Detect.Body.Rect;
+            tmp.score = a.Detect.Body.Score;
             r.bikes.push_back(tmp);
         }
         for (auto a : root.Pedestrains) {
@@ -186,6 +187,7 @@ private:
             tmp.guid = a.GUID;
             tmp.trail = a.Trail;
             tmp.detect = a.Detect.Body.Rect;
+            tmp.score = a.Detect.Body.Score;
             r.pedestrains.push_back(tmp);
         }
         for (auto a : root.Vehicles) {
@@ -194,6 +196,7 @@ private:
             tmp.guid = a.GUID;
             tmp.trail = a.Trail;
             tmp.detect = a.Detect.Body.Rect;
+            tmp.score = a.Detect.Body.Score;
             r.vehicles.push_back(tmp);
         }
     }
@@ -218,6 +221,7 @@ private:
             tmp.contextCode = a.ContextCode;
             tmp.frameId = a.Timestamp;
             tmp.detect = a.Detect.Body.Rect;
+            tmp.score = a.Detect.Body.Score;
             r.bikes.push_back(tmp);
         }
         for (auto a : root.Pedestrains) {
@@ -228,6 +232,7 @@ private:
             tmp.contextCode = a.ContextCode;
             tmp.frameId = a.Timestamp;
             tmp.detect = a.Detect.Body.Rect;
+            tmp.score = a.Detect.Body.Score;
             r.pedestrains.push_back(tmp);
         }
         for (auto a : root.Vehicles) {
@@ -238,6 +243,7 @@ private:
             tmp.contextCode = a.ContextCode;
             tmp.frameId = a.Timestamp;
             tmp.detect = a.Detect.Body.Rect;
+            tmp.score = a.Detect.Body.Score;
             r.vehicles.push_back(tmp);
         }
         r.releasedFrames = root.ReleaseCacheFrames;
