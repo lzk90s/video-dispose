@@ -213,11 +213,7 @@ static av_cold int init(AVFilterContext *ctx) {
     AlgoContext *privCtx = ctx->priv;
 
     uint32_t channel_id = 0;
-    //解析通道号参数
-    char *val_str = (char*)av_malloc(50);
-    av_opt_get(privCtx, "cid", 0, (uint8_t**)&val_str);
-    channel_id = atoi(val_str);
-    av_free(val_str);
+    av_opt_get_int(privCtx, "cid", 0, (int64_t*)&channel_id);
 
     av_log(NULL, AV_LOG_DEBUG, "init \n");
 
@@ -274,7 +270,7 @@ static int query_formats(AVFilterContext *ctx) {
 #define FLAGS AV_OPT_FLAG_VIDEO_PARAM|AV_OPT_FLAG_FILTERING_PARAM
 
 static const AVOption algo_options[] = {
-    { "cid", "the video channel id", OFFSET(cid), AV_OPT_TYPE_STRING, {.str = "0"}, CHAR_MIN, CHAR_MAX, FLAGS },
+    { "cid", "the video channel id", OFFSET(cid), AV_OPT_TYPE_INT, { .i64 = -1 }, INT_MIN, INT_MAX, FLAGS },
     { NULL }
 
 };
