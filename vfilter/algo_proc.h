@@ -262,8 +262,9 @@ private:
     }
 
 private:
-    //深瞐算法stub
+    //算法stub
     AlgoStub * algo_;
+    //算法异步线程池
     threadpool tp_;
     //通知线程池
     threadpool tpNtf_;
