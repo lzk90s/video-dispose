@@ -21,8 +21,3 @@ brpc + opencv + ffmpeg 开发环境
 
 > docker build -t registry.cn-hangzhou.aliyuncs.com/gosun/seemmo_sdk:latest .
 > docker push registry.cn-hangzhou.aliyuncs.com/gosun/seemmo_sdk:latest
-
-
-## Dockerfile-video
-
-视频处理插件
