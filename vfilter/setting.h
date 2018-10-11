@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include <cstdint>
 #include <string>
@@ -39,11 +39,11 @@ public:
 private:
     void init() {
         //根据环境变量重新设置值
-        framePickInternalMs = parseEnvNumValue("FRAME_PICK_INTERNAL_MS", 80);
+        framePickInternalMs = parseEnvNumValue("FRAME_PICK_INTERNAL_MS", 100);
         framePickInternalNum = parseEnvNumValue("FRAME_PICK_INTERNAL_NUM", 3);
         objectDisappearCount = parseEnvNumValue("OBJECT_DISAPPEAR_COUNT", 10);
         validPictureMinWidth = parseEnvNumValue("VALID_PICTURE_MIN_WIDTH", 80);
-        frameCacheMaxNum = parseEnvNumValue("FRAME_CACHE_MAX_NUM", 30 * (1000 / framePickInternalMs));
+        frameCacheMaxNum = parseEnvNumValue("FRAME_CACHE_MAX_NUM", 20 * (1000 / framePickInternalMs));
         notifyServerHost = parseEnvStringValue("NOTIFY_SERVER_HOST", "message-transfer:9091");
         scoreDiff4ReRecognize = parseEnvNumValue("SCORE_DIFF_4_RE_RECOGNIZE", 10);
         enableGosunAlgo = parseEnvBoolValue("ENABLE_GOSUN_ALGO", true);
