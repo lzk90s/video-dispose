@@ -45,7 +45,7 @@ private:
         validPictureMinWidth = parseEnvNumValue("VALID_PICTURE_MIN_WIDTH", 80);
         frameCacheMaxNum = parseEnvNumValue("FRAME_CACHE_MAX_NUM", 30 * (1000 / framePickInternalMs));
         notifyServerHost = parseEnvStringValue("NOTIFY_SERVER_HOST", "message-transfer:9091");
-        scoreDiff4ReRecognize = parseEnvNumValue("SCORE_DIFF_4_RE_RECOGNIZE", 5);
+        scoreDiff4ReRecognize = parseEnvNumValue("SCORE_DIFF_4_RE_RECOGNIZE", 10);
         enableGosunAlgo = parseEnvBoolValue("ENABLE_GOSUN_ALGO", true);
         enableSeemmoAlgo = parseEnvBoolValue("ENABLE_SEEMMO_ALGO", true);
     }

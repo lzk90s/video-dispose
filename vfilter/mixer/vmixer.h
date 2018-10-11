@@ -18,7 +18,7 @@ using namespace std;
 
 namespace vf {
 static const char *DEFAULT_FONT = "/usr/share/fonts/truetype/simsun.ttf";
-static const int FONT_MIN_SIZE = 20;	//字体最小号
+static const int FONT_MIN_SIZE = 16;	//字体最小号
 static const int FONT_MAX_SIZE = 40;	//字体最大号
 
 
@@ -82,8 +82,8 @@ protected:
 
         uint32_t maxTextPixNum = (maxWcharFontNum * fontSize) + (maxAsciiFontNum * fontSize / 2);
 
-        const int32_t MARGIN_LEFT = 8;	//字体与左边界的间隔
-        const int32_t MARGIN_TOP = 6;	//字体与上边界的间隔
+        const int32_t MARGIN_LEFT = 6;	//字体与左边界的间隔
+        const int32_t MARGIN_TOP = 4;	//字体与上边界的间隔
 
         int idx = 0;
         for (auto &a : attrs) {
@@ -94,7 +94,7 @@ protected:
             //start x, start y
             int32_t sx = x, sy = y;
             //如果字体的宽度大于目标的宽度，把字体写在目标框右边
-            if (maxTextPixNum > (uint32_t)w) {
+            if (textRightForce() || maxTextPixNum > (uint32_t)w) {
                 sx = x + w;
             }
 
@@ -118,7 +118,11 @@ protected:
                 h1 = frame.rows - y1;
             }
 
-            // 超过最大，不显示
+            // 如果宽或者高计算出来为0，说明到最边上了，不显示
+            if (w1== 0 || h1==0) {
+                continue;
+            }
+            // y方向超过最大，不显示多余的
             if (y1 + fontSize > frame.rows) {
                 LOG_DEBUG("Ignore attribute {} to mix", a.name.c_str());
                 continue;
@@ -139,6 +143,11 @@ protected:
 
             idx++;
         }
+    }
+
+    //字体是否强制显示在右边
+    virtual bool textRightForce() {
+        return true;
     }
 
 private:

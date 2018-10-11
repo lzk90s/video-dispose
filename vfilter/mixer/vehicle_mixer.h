@@ -56,6 +56,9 @@ protected:
         }
     }
 
+    bool textRightForce() override {
+        return false;
+    }
 };
 
 }
