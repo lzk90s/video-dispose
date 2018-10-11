@@ -20,6 +20,10 @@ typedef struct tagAttributePO {
     string Code;
     string Name;
     int32_t Score;
+
+    tagAttributePO() {
+        Score = 0;
+    }
 } AttributePO;
 
 typedef struct tagVehicleAttributeGroup {
@@ -63,6 +67,10 @@ typedef struct tagDetectRectPO {
     struct tagCar {
         vector<int32_t> Rect;
     } Car;
+
+    tagDetectRectPO() {
+        Code = 0;
+    }
 } DetectRectPO;
 
 // 人
@@ -71,6 +79,10 @@ typedef struct tagPersonObjectPO {
     string GUID;
     DetectRectPO Detect;
     PersonAttributeGroupPO Recognize;
+
+    tagPersonObjectPO() {
+        Type = 0;
+    }
 } PersonObjectPO;
 
 // 非机动车
@@ -79,6 +91,10 @@ typedef struct tagBikeObjectPO {
     string GUID;
     DetectRectPO Detect;
     vector<PersonObjectPO> Persons;	//非机动车上的人
+
+    tagBikeObjectPO() {
+        Type = 0;
+    }
 } BikeObjectPO;
 
 // 机动车
@@ -87,6 +103,10 @@ typedef struct tagVehicleObjectPO {
     string GUID;
     DetectRectPO Detect;
     VehicleAttributeGroup Recognize;
+
+    tagVehicleObjectPO() {
+        Type = 0;
+    }
 } VehicleObjectPO;
 
 
@@ -96,12 +116,20 @@ typedef struct tagImageResultPO {
     vector<VehicleObjectPO> Vehicles;
     vector<PersonObjectPO> Pedestrains;
     vector<BikeObjectPO> Bikes;
+
+    tagImageResultPO() {
+        Code = 0;
+    }
 } ImageResultPO;
 
 typedef struct tagRecogReplyPO {
     int32_t Code;
     string Message;
     vector<ImageResultPO> ImageResults;
+
+    tagRecogReplyPO() {
+        Code = 0;
+    }
 } RecogReplyPO;
 
 void from_json(const json& j, AttributePO& p) {

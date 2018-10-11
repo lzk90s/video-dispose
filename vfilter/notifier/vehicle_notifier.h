@@ -75,10 +75,10 @@ protected:
         msg.channelId = channelId;
         msg.type = obj.type;
 
-        msg.plateLicence = obj.attrs.plate.name;
-        msg.carPatternName = obj.attrs.brand.name;
-        msg.plateTypeCodeName = obj.attrs.type.name;
-        msg.colorCodeName = obj.attrs.color.name;
+        msg.plateLicence = obj.attrs[algo::VehicleObject::AttrType::PLATE].name;
+        msg.carPatternName = obj.attrs[algo::VehicleObject::AttrType::BRAND].name;
+        msg.plateTypeCodeName = obj.attrs[algo::VehicleObject::AttrType::TYPE].name;
+        msg.colorCodeName = obj.attrs[algo::VehicleObject::AttrType::COLOR].name;
         msg.coDriverPersonCodeName = "";
         msg.callCodeName = "";
         msg.rackCodeName = "";

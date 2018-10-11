@@ -18,6 +18,10 @@ typedef struct tagLocationPO {
     string ContextCode;
     vector<int32_t> Rect;
     vector<int32_t> Trail;
+
+    tagLocationPO() {
+        Type = 0;
+    }
 } LocationPO;
 
 void to_json(json& j, const LocationPO& p) {

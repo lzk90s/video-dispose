@@ -104,6 +104,18 @@ public:
         unique_lock<mutex> lck(mutex_);
         for (auto &o : objs) {
             if (existObjs_.find(o.guid) != existObjs_.end()) {
+                auto &lastObj = existObjs_[o.guid];
+                //对比属性，根据属性的评分判断是否更新目标的属性
+                for (auto &p : o.attrs) {
+                    uint32_t attrKey = p.first;
+                    if (lastObj.obj2.attrs.find(attrKey) != lastObj.obj2.attrs.end()) {
+                        uint32_t currScore = p.second.score;
+                        uint32_t lastScore = lastObj.obj2.attrs[attrKey].score;
+                        if (currScore < lastScore) {
+                            p.second = lastObj.obj2.attrs[attrKey];
+                        }
+                    }
+                }
                 existObjs_[o.guid].obj2 = o;
             }
         }

@@ -28,10 +28,10 @@ protected:
             vector<Attribute> mixableAttrs;
 
             mixableAttrs.push_back(algo::Attribute().WithName(getTypeString(objs1[idx].type)));
-            mixableAttrs.push_back(objs2[idx].attrs.brand);
-            mixableAttrs.push_back(objs2[idx].attrs.color);
-            mixableAttrs.push_back(objs2[idx].attrs.plate);
-            mixableAttrs.push_back(objs2[idx].attrs.type);
+            mixableAttrs.push_back(objs2[idx].attrs[algo::VehicleObject::AttrType::BRAND]);
+            mixableAttrs.push_back(objs2[idx].attrs[algo::VehicleObject::AttrType::COLOR]);
+            mixableAttrs.push_back(objs2[idx].attrs[algo::VehicleObject::AttrType::PLATE]);
+            mixableAttrs.push_back(objs2[idx].attrs[algo::VehicleObject::AttrType::TYPE]);
 
             mixObjectAttributeText(frame, x, y, w, h, mixableAttrs);
         }

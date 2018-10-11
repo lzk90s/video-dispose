@@ -25,25 +25,6 @@ enum ObjectType {
     FACE = 100,			//人脸
 };
 
-typedef vector<int32_t> Rect;		//矩形[x,y,w,h]
-typedef vector<int32_t> Shift;		//位移[x,y]
-typedef vector<int32_t> Point;		//点[x,y]
-
-
-// 目标基础类型
-class BaseObject {
-public:
-    string guid;				// 目标guid
-    ObjectType type;			// 目标类型
-    Rect detect;				// 目标所在区域
-    Shift trail;				// 目标跟踪变化
-    uint32_t score;				// 目标评分
-
-    BaseObject() {
-        type = UNKNOWN;
-        score = 0;
-    }
-};
 
 //目标属性
 class Attribute {
@@ -57,9 +38,9 @@ public:
         score = 0;
     }
 
-    Attribute(const Attribute &rhs) {
-        this->name = rhs.name;
-        this->visable = rhs.visable;
+    Attribute(const string &name, uint32_t score) {
+        this->name = name;
+        this->score = score;
     }
 
     Attribute &WithName(const string &name) {
@@ -73,16 +54,39 @@ public:
     }
 };
 
+typedef vector<int32_t> Rect;		//矩形[x,y,w,h]
+typedef vector<int32_t> Shift;		//位移[x,y]
+typedef vector<int32_t> Point;		//点[x,y]
+typedef map<uint32_t, Attribute> Attributes;
+
+
+// 目标基础类型
+class BaseObject {
+public:
+    string guid;				// 目标guid
+    ObjectType type;			// 目标类型
+    Rect detect;				// 目标所在区域
+    Shift trail;				// 目标跟踪变化
+    uint32_t score;				// 目标评分
+    Attributes attrs; // 目标属性
+
+    BaseObject() {
+        type = UNKNOWN;
+        score = 0;
+    }
+};
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////
 // 机动车
 class VehicleObject : public BaseObject {
 public:
-    struct tagAttributeGroup {
-        Attribute color;
-        Attribute type;
-        Attribute brand;
-        Attribute plate;
-    } attrs;
+    enum AttrType {
+        COLOR,
+        TYPE,
+        BRAND,
+        PLATE,
+    } ;
 };
 
 // 机动车择优
@@ -90,34 +94,38 @@ class VehicleFilter : public BaseObject {
 public:
     string contextCode;			// 上下文code
     int32_t frameId;		// 最优帧的图像id
+
+    VehicleFilter() {
+        frameId = 0;
+    }
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 // 人
 class PersonObject : public BaseObject {
 public:
-    struct tagAttributeGroup {
-        Attribute sex;
-        Attribute age;
-        Attribute upperColor;
-        Attribute bottomColor;
-        Attribute orientation;
-        Attribute hair;
-        Attribute umbrella;
-        Attribute hat;
-        Attribute upperType;
-        Attribute bottomType;
-        Attribute knapsack;
-        Attribute bag;
-        Attribute baby;
-        Attribute messengerBag;
-        Attribute shoulderBag;
-        Attribute glasses;
-        Attribute mask;
-        Attribute upperTexture;
-        Attribute barrow;
-        Attribute trolleyCase;
-    } attrs;
+    enum AttrType {
+        SEX,
+        AGE,
+        UPPER_COLOR,
+        BOTTOM_COLOR,
+        ORIENTATION,
+        HAIR,
+        UMBERLLA,
+        HAT,
+        UPPER_TYPE,
+        BOTTOM_TYPE,
+        KNAPSACK,
+        BAG,
+        BABY,
+        MESSAGER_BAG,
+        SHOULDER_BAG,
+        GLASSES,
+        MASK,
+        UPPER_TEXTURE,
+        BARROW,
+        TROLLEY_CASE
+    };
 };
 
 // 人择优
@@ -125,6 +133,10 @@ class PersonFilter : public BaseObject {
 public:
     string contextCode;			// 上下文code
     int32_t frameId;		// 最优帧的图像id
+
+    PersonFilter() {
+        frameId = 0;
+    }
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -139,6 +151,10 @@ class BikeFilter : public BaseObject {
 public:
     string contextCode;			// 上下文code
     int32_t frameId;		// 最优帧的图像id
+
+    BikeFilter() {
+        frameId = 0;
+    }
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -151,6 +167,10 @@ class FaceFilter : public BaseObject {
 public:
     string contextCode;			// 上下文code
     int32_t frameId;		// 最优帧的图像id
+
+    FaceFilter() {
+        frameId = 0;
+    }
 };
 
 }

@@ -288,10 +288,7 @@ private:
             algo::VehicleObject tmp;
             tmp.type = (algo::ObjectType)a.Type;
             tmp.detect = a.Detect.Body.Rect;
-            tmp.attrs.brand.WithName(a.Recognize.Brand.Name);
-            tmp.attrs.color.WithName(a.Recognize.Color.Name);
-            tmp.attrs.type.WithName(a.Recognize.Type.Name);
-            tmp.attrs.plate.WithName(a.Recognize.Plate.Name);
+            recogAttributesConv(a.Recognize, tmp.attrs);
             r.vehicles.push_back(tmp);
         }
     }
@@ -311,34 +308,34 @@ private:
         }
     }
 
-    void recogAttributesConv(algo::seemmo::rec::PersonAttributeGroupPO &in, algo::PersonObject::tagAttributeGroup &out) {
-        out.age.WithName(in.Age.Name);
-        out.sex.WithName(in.Sex.Name);
-        out.upperColor.WithName(in.UpperColor.Name);
-        out.bottomColor.WithName(in.BottomColor.Name);
-        out.orientation.WithName(in.Orientation.Name);
-        out.hair.WithName(in.Hair.Name);
-        out.umbrella.WithName(in.Umbrella.Name);
-        out.hat.WithName(in.Hat.Name);
-        out.upperType.WithName(in.UpperType.Name);
-        out.bottomType.WithName(in.BottomType.Name);
-        out.knapsack.WithName(in.Knapsack.Name);
-        out.bag.WithName(in.Bag.Name);
-        out.baby.WithName(in.Baby.Name);
-        out.messengerBag.WithName(in.MessengerBag.Name);
-        out.shoulderBag.WithName(in.ShoulderBag.Name);
-        out.glasses.WithName(in.Glasses.Name);
-        out.mask.WithName(in.Mask.Name);
-        out.upperTexture.WithName(in.UpperTexture.Name);
-        out.barrow.WithName(in.Barrow.Name);
-        out.trolleyCase.WithName(in.TrolleyCase.Name);
+    void recogAttributesConv(algo::seemmo::rec::PersonAttributeGroupPO &in, algo::Attributes &out) {
+        out[algo::PersonObject::AttrType::AGE] = algo::Attribute(in.Age.Name, in.Age.Score);
+        out[algo::PersonObject::AttrType::SEX] = algo::Attribute(in.Sex.Name, in.Sex.Score);
+        out[algo::PersonObject::AttrType::UPPER_COLOR] = algo::Attribute(in.UpperColor.Name, in.UpperColor.Score);
+        out[algo::PersonObject::AttrType::BOTTOM_COLOR] = algo::Attribute(in.BottomColor.Name, in.BottomColor.Score);
+        out[algo::PersonObject::AttrType::ORIENTATION] = algo::Attribute(in.Orientation.Name, in.Orientation.Score);
+        out[algo::PersonObject::AttrType::HAIR] = algo::Attribute(in.Hair.Name, in.Hair.Score);
+        out[algo::PersonObject::AttrType::UMBERLLA] = algo::Attribute(in.Umbrella.Name, in.Umbrella.Score);
+        out[algo::PersonObject::AttrType::HAT] = algo::Attribute(in.Hat.Name, in.Hat.Score);
+        out[algo::PersonObject::AttrType::UPPER_TYPE] = algo::Attribute(in.UpperType.Name, in.UpperType.Score);
+        out[algo::PersonObject::AttrType::BOTTOM_TYPE] = algo::Attribute(in.BottomType.Name, in.BottomType.Score);
+        out[algo::PersonObject::AttrType::KNAPSACK] = algo::Attribute(in.Knapsack.Name, in.Knapsack.Score);
+        out[algo::PersonObject::AttrType::BAG] = algo::Attribute(in.Bag.Name, in.Bag.Score);
+        out[algo::PersonObject::AttrType::BABY] = algo::Attribute(in.Baby.Name, in.Baby.Score);
+        out[algo::PersonObject::AttrType::MESSAGER_BAG] = algo::Attribute(in.MessengerBag.Name, in.MessengerBag.Score);
+        out[algo::PersonObject::AttrType::SHOULDER_BAG] = algo::Attribute(in.ShoulderBag.Name, in.ShoulderBag.Score);
+        out[algo::PersonObject::AttrType::GLASSES] = algo::Attribute(in.Glasses.Name, in.Glasses.Score);
+        out[algo::PersonObject::AttrType::MASK] = algo::Attribute(in.Mask.Name, in.Mask.Score);
+        out[algo::PersonObject::AttrType::UPPER_TEXTURE] = algo::Attribute(in.UpperTexture.Name, in.UpperTexture.Score);
+        out[algo::PersonObject::AttrType::BARROW] = algo::Attribute(in.Barrow.Name, in.Barrow.Score);
+        out[algo::PersonObject::AttrType::TROLLEY_CASE] = algo::Attribute(in.TrolleyCase.Name, in.TrolleyCase.Score);
     }
 
-    void recogAttributesConv(algo::seemmo::rec::VehicleAttributeGroup &in, algo::VehicleObject::tagAttributeGroup &out) {
-        out.brand.WithName(in.Brand.Name);
-        out.color.WithName(in.Color.Name);
-        out.type.WithName(in.Type.Name);
-        out.plate.WithName(in.Plate.Name);
+    void recogAttributesConv(algo::seemmo::rec::VehicleAttributeGroup &in, algo::Attributes &out) {
+        out[algo::VehicleObject::AttrType::BRAND] = algo::Attribute(in.Brand.Name, in.Brand.Score);
+        out[algo::VehicleObject::AttrType::COLOR] = algo::Attribute(in.Color.Name, in.Color.Score);
+        out[algo::VehicleObject::AttrType::TYPE] = algo::Attribute(in.Type.Name, in.Type.Score);
+        out[algo::VehicleObject::AttrType::PLATE] =algo::Attribute(in.Plate.Name, in.Plate.Score);
     }
 
 private:

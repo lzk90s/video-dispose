@@ -26,11 +26,11 @@ protected:
             // 需要混到流中的属性
             vector<Attribute> mixableAttrs;
             mixableAttrs.push_back(algo::Attribute().WithName(getTypeString(objs1[idx].type)));
-            mixableAttrs.push_back(objs2[idx].attrs.sex);
-            mixableAttrs.push_back(objs2[idx].attrs.age);
-            mixableAttrs.push_back(objs2[idx].attrs.hair);
-            mixableAttrs.push_back(objs2[idx].attrs.hat);
-            mixableAttrs.push_back(objs2[idx].attrs.upperColor);
+            mixableAttrs.push_back(objs2[idx].attrs[algo::PersonObject::AttrType::SEX]);
+            mixableAttrs.push_back(objs2[idx].attrs[algo::PersonObject::AttrType::AGE]);
+            mixableAttrs.push_back(objs2[idx].attrs[algo::PersonObject::AttrType::HAIR]);
+            mixableAttrs.push_back(objs2[idx].attrs[algo::PersonObject::AttrType::HAT]);
+            mixableAttrs.push_back(objs2[idx].attrs[algo::PersonObject::AttrType::UPPER_COLOR]);
 
             mixObjectAttributeText(frame, x, y, w, h, mixableAttrs);
         }

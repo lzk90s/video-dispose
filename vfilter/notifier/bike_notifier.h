@@ -93,24 +93,24 @@ protected:
 
         //非机动车显示其上人的属性
         for (auto &p : obj.persons) {
-            msg.sexCodeName = p.attrs.sex.name;
-            msg.ageCodeName = p.attrs.age.name;
-            msg.hairCodeName = p.attrs.hair.name;
-            msg.hatCodeName = p.attrs.hat.name;
-            msg.orientationCodeName = p.attrs.orientation.name;
-            msg.knapsackCodeName = p.attrs.knapsack.name;
-            msg.umbrellaCodeName = p.attrs.umbrella.name;
-            msg.bagCodeName = p.attrs.bag.name;
-            msg.maskCodeName = p.attrs.mask.name;
-            msg.glassesCodeName = p.attrs.glasses.name;
-            msg.trolleyCaseCodeName = p.attrs.trolleyCase.name;
-            msg.barrowCodeName = p.attrs.barrow.name;
-            msg.upperTextureCodeName = p.attrs.upperTexture.name;
-            msg.upperColorCodeName = p.attrs.upperColor.name;
-            msg.bottomColorCodeName = p.attrs.bottomColor.name;
-            msg.upperCodeName = p.attrs.upperType.name;
-            msg.bottomCodeName = p.attrs.bottomType.name;
-            msg.babyCodeName = p.attrs.baby.name;
+            msg.sexCodeName = p.attrs[algo::PersonObject::AttrType::SEX].name;
+            msg.ageCodeName = p.attrs[algo::PersonObject::AttrType::AGE].name;
+            msg.hairCodeName = p.attrs[algo::PersonObject::AttrType::HAIR].name;
+            msg.hatCodeName = p.attrs[algo::PersonObject::AttrType::HAT].name;
+            msg.orientationCodeName = p.attrs[algo::PersonObject::AttrType::ORIENTATION].name;
+            msg.knapsackCodeName = p.attrs[algo::PersonObject::AttrType::KNAPSACK].name;
+            msg.umbrellaCodeName = p.attrs[algo::PersonObject::AttrType::UMBERLLA].name;
+            msg.bagCodeName = p.attrs[algo::PersonObject::AttrType::BAG].name;
+            msg.maskCodeName = p.attrs[algo::PersonObject::AttrType::MASK].name;
+            msg.glassesCodeName = p.attrs[algo::PersonObject::AttrType::GLASSES].name;
+            msg.trolleyCaseCodeName = p.attrs[algo::PersonObject::AttrType::TROLLEY_CASE].name;
+            msg.barrowCodeName = p.attrs[algo::PersonObject::AttrType::BARROW].name;
+            msg.upperTextureCodeName = p.attrs[algo::PersonObject::AttrType::UPPER_TEXTURE].name;
+            msg.upperColorCodeName = p.attrs[algo::PersonObject::AttrType::UPPER_COLOR].name;
+            msg.bottomColorCodeName = p.attrs[algo::PersonObject::AttrType::BOTTOM_COLOR].name;
+            msg.upperCodeName = p.attrs[algo::PersonObject::AttrType::UPPER_TYPE].name;
+            msg.bottomCodeName = p.attrs[algo::PersonObject::AttrType::BOTTOM_TYPE].name;
+            msg.babyCodeName = p.attrs[algo::PersonObject::AttrType::BABY].name;
 
             // only one
             break;

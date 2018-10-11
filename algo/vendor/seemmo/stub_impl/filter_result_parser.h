@@ -20,6 +20,10 @@ typedef struct tagDetectPO {
         vector<int32_t> MarginRect;
         int32_t Score;
     } Body;
+
+    tagDetectPO() {
+        Code = 0;
+    }
 } DetectPO;
 
 typedef struct tagObjectPO {
@@ -29,6 +33,11 @@ typedef struct tagObjectPO {
     string GUID;
     vector<int32_t> Trail;
     DetectPO Detect;
+
+    tagObjectPO() {
+        Type = 0;
+        Timestamp = 0;
+    }
 } ObjectPO;
 
 
@@ -39,12 +48,20 @@ typedef struct tagFilterResultPO {
     vector<ObjectPO> Pedestrains;
     vector<ObjectPO> Bikes;
     vector<int32_t> ReleaseCacheFrames;
+
+    tagFilterResultPO() {
+        Code = 0;
+    }
 } FilterResultPO;
 
 typedef struct tagTrailReplyPO {
     int32_t Code;
     string Message;
     vector<FilterResultPO> FilterResults;
+
+    tagTrailReplyPO() {
+        Code = 0;
+    }
 } TrailReplyPO;
 
 
