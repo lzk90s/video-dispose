@@ -47,10 +47,10 @@ CvxText::CvxText(const char* freeType) {
 
 // 释放FreeType资源
 CvxText::~CvxText() {
-    FT_Done_Face(m_face);
-    FT_Done_FreeType(m_library);
     FTC_Manager_RemoveFaceID(m_cacheManager, m_myfaceId);
+    FTC_Manager_Reset(m_cacheManager);
     FTC_Manager_Done(m_cacheManager);
+    FT_Done_FreeType(m_library);
 }
 
 // 获取字体参数:

@@ -212,13 +212,13 @@ static av_cold int init(AVFilterContext *ctx) {
     int ret = 0;
     AlgoContext *privCtx = ctx->priv;
 
-    uint32_t channel_id = 0;
+    uint64_t channel_id = 0;
     av_opt_get_int(privCtx, "cid", 0, (int64_t*)&channel_id);
 
     av_log(NULL, AV_LOG_DEBUG, "init \n");
 
-    av_log(NULL, AV_LOG_INFO, "Channel id %d\n", channel_id);
-    privCtx->cid = channel_id;
+    av_log(NULL, AV_LOG_INFO, "Channel id %ld\n", channel_id);
+    privCtx->cid = (int)channel_id;
 
     handle = dlopen(VFILTER_DLL_NAME, RTLD_LAZY);
     if (NULL == handle) {
