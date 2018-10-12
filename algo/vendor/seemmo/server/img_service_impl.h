@@ -76,6 +76,7 @@ public:
         buildRecLocationByImageResult(detectReply, locs);
 
         if (locs.empty()) {
+            response->set_data(buildEmptyResponse().c_str());
             return;
         }
 
@@ -124,6 +125,11 @@ private:
                 locs.push_back(tmp);
             }
         }
+    }
+
+    string buildEmptyResponse() {
+        string msg = "{\"Code\":0, \"Message\":\"ok\", \"ImageResults\":[]}";
+        return msg;
     }
 
 private:
