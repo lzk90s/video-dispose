@@ -45,8 +45,8 @@ public:
                       request->videochl(),
                       request->timestamp(),
                       /*(const uint8_t*)request->bgr24().data()*/ bgr24,
-                      request->height(),
                       request->width(),
+                      request->height(),
                       request->param(),
                       buf.get(),
                       bufLen);

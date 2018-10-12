@@ -87,7 +87,7 @@ public:
 
     future<int32_t> commitAsyncTask(
         int32_t videoChl,
-        uint64_t timeStamp,
+        uint64_t timestamp,
         const uint8_t *bgr24,
         uint32_t width,
         uint32_t height,
@@ -95,7 +95,16 @@ public:
         char *jsonRsp,
         uint32_t *rspLen
     ) {
-        return tp_->commit(trail, videoChl, timeStamp, bgr24, width, height, param, jsonRsp, rspLen);
+        return tp_->commit(trail, videoChl, timestamp, bgr24, width, height, param, jsonRsp, rspLen);
+    }
+
+    future<int32_t> commitAsyncEndTask(
+        int32_t videoChl,
+        const string &param,
+        char *jsonRsp,
+        uint32_t *rspLen
+    ) {
+        return tp_->commit(trailEnd, videoChl, param, jsonRsp, rspLen);
     }
 
 private:
@@ -118,7 +127,24 @@ private:
             return ret;
         }
         *rspLen = len;
-        return ERR_OK;
+        return 0;
+    }
+
+    static int32_t trailEnd(
+        int32_t videoChl,
+        const string &param,
+        char *jsonRsp,
+        uint32_t *rspLen
+    ) {
+        const char *p = param.c_str();
+        int32_t len = *rspLen;
+        int ret = seemmo_video_pvc_end(1, &videoChl, &p, jsonRsp, len, 2);
+        if (0 != ret) {
+            LOG_ERROR("Call seemmo_video_pvc fail, ret {}", ret);
+            return ret;
+        }
+        *rspLen = len;
+        return 0;
     }
 };
 
@@ -129,7 +155,7 @@ public:
         : BusinessWorker(gpuDevId, SEEMMO_LOAD_TYPE_RECOG, thrNum) {
     }
 
-    future<uint32_t> CommitAsyncTask(
+    future<int32_t> CommitAsyncTask(
         const uint8_t *bgr24,
         uint32_t width,
         uint32_t height,
@@ -137,12 +163,12 @@ public:
         char *jsonRsp,
         uint32_t *rspLen
     ) {
-        return tp_->commit(rec, bgr24, height, width, param, jsonRsp, rspLen);
+        return tp_->commit(rec, bgr24, width, height, param, jsonRsp, rspLen);
     }
 
 private:
 
-    static uint32_t rec(
+    static int32_t rec(
         const uint8_t *bgr24,
         uint32_t width,
         uint32_t height,
@@ -157,7 +183,7 @@ private:
             return ret;
         }
         *rspLen = len;
-        return ERR_OK;
+        return 0;
     }
 };
 
@@ -169,7 +195,7 @@ public:
         : BusinessWorker(gpuDevId, SEEMMO_LOAD_TYPE_ALL, thrNum) {
     }
 
-    future<uint32_t> CommitAsyncTask(
+    future<int32_t> CommitAsyncTask(
         const uint8_t *bgr24,
         uint32_t width,
         uint32_t height,
@@ -177,12 +203,12 @@ public:
         char *jsonRsp,
         uint32_t *rspLen
     ) {
-        return tp_->commit(detectAndRecog, bgr24, height, width, param, jsonRsp, rspLen);
+        return tp_->commit(detectAndRecog, bgr24, width, height, param, jsonRsp, rspLen);
     }
 
 private:
 
-    static uint32_t detectAndRecog(
+    static int32_t detectAndRecog(
         const uint8_t *rgbImg,
         uint32_t width,
         uint32_t height,
@@ -197,10 +223,9 @@ private:
             return ret;
         }
         *rspLen = len;
-        return ERR_OK;
+        return 0;
     }
 };
-
 
 }
 }

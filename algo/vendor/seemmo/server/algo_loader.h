@@ -35,6 +35,13 @@ typedef int32_t (*PF_SeemmoAlgo_Trail)(
     uint32_t &rspLen
 );
 
+typedef int32_t(*PF_SeemmoAlgo_TrailEnd)(
+    int32_t videoChl,
+    const char *param,
+    char *jsonRsp,
+    uint32_t &rspLen
+);
+
 typedef int32_t (*PF_SeemmoAlgo_Recognize)(
     const uint8_t *bgr24,
     uint32_t width,
@@ -91,12 +98,14 @@ public:
         pf_SeemmoAlgo_Init_ = (PF_SeemmoAlgo_Init)dlsym(handle_, "SeemmoAlgo_Init");
         pf_SeemmoAlgo_Destroy_ = (PF_SeemmoAlgo_Destroy)dlsym(handle_, "SeemmoAlgo_Destroy");
         pf_SeemmoAlgo_Trail_ = (PF_SeemmoAlgo_Trail)dlsym(handle_, "SeemmoAlgo_Trail");
+        pf_SeemmoAlgo_TrailEnd_ = (PF_SeemmoAlgo_TrailEnd)dlsym(handle_, "SeemmoAlgo_TrailEnd");
         pf_SeemmoAlgo_Recognize_ = (PF_SeemmoAlgo_Recognize)dlsym(handle_, "SeemmoAlgo_Recognize");
         pf_SeemmoAlgo_DetectRecognize = (PF_SeemmoAlgo_DetectRecognize)dlsym(handle_, "SeemmoAlgo_DetectRecognize");
 
         if (nullptr == pf_SeemmoAlgo_Init_ ||
                 nullptr == pf_SeemmoAlgo_Destroy_ ||
                 nullptr == pf_SeemmoAlgo_Trail_   ||
+                nullptr == pf_SeemmoAlgo_TrailEnd_ ||
                 nullptr == pf_SeemmoAlgo_Recognize_ ||
                 nullptr == pf_SeemmoAlgo_DetectRecognize) {
             throw runtime_error("invalid symbol in dll");
@@ -119,6 +128,7 @@ public:
             pf_SeemmoAlgo_Init_ = nullptr;
             pf_SeemmoAlgo_Destroy_ = nullptr;
             pf_SeemmoAlgo_Trail_ = nullptr;
+            pf_SeemmoAlgo_TrailEnd_ = nullptr;
             pf_SeemmoAlgo_Recognize_ = nullptr;
             handle_ = nullptr;
         }
@@ -130,6 +140,13 @@ public:
             throw runtime_error("Nullpointer");
         }
         return pf_SeemmoAlgo_Trail_(videoChl, timestamp, bgr24, width, height, param.c_str(), jsonRsp, rspLen);
+    }
+
+    int32_t TrailEnd(int32_t videoChl, const string &param, char *jsonRsp, uint32_t &rspLen) {
+        if (nullptr == pf_SeemmoAlgo_Trail_) {
+            throw runtime_error("Nullpointer");
+        }
+        return pf_SeemmoAlgo_TrailEnd_(videoChl, param.c_str(), jsonRsp, rspLen);
     }
 
     int32_t Recognize(const uint8_t *bgr24, uint32_t width, uint32_t height, const string &param, char *jsonRsp,
@@ -153,6 +170,7 @@ private:
     PF_SeemmoAlgo_Init pf_SeemmoAlgo_Init_;
     PF_SeemmoAlgo_Destroy pf_SeemmoAlgo_Destroy_;
     PF_SeemmoAlgo_Trail pf_SeemmoAlgo_Trail_;
+    PF_SeemmoAlgo_TrailEnd pf_SeemmoAlgo_TrailEnd_;
     PF_SeemmoAlgo_Recognize pf_SeemmoAlgo_Recognize_;
     PF_SeemmoAlgo_DetectRecognize pf_SeemmoAlgo_DetectRecognize;
 };

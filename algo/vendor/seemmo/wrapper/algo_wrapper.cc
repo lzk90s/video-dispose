@@ -53,12 +53,12 @@ public:
         // 初始化worker
         trailWorker = std::make_shared<TrailWorker>(gpuDevId_, videoThrNum);
         recWorker = std::make_shared<RecognizeWorker>(gpuDevId_, imgThrNum);
-        decRecWorker = std::make_shared<DetectRecognizeWorker>(gpuDevId_, imgThrNum);
+        //decRecWorker = std::make_shared<DetectRecognizeWorker>(gpuDevId_, imgThrNum);
 
         // 等待所有worker启动完成
         trailWorker->WaitStartOk();
         recWorker->WaitStartOk();
-        decRecWorker->WaitStartOk();
+        //decRecWorker->WaitStartOk();
     }
 
     void Destroy() {
@@ -66,12 +66,12 @@ public:
         //深瞐sdk需要并发退出，不能串行停，否则会死锁
         trailWorker->Close();
         recWorker->Close();
-        decRecWorker->Close();
+        //decRecWorker->Close();
 
         //等待各个worker退出完成
         trailWorker->WaitStopOk();
         recWorker->WaitStopOk();
-        decRecWorker->WaitStopOk();
+        //decRecWorker->WaitStopOk();
 
         // 卸载深瞐sdk
         seemmo_uninit();
@@ -79,15 +79,26 @@ public:
     }
 
     uint32_t Trail(
-        int32_t videoChl, uint64_t timeStamp,
+        int32_t videoChl,
+        uint64_t timestamp,
         const uint8_t *bgr24,
-        uint32_t height,
         uint32_t width,
+        uint32_t height,
         const string &param,
         char *jsonRsp,
         uint32_t *rspLen
     ) {
-        auto f = trailWorker->commitAsyncTask(videoChl, timeStamp, bgr24, height, width, param, jsonRsp, rspLen);
+        auto f = trailWorker->commitAsyncTask(videoChl, timestamp, bgr24, width, height, param, jsonRsp, rspLen);
+        return f.get();
+    }
+
+    uint32_t TrailEnd(
+        int32_t videoChl,
+        const string &param,
+        char *jsonRsp,
+        uint32_t *rspLen
+    ) {
+        auto f = trailWorker->commitAsyncEndTask(videoChl, param, jsonRsp, rspLen);
         return f.get();
     }
 
@@ -99,7 +110,7 @@ public:
         char *jsonRsp,
         uint32_t *rspLen
     ) {
-        auto f = recWorker->CommitAsyncTask(bgr24, height, width, param, jsonRsp, rspLen);
+        auto f = recWorker->CommitAsyncTask(bgr24, width, height, param, jsonRsp, rspLen);
         return f.get();
     }
 
@@ -111,8 +122,9 @@ public:
         char *jsonRsp,
         uint32_t *rspLen
     ) {
-        auto f = decRecWorker->CommitAsyncTask(bgr24, height, width, param, jsonRsp, rspLen);
-        return f.get();
+        //auto f = decRecWorker->CommitAsyncTask(bgr24, width, height, param, jsonRsp, rspLen);
+        //return f.get();
+        return -1;
     }
 
 private:
@@ -157,7 +169,7 @@ int32_t SeemmoAlgo_Destroy(void) {
 
 int32_t SeemmoAlgo_Trail(
     int32_t videoChl,
-    uint64_t timeStamp,
+    uint64_t timestamp,
     const uint8_t *bgr24,
     uint32_t width,
     uint32_t height,
@@ -165,7 +177,16 @@ int32_t SeemmoAlgo_Trail(
     char *jsonRsp,
     uint32_t &rspLen
 ) {
-    return AlgoSingleton::getInstance().Trail(videoChl, timeStamp, bgr24, height, width, param, jsonRsp, &rspLen);
+    return AlgoSingleton::getInstance().Trail(videoChl, timestamp, bgr24, width, height, param, jsonRsp, &rspLen);
+}
+
+int32_t SeemmoAlgo_TrailEnd(
+    int32_t videoChl,
+    const char *param,
+    char *jsonRsp,
+    uint32_t &rspLen
+) {
+    return AlgoSingleton::getInstance().TrailEnd(videoChl, param, jsonRsp, &rspLen);
 }
 
 int32_t SeemmoAlgo_Recognize(

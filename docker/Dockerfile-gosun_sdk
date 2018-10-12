@@ -2,4 +2,38 @@ FROM ubuntu:16.04
 
 WORKDIR /root/gosun_sdk
 
-COPY . .
+RUN rm /usr/bin/python && \
+    ln -s /usr/bin/python3 /usr/bin/python && \
+    sed -i 's/archive.ubuntu.com/mirrors.aliyun.com/g' /etc/apt/sources.list && \
+    apt-get -qq update && \
+    apt-get install -y --no-install-recommends  --fix-missing \
+      build-essential \
+      cmake \
+      git \
+      libgoogle-glog-dev \
+      libgtest-dev \
+      libiomp-dev \
+      libleveldb-dev \
+      liblmdb-dev \
+      libopencv-dev \
+      libopenmpi-dev \
+      libsnappy-dev \
+      libprotobuf-dev \
+      openmpi-bin \
+      openmpi-doc \
+      protobuf-compiler \
+      python-dev \
+      python-pip \
+      libgflags-dev && \
+    pip install --user \
+      future \
+      numpy \
+      protobuf
+    
+RUN cd /root/ && \
+    git clone https://github.com/pytorch/pytorch.git && \
+    cd pytorch && \
+    git submodule update --init --recursive && \
+    python setup.py install
+
+#COPY . .

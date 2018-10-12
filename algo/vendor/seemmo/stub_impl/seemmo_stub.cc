@@ -11,7 +11,7 @@
 #include "common/helper/logger.h"
 #include "algo/vendor/seemmo/stub_impl/seemmo_stub.h"
 #include "algo/vendor/seemmo/rpc/service.pb.h"
-#include "algo/vendor/seemmo/stub_impl/filter_param_builder.h"
+#include "algo/vendor/seemmo/stub_impl/detect_param_builder.h"
 #include "algo/vendor/seemmo/stub_impl/filter_result_parser.h"
 #include "algo/vendor/seemmo/stub_impl/rec_param_builder.h"
 #include "algo/vendor/seemmo/stub_impl/rec_result_parser.h"
@@ -73,9 +73,9 @@ public:
         request.set_width(width);
         request.set_height(height);
 
-        trail::DetectRegionPO regionPO;
+        detect::DetectRegionPO regionPO;
         fillDetectRegion(param, regionPO);
-        request.set_param(trail::FilterParamBuilder().Build(regionPO).c_str());
+        request.set_param(detect::DetectParamBuilder().Build(regionPO).c_str());
 
         stub_->Trail(&cntl, &request, &reply, NULL);
         if (cntl.Failed()) {
@@ -83,9 +83,10 @@ public:
             return cntl.ErrorCode();
         }
 
-        // parse response message
-        algo::seemmo::detect::DetectReplyPO detectRspPO;
-        algo::seemmo::detect::DetectResponseParser().Parse(reply.data(), detectRspPO);
+        // parse detect result
+        detect::DetectReplyPO detectRspPO;
+        detect::DetectResponseParser().Parse(reply.data(), detectRspPO);
+        // parse filter result
         trail::TrailReplyPO trailRspPO;
         trail::FilterResponseParser().Parse(reply.data(), trailRspPO);
 
@@ -172,7 +173,7 @@ private:
         //目前没有用批量方式，所以，只取第一个imageresult即可
         detect::ImageResultPO root = p.ImageResults.at(0);
 
-        for (auto a : root.Bikes) {
+        for (auto &a : root.Bikes) {
             algo::BikeObject tmp;
             tmp.type = (algo::ObjectType)a.Type;
             tmp.guid = a.GUID;
@@ -181,7 +182,7 @@ private:
             tmp.score = a.Detect.Body.Score;
             r.bikes.push_back(tmp);
         }
-        for (auto a : root.Pedestrains) {
+        for (auto &a : root.Pedestrains) {
             algo::PersonObject tmp;
             tmp.type = (algo::ObjectType)a.Type;
             tmp.guid = a.GUID;
@@ -190,7 +191,7 @@ private:
             tmp.score = a.Detect.Body.Score;
             r.pedestrains.push_back(tmp);
         }
-        for (auto a : root.Vehicles) {
+        for (auto &a : root.Vehicles) {
             algo::VehicleObject tmp;
             tmp.type = (algo::ObjectType)a.Type;
             tmp.guid = a.GUID;
@@ -213,7 +214,7 @@ private:
         //目前没有用批量方式，所以，只取第一个imageresult即可
         trail::FilterResultPO root = p.FilterResults.at(0);
 
-        for (auto a : root.Bikes) {
+        for (auto &a : root.Bikes) {
             algo::BikeFilter tmp;
             tmp.type = (algo::ObjectType)a.Type;
             tmp.guid = a.GUID;
@@ -224,7 +225,7 @@ private:
             tmp.score = a.Detect.Body.Score;
             r.bikes.push_back(tmp);
         }
-        for (auto a : root.Pedestrains) {
+        for (auto &a : root.Pedestrains) {
             algo::PersonFilter tmp;
             tmp.type = (algo::ObjectType)a.Type;
             tmp.guid = a.GUID;
@@ -235,7 +236,7 @@ private:
             tmp.score = a.Detect.Body.Score;
             r.pedestrains.push_back(tmp);
         }
-        for (auto a : root.Vehicles) {
+        for (auto &a : root.Vehicles) {
             algo::VehicleFilter tmp;
             tmp.type = (algo::ObjectType)a.Type;
             tmp.guid = a.GUID;
@@ -261,7 +262,7 @@ private:
         //目前没有用批量方式，所以，只取第一个imageresult即可
         rec::ImageResultPO root = p.ImageResults.at(0);
 
-        for (auto a : root.Bikes) {
+        for (auto &a : root.Bikes) {
             algo::BikeObject tmp;
             tmp.type = (algo::ObjectType)a.Type;
             tmp.detect = a.Detect.Body.Rect;
@@ -277,14 +278,14 @@ private:
             }
             r.bikes.push_back(tmp);
         }
-        for (auto a : root.Pedestrains) {
+        for (auto &a : root.Pedestrains) {
             algo::PersonObject tmp;
             tmp.type = (algo::ObjectType)a.Type;
             tmp.detect = a.Detect.Body.Rect;
             recogAttributesConv(a.Recognize, tmp.attrs);
             r.pedestrains.push_back(tmp);
         }
-        for (auto a : root.Vehicles) {
+        for (auto &a : root.Vehicles) {
             algo::VehicleObject tmp;
             tmp.type = (algo::ObjectType)a.Type;
             tmp.detect = a.Detect.Body.Rect;
@@ -293,12 +294,12 @@ private:
         }
     }
 
-    void fillDetectRegion(const TrailParam &r, trail::DetectRegionPO &regionPO) {
+    void fillDetectRegion(const TrailParam &r, detect::DetectRegionPO &regionPO) {
         regionPO.regions = r.roi;
     }
 
     void fillLocations(const RecogParam &r, vector<rec::LocationPO> &locPOArray) {
-        for (auto loc : r.locations) {
+        for (auto &loc : r.locations) {
             rec::LocationPO l;
             l.ContextCode = loc.ContextCode;
             l.Rect = loc.detect;

@@ -41,6 +41,14 @@ int32_t SeemmoAlgo_Trail(
     uint32_t &rspLen
 );
 
+//视频跟踪结束，强制输出结果
+int32_t SeemmoAlgo_TrailEnd(
+    int32_t videoChl,
+    const char *param,
+    char *jsonRsp,
+    uint32_t &rspLen
+);
+
 //视频图像识别
 int32_t SeemmoAlgo_Recognize(
     const uint8_t *bgr24,

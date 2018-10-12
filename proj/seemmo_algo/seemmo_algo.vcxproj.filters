@@ -27,9 +27,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\algo\vendor\seemmo\stub_impl\filter_param_builder.h">
-      <Filter>源文件\stub_impl</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\algo\vendor\seemmo\stub_impl\filter_result_parser.h">
       <Filter>源文件\stub_impl</Filter>
     </ClInclude>
@@ -62,6 +59,9 @@
     </ClInclude>
     <ClInclude Include="..\..\algo\vendor\seemmo\server\img_service_impl.h">
       <Filter>源文件\server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\algo\vendor\seemmo\stub_impl\detect_param_builder.h">
+      <Filter>源文件\stub_impl</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
