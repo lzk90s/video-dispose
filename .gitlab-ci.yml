@@ -3,7 +3,7 @@ image: tico/docker
 build:
   stage: build
   script:
-    - "docker build -t registry.cn-hangzhou.aliyuncs.com/gosun/video-dispose:latest"
+    - "docker build -t registry.cn-hangzhou.aliyuncs.com/gosun/video-dispose:latest ."
   only:
     - master
   tags:
