@@ -75,6 +75,10 @@ public:
         detect::DetectResponseParser().Parse(buf1.get(), detectReply);
         buildRecLocationByImageResult(detectReply, locs);
 
+        if (locs.empty()) {
+            return;
+        }
+
         //Ê¶±ð
         uint32_t bufLen2 = 1024 * 1024 * 5;
         unique_ptr<char[]> buf2(new char[bufLen2]);
