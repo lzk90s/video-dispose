@@ -54,6 +54,8 @@ protected:
         msg.channelId = channelId;
         msg.type = obj.type;
 
+        LOG_INFO("---------------------DDDDDDDDDDDDDDDDDDDDDDDDD----------------------DDDDDDD");
+
         json j = msg;
         return j.dump();
     }

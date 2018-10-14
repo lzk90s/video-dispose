@@ -5,7 +5,7 @@ MODULE_SUFFIX=.so
 
 
 INC =-I$(TOP_DIR) -I$(TOP_DIR)/thirdparty -I$(SEEMMO_SDK_HOME)/include
-LIB =-L$(TOP_DIR) -L$(SEEMMO_SDK_HOME)/lib -L$(OPENCV_HOME)/lib -lexport_sdk -lpthread
+LIB =-L/usr/local/lib -L$(TOP_DIR) -L$(SEEMMO_SDK_HOME)/lib -L$(OPENCV_HOME)/lib -lexport_sdk -lpthread
 
 
 CXXFLAGS = $(INC) -std=c++11 -fPIC -Wall

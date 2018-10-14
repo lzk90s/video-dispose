@@ -104,6 +104,9 @@ private:
             //目前没有用批量方式，所以，只取第一个imageresult即可
             detect::ImageResultPO root = p.ImageResults.at(0);
             for (auto &a : root.Bikes) {
+                if (a.GUID.empty()) {
+                    continue;
+                }
                 rec::LocationPO tmp;
                 tmp.Type = a.Type;
                 tmp.Trail = a.Trail;
@@ -111,6 +114,9 @@ private:
                 locs.push_back(tmp);
             }
             for (auto &a : root.Pedestrains) {
+                if (a.GUID.empty()) {
+                    continue;
+                }
                 rec::LocationPO tmp;
                 tmp.Type = a.Type;
                 tmp.Trail = a.Trail;
@@ -118,6 +124,9 @@ private:
                 locs.push_back(tmp);
             }
             for (auto &a : root.Vehicles) {
+                if (a.GUID.empty()) {
+                    continue;
+                }
                 rec::LocationPO tmp;
                 tmp.Type = a.Type;
                 tmp.Trail = a.Trail;

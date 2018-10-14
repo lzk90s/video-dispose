@@ -3,8 +3,8 @@ TOP_DIR=../../../
 MODULE_NAME=libseemmo_stub_impl
 MODULE_SUFFIX=.so
 
-INC =-I$(TOP_DIR) -I$(TOP_DIR)/thirdparty -I$(TOP_DIR)/common
-LIB =-lbrpc -lprotobuf -lgflags -lz -lleveldb -lpthread -ldl -lssl -lcrypto
+INC =-I$(TOP_DIR) -I$(TOP_DIR)/thirdparty 
+LIB =-L/usr/local/lib -lbrpc /usr/local/lib/libgflags.a -lprotobuf -lz -lleveldb -lpthread -ldl -lssl -lcrypto
 
 CXXFLAGS = $(INC) -std=c++11 -fPIC -Wall
 LDFLAGS = $(LIB)

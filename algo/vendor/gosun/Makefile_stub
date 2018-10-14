@@ -4,7 +4,7 @@ MODULE_NAME=libgosun_stub_impl
 MODULE_SUFFIX=.so
 
 INC =-I$(GOSUN_SDK_HOME)/include -I$(TOP_DIR) -I$(TOP_DIR)/thirdparty -I$(TOP_DIR)/common
-LIB =-L$(GOSUN_SDK_HOME)/lib -lpthread -lSmartFace -luuid -lopenblas -lopencv_world
+LIB =-L$(GOSUN_SDK_HOME)/lib -lpthread -lSmartFace -lCaffe2FaceDetector -luuid -lopenblas -lopencv_core -lopencv_imgproc -lcaffe2 -lcaffe2_gpu -lcaffe2_detectron_ops_gpu
 #LIB =-L$(GOSUN_SDK_HOME)/lib -lpthread `pkg-config --libs opencv` -lopenblas -lSmartface 
 
 CXXFLAGS = $(INC) -std=c++11 -fPIC -Wall

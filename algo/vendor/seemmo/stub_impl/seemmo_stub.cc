@@ -3,7 +3,6 @@
 #include <string>
 #include <cassert>
 
-#include <gflags/gflags.h>
 #include <butil/logging.h>
 #include <butil/time.h>
 #include <brpc/channel.h>
@@ -17,16 +16,6 @@
 #include "algo/vendor/seemmo/stub_impl/rec_result_parser.h"
 #include "algo/vendor/seemmo/stub_impl/detect_result_parser.h"
 #include "algo/vendor/seemmo/shm/shmdata.h"
-
-// service param
-DEFINE_string(attachment, "foo", "Carry this along with requests");
-DEFINE_string(protocol, "baidu_std", "Protocol type. Defined in src/brpc/options.proto");
-DEFINE_string(connection_type, "single", "Connection type. Available values: single, pooled, short");
-DEFINE_string(server, "0.0.0.0:7000", "IP Address of server");
-DEFINE_string(load_balancer, "", "The algorithm for load balancing");
-DEFINE_int32(timeout_ms, 2000, "RPC timeout in milliseconds");
-DEFINE_int32(max_retry, 0, "Max retries(not including the first RPC)");
-DEFINE_string(http_content_type, "application/json", "Content type of http request");
 
 using namespace std;
 
@@ -147,12 +136,13 @@ private:
     void init() {
         channel_.reset(new brpc::Channel);
 
+
         brpc::ChannelOptions options;
-        options.protocol = FLAGS_protocol;
-        options.connection_type = FLAGS_connection_type;
-        options.timeout_ms = FLAGS_timeout_ms/*milliseconds*/;
-        options.max_retry = FLAGS_max_retry;
-        if (channel_->Init(FLAGS_server.c_str(), FLAGS_load_balancer.c_str(), &options) != 0) {
+        options.protocol = "baidu_std";
+        options.connection_type = "single";
+        options.timeout_ms = 2000/*milliseconds*/;
+        options.max_retry = 0;
+        if (channel_->Init("0.0.0.0:7000", "", &options) != 0) {
             LOG_ERROR("Fail to initialize channel");
             throw runtime_error("brpc init error");
         }
@@ -174,6 +164,9 @@ private:
         detect::ImageResultPO root = p.ImageResults.at(0);
 
         for (auto &a : root.Bikes) {
+            if (a.GUID.empty()) {
+                continue;
+            }
             algo::BikeObject tmp;
             tmp.type = (algo::ObjectType)a.Type;
             tmp.guid = a.GUID;
@@ -183,6 +176,9 @@ private:
             r.bikes.push_back(tmp);
         }
         for (auto &a : root.Pedestrains) {
+            if (a.GUID.empty()) {
+                continue;
+            }
             algo::PersonObject tmp;
             tmp.type = (algo::ObjectType)a.Type;
             tmp.guid = a.GUID;
@@ -192,6 +188,9 @@ private:
             r.pedestrains.push_back(tmp);
         }
         for (auto &a : root.Vehicles) {
+            if (a.GUID.empty()) {
+                continue;
+            }
             algo::VehicleObject tmp;
             tmp.type = (algo::ObjectType)a.Type;
             tmp.guid = a.GUID;

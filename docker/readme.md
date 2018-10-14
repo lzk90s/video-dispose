@@ -4,6 +4,8 @@
 
 brpc + opencv + ffmpeg 开发环境
 
+> docker build -t registry.cn-hangzhou.aliyuncs.com/gosun/brpc_opencv_ffmpeg:latest -f Dockerfile-brpc_opencv_ffmpeg  .
+
 
 ## Dockerfile-gosun_sdk
 

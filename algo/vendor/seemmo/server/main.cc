@@ -2,7 +2,7 @@
 #include <string>
 
 #include <gflags/gflags.h>
-#include <butil/logging.h>
+//#include <butil/logging.h>
 #include <brpc/server.h>
 
 #include "algo/vendor/seemmo/server/algo_loader.h"
@@ -48,12 +48,12 @@ int main(int argc, char* argv[]) {
     // use brpc::SERVER_OWNS_SERVICE.
     if (server.AddService(&videoProcServiceImpl,
                           brpc::SERVER_DOESNT_OWN_SERVICE) != 0) {
-        LOG(ERROR) << "Fail to add service";
+        cout << "Fail to add service";
         return -1;
     }
     if (server.AddService(&imgProcServiceImpl,
                           brpc::SERVER_DOESNT_OWN_SERVICE) != 0) {
-        LOG(ERROR) << "Fail to add service";
+        cout << "Fail to add service";
         return -1;
     }
 
@@ -61,13 +61,13 @@ int main(int argc, char* argv[]) {
     brpc::ServerOptions options;
     options.idle_timeout_sec = FLAGS_idle_timeout_s;
     if (server.Start(FLAGS_port, &options) != 0) {
-        LOG(ERROR) << "Fail to start EchoServer";
+        cout << "Fail to start EchoServer";
         return -1;
     }
 
     // Wait until Ctrl-C is pressed, then Stop() and Join() the server.
     server.RunUntilAskedToQuit();
-    LOG(INFO) << "Quit";
+    cout << "Quit";
 
     return 0;
 }

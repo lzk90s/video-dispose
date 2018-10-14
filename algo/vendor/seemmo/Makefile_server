@@ -4,7 +4,7 @@ MODULE_NAME=seemmo_algo_server
 MODULE_SUFFIX=
 
 INC =-I$(TOP_DIR) -I$(TOP_DIR)/thirdparty -I$(TOP_DIR)/common
-LIB =-lbrpc -lprotobuf -lgflags -lz -lleveldb -lpthread -ldl -lssl -lcrypto -lturbojpeg
+LIB =-L/usr/local/lib -lbrpc -lgflags -lprotobuf -lz -lleveldb -lpthread -ldl -lssl -lcrypto -lturbojpeg
 
 CXXFLAGS = $(INC) -std=c++11 -fPIC -Wall
 LDFLAGS = $(LIB)
