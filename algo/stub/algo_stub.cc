@@ -1,6 +1,8 @@
 
 #include "common/helper/logger.h"
 #include "common/helper/threadpool.h"
+#include "common/helper/counttimer.h"
+
 #include "algo/stub/algo_stub.h"
 #include "algo/vendor/seemmo/stub_impl/seemmo_stub.h"
 #include "algo/vendor/gosun/stub_impl/gosun_stub.h"
@@ -14,12 +16,17 @@ public:
         : tp_(2) {
         enableSeemmoAlgo_ = enableSeemmoAlgo;
         enableGosunAlgo_ = enableGosunAlgo;
+        gosunAlgoStartOk = false;
 
         if (enableSeemmoAlgo) {
             seemmoAlgo_.reset(new algo::seemmo::SeemmoAlgoStub());
         }
         if (enableGosunAlgo) {
-            gosunAlgo_.reset(new algo::gosun::GosunAlgoStub());
+            //由于高创算法还需要加载算法库，比较慢。异步加载
+            tp_.commit([this]() {
+                gosunAlgo_.reset(new algo::gosun::GosunAlgoStub());
+                gosunAlgoStartOk = true;	//设置启动ok
+            });
         }
     }
 
@@ -40,6 +47,7 @@ public:
         //lamba捕获引用会出现莫名其妙的崩溃，所以，这里改为捕获值
         auto f1 = tp_.commit([=]() {
             if (enableSeemmoAlgo_) {
+                //CountTimer t1("Seemmo_Trail");
                 return seemmoAlgo_->Trail(channelId, frameId, bgr24, width, height, *paramPtr, *imageResultPtr, *filterResultPtr);
             } else {
                 return 0;
@@ -47,7 +55,14 @@ public:
         });
         auto f2 = tp_.commit([=]() {
             if (enableGosunAlgo_) {
-                return gosunAlgo_->Trail(channelId, frameId, bgr24, width, height, *paramPtr, *imageResultPtr, *filterResultPtr);
+                //CountTimer t1("Gosun_Trail");
+                //double check多线程可能有问题，不过影响不大，可以忽略
+                if (gosunAlgoStartOk) {
+                    if (gosunAlgoStartOk) {
+                        return gosunAlgo_->Trail(channelId, frameId, bgr24, width, height, *paramPtr, *imageResultPtr, *filterResultPtr);
+                    }
+                }
+                return -1;	// return error
             } else {
                 return 0;
             }
@@ -59,7 +74,7 @@ public:
         }
         int ret2 = f2.get();
         if (0 != ret2) {
-            LOG_ERROR("GosunTrail error, ret {}", ret1);
+            LOG_ERROR("GosunTrail error, ret {}", ret2);
         }
 
         return ret1 * ret2;	//只有2个都失败才认为失败，所以直接用*
@@ -80,6 +95,7 @@ public:
         //lamba捕获引用会出现莫名其妙的崩溃，所以，这里改为捕获值
         auto f1 = tp_.commit([=]() {
             if (enableSeemmoAlgo_) {
+                //CountTimer t1("Seemmo_Recognize");
                 return seemmoAlgo_->Recognize(channelId, bgr24, width, height, *paramPtr, *imageResultPtr);
             } else {
                 return 0;
@@ -87,7 +103,14 @@ public:
         });
         auto f2 = tp_.commit([=]() {
             if (enableGosunAlgo_) {
-                return gosunAlgo_->Recognize(channelId, bgr24, width, height, *paramPtr, *imageResultPtr);
+                //CountTimer t1("Gosun_Recognize");
+                //double check多线程可能有问题，不过影响不大，可以忽略
+                if (gosunAlgoStartOk) {
+                    if (gosunAlgoStartOk) {
+                        return gosunAlgo_->Recognize(channelId, bgr24, width, height, *paramPtr, *imageResultPtr);
+                    }
+                }
+                return -1;	//return error
             } else {
                 return 0;
             }
@@ -99,7 +122,7 @@ public:
         }
         int ret2 = f2.get();
         if (0 != ret2) {
-            LOG_ERROR("GosunRecognize error, ret {}", ret1);
+            LOG_ERROR("GosunRecognize error, ret {}", ret2);
         }
 
         return ret1 * ret2;	//只有2个都失败才认为失败，所以直接用*
@@ -111,6 +134,7 @@ private:
     threadpool tp_;
     bool enableSeemmoAlgo_;
     bool enableGosunAlgo_;
+    bool gosunAlgoStartOk;
 };
 
 
