@@ -9,7 +9,7 @@ brpc + opencv + ffmpeg 开发环境
 
 ## gosun_sdk
 
-高创算法sdk库镜像，当sdk更新后，把Dockerfile-gosun_sdk放到高创算法根目录下，执行命令
+高创算法sdk库镜像，当sdk更新后，把Dockerfile放到高创算法根目录下，执行命令
 
 > docker build -t registry.cn-hangzhou.aliyuncs.com/gosun/gosun_sdk:latest .
 
@@ -17,9 +17,17 @@ brpc + opencv + ffmpeg 开发环境
 ## seemmo_sdk
 
 
-深瞐算法sdk库镜像，当sdk更新后，把Dockerfile-seemmo_sdk放到深瞐算法根目录下，执行命令
+深瞐算法sdk库镜像，当sdk更新后，把Dockerfile放到深瞐算法根目录下，执行命令
 
 > docker build -t registry.cn-hangzhou.aliyuncs.com/gosun/seemmo_sdk:latest .
+
+
+## seemmo_server
+
+
+深瞐算法服务，深瞐sdk一台机器上只能跑一个
+
+> docker build -t registry.cn-hangzhou.aliyuncs.com/gosun/seemmo-algo-server:latest -f docker/seemmo_server/Dockerfile .
 
 
 ## video-dispose
