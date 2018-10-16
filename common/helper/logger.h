@@ -20,8 +20,8 @@ public:
         //delegate = spd::rotating_logger_mt(moduleName, ".", 1048576 * 5, 3);
         delegate = spd::stdout_logger_mt(moduleLibraryName);
 
-        delegate->flush_on(spdlog::level::info);
-        spd::set_level(spd::level::info);
+        delegate->flush_on(parseLevel());
+        spd::set_level(parseLevel());
     }
 
     ~ Logger() {
@@ -30,6 +30,16 @@ public:
 
     shared_ptr<spdlog::logger> getLogger() {
         return delegate;
+    }
+
+private:
+    spd::level::level_enum parseLevel() {
+        spd::level::level_enum level = spdlog::level::info;
+        const char *levelEnv = getenv("SPD_LOG_LEVEL");
+        if (nullptr != levelEnv) {
+            level = spd::level::from_str(levelEnv);
+        }
+        return level;
     }
 
 private:
