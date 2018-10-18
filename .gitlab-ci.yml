@@ -6,7 +6,8 @@ variables:
 build:
   stage: build
   script:
-    - "docker -H $DOCKER_HOST build -t registry.cn-hangzhou.aliyuncs.com/gosun/video-dispose:latest ."
+    - "docker -H $DOCKER_HOST build -t registry.cn-hangzhou.aliyuncs.com/gosun/seemmo-algo-server:latest -f docker/seemmo_server/Dockerfile ."
+    - "docker -H $DOCKER_HOST build -t registry.cn-hangzhou.aliyuncs.com/gosun/video-dispose:latest -f docker/video-dispose/Dockerfile ."
   only:
     - master
   tags:
