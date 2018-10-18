@@ -1,8 +1,11 @@
+#include <memory>
 
 #include "common/helper/logger.h"
 #include "algo/vendor/gosun/stub_impl/gosun_stub.h"
 
 #include "interface/faceApi.h"
+
+using namespace std;
 
 namespace algo {
 namespace gosun {
@@ -16,7 +19,27 @@ GosunAlgoStub::GosunAlgoStub() {
             LOG_ERROR("chdir error");
         }
     }
+
     createSmartFace();
+
+    //第一次算法比较慢，用空数据做几次算法热身
+    uint32_t count = 5;
+    do {
+        uint32_t w = 1920;
+        uint32_t h = 1080;
+        faceId faceIds[30] = { 0 };
+        int32_t faceNum = 30;
+        unique_ptr<uint8_t[]> emptyImg(new uint8_t[w*h * 3] {0});
+
+        int ret = faceTrack((uint8_t*)emptyImg.get(), h, w, faceIds, faceNum);
+        if (0 != ret) {
+            LOG_ERROR("Failed to track face, ret {}", ret);
+            continue;
+        }
+        count--;
+    } while (count >0);
+
+    LOG_INFO("Gosun algo init ok");
 }
 
 GosunAlgoStub::~GosunAlgoStub() {
