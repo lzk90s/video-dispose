@@ -68,16 +68,39 @@ public:
             }
         });
 
+#if 0
+        auto s1 = f1.wait_for(std::chrono::milliseconds(100));
+        if (std::future_status::ready == s1) {
+            int ret1 = f1.get();
+            if (0 != ret1) {
+                LOG_ERROR("SeemmoTrail error, ret {}", ret1);
+            }
+        } else if (std::future_status::timeout == s1) {
+            LOG_WARN("SeemmoTrail timeout");
+        }
+
+        auto s2 = f2.wait_for(std::chrono::milliseconds(100));
+        if (std::future_status::ready == s2) {
+            int ret2 = f2.get();
+            if (0 != ret2) {
+                LOG_ERROR("GosunTrail error, ret {}", ret2);
+            }
+        } else if (std::future_status::timeout == s1) {
+            LOG_WARN("GosunTrail timeout");
+        }
+#else
         int ret1 = f1.get();
         if (0 != ret1) {
             LOG_ERROR("SeemmoTrail error, ret {}", ret1);
         }
+
         int ret2 = f2.get();
         if (0 != ret2) {
             LOG_ERROR("GosunTrail error, ret {}", ret2);
         }
+#endif
 
-        return ret1 * ret2;	//只有2个都失败才认为失败，所以直接用*
+        return 0;
 
     };
 
@@ -116,16 +139,39 @@ public:
             }
         });
 
+#if 0
+        auto s1 = f1.wait_for(std::chrono::milliseconds(100));
+        if (std::future_status::ready == s1) {
+            int ret1 = f1.get();
+            if (0 != ret1) {
+                LOG_ERROR("SeemmoRecognize error, ret {}", ret1);
+            }
+        } else if (std::future_status::timeout == s1) {
+            LOG_WARN("SeemmoRecognize timeout");
+        }
+
+        auto s2 = f2.wait_for(std::chrono::milliseconds(100));
+        if (std::future_status::ready == s2) {
+            int ret2 = f2.get();
+            if (0 != ret2) {
+                LOG_ERROR("GosunRecognize error, ret {}", ret2);
+            }
+        } else if (std::future_status::timeout == s1) {
+            LOG_WARN("GosunRecognize timeout");
+        }
+#else
         int ret1 = f1.get();
         if (0 != ret1) {
             LOG_ERROR("SeemmoRecognize error, ret {}", ret1);
         }
+
         int ret2 = f2.get();
         if (0 != ret2) {
             LOG_ERROR("GosunRecognize error, ret {}", ret2);
         }
+#endif
 
-        return ret1 * ret2;	//只有2个都失败才认为失败，所以直接用*
+        return 0;
     };
 
 private:
