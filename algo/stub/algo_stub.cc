@@ -47,7 +47,7 @@ public:
         //lamba捕获引用会出现莫名其妙的崩溃，所以，这里改为捕获值
         auto f1 = tp_.commit([=]() {
             if (enableSeemmoAlgo_) {
-                //CountTimer t1("Seemmo_Trail");
+                CountTimer t1("Seemmo_Trail", 80 * 1000);
                 return seemmoAlgo_->Trail(channelId, frameId, bgr24, width, height, *paramPtr, *imageResultPtr, *filterResultPtr);
             } else {
                 return 0;
@@ -55,7 +55,7 @@ public:
         });
         auto f2 = tp_.commit([=]() {
             if (enableGosunAlgo_) {
-                //CountTimer t1("Gosun_Trail");
+                CountTimer t1("Gosun_Trail", 80*1000);
                 //double check多线程可能有问题，不过影响不大，可以忽略
                 if (gosunAlgoStartOk) {
                     if (gosunAlgoStartOk) {
@@ -95,7 +95,7 @@ public:
         //lamba捕获引用会出现莫名其妙的崩溃，所以，这里改为捕获值
         auto f1 = tp_.commit([=]() {
             if (enableSeemmoAlgo_) {
-                //CountTimer t1("Seemmo_Recognize");
+                CountTimer t1("Seemmo_Recognize", 80 * 1000);
                 return seemmoAlgo_->Recognize(channelId, bgr24, width, height, *paramPtr, *imageResultPtr);
             } else {
                 return 0;
@@ -103,7 +103,7 @@ public:
         });
         auto f2 = tp_.commit([=]() {
             if (enableGosunAlgo_) {
-                //CountTimer t1("Gosun_Recognize");
+                CountTimer t1("Gosun_Recognize", 80 * 1000);
                 //double check多线程可能有问题，不过影响不大，可以忽略
                 if (gosunAlgoStartOk) {
                     if (gosunAlgoStartOk) {

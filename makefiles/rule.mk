@@ -10,8 +10,12 @@ INSTALL_PREFIX=/usr/local
 CXX = g++
 AR = ar
 
+#CXXFLAGS+=-fvisibility=hidden
+
 ifdef DEBUG
 CXXFLAGS += -g -O0
+else
+CXXFLAGS += -O3
 endif
 
 ifeq (x$(SRC_DIRS), x)

@@ -12,7 +12,7 @@ GosunAlgoStub::GosunAlgoStub() {
     if (nullptr != gosunSdkHome) {
         string h(gosunSdkHome);
         h.append("/lib");
-        chdir(h.c_str());
+        (void)chdir(h.c_str());
     }
     createSmartFace();
 }
