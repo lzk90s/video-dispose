@@ -16,30 +16,30 @@ using namespace algo;
 
 namespace vf {
 
-class DefaultAlgoProcessor : public  FrameHandler {
+class AbstractAlgoProcessor : public  FrameHandler {
 public:
 
-    DefaultAlgoProcessor(VSink &sink)
+    AbstractAlgoProcessor(VSink &sink, AlgoStub &algoStub)
         : tp_(1),	//业务线程是单线程，这样就不需要加锁，也避免后面的图片先比前面的图片去检测
           tpNtf_(1),	//通知线程，启1个。
-          sink_(sink) {
-        algo_ = NewAlgoStub(GlobalSettings::getInstance().enableSeemmoAlgo, GlobalSettings::getInstance().enableGosunAlgo);
-        sink_.RegisterFrameHandler(std::bind(&DefaultAlgoProcessor::OnFrame, this,
+          sink_(sink),
+          algo_(algoStub) {
+        sink_.RegisterFrameHandler(std::bind(&AbstractAlgoProcessor::OnFrame, this,
                                              std::placeholders::_1,
                                              std::placeholders::_2,
                                              std::placeholders::_3));
     }
 
-    ~DefaultAlgoProcessor() {
-        FreeAlgoStub(algo_);
+    ~AbstractAlgoProcessor() {
     }
 
     void OnFrame(uint32_t chanelId, uint64_t frameId, cv::Mat &frame) override  {
-        auto f1 = std::bind(&DefaultAlgoProcessor::algoRoutine, this, chanelId, frameId, frame);
+        auto f1 = std::bind(&AbstractAlgoProcessor::algoRoutine, this, chanelId, frameId, frame);
         tp_.commit(f1);
     }
 
-private:
+protected:
+
     int32_t algoRoutine(uint32_t channelId, uint64_t frameId, cv::Mat &frame) {
         ImageResult imageResult;
         FilterResult filterResult;
@@ -74,7 +74,7 @@ private:
         trailParam.roi.push_back(Point{ (int32_t)width, (int32_t)height });
         trailParam.roi.push_back(Point{ (int32_t)width, 0 });
 
-        int32_t ret = algo_->Trail(channelId, frameId, bgr24, width, height, trailParam, imageResult, filterResult);
+        int32_t ret = algo_.Trail(channelId, frameId, bgr24, width, height, trailParam, imageResult, filterResult);
         if (0 != ret) {
             LOG_ERROR("Trail error, ret {}", ret);
             return ret;
@@ -119,10 +119,6 @@ private:
             recParam.locations.push_back(loc);
         }
 
-        //更新目标目标检测结果
-        sink_.personObjectSink.UpdateDetectedObjects(imageResult.pedestrains);
-        sink_.vehicleObjectSink.UpdateDetectedObjects(imageResult.vehicles);
-        sink_.bikeObjectSink.UpdateDetectedObjects(imageResult.bikes);
         for (auto &p : imageResult.faces) {
             //针对人脸特殊处理，目前人脸算法中没有去重，这样简单处理
             if (!sink_.faceObjectSink.ObjectExist(p.guid)) {
@@ -130,12 +126,14 @@ private:
                 sink_.faceNotifier.OnRecognizedObject(channelId, frame, p);
             }
         }
-        sink_.faceObjectSink.UpdateDetectedObjects(imageResult.faces);
+
+        //更新目标目标检测结果
+        onDetectedObjects(imageResult);
 
         ImageResult recImageResult;
         //如果存在识别区域，则进行识别
         if (!recParam.locations.empty()) {
-            ret = algo_->Recognize(channelId, bgr24, width, height, recParam, recImageResult);
+            ret = algo_.Recognize(channelId, bgr24, width, height, recParam, recImageResult);
             if (0 != ret) {
                 LOG_ERROR("Recognize error, ret {}", ret);
                 return ret;
@@ -154,10 +152,7 @@ private:
         }
 
         //更新目标池
-        sink_.personObjectSink.UpdateRecognizedObjects(recImageResult.pedestrains);
-        sink_.vehicleObjectSink.UpdateRecognizedObjects(recImageResult.vehicles);
-        sink_.bikeObjectSink.UpdateRecognizedObjects(recImageResult.bikes);
-        sink_.faceObjectSink.UpdateRecognizedObjects(recImageResult.faces);
+        onRecognizedObjects(recImageResult);
 
         return 0;
     }
@@ -235,7 +230,7 @@ private:
             uint32_t height = frame.rows;
 
             ImageResult imageResult;
-            int32_t ret = algo_->Recognize(channelId, bgr24, width, height, recParam, imageResult);
+            int32_t ret = algo_.Recognize(channelId, bgr24, width, height, recParam, imageResult);
             if (0 != ret) {
                 LOG_ERROR("Recognize error, ret {}", ret);
                 return ret;
@@ -261,15 +256,70 @@ private:
         return 0;
     }
 
-private:
-    //算法stub
-    AlgoStub * algo_;
+    virtual void onDetectedObjects(ImageResult &imageResult) {
+        sink_.personObjectSink.UpdateDetectedObjects(imageResult.pedestrains);
+        sink_.vehicleObjectSink.UpdateDetectedObjects(imageResult.vehicles);
+        sink_.bikeObjectSink.UpdateDetectedObjects(imageResult.bikes);
+        sink_.faceObjectSink.UpdateDetectedObjects(imageResult.faces);
+    }
+
+    virtual void onRecognizedObjects(ImageResult &imageResult) {
+        sink_.personObjectSink.UpdateRecognizedObjects(imageResult.pedestrains);
+        sink_.vehicleObjectSink.UpdateRecognizedObjects(imageResult.vehicles);
+        sink_.bikeObjectSink.UpdateRecognizedObjects(imageResult.bikes);
+        sink_.faceObjectSink.UpdateRecognizedObjects(imageResult.faces);
+    }
+
+protected:
     //算法异步线程池
     threadpool tp_;
     //通知线程池
     threadpool tpNtf_;
     //sink
     VSink &sink_;
+    //算法stub
+    AlgoStub  &algo_;
+};
+
+class DefaultAlgoProcessor : public AbstractAlgoProcessor {
+public:
+    DefaultAlgoProcessor(VSink &vsink, AlgoStub *stub = NewAlgoStub(GlobalSettings::getInstance().enableSeemmoAlgo, false)):
+        AbstractAlgoProcessor(vsink, *stub) {
+        this->stub_ = stub;
+    }
+
+    ~DefaultAlgoProcessor() {
+        FreeAlgoStub(stub_);
+    }
+
+private:
+    AlgoStub *stub_;
+};
+
+
+//人脸的单独出来，是因为人脸的效果还需要优化，避免影响其他算法的效果
+class FaceAlgoProcessor : public AbstractAlgoProcessor {
+public:
+    FaceAlgoProcessor(VSink &vsink, AlgoStub *stub = NewAlgoStub(false, GlobalSettings::getInstance().enableGosunAlgo))
+        : AbstractAlgoProcessor(vsink, *stub) {
+        this->stub_ = stub;
+    }
+
+    ~FaceAlgoProcessor() {
+        FreeAlgoStub(stub_);
+    }
+
+protected:
+    void onDetectedObjects(ImageResult &imageResult) override {
+        sink_.faceObjectSink.UpdateDetectedObjects(imageResult.faces);
+    }
+
+    void onRecognizedObjects(ImageResult &imageResult) override {
+        sink_.faceObjectSink.UpdateRecognizedObjects(imageResult.faces);
+    }
+
+private:
+    AlgoStub *stub_;
 };
 
 }

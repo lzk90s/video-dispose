@@ -20,7 +20,8 @@ public:
     VFilter(uint32_t channelId)
         : channelId_(channelId),
           vsink_(channelId),
-          defAlgoProcessor_(vsink_) {
+          defAlgoProcessor_(vsink_),
+          faceAlgoProcessor_(vsink_) {
 
     }
     void SetChannelId(uint32_t channelId) {
@@ -36,6 +37,7 @@ private:
     uint32_t channelId_;
     VSink vsink_;
     DefaultAlgoProcessor defAlgoProcessor_;
+    FaceAlgoProcessor faceAlgoProcessor_;
 };
 
 class VFilterManager {
