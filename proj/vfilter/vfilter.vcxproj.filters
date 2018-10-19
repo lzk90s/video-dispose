@@ -29,9 +29,6 @@
     <ClCompile Include="..\..\vfilter\vfilter.cc">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\vfilter\mixer\cvx_text.cc">
-      <Filter>源文件\mixer</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\vfilter\vfilter.h">

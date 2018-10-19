@@ -83,7 +83,6 @@
     <None Include="..\..\vfilter\Makefile" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\vfilter\mixer\cvx_text.cc" />
     <ClCompile Include="..\..\vfilter\vfilter.cc" />
   </ItemGroup>
   <ItemGroup>
