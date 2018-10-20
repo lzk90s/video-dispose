@@ -8,17 +8,22 @@
 #include "opencv/cv.h"
 
 #include "vfilter/setting.h"
-
+#include "vfilter/buffered_frame.h"
 
 using namespace std;
 
 namespace vf {
+
 class FrameCache {
 public:
     typedef uint64_t FrameId;
 
 public:
-    FrameCache() : currFrameId_(0) {}
+    FrameCache() {
+        currFrameId_ = 0;
+        frameCacheMaxNum_ = GlobalSettings::getInstance().frameCacheMaxNum;
+        bufferedFrameType_ = GlobalSettings::getInstance().bufferedFrameType;
+    }
 
     ~FrameCache() {
         unique_lock<mutex> lck(mutex_);
@@ -29,10 +34,16 @@ public:
     FrameId Put(cv::Mat &frame) {
         unique_lock<mutex> lck(mutex_);
 
+        shared_ptr<BufferedFrame> bufferedFrame(BufferedFrameFactory::Create(bufferedFrameType_),[](BufferedFrame*ptr) {
+            BufferedFrameFactory::Free(ptr);
+        });
+        bufferedFrame->Put(frame);
+
         FrameId thisId = currFrameId_;
-        cache_[currFrameId_] = frame;
+        cache_[currFrameId_] = bufferedFrame;
         deq_.push_back(currFrameId_);
         currFrameId_++;
+
         freeExpiredFrame();
         return thisId;
     }
@@ -42,7 +53,7 @@ public:
 
         cv::Mat mat;
         if (cache_.find(fid) != cache_.end()) {
-            mat = cache_[fid];
+            mat = cache_[fid]->Get();
             exist = true;
         } else {
             exist = false;
@@ -67,7 +78,7 @@ public:
 
 private:
     void freeExpiredFrame() {
-        while (deq_.size() > GlobalSettings::getInstance().frameCacheMaxNum) {
+        while (deq_.size() > frameCacheMaxNum_) {
             cache_.erase(deq_.front());
             deq_.pop_front();
         }
@@ -75,9 +86,10 @@ private:
 
 private:
 
-    //frame cache
+    uint32_t frameCacheMaxNum_;
+    uint32_t bufferedFrameType_;
     FrameId currFrameId_;
-    map<FrameId, cv::Mat> cache_;
+    map<FrameId, shared_ptr<BufferedFrame>> cache_;
     deque<FrameId> deq_;
     mutex mutex_;
 };
