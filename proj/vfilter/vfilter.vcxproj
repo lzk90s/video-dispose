@@ -88,6 +88,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\vfilter\app.h" />
     <ClInclude Include="..\..\vfilter\algo_proc.h" />
+    <ClInclude Include="..\..\vfilter\buffered_frame.h" />
     <ClInclude Include="..\..\vfilter\frame_handler.h" />
     <ClInclude Include="..\..\vfilter\mixer\face_mixer.h" />
     <ClInclude Include="..\..\vfilter\notifier\bike_notifier.h" />

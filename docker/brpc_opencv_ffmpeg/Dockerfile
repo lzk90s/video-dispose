@@ -16,26 +16,28 @@ RUN sed -i 's/archive.ubuntu.com/mirrors.aliyun.com/g' /etc/apt/sources.list && 
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
     
 
-ADD package/ .
 
 #编译opencv
+ADD package/opencv opencv
+ADD package/opencv_contrib opencv_contrib
+ADD package/ippicv opencv/3rdparty/ippicv
 RUN \
     cd /root/opencv && \
     mkdir build && \
     cd build && \
-    cmake -D CMAKE_BUILD_TYPE=RELEASE \
-        -D CMAKE_INSTALL_PREFIX=/usr/local \
-        -D INSTALL_C_EXAMPLES=OFF \
-        -D INSTALL_PYTHON_EXAMPLES=OFF \
-        -D OPENCV_EXTRA_MODULES_PATH=~/opencv_contrib/modules \
-        -D BUILD_EXAMPLES=OFF \
-	-D BUILD_SHARED_LIBS=0 .. && \
+    cmake -DCMAKE_BUILD_TYPE=RELEASE \
+        -DCMAKE_INSTALL_PREFIX=/usr/local \
+        -DINSTALL_C_EXAMPLES=OFF \
+        -DINSTALL_PYTHON_EXAMPLES=OFF \
+        -DBUILD_EXAMPLES=OFF \
+        -DBUILD_SHARED_LIBS=0 \
+        -DIPPROOT=~opencv/3rdparty/ippicv/ .. && \
     #build opencv
     cd ~/opencv/build && \
     make -j $(nproc) && \
     make install && \
     cp ~/opencv/build/3rdparty/lib/* /usr/local/lib && \
-    cp ~/opencv/build/3rdparty/ippicv/ippicv_lnx/lib/intel64/* /usr/local/lib && \
+    cp ~/opencv/3rdparty/ippicv/ippicv_lnx/lib/intel64/* /usr/local/lib && \
     ldconfig  && \
     # clean opencv repos
     rm -rf ~/opencv/build && \
@@ -57,12 +59,16 @@ RUN \
 	make -j$(nproc) && \
 	make install
 
+    
 #编译gflags    
+ADD package/gflags gflags
 RUN \
     cd /root/gflags && \
 	mkdir build && cd build && cmake .. && make  -j$(nproc) && make install
-
+ 
+    
 #编译protobuf    
+ADD package/protobuf protobuf   
 RUN \
     cd /root/protobuf && \
 	./autogen.sh && \
@@ -71,19 +77,22 @@ RUN \
 	 make install
 
 #编译leveldb     
+ADD package/leveldb leveldb   
 RUN \
 	cd /root/leveldb && \
 	sed -i 's/3.9/3.2/g' CMakeLists.txt && \
 	mkdir build && cd build && cmake .. && make  -j$(nproc) && make install
 
 #编译brpc
+ADD package/brpc brpc   
 RUN \
 	cd /root/brpc && \
 	mkdir build && cd build && cmake .. -DBUILD_SHARED_LIBS=0 -DBUILD_STATIC_LIBS=1 -DWITH_DEBUG_SYMBOLS=OFF && make  -j$(nproc) && make install && \
     rm -rf /usr/local/lib/libbrpc.so
 
 
-#编译x264    
+#编译x264   
+ ADD package/x264 x264 
 RUN cd ~  && \
     curl -O https://www.nasm.us/pub/nasm/releasebuilds/2.13.03/nasm-2.13.03.tar.gz && \
     tar -xzvf nasm-2.13.03.tar.gz && \
@@ -97,12 +106,24 @@ RUN cd ~  && \
     make install
 
 #编译libjpeg-turbo
+ADD package/libjpeg-turbo libjpeg-turbo    
 RUN \
     cd /root/libjpeg-turbo && \
     mkdir build && cd build && cmake .. -DENABLE_SHARED=0 -DCMAKE_INSTALL_PREFIX=/usr/local && \
     make install
+
+#编译libyuv
+ADD package/libyuv libyuv   
+RUN \
+    cd /root/libyuv && \
+    mkdir build && cd build  && cmake .. -DCMAKE_BUILD_TYPE=Release && \
+    make -j$(nproc) && \
+    make install && \
+    rm -rf /usr/local/lib/libyuv.so*
     
-#编译FFmpeg    
+#编译FFmpeg
+ADD package/nv-codec-headers nv-codec-headers
+ADD package/FFmpeg FFmpeg          
 RUN \
     cd /root/nv-codec-headers && \
     make install && \
