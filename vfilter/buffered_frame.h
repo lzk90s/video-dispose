@@ -21,6 +21,7 @@ public:
     }
 };
 
+
 //原始数据buffer，未经过任何压缩处理
 class OriginBufferedFrame : public BufferedFrame {
 public:
@@ -36,6 +37,7 @@ private:
     cv::Mat mat_;
 };
 
+
 //bgr转为yuv buffer，yuv的空间占用比rgb小一半，这里使用libyuv进行转换，不使用opencv自带的cvtColor，libyuv性能更好
 class YUVBufferedFrame : public BufferedFrame {
 public:
@@ -44,68 +46,48 @@ public:
         height_ = 0;
     }
 
+
     void Put(cv::Mat &frame) override {
         width_ = frame.cols;
         height_ = frame.rows;
 
-        unique_ptr<uint8_t[]> rgb(new uint8_t[width_*height_ * 3] {0});
         yuv_.reset(new uint8_t[width_*height_ * 3 / 2] { 0 });
 
-        //opencv默认是bgr，这里转成rgb
-        rgbbgrCvt(frame.data, rgb.get(), width_, height_);
-
+        //cvmat默认虽然是bgr排列，不过直接用rgb也没有关系，转回来的时候用相应的方法就不会有问题
         int width = width_;
         int height = height_;
-        const uint8_t* src_rgb24 = rgb.get();
-        int src_stride_rgb24 = width*3;
+        const uint8_t* src_rgb24 = frame.data;
+        int src_stride_rgb24 = width * 3;
         uint8_t* dst_y = yuv_.get();
         int dst_stride_y = width;
-        uint8_t* dst_u = yuv_.get() + height*width*5/4;
-        int dst_stride_u = width/2;
-        uint8_t* dst_v = yuv_.get() + height*width;
-        int dst_stride_v = width/2;
+        uint8_t* dst_u = yuv_.get() + height * width * 5 / 4;
+        int dst_stride_u = width / 2;
+        uint8_t* dst_v = yuv_.get() + height * width;
+        int dst_stride_v = width / 2;
         libyuv::RGB24ToI420(src_rgb24, src_stride_rgb24, dst_y, dst_stride_y, dst_u, dst_stride_u, dst_v, dst_stride_v, width,
                             height);
     }
 
     cv::Mat Get() override {
-        unique_ptr<uint8_t[]> rgb(new uint8_t[width_*height_*3] { 0 });
+        unique_ptr<uint8_t[]> rgb(new uint8_t[width_*height_ * 3] { 0 });
 
         int width = width_;
         int height = height_;
         const uint8_t* src_y = yuv_.get();
         int src_stride_y = width;
-        const uint8_t* src_u = yuv_.get() + width*height;
-        int src_stride_u = width/2;
-        const uint8_t* src_v = yuv_.get() + width *height*5/4;
-        int src_stride_v = width/2;
+        const uint8_t* src_u = yuv_.get() + width * height;
+        int src_stride_u = width / 2;
+        const uint8_t* src_v = yuv_.get() + width * height * 5 / 4;
+        int src_stride_v = width / 2;
         uint8_t* dst_rgb24 = rgb.get();
-        int dst_stride_rgb24 = width*3;
+        int dst_stride_rgb24 = width * 3;
         libyuv::I420ToRGB24(src_y, src_stride_y, src_u, src_stride_u, src_v, src_stride_v, dst_rgb24, dst_stride_rgb24, width,
                             height);
 
-        //opencv默认需要bgr，把rgb转成bgr
-        unique_ptr<uint8_t[]> bgr(new uint8_t[width_*height_*3] { 0 });
-        rgbbgrCvt(rgb.get(), bgr.get(), width, height);
-
         cv::Mat mat = cv::Mat(height, width, CV_8UC3);
-        memcpy(mat.data, bgr.get(), width*height * 3);
+        memcpy(mat.data, rgb.get(), width*height * 3);
 
         return mat;
-    }
-
-private:
-    //rgb <-> bgr 相互转换，调换r和b的位置
-    inline void rgbbgrCvt(uint8_t *src, uint8_t *dst, uint32_t width, uint32_t height) {
-        uint8_t *buf = src;
-        for (uint32_t i = 0; i < height; i++) {
-            for (uint32_t j = 0; j < width; j++) {
-                uint8_t tmp = *buf;
-                *buf = *(buf + 2);
-                *(buf + 2) = tmp;
-                buf += 3;
-            }
-        }
     }
 
 private:
@@ -113,6 +95,7 @@ private:
     uint32_t height_;
     unique_ptr<uint8_t[]> yuv_;
 };
+
 
 //jpeg压缩buffer，把bgr压缩为jpeg图片，压缩比很大
 class JpegBufferedFrame : public BufferedFrame {
