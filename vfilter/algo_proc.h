@@ -165,7 +165,7 @@ protected:
             cv::Mat frame = sink_.frameCache.Get(p.frameId, exist);
             if (!exist) {
                 LOG_WARN("The saved frame {} not exist", p.frameId);
-                return 0;
+                continue;
             }
             recognizeByFilterResultInner(channelId, frame, recParam);
         }
@@ -183,7 +183,7 @@ protected:
             cv::Mat frame = sink_.frameCache.Get(p.frameId, exist);
             if (!exist) {
                 LOG_WARN("The saved frame {} not exist", p.frameId);
-                return 0;
+                continue;
             }
             recognizeByFilterResultInner(channelId, frame, recParam);
         }
@@ -201,7 +201,7 @@ protected:
             cv::Mat frame = sink_.frameCache.Get(p.frameId, exist);
             if (!exist) {
                 LOG_WARN("The saved frame {} not exist", p.frameId);
-                return 0;
+                continue;
             }
             recognizeByFilterResultInner(channelId, frame, recParam);
         }
