@@ -120,7 +120,7 @@ protected:
         }
 
         //更新目标目标检测结果
-        onDetectedObjects(imageResult);
+        onDetectedObjects(channelId, frame, imageResult);
 
         ImageResult recImageResult;
         //如果存在识别区域，则进行识别
@@ -144,7 +144,7 @@ protected:
         }
 
         //更新目标池
-        onRecognizedObjects(recImageResult);
+        onRecognizedObjects(channelId, frame, recImageResult);
 
         return 0;
     }
@@ -248,14 +248,14 @@ protected:
         return 0;
     }
 
-    virtual void onDetectedObjects(ImageResult &imageResult) {
+    virtual void onDetectedObjects(uint32_t channelId, cv::Mat &frame, ImageResult &imageResult) {
         sink_.personObjectSink.UpdateDetectedObjects(imageResult.pedestrains);
         sink_.vehicleObjectSink.UpdateDetectedObjects(imageResult.vehicles);
         sink_.bikeObjectSink.UpdateDetectedObjects(imageResult.bikes);
         sink_.faceObjectSink.UpdateDetectedObjects(imageResult.faces);
     }
 
-    virtual void onRecognizedObjects(ImageResult &imageResult) {
+    virtual void onRecognizedObjects(uint32_t channelId, cv::Mat &frame, ImageResult &imageResult) {
         sink_.personObjectSink.UpdateRecognizedObjects(imageResult.pedestrains);
         sink_.vehicleObjectSink.UpdateRecognizedObjects(imageResult.vehicles);
         sink_.bikeObjectSink.UpdateRecognizedObjects(imageResult.bikes);
@@ -302,7 +302,7 @@ public:
     }
 
 protected:
-    void onDetectedObjects(ImageResult &imageResult) override {
+    void onDetectedObjects(uint32_t channelId, cv::Mat &frame, ImageResult &imageResult) override {
         for (auto &p : imageResult.faces) {
             //针对人脸特殊处理，目前人脸算法中没有去重，这样简单处理
             if (!sink_.faceObjectSink.ObjectExist(p.guid)) {
@@ -314,7 +314,7 @@ protected:
         sink_.faceObjectSink.UpdateDetectedObjects(imageResult.faces);
     }
 
-    void onRecognizedObjects(ImageResult &imageResult) override {
+    void onRecognizedObjects(uint32_t channelId, cv::Mat &frame, ImageResult &imageResult) override {
         sink_.faceObjectSink.UpdateRecognizedObjects(imageResult.faces);
     }
 
