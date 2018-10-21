@@ -20,8 +20,8 @@ class AbstractAlgoProcessor : public  FrameHandler {
 public:
 
     AbstractAlgoProcessor(VSink &sink, AlgoStub &algoStub)
-        : tp_(1),	//ÒµÎñÏß³ÌÊÇµ¥Ïß³Ì£¬ÕâÑù¾Í²»ĞèÒª¼ÓËø£¬Ò²±ÜÃâºóÃæµÄÍ¼Æ¬ÏÈ±ÈÇ°ÃæµÄÍ¼Æ¬È¥¼ì²â
-          tpNtf_(1),	//Í¨ÖªÏß³Ì£¬Æô1¸ö¡£
+        : tp_(1),	//ä¸šåŠ¡çº¿ç¨‹æ˜¯å•çº¿ç¨‹ï¼Œè¿™æ ·å°±ä¸éœ€è¦åŠ é”ï¼Œä¹Ÿé¿å…åé¢çš„å›¾ç‰‡å…ˆæ¯”å‰é¢çš„å›¾ç‰‡å»æ£€æµ‹
+          tpNtf_(1),	//é€šçŸ¥çº¿ç¨‹ï¼Œå¯1ä¸ªã€‚
           sink_(sink),
           algo_(algoStub) {
         sink_.RegisterFrameHandler(std::bind(&AbstractAlgoProcessor::OnFrame, this,
@@ -45,16 +45,16 @@ protected:
         FilterResult filterResult;
         int ret = 0;
 
-        // ¸ú×ÙÄ¿±ê
+        // è·Ÿè¸ªç›®æ ‡
         ret = trailObjects(channelId, frameId, frame, imageResult, filterResult);
         if (0 != ret) {
             return ret;
         }
 
-        // Ä¿±êÊ¶±ğ
+        // ç›®æ ‡è¯†åˆ«
         recognizeByImageResult(channelId, frame, imageResult);
 
-        // ¶ÔÔñÓÅ½á¹û½øĞĞÊ¶±ğ
+        // å¯¹æ‹©ä¼˜ç»“æœè¿›è¡Œè¯†åˆ«
         recognizeByFilterResult(channelId, filterResult);
 
         return 0;
@@ -68,7 +68,7 @@ protected:
         uint32_t height = frame.rows;
 
         TrailParam trailParam;
-        // roiÇøÓòÉèÖÃÎªÈ«Í¼
+        // roiåŒºåŸŸè®¾ç½®ä¸ºå…¨å›¾
         trailParam.roi.push_back(Point{ 0, 0 });
         trailParam.roi.push_back(Point{ 0, (int32_t)height });
         trailParam.roi.push_back(Point{ (int32_t)width, (int32_t)height });
@@ -90,7 +90,7 @@ protected:
         uint32_t width = frame.cols;
         uint32_t height = frame.rows;
 
-        //¸ù¾İ¼ì²â½á¹û£¬¼ÆËãĞèÒªÊ¶±ğµÄÄ¿±ê
+        //æ ¹æ®æ£€æµ‹ç»“æœï¼Œè®¡ç®—éœ€è¦è¯†åˆ«çš„ç›®æ ‡
         vector<algo::BikeObject> toRecogBikeObjs;
         sink_.bikeObjectSink.CalcNeedRecognizeObjects(imageResult.bikes, toRecogBikeObjs);
         for (auto &p : toRecogBikeObjs) {
@@ -119,19 +119,11 @@ protected:
             recParam.locations.push_back(loc);
         }
 
-        for (auto &p : imageResult.faces) {
-            //Õë¶ÔÈËÁ³ÌØÊâ´¦Àí£¬Ä¿Ç°ÈËÁ³Ëã·¨ÖĞÃ»ÓĞÈ¥ÖØ£¬ÕâÑù¼òµ¥´¦Àí
-            if (!sink_.faceObjectSink.ObjectExist(p.guid)) {
-                LOG_INFO("New face object {}", p.guid);
-                sink_.faceNotifier.OnRecognizedObject(channelId, frame, p);
-            }
-        }
-
-        //¸üĞÂÄ¿±êÄ¿±ê¼ì²â½á¹û
+        //æ›´æ–°ç›®æ ‡ç›®æ ‡æ£€æµ‹ç»“æœ
         onDetectedObjects(imageResult);
 
         ImageResult recImageResult;
-        //Èç¹û´æÔÚÊ¶±ğÇøÓò£¬Ôò½øĞĞÊ¶±ğ
+        //å¦‚æœå­˜åœ¨è¯†åˆ«åŒºåŸŸï¼Œåˆ™è¿›è¡Œè¯†åˆ«
         if (!recParam.locations.empty()) {
             ret = algo_.Recognize(channelId, bgr24, width, height, recParam, recImageResult);
             if (0 != ret) {
@@ -139,7 +131,7 @@ protected:
                 return ret;
             }
 
-            //¸üĞÂguid£¬Éî²aÊ¶±ğÊ±Ã»ÓĞ·µ»Øguid
+            //æ›´æ–°guidï¼Œæ·±çè¯†åˆ«æ—¶æ²¡æœ‰è¿”å›guid
             for (uint32_t idx = 0; idx < recImageResult.bikes.size(); idx++) {
                 recImageResult.bikes[idx].guid = imageResult.bikes[idx].guid;
             }
@@ -151,15 +143,15 @@ protected:
             }
         }
 
-        //¸üĞÂÄ¿±ê³Ø
+        //æ›´æ–°ç›®æ ‡æ± 
         onRecognizedObjects(recImageResult);
 
         return 0;
     }
 
-    //¸ù¾İfilterresult½øĞĞÒì²½Ê¶±ğ
+    //æ ¹æ®filterresultè¿›è¡Œå¼‚æ­¥è¯†åˆ«
     int32_t recognizeByFilterResult(uint32_t channelId, FilterResult &filterResult) {
-        //¸ù¾İÉî²aµÄsdkÊÖ²á£¬Ê¶±ğ¸ú×Ù½á¹û£¬ĞèÒªÉèÖÃtype£¬trail£¬rect£¬contextcode
+        //æ ¹æ®æ·±ççš„sdkæ‰‹å†Œï¼Œè¯†åˆ«è·Ÿè¸ªç»“æœï¼Œéœ€è¦è®¾ç½®typeï¼Œtrailï¼Œrectï¼Œcontextcode
         for (auto &p : filterResult.bikes) {
             RecogParam recParam;
             RecogParam::ObjLocation loc;
@@ -214,7 +206,7 @@ protected:
             recognizeByFilterResultInner(channelId, frame, recParam);
         }
 
-        //°Ñ²»ĞèÒªµÄÖ¡ÊÖ¶¯ÊÍ·Åµô
+        //æŠŠä¸éœ€è¦çš„å¸§æ‰‹åŠ¨é‡Šæ”¾æ‰
         for (auto &fid : filterResult.releasedFrames) {
             sink_.frameCache.ManualRelase(fid);
         }
@@ -223,7 +215,7 @@ protected:
     }
 
     int32_t recognizeByFilterResultInner(uint32_t channelId, cv::Mat &frame, RecogParam &recParam) {
-        //Òì²½´¦Àí
+        //å¼‚æ­¥å¤„ç†
         tpNtf_.commit([=]() {
             const uint8_t *bgr24 = frame.data;
             uint32_t width = frame.cols;
@@ -271,13 +263,13 @@ protected:
     }
 
 protected:
-    //Ëã·¨Òì²½Ïß³Ì³Ø
+    //ç®—æ³•å¼‚æ­¥çº¿ç¨‹æ± 
     threadpool tp_;
-    //Í¨ÖªÏß³Ì³Ø
+    //é€šçŸ¥çº¿ç¨‹æ± 
     threadpool tpNtf_;
     //sink
     VSink &sink_;
-    //Ëã·¨stub
+    //ç®—æ³•stub
     AlgoStub  &algo_;
 };
 
@@ -297,7 +289,7 @@ private:
 };
 
 
-//ÈËÁ³µÄµ¥¶À³öÀ´£¬ÊÇÒòÎªÈËÁ³µÄĞ§¹û»¹ĞèÒªÓÅ»¯£¬±ÜÃâÓ°ÏìÆäËûËã·¨µÄĞ§¹û
+//äººè„¸çš„å•ç‹¬å‡ºæ¥ï¼Œæ˜¯å› ä¸ºäººè„¸çš„æ•ˆæœè¿˜éœ€è¦ä¼˜åŒ–ï¼Œé¿å…å½±å“å…¶ä»–ç®—æ³•çš„æ•ˆæœ
 class FaceAlgoProcessor : public AbstractAlgoProcessor {
 public:
     FaceAlgoProcessor(VSink &vsink, AlgoStub *stub = NewAlgoStub(false, GlobalSettings::getInstance().enableGosunAlgo))
@@ -311,6 +303,14 @@ public:
 
 protected:
     void onDetectedObjects(ImageResult &imageResult) override {
+        for (auto &p : imageResult.faces) {
+            //é’ˆå¯¹äººè„¸ç‰¹æ®Šå¤„ç†ï¼Œç›®å‰äººè„¸ç®—æ³•ä¸­æ²¡æœ‰å»é‡ï¼Œè¿™æ ·ç®€å•å¤„ç†
+            if (!sink_.faceObjectSink.ObjectExist(p.guid)) {
+                LOG_INFO("New face object {}", p.guid);
+                sink_.faceNotifier.OnRecognizedObject(channelId, frame, p);
+            }
+        }
+
         sink_.faceObjectSink.UpdateDetectedObjects(imageResult.faces);
     }
 
