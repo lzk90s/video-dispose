@@ -25,6 +25,9 @@
     <Filter Include="源文件\rpc">
       <UniqueIdentifier>{fd605ee5-3257-4eac-ad1a-e652668515da}</UniqueIdentifier>
     </Filter>
+    <Filter Include="源文件\shm">
+      <UniqueIdentifier>{b0d5929a-54cb-4c6f-b2ff-0a5518a14b3c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\algo\vendor\seemmo\stub_impl\filter_result_parser.h">
@@ -62,6 +65,9 @@
     </ClInclude>
     <ClInclude Include="..\..\algo\vendor\seemmo\stub_impl\detect_param_builder.h">
       <Filter>源文件\stub_impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\algo\vendor\seemmo\shm\shmdata.h">
+      <Filter>源文件\shm</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

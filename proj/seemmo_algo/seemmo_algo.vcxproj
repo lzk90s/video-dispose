@@ -15,6 +15,7 @@
     <ClInclude Include="..\..\algo\vendor\seemmo\server\algo_loader.h" />
     <ClInclude Include="..\..\algo\vendor\seemmo\server\img_service_impl.h" />
     <ClInclude Include="..\..\algo\vendor\seemmo\server\video_service_impl.h" />
+    <ClInclude Include="..\..\algo\vendor\seemmo\shm\shmdata.h" />
     <ClInclude Include="..\..\algo\vendor\seemmo\stub_impl\detect_result_parser.h" />
     <ClInclude Include="..\..\algo\vendor\seemmo\stub_impl\detect_param_builder.h" />
     <ClInclude Include="..\..\algo\vendor\seemmo\stub_impl\filter_result_parser.h" />
