@@ -49,7 +49,7 @@ public:
 
         // 初始化共享内存
         if (!SIMMNG::getInstance().Exist(channelId)) {
-            SIMMNG::getInstance().Create(channelId);
+            SIMMNG::getInstance().Create(channelId, width, height, false);
         }
 
         uint8_t *bgr24Dst = SIMMNG::getInstance().Get(channelId)->GetBuffer().bgr24Buff1;
@@ -99,7 +99,7 @@ public:
         brpc::Controller cntl;
 
         if (!SIMMNG::getInstance().Exist(channelId)) {
-            SIMMNG::getInstance().Create(channelId);
+            SIMMNG::getInstance().Create(channelId, width, height, false);
         }
 
         uint8_t *bgr24Dst = SIMMNG::getInstance().Get(channelId)->GetBuffer().bgr24Buff2;

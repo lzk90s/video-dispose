@@ -32,19 +32,23 @@ public:
         brpc::Controller* cntl =
             static_cast<brpc::Controller*>(controller);
 
-        //没有共享内存时，创建共享内存
-        if (!SIMMNG::getInstance().Exist(request->videochl())) {
-            SIMMNG::getInstance().Create(request->videochl(), true);
+        uint8_t *bgr24 = nullptr;
+        if (request->bgr24().empty()) {
+            //没有共享内存时，创建共享内存
+            if (!SIMMNG::getInstance().Exist(request->videochl())) {
+                SIMMNG::getInstance().Create(request->videochl(), request->width(), request->height(), true);
+            }
+            bgr24 = SIMMNG::getInstance().Get(request->videochl())->GetBuffer().bgr24Buff1;
+        } else {
+            bgr24 = (uint8_t*)request->bgr24().data();
         }
-
-        uint8_t *bgr24 = SIMMNG::getInstance().Get(request->videochl())->GetBuffer().bgr24Buff1;
 
         uint32_t bufLen = 1024 * 1024 * 5;
         unique_ptr<char[]> buf(new char[bufLen]);
         int ret = algo_.Trail(
                       request->videochl(),
                       request->timestamp(),
-                      /*(const uint8_t*)request->bgr24().data()*/ bgr24,
+                      bgr24,
                       request->width(),
                       request->height(),
                       request->param(),
@@ -65,12 +69,16 @@ public:
         brpc::Controller* cntl =
             static_cast<brpc::Controller*>(controller);
 
-        // 没有共享内存时，创建
-        if (!SIMMNG::getInstance().Exist(request->videochl())) {
-            SIMMNG::getInstance().Create(request->videochl(), true);
+        uint8_t *bgr24 = nullptr;
+        if (request->bgr24().empty()) {
+            // 没有共享内存时，创建
+            if (!SIMMNG::getInstance().Exist(request->videochl())) {
+                SIMMNG::getInstance().Create(request->videochl(), request->width(), request->height(), true);
+            }
+            bgr24 = SIMMNG::getInstance().Get(request->videochl())->GetBuffer().bgr24Buff2;
+        } else {
+            bgr24 = (uint8_t*)request->bgr24().data();
         }
-
-        uint8_t *bgr24 = SIMMNG::getInstance().Get(request->videochl())->GetBuffer().bgr24Buff2;
 
         uint32_t bufLen = 1024 * 1024 * 5;
         unique_ptr<char[]> buf(new char[bufLen]);

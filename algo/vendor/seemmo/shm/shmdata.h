@@ -9,13 +9,11 @@
 
 #include "common/helper/singleton.h"
 
-//Í¼Æ¬×î´ó20M
-#define IMAGE_MAX_SIZE 20*1024*1024
 
 //¹²ÏíÍ¼Æ¬buffer
 typedef struct {
-    uint8_t bgr24Buff1[IMAGE_MAX_SIZE];	// bgr24 Í¼Æ¬»º´æ1£¨¼ì²â¸ú×Ù£©
-    uint8_t bgr24Buff2[IMAGE_MAX_SIZE];	// bgr24 Í¼Æ¬»º´æ2£¨Ê¶±ð£©
+    uint8_t *bgr24Buff1;	// bgr24 Í¼Æ¬»º´æ1£¨¼ì²â¸ú×Ù£©
+    uint8_t *bgr24Buff2;	// bgr24 Í¼Æ¬»º´æ2£¨Ê¶±ð£©
 } SharedImageBuffer;
 
 using namespace  std;
@@ -25,15 +23,21 @@ namespace seemmo {
 
 class SharedImageMemory {
 public:
-    SharedImageMemory(int32_t channelId, bool autoDelete = false) {
+    SharedImageMemory(int32_t channelId, uint32_t width, uint32_t height, bool autoDelete = false) {
         this->channelId_ = channelId;
         shm_ = nullptr;
         autoDelete_ = autoDelete;
+        width_ = width;
+        height_ = height;
+
+        //Ä©Î²ÁôÒ»×Ö½Ú
+        uint32_t frameSize = width * height * 3 + 1;
 
         //¼ÓÒ»¸ö´óÊý£¬±ÜÃâ³åÍ»
         key_t key = (key_t)(channelId_ + 20000);
 
-        shmid_ = shmget(key, sizeof(SharedImageBuffer),  0666 | IPC_CREAT | IPC_EXCL);
+        //framesize*2
+        shmid_ = shmget(key, frameSize*2,  0666 | IPC_CREAT | IPC_EXCL);
         if (shmid_ == -1) {
             cout << "Shared memory already exist" << endl;
             //ÒÑ¾­´æÔÚ£¬Ö±½Óget
@@ -48,9 +52,11 @@ public:
             throw runtime_error("shmmat error");
         }
 
-        cout << "Allocate shared memory " << shmid_ << " for channel " << channelId <<  endl;
+        cout << "Allocate shared memory " << shmid_ << " for channel " << channelId << ", frameSize " << frameSize <<  endl;
 
-        buffer_ = (SharedImageBuffer*)shm_;
+        //ÐÞ¸ÄÖ¸ÕëÎ»ÖÃ
+        buffer_.bgr24Buff1 = (uint8_t*)shm_;
+        buffer_.bgr24Buff2 = (uint8_t*)shm_ + frameSize;
     }
 
     ~SharedImageMemory() {
@@ -62,14 +68,16 @@ public:
     }
 
     SharedImageBuffer& GetBuffer() {
-        return *this->buffer_;
+        return this->buffer_;
     }
 
 private:
     int32_t shmid_;
     int32_t channelId_;
+    uint32_t width_;
+    uint32_t height_;
     bool autoDelete_;
-    SharedImageBuffer *buffer_;
+    SharedImageBuffer buffer_;
     void *shm_;
 };
 
@@ -80,12 +88,12 @@ public:
         sharedMemMap_.clear();
     }
 
-    void Create(int32_t channelId, bool autoDelete=false) {
+    void Create(int32_t channelId, uint32_t width, uint32_t height, bool autoDelete=false) {
         unique_lock<mutex> lck(mutex_);
         if (sharedMemMap_.find(channelId) != sharedMemMap_.end()) {
             return;
         }
-        sharedMemMap_[channelId] = make_shared<SharedImageMemory>(channelId, autoDelete);
+        sharedMemMap_[channelId] = make_shared<SharedImageMemory>(channelId, width, height, autoDelete);
     }
 
     void Delete(int32_t channelId) {
