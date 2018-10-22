@@ -40,8 +40,8 @@ public:
         int32_t x = obj.detect[0], y = obj.detect[1], w = obj.detect[2], h = obj.detect[3];
 
         //过滤掉无效的图片
-        if ((uint32_t)w < GlobalSettings::getInstance().validPictureMinWidth) {
-            //LOG_INFO("The picture is too small, ignore it, width {}, height{}", w, h);
+        if (isInvalidPicture(w, h)) {
+            LOG_DEBUG("The picture is too small, ignore it, width {}, height{}", w, h);
             return;
         }
 
@@ -59,9 +59,14 @@ public:
     }
 
 protected:
+    //生成通知消息
     virtual string buildNotifyMsg(uint32_t channelId, cv::Mat &img, T &obj) = 0;
 
+    //获取http请求url
     virtual string getRequestURL() = 0;
+
+    //判断是否是无效的图片
+    virtual bool isInvalidPicture(uint32_t width, uint32_t height) = 0;
 
 private:
     string type_;

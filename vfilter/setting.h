@@ -22,8 +22,14 @@ public:
     bool compressFrameCache;
     //目标消失初始计数(当某个目标在超过设置的帧后，还没有检测到，则认为目标已经消失，需要从内存中删掉)
     uint32_t objectDisappearCount;
-    //有效图片的最小宽度，小于这个宽度的图片，比较模糊，不予显示
-    uint32_t validPictureMinWidth;
+    //人脸图片最小宽度
+    uint32_t facePictureMinWidth;
+    //行人图片最小宽度
+    uint32_t personPictureMinWidth;
+    //非机动车图片最小宽度
+    uint32_t bikePictureMinWidth;
+    //机动车图片最小宽度
+    uint32_t vehiclePictureMinWidth;
     //目标评分差大于指定值时，需要重新识别
     uint32_t scoreDiff4ReRecognize;
     //使能高创算法
@@ -46,7 +52,10 @@ private:
         framePickInternalMs = parseEnvNumValue("FRAME_PICK_INTERNAL_MS", 100);
         framePickInternalNum = parseEnvNumValue("FRAME_PICK_INTERNAL_NUM", 3);
         objectDisappearCount = parseEnvNumValue("OBJECT_DISAPPEAR_COUNT", 10);
-        validPictureMinWidth = parseEnvNumValue("VALID_PICTURE_MIN_WIDTH", 80);
+        facePictureMinWidth = parseEnvNumValue("FACE_PICTURE_MIN_WIDTH", 80);
+        personPictureMinWidth = parseEnvNumValue("PERSON_PICTURE_MIN_WIDTH", 80);
+        bikePictureMinWidth = parseEnvNumValue("BIKE_PICTURE_MIN_WIDTH", 80);
+        vehiclePictureMinWidth = parseEnvNumValue("VEHICLE_PICTURE_MIN_WIDTH", 80);
         frameCacheMaxNum = parseEnvNumValue("FRAME_CACHE_MAX_NUM", 20 * (1000 / framePickInternalMs));
         compressFrameCache = parseEnvBoolValue("COMPRESS_FRAME_CACHE", true);
         notifyServerHost = parseEnvStringValue("NOTIFY_SERVER_HOST", "message-transfer:9091");
@@ -92,7 +101,12 @@ private:
              << "enableSeemmoAlgo: " << enableSeemmoAlgo << ", "
              << "scoreDiff4ReRecognize: " << scoreDiff4ReRecognize << ", "
              << "bufferedFrameType: " << bufferedFrameType << ", "
-             << "notifyServerHost: " << notifyServerHost << "}"
+             << "facePictureMinWidth: " << facePictureMinWidth << ", "
+             << "personPictureMinWidth: " << personPictureMinWidth << ", "
+             << "bikePictureMinWidth: " << bikePictureMinWidth << ", "
+             << "vehiclePictureMinWidth: " << vehiclePictureMinWidth << ", "
+             << "notifyServerHost: " << notifyServerHost
+             << "}"
              << endl;
     }
 };
