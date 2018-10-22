@@ -75,9 +75,9 @@ public:
         int height = height_;
         const uint8_t* src_y = yuv_.get();
         int src_stride_y = width;
-        const uint8_t* src_u = yuv_.get() + width * height;
+        const uint8_t* src_u = yuv_.get() + width * height * 5 / 4;
         int src_stride_u = width / 2;
-        const uint8_t* src_v = yuv_.get() + width * height * 5 / 4;
+        const uint8_t* src_v = yuv_.get() + width * height;
         int src_stride_v = width / 2;
         uint8_t* dst_rgb24 = rgb.get();
         int dst_stride_rgb24 = width * 3;
