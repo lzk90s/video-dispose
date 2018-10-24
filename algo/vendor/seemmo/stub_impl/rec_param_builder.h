@@ -47,7 +47,7 @@ public:
             {
                 "Recognize": {
                     "Feature": {
-                        "IsRec": true
+                        "IsRec": false
                     },
                     "Person": {
                         "IsRec": true
