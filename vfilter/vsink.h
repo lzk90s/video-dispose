@@ -32,7 +32,6 @@ namespace vf {
 
 class VSink {
 public:
-
     //object sink
     VehicleObjectSink vehicleObjectSink;
     BikeObjectSink bikeObjectSink;
@@ -51,9 +50,6 @@ public:
     PersonNotifier personNotifier;
     FaceNotifier faceNotifier;
 
-    //frame cache
-    FrameCache frameCache;
-
 public:
     VSink(uint32_t channelId)
         : channelId_(channelId),
@@ -65,11 +61,8 @@ public:
     // 处理接收到的帧
     int32_t HandleReceivedFrame(cv::Mat &frame) {
         if (needPickFrame()) {
-            //抽帧&异步处理图像帧
-            cv::Mat cloneFrame = frame.clone();
-            FrameCache::FrameId fid = frameCache.Put(cloneFrame);
             for (auto &h : onFrameHandlers_) {
-                h(channelId_, (uint64_t)fid, cloneFrame);
+                h(channelId_, frame);
             }
         }
         mixFrame(frame);

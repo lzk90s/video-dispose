@@ -25,40 +25,9 @@ public:
 			"MaxCarWidth": 0,
 			"MinCarWidth": 0,
 			"Mode": 0,
-			"Threshold": 20,
+			"Threshold": 40,
 			"Version": 1001
-            },
-		"Recognize": {
-				"Person": {
-					"Age": {
-						"IsRec": true
-					},
-					"Bag": {
-						"IsRec": true
-					},
-					"BottomColor": {
-						"IsRec": true
-					},
-					"Hat": {
-						"IsRec": true
-					},
-					"Mistake": {
-						"IsRec": true
-					},
-					"Sex": {
-						"IsRec": true
-					},
-					"UpperColor": {
-						"IsRec": true
-					},
-					"Feature": {
-						"IsRec": false
-					},
-					"Knapsack": {
-						"IsRec": true
-					}
-				}
-			}
+            }
         })"_json;
 
         j["Detect"]["DetectRegion"] = r.regions;

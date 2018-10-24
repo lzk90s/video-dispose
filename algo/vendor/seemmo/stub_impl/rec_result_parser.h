@@ -64,10 +64,6 @@ typedef struct tagDetectRectPO {
         //int32_t Score;
     } Body;
 
-    struct tagCar {
-        vector<int32_t> Rect;
-    } Car;
-
     tagDetectRectPO() {
         Code = 0;
     }
@@ -201,8 +197,9 @@ void from_json(const json& j, DetectRectPO& p) {
             if (j.end() != j.find("Body")) {
                 p.Body.Rect = j.at("Body").at("Rect").get<vector<int>>();
             }
+            //car ±£¨”√car.rect∏≤∏«body.rect
             if (j.end() != j.find("Car")) {
-                p.Car.Rect = j.at("Car").at("Rect").get<vector<int>>();
+                p.Body.Rect = j.at("Car").at("Rect").get<vector<int>>();
             }
         }
     } catch (exception &e) {

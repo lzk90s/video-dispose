@@ -36,7 +36,7 @@ private:
     spd::level::level_enum parseLevel() {
         spd::level::level_enum level = spdlog::level::info;
         const char *levelEnv = getenv("SPD_LOG_LEVEL");
-        if (nullptr != levelEnv) {
+        if (nullptr != levelEnv && strlen(levelEnv) > 0) {
             level = spd::level::from_str(levelEnv);
         }
         return level;
