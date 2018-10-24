@@ -7,6 +7,8 @@
 
 #include "opencv/cv.h"
 
+#include "common/helper/logger.h"
+
 #include "vfilter/setting.h"
 #include "vfilter/buffered_frame.h"
 
@@ -14,9 +16,11 @@ using namespace std;
 
 namespace vf {
 
+//保存每一帧图像中的目标
 class FrameCache {
 public:
     typedef uint64_t FrameId;
+    typedef map<string, cv::Mat> ObjectImageMap;
 
 public:
     FrameCache() {
@@ -31,16 +35,11 @@ public:
         cache_.clear();
     }
 
-    FrameId Put(cv::Mat &frame) {
+    FrameId AllocateEmptyFrame() {
         unique_lock<mutex> lck(mutex_);
 
-        shared_ptr<BufferedFrame> bufferedFrame(BufferedFrameFactory::Create(bufferedFrameType_),[](BufferedFrame*ptr) {
-            BufferedFrameFactory::Free(ptr);
-        });
-        bufferedFrame->Put(frame);
-
         FrameId thisId = currFrameId_;
-        cache_[currFrameId_] = bufferedFrame;
+        cache_[currFrameId_] = map<string, cv::Mat> {};
         deq_.push_back(currFrameId_);
         currFrameId_++;
 
@@ -48,16 +47,25 @@ public:
         return thisId;
     }
 
-    cv::Mat Get(FrameCache::FrameId fid, bool &exist) {
+    void SaveObjectImageInFrame(FrameId fid, ObjectImageMap &imgs) {
+        unique_lock<mutex> lck(mutex_);
+        cache_[fid] = imgs;
+    }
+
+    cv::Mat GetOneObjectImage(FrameCache::FrameId fid, const string &objId, bool &exist) {
         unique_lock<mutex> lck(mutex_);
 
         cv::Mat mat;
         if (cache_.find(fid) != cache_.end()) {
-            mat = cache_[fid]->Get();
-            exist = true;
+            auto &m = cache_[fid];
+            if (m.find(objId) != m.end()) {
+                exist = true;
+                mat = m[objId];
+            }
         } else {
             exist = false;
         }
+
         return mat;
     }
 
@@ -89,7 +97,7 @@ private:
     uint32_t frameCacheMaxNum_;
     uint32_t bufferedFrameType_;
     FrameId currFrameId_;
-    map<FrameId, shared_ptr<BufferedFrame>> cache_;
+    map<FrameId, ObjectImageMap> cache_;
     deque<FrameId> deq_;
     mutex mutex_;
 };
