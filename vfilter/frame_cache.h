@@ -47,12 +47,12 @@ public:
         return thisId;
     }
 
-    void SaveObjectImageInFrame(FrameId fid, ObjectImageMap &imgs) {
+    void SaveAllObjectImageInFrame(FrameId fid, ObjectImageMap &imgs) {
         unique_lock<mutex> lck(mutex_);
         cache_[fid] = imgs;
     }
 
-    cv::Mat GetOneObjectImage(FrameCache::FrameId fid, const string &objId, bool &exist) {
+    cv::Mat GetObjectImageInFrame(FrameCache::FrameId fid, const string &objId, bool &exist) {
         unique_lock<mutex> lck(mutex_);
 
         cv::Mat mat;

@@ -10,10 +10,9 @@
 
 #include "opencv/cv.h"
 
-#include "vfilter/setting.h"
-#include "vfilter/frame_cache.h"
 #include "vfilter/frame_handler.h"
 #include "vfilter/object_sink.h"
+#include "vfilter/frame_picker.h"
 
 #include "vfilter/mixer/bike_mixer.h"
 #include "vfilter/mixer/person_mixer.h"
@@ -51,18 +50,16 @@ public:
     FaceNotifier faceNotifier;
 
 public:
-    VSink(uint32_t channelId)
-        : channelId_(channelId),
-          lastTime_(chrono::steady_clock::now()),
-          currTime_(chrono::steady_clock::now()),
-          pickCnt(0) {
+    VSink(uint32_t channelId) {
+        this->channelId_ = channelId;
     }
 
     // 处理接收到的帧
     int32_t HandleReceivedFrame(cv::Mat &frame) {
-        if (needPickFrame()) {
+        if (framePicker_.NeedPickFrame()) {
+            cv::Mat cloneFrame = frame.clone();
             for (auto &h : onFrameHandlers_) {
-                h(channelId_, frame);
+                h(channelId_, cloneFrame);
             }
         }
         mixFrame(frame);
@@ -79,23 +76,6 @@ public:
 
 protected:
 
-    bool needPickFrame() {
-        bool pickFlag = false;
-        currTime_ = chrono::steady_clock::now();
-        pickCnt++;
-        auto diffTime = std::chrono::duration_cast<std::chrono::milliseconds>(currTime_ - lastTime_).count();
-        //当时间和数量都达到的时候，才抽帧。
-        //做时间限制，是为了避免高帧率的时候，疯狂抽帧。做数量限制，是为了避免低帧率的时候，抽到相同帧
-        if (pickCnt>= GlobalSettings::getInstance().framePickInternalNum &&
-                diffTime >= GlobalSettings::getInstance().framePickInternalMs) {
-            // 时间更新&计数归零
-            pickFlag = true;
-            lastTime_ = currTime_;
-            pickCnt = 0;
-        }
-        return pickFlag;
-    }
-
     void mixFrame(cv::Mat &frame) {
         vehicleMixer.MixFrame(frame, vehicleObjectSink);
         personMixer.MixFrame(frame, personObjectSink);
@@ -106,12 +86,8 @@ protected:
 private:
     //channel id
     uint32_t channelId_;
-
-    //time for pick frame
-    chrono::steady_clock::time_point lastTime_;
-    chrono::steady_clock::time_point currTime_;
-    uint32_t pickCnt;
-
+    //frame picker
+    FramePicker framePicker_;
     //callback
     vector<OnFrameHandler> onFrameHandlers_;
 };

@@ -9,7 +9,8 @@
 #include "vfilter/vfilter.h"
 #include "vfilter/vsink.h"
 
-#include "vfilter/algo_proc.h"
+#include "vfilter/proc/default_algo_proc.h"
+#include "vfilter/proc/face_algo_proc.h"
 
 using namespace std;
 
@@ -23,9 +24,6 @@ public:
           defAlgoProcessor_(vsink_),
           faceAlgoProcessor_(vsink_) {
 
-    }
-    void SetChannelId(uint32_t channelId) {
-        this->channelId_ = channelId;
     }
 
     uint32_t FilterFlow(uint8_t *bgr24, uint32_t width, uint32_t height) {
