@@ -54,6 +54,7 @@ private:
         trailParam.roi.push_back(Point{ (int32_t)width, (int32_t)height });
         trailParam.roi.push_back(Point{ (int32_t)width, 0 });
 
+        //检测
         ImageResult imageResult;
         FilterResult filterResult;
         ret = algo_.Trail(channelId, frameId, bgr24, width, height, trailParam, imageResult, filterResult);
@@ -62,85 +63,21 @@ private:
             return ret;
         }
 
+        //保存目标的图片
         saveAllObjectImage(frameId, frame, imageResult);
 
+        //异步识别
         asyncRecognizeByImageResult(channelId, frameId, frame, imageResult);
 
+        //异步识别最优结果
         asyncRecognizeByFilterResult(channelId, frameId, filterResult);
 
         return 0;
     }
 
-    void saveAllObjectImage(uint64_t frameId, cv::Mat &frame, ImageResult &imageResult) {
-        //根据检测结果抠图
-        FrameCache::ObjectImageMap objectImages;
-        for (auto &p : imageResult.bikes) {
-            int32_t x = p.detect[0], y = p.detect[1], w = p.detect[2], h = p.detect[3];
-            cv::Rect  rect = cv::Rect(x, y, w, h);
-            cv::Mat roi = frame(rect);
-            cv::Mat img = roi.clone();
-            objectImages[p.guid] = img;
-        }
-        for (auto &p : imageResult.pedestrains) {
-            int32_t x = p.detect[0], y = p.detect[1], w = p.detect[2], h = p.detect[3];
-            cv::Rect  rect = cv::Rect(x, y, w, h);
-            cv::Mat roi = frame(rect);
-            cv::Mat img = roi.clone();
-            objectImages[p.guid] = img;
-        }
-        for (auto &p : imageResult.vehicles) {
-            int32_t x = p.detect[0], y = p.detect[1], w = p.detect[2], h = p.detect[3];
-            cv::Rect  rect = cv::Rect(x, y, w, h);
-            cv::Mat roi = frame(rect);
-            cv::Mat img = roi.clone();
-            objectImages[p.guid] = img;
-        }
-        for (auto &p : imageResult.faces) {
-            int32_t x = p.detect[0], y = p.detect[1], w = p.detect[2], h = p.detect[3];
-            cv::Rect  rect = cv::Rect(x, y, w, h);
-            cv::Mat roi = frame(rect);
-            cv::Mat img = roi.clone();
-            objectImages[p.guid] = img;
-        }
-
-        //保存目标抠图，后续的择优识别需要用到
-        if (!objectImages.empty()) {
-            frameCache_.SaveAllObjectImageInFrame(frameId, objectImages);
-        }
-    }
-
     void asyncRecognizeByImageResult(uint32_t channelId, uint64_t frameId, cv::Mat &frame, ImageResult &imageResult) {
-        //根据检测结果，计算需要识别的目标
         RecogParam recParam;
-        vector<algo::BikeObject> toRecogBikeObjs;
-        sink_.bikeObjectSink.CalcNeedRecognizeObjects(imageResult.bikes, toRecogBikeObjs);
-        for (auto &p : toRecogBikeObjs) {
-            RecogParam::ObjLocation loc;
-            loc.type = p.type;
-            loc.trail = p.trail;
-            loc.detect = p.detect;
-            recParam.locations.push_back(loc);
-        }
-        vector<algo::VehicleObject> toRecogVehicleObjs;
-        sink_.vehicleObjectSink.CalcNeedRecognizeObjects(imageResult.vehicles, toRecogVehicleObjs);
-        for (auto &p : toRecogVehicleObjs) {
-            RecogParam::ObjLocation loc;
-            loc.type = p.type;
-            loc.trail = p.trail;
-            loc.detect = p.detect;
-            recParam.locations.push_back(loc);
-        }
-        vector<algo::PersonObject> toRecogPersonObjs;
-        sink_.personObjectSink.CalcNeedRecognizeObjects(imageResult.pedestrains, toRecogPersonObjs);
-        for (auto &p : toRecogPersonObjs) {
-            RecogParam::ObjLocation loc;
-            loc.type = p.type;
-            loc.trail = p.trail;
-            loc.detect = p.detect;
-            recParam.locations.push_back(loc);
-        }
-
-        onDetectedObjects(channelId, frameId, frame, imageResult);
+        onDetectedObjects(channelId, frameId, frame, imageResult, recParam);
 
         //根据imageresult异步识别
         recogWorker_.commit([=]() {
@@ -255,8 +192,73 @@ private:
         return 0;
     }
 
+    void saveAllObjectImage(uint64_t frameId, cv::Mat &frame, ImageResult &imageResult) {
+        //根据检测结果抠图
+        FrameCache::ObjectImageMap objectImages;
+        for (auto &p : imageResult.bikes) {
+            int32_t x = p.detect[0], y = p.detect[1], w = p.detect[2], h = p.detect[3];
+            cv::Rect  rect = cv::Rect(x, y, w, h);
+            cv::Mat roi = frame(rect);
+            cv::Mat img = roi.clone();
+            objectImages[p.guid] = img;
+        }
+        for (auto &p : imageResult.pedestrains) {
+            int32_t x = p.detect[0], y = p.detect[1], w = p.detect[2], h = p.detect[3];
+            cv::Rect  rect = cv::Rect(x, y, w, h);
+            cv::Mat roi = frame(rect);
+            cv::Mat img = roi.clone();
+            objectImages[p.guid] = img;
+        }
+        for (auto &p : imageResult.vehicles) {
+            int32_t x = p.detect[0], y = p.detect[1], w = p.detect[2], h = p.detect[3];
+            cv::Rect  rect = cv::Rect(x, y, w, h);
+            cv::Mat roi = frame(rect);
+            cv::Mat img = roi.clone();
+            objectImages[p.guid] = img;
+        }
+        for (auto &p : imageResult.faces) {
+            int32_t x = p.detect[0], y = p.detect[1], w = p.detect[2], h = p.detect[3];
+            cv::Rect  rect = cv::Rect(x, y, w, h);
+            cv::Mat roi = frame(rect);
+            cv::Mat img = roi.clone();
+            objectImages[p.guid] = img;
+        }
+
+        //保存目标抠图，后续的择优识别需要用到
+        if (!objectImages.empty()) {
+            frameCache_.SaveAllObjectImageInFrame(frameId, objectImages);
+        }
+    }
+
     //检测到目标
-    void onDetectedObjects(uint32_t channelId, uint64_t frameId, cv::Mat &frame, ImageResult &imageResult) {
+    void onDetectedObjects(uint32_t channelId, uint64_t frameId, cv::Mat &frame, ImageResult &imageResult,
+                           RecogParam &recParam) {
+        //计算需要识别的目标
+        auto toRecogBikeObjs = sink_.bikeObjectSink.CalcNeedRecognizeObjects(imageResult.bikes);
+        for (auto &p : toRecogBikeObjs) {
+            RecogParam::ObjLocation loc;
+            loc.type = p.type;
+            loc.trail = p.trail;
+            loc.detect = p.detect;
+            recParam.locations.push_back(loc);
+        }
+        auto toRecogVehicleObjs = sink_.vehicleObjectSink.CalcNeedRecognizeObjects(imageResult.vehicles);
+        for (auto &p : toRecogVehicleObjs) {
+            RecogParam::ObjLocation loc;
+            loc.type = p.type;
+            loc.trail = p.trail;
+            loc.detect = p.detect;
+            recParam.locations.push_back(loc);
+        }
+        auto toRecogPersonObjs = sink_.personObjectSink.CalcNeedRecognizeObjects(imageResult.pedestrains);
+        for (auto &p : toRecogPersonObjs) {
+            RecogParam::ObjLocation loc;
+            loc.type = p.type;
+            loc.trail = p.trail;
+            loc.detect = p.detect;
+            recParam.locations.push_back(loc);
+        }
+
         sink_.personObjectSink.UpdateDetectedObjects(imageResult.pedestrains);
         sink_.vehicleObjectSink.UpdateDetectedObjects(imageResult.vehicles);
         sink_.bikeObjectSink.UpdateDetectedObjects(imageResult.bikes);

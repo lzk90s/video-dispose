@@ -12,6 +12,7 @@
 
 namespace vf {
 
+//目标池
 template<class T>
 class ObjectSink {
 public:
@@ -29,9 +30,9 @@ public:
     }
 
     //计算需要识别的目标
-    void CalcNeedRecognizeObjects(vector<T> &objs, vector<T> &recognizableObjs) {
+    vector<T>  CalcNeedRecognizeObjects(vector<T> &objs) {
         unique_lock<mutex> lck(mutex_);
-
+        vector<T> recognizableObjs;
         for (auto &o : objs) {
             // 1. 目标第一次出现
             // 2. 目标最新的评分比上一次高
@@ -46,16 +47,17 @@ public:
                 }
             }
         }
+        return recognizableObjs;
     }
 
-    //设置目标
+    //更新检测到的目标
     void UpdateDetectedObjects(vector<T> &objs) {
         unique_lock<mutex> lck(mutex_);
 
         for (auto &o : objs) {
             //如果没有找到，则添加到已存在目标容器中
             if (existObjs_.find(o.guid) == existObjs_.end()) {
-                ObjectWithCounter newObj;
+                ObjectVO newObj;
                 newObj.obj1 = o;
                 existObjs_[o.guid] = newObj;
                 if (nullptr != objAppearHandler_) {
@@ -100,19 +102,20 @@ public:
         }
     }
 
+    //更新识别到的目标
     void UpdateRecognizedObjects(vector<T> &objs) {
         unique_lock<mutex> lck(mutex_);
         for (auto &o : objs) {
             if (existObjs_.find(o.guid) != existObjs_.end()) {
-                auto &lastObj = existObjs_[o.guid];
+                auto &lastObj = existObjs_[o.guid].obj2;
                 //对比属性，根据属性的评分判断是否更新目标的属性
                 for (auto &p : o.attrs) {
                     uint32_t attrKey = p.first;
-                    if (lastObj.obj2.attrs.find(attrKey) != lastObj.obj2.attrs.end()) {
+                    if (lastObj.attrs.find(attrKey) != lastObj.attrs.end()) {
                         uint32_t currScore = p.second.score;
-                        uint32_t lastScore = lastObj.obj2.attrs[attrKey].score;
+                        uint32_t lastScore = lastObj.attrs[attrKey].score;
                         if (currScore < lastScore) {
-                            p.second = lastObj.obj2.attrs[attrKey];
+                            p.second = lastObj.attrs[attrKey];
                         }
                     }
                 }
@@ -137,15 +140,15 @@ public:
     }
 
 private:
-    class ObjectWithCounter {
-        typedef uint32_t OjbectDisappearCounter;
-
+    class ObjectVO {
     public:
-        T obj1;		//obj1 存储检测结果
-        T obj2;		//obj2 存储识别结果
-        OjbectDisappearCounter cnt;
+        typedef uint32_t DisappearCounter;
 
-        ObjectWithCounter() {
+        T obj1;		//obj1 存储检测结果，检测结果不带属性信息
+        T obj2;		//obj2 存储识别结果，识别结果带属性信息
+        DisappearCounter cnt;
+
+        ObjectVO() {
             cnt = GlobalSettings::getInstance().objectDisappearCount;
         }
 
@@ -160,7 +163,7 @@ private:
 
     mutex mutex_;
     //已经存在的目标<id, obj>
-    map<string, ObjectWithCounter> existObjs_;
+    map<string, ObjectVO> existObjs_;
     ObjectAppearHandler objAppearHandler_;
     ObjectDisappearHandler objDisappearHandler_;
 };
