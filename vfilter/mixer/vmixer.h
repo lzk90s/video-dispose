@@ -43,26 +43,14 @@ protected:
 
     //画目标的矩形框
     virtual void mixObjectRectangle(cv::Mat &frame, int32_t x, int32_t y, int32_t w, int32_t h,
-                                    CvScalar color= CV_RGB(255,255,255)) {
+                                    CvScalar color = CV_RGB(255, 255, 255)) {
         int32_t thickness = 2;
         cv::rectangle(frame, cvPoint(x, y), cvPoint(x + w, y + h), color, thickness, 1, 0);
     }
 
-    //目标位移修正, shift表示的是当前帧与上一帧之间的位移
-    //目标的移动一般都是有规律的，因为是抽帧的，所以用目标当前区域和位移来计算出真正的位置，做修正
-    virtual algo::Rect recoveryObjectRect(algo::Rect &rect, algo::Shift &shift) {
-        //抽帧间隔
-        uint32_t frameInternal = GlobalSettings::getInstance().framePickInternalNum;
-        int32_t x = rect[0], y = rect[1], w = rect[2], h = rect[3];
-        int32_t sx = shift[0], sy = shift[1];
-        x += sx / frameInternal;
-        y += sy / frameInternal;
-        return algo::Rect{x,y,w,h};
-    }
-
     //画目标的属性文字
     virtual void mixObjectAttributeText(cv::Mat &frame, int32_t x, int32_t y, int32_t w, int32_t h,
-                                        vector<algo::Attribute> &attrs, CvScalar color= CV_RGB(255,255,255)) {
+                                        vector<algo::Attribute> &attrs, CvScalar color = CV_RGB(255, 255, 255)) {
         // 根据目标的远近，计算字体大小
         int32_t fontSize = FONT_MIN_SIZE + (w / (frame.cols / (FONT_MAX_SIZE - FONT_MIN_SIZE)));
         cv::Scalar size{ (double)fontSize, 0.5, 0.1, 0 };
@@ -131,7 +119,7 @@ protected:
             }
 
             // 如果宽或者高计算出来为0，说明到最边上了，不显示
-            if (w1== 0 || h1==0) {
+            if (w1 == 0 || h1 == 0) {
                 continue;
             }
             // y方向超过最大，不显示多余的
@@ -151,7 +139,7 @@ protected:
             wchar_t msg[200] = { 0 };
             swprintf(msg, 200, L"%hs", a.name.c_str());
             //字体是以字的下面作为坐标的，所以，y1是字的上部坐标，所以坐标再往下移动一个字的高度
-            text_.putText(frame, msg, cvPoint(x1, y1+ fontSize), color);
+            text_.putText(frame, msg, cvPoint(x1, y1 + fontSize), color);
 
             idx++;
         }
