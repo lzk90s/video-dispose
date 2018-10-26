@@ -19,8 +19,7 @@ protected:
     void doMixFrame(cv::Mat &frame, vector<algo::VehicleObject> &objs1, vector<algo::VehicleObject> &objs2) override {
 
         for (uint32_t idx = 0; idx < objs1.size() && idx <objs2.size(); idx++) {
-            // 区域从objs1取
-            algo::Rect &rect = objs1[idx].detect;
+            algo::Rect rect = recoveryObjectRect(objs1[idx].detect, objs1[idx].trail);
             int32_t x = rect[0], y = rect[1], w = rect[2], h = rect[3];
             mixObjectRectangle(frame, x, y, w, h, CV_RGB(0, 255, 0));
 

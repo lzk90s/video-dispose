@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <string>
 #include <iostream>
+#include <limits>
 
 #include "common/helper/singleton.h"
 
@@ -65,7 +66,28 @@ private:
         bufferedFrameType = parseEnvNumValue("BUFFERED_FRAME_TYPE", 1);
     }
 
-    uint32_t parseEnvNumValue(const string &env, uint32_t defValue) {
+    void dump() {
+        cout << "Settings -> {"
+             << "framePickInternalMs: " << framePickInternalMs << ", "
+             << "framePickInternalNum: " << framePickInternalNum << ", "
+             << "frameCacheMaxNum: " << frameCacheMaxNum << ", "
+             << "compressFrameCache: " << compressFrameCache << ", "
+             << "objectDisappearCount: " << objectDisappearCount << ", "
+             << "enableGosunAlgo: " << enableGosunAlgo << ", "
+             << "enableSeemmoAlgo: " << enableSeemmoAlgo << ", "
+             << "scoreDiff4ReRecognize: " << scoreDiff4ReRecognize << ", "
+             << "bufferedFrameType: " << bufferedFrameType << ", "
+             << "facePictureMinWidth: " << facePictureMinWidth << ", "
+             << "personPictureMinWidth: " << personPictureMinWidth << ", "
+             << "bikePictureMinWidth: " << bikePictureMinWidth << ", "
+             << "vehiclePictureMinWidth: " << vehiclePictureMinWidth << ", "
+             << "notifyServerHost: " << notifyServerHost
+             << "}"
+             << endl;
+    }
+
+
+    int32_t parseEnvNumValue(const string &env, int32_t defValue) {
         char *e = std::getenv(env.c_str());
         if (e != nullptr) {
             return atoi(e);
@@ -88,26 +110,6 @@ private:
             return string(e);
         }
         return defValue;
-    }
-
-    void dump() {
-        cout << "Settings -> {"
-             << "framePickInternalMs: " << framePickInternalMs << ", "
-             << "framePickInternalNum: " << framePickInternalNum << ", "
-             << "frameCacheMaxNum: " << frameCacheMaxNum << ", "
-             << "compressFrameCache: " << compressFrameCache << ", "
-             << "objectDisappearCount: " << objectDisappearCount << ", "
-             << "enableGosunAlgo: " << enableGosunAlgo << ", "
-             << "enableSeemmoAlgo: " << enableSeemmoAlgo << ", "
-             << "scoreDiff4ReRecognize: " << scoreDiff4ReRecognize << ", "
-             << "bufferedFrameType: " << bufferedFrameType << ", "
-             << "facePictureMinWidth: " << facePictureMinWidth << ", "
-             << "personPictureMinWidth: " << personPictureMinWidth << ", "
-             << "bikePictureMinWidth: " << bikePictureMinWidth << ", "
-             << "vehiclePictureMinWidth: " << vehiclePictureMinWidth << ", "
-             << "notifyServerHost: " << notifyServerHost
-             << "}"
-             << endl;
     }
 };
 

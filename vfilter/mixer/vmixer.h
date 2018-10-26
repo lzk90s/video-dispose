@@ -44,8 +44,20 @@ protected:
     //画目标的矩形框
     virtual void mixObjectRectangle(cv::Mat &frame, int32_t x, int32_t y, int32_t w, int32_t h,
                                     CvScalar color= CV_RGB(255,255,255)) {
-        int32_t thickness = 3;
+        int32_t thickness = 2;
         cv::rectangle(frame, cvPoint(x, y), cvPoint(x + w, y + h), color, thickness, 1, 0);
+    }
+
+    //目标位移修正, shift表示的是当前帧与上一帧之间的位移
+    //目标的移动一般都是有规律的，因为是抽帧的，所以用目标当前区域和位移来计算出真正的位置，做修正
+    virtual algo::Rect recoveryObjectRect(algo::Rect &rect, algo::Shift &shift) {
+        //抽帧间隔
+        uint32_t frameInternal = GlobalSettings::getInstance().framePickInternalNum;
+        int32_t x = rect[0], y = rect[1], w = rect[2], h = rect[3];
+        int32_t sx = shift[0], sy = shift[1];
+        x += sx / frameInternal;
+        y += sy / frameInternal;
+        return algo::Rect{x,y,w,h};
     }
 
     //画目标的属性文字
