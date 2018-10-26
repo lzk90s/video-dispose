@@ -44,27 +44,68 @@ class RecParamBuilder {
 public:
     string Build(vector<LocationPO> &locations) {
         json j = R"(
-            {
-                "Recognize": {
-                    "Feature": {
-                        "IsRec": false
-                    },
-                    "Person": {
-                        "IsRec": true
-                    },
-                    "Vehicle": {
-                        "Brand": {
-                            "IsRec": true
-                        },
-                        "Color": {
-                            "IsRec": true
-                        },
-                        "Plate": {
-                            "IsRec": true
-                        }
-                    }
-                }
-            }
+		 {
+			"Detect": {
+				"IsDet": true,
+				"Threshold": 1,
+				"Mode": 0
+			},
+			"Recognize": {
+				"Feature": {
+					"IsRec": false
+				},
+				"Person": {
+					"IsRec": true
+				},
+				"Vehicle": {
+					"Brand": {
+						"IsRec": true
+					},
+					"Plate": {
+						"IsRec": true
+					},
+					"Color": {
+						"IsRec": true
+					},
+					"Marker": {
+						"IsRec": true
+					},
+					"Type": {
+						"IsRec": true
+					},
+					"Belt": {
+						"IsRec": true
+					},
+					"Call": {
+						"IsRec": true
+					},
+					"Crash": {
+						"IsRec": true
+					},
+					"Danger": {
+						"IsRec": true
+					},
+					"Rack": {
+						"IsRec": true
+					},
+					"Sunroof": {
+						"IsRec": true
+					},
+					"SpareTire": {
+						"IsRec": true
+					},
+					"Slag": {
+						"IsRec": true
+					},
+					"Convertible": {
+						"IsRec": true
+					},
+					"Manned": {
+						"IsRec": true
+					}
+				}
+			}
+		}
         )"_json;
 
         // only one

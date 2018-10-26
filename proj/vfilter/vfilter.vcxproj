@@ -87,9 +87,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\vfilter\app.h" />
-    <ClInclude Include="..\..\vfilter\algo_proc.h" />
     <ClInclude Include="..\..\vfilter\buffered_frame.h" />
     <ClInclude Include="..\..\vfilter\frame_handler.h" />
+    <ClInclude Include="..\..\vfilter\frame_picker.h" />
     <ClInclude Include="..\..\vfilter\mixer\face_mixer.h" />
     <ClInclude Include="..\..\vfilter\notifier\bike_notifier.h" />
     <ClInclude Include="..\..\vfilter\notifier\face_notifier.h" />
@@ -98,6 +98,9 @@
     <ClInclude Include="..\..\vfilter\notifier\person_notifier.h" />
     <ClInclude Include="..\..\vfilter\notifier\vehicle_notifier.h" />
     <ClInclude Include="..\..\vfilter\object_sink.h" />
+    <ClInclude Include="..\..\vfilter\proc\abstract_algo_proc.h" />
+    <ClInclude Include="..\..\vfilter\proc\default_algo_proc.h" />
+    <ClInclude Include="..\..\vfilter\proc\face_algo_proc.h" />
     <ClInclude Include="..\..\vfilter\setting.h" />
     <ClInclude Include="..\..\vfilter\frame_cache.h" />
     <ClInclude Include="..\..\vfilter\mixer\bike_mixer.h" />

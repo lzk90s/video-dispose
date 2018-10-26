@@ -10,7 +10,7 @@
 #include "common/helper/counttimer.h"
 #include "common/helper/logger.h"
 
-#include "sdk_export/sdk_export.h"
+#include "sdk_export.h"
 
 using namespace std;
 

@@ -33,7 +33,7 @@ COPY --from=base_builder /usr/local/bin/seemmo_algo_server /usr/local/bin/
 COPY --from=base_builder /usr/local/lib/*.so /usr/local/lib/
 
 ENV SEEMMO_SDK_HOME /root/seemmo_sdk
-ENV LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${SEEMMO_SDK_HOME}/lib
+ENV LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${SEEMMO_SDK_HOME}/ubuntu/lib
 
 RUN sed -i 's/archive.ubuntu.com/mirrors.aliyun.com/g' /etc/apt/sources.list && \
     ##cuda和nvidia-ml下载会失败，直接删除掉

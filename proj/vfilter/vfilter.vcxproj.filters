@@ -19,6 +19,9 @@
     <Filter Include="源文件\notifier">
       <UniqueIdentifier>{b428b955-8ec9-44cf-b913-55c2aa8bdd20}</UniqueIdentifier>
     </Filter>
+    <Filter Include="源文件\proc">
+      <UniqueIdentifier>{e6c74a94-c6d5-458c-a779-b0ed8270899d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\vfilter\Makefile">
@@ -51,9 +54,6 @@
     </ClInclude>
     <ClInclude Include="..\..\vfilter\mixer\bike_mixer.h">
       <Filter>源文件\mixer</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\vfilter\vsink.h">
-      <Filter>源文件</Filter>
     </ClInclude>
     <ClInclude Include="..\..\vfilter\app.h">
       <Filter>源文件</Filter>
@@ -88,11 +88,23 @@
     <ClInclude Include="..\..\vfilter\object_sink.h">
       <Filter>源文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\vfilter\algo_proc.h">
-      <Filter>源文件</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\vfilter\buffered_frame.h">
       <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\vfilter\vsink.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\vfilter\frame_picker.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\vfilter\proc\abstract_algo_proc.h">
+      <Filter>源文件\proc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\vfilter\proc\default_algo_proc.h">
+      <Filter>源文件\proc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\vfilter\proc\face_algo_proc.h">
+      <Filter>源文件\proc</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

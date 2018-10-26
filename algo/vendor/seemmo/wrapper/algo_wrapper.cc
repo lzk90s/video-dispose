@@ -5,8 +5,6 @@
 
 #include "common/helper/logger.h"
 
-#include "sdk_export/sdk_export.h"
-
 #include "algo/vendor/seemmo/wrapper/algo_wrapper.h"
 #include "algo/vendor/seemmo/wrapper/workers.h"
 

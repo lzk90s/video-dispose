@@ -21,12 +21,7 @@ public:
         json j = R"(
         {
         "Detect": {
-			"IsDet": true,
-			"MaxCarWidth": 0,
-			"MinCarWidth": 0,
-			"Mode": 0,
-			"Threshold": 40,
-			"Version": 1001
+			"IsDet": true
             }
         })"_json;
 
