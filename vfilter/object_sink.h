@@ -21,6 +21,13 @@ public:
 
 public:
 
+    ObjectSink() {
+        gofIdx_ = 0;
+        gofSize_ = 0;
+        objAppearHandler_ = nullptr;
+        objDisappearHandler_ = nullptr;
+    }
+
     void SetObjectAppearHandler(ObjectAppearHandler h) {
         this->objAppearHandler_ = h;
     }
@@ -100,6 +107,10 @@ public:
             }
             existObjs_.erase(o);
         }
+
+        //更新gofsize，gofidx清0
+        gofSize_ = gofIdx_;
+        gofIdx_ = 0;
     }
 
     //更新识别到的目标
@@ -124,10 +135,18 @@ public:
         }
     }
 
+    void IncreaseGofIdx() {
+        unique_lock<mutex> lck(mutex_);
+        gofIdx_++;
+    }
+
     void GetShowableObjects(vector<T> &t1, vector<T> &t2) {
         unique_lock<mutex> lck(mutex_);
         for (auto &o : existObjs_) {
             if (o.second.Showable()) {
+//                 T tmp;
+//                 tmp = o.second.obj1;
+//                 tmp.detect = fixObjectRect(tmp.detect, tmp.trail);
                 t1.push_back(o.second.obj1);
                 t2.push_back(o.second.obj2);
             }
@@ -137,6 +156,21 @@ public:
     bool ObjectExist(const string &objId) {
         unique_lock<mutex> lck(mutex_);
         return existObjs_.find(objId) != existObjs_.end();
+    }
+
+private:
+    //目标位移修正, shift表示的是当前帧与上一帧之间的位移
+    //目标的移动一般都是有规律的，因为是抽帧的，所以用目标当前区域和位移来计算出预估的位置
+    algo::Rect fixObjectRect(algo::Rect &rect, algo::Shift &shift) {
+        int32_t x = rect[0], y = rect[1], w = rect[2], h = rect[3];
+        int32_t gofSize = (int32_t)gofSize_;
+        if (gofSize > 0) {
+            int32_t gofIdx = gofIdx_ > gofSize_ ? (int32_t)gofSize_ : (int32_t)gofIdx_;
+            int32_t sx = shift[0], sy = shift[1];
+            x += (sx / gofSize) * gofIdx;
+            y += (sy / gofSize) * gofIdx;
+        }
+        return algo::Rect{ x,y,w,h };
     }
 
 private:
@@ -166,6 +200,9 @@ private:
     map<string, ObjectVO> existObjs_;
     ObjectAppearHandler objAppearHandler_;
     ObjectDisappearHandler objDisappearHandler_;
+    //因为是抽帧检测，所以，把相邻两次检测之间的帧认作一个gof（group of frame），gofSize表示一个gof中的帧数目，gofidx表示一帧在当前gof中的序号
+    uint32_t gofSize_;
+    uint32_t gofIdx_;
 };
 
 typedef ObjectSink<algo::BikeObject> BikeObjectSink;
