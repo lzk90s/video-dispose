@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "vfilter/proc/abstract_algo_proc.h"
 
@@ -45,12 +45,6 @@ private:
             return ret;
         }
 
-        onDetectedObjects(channelId, frameId, frame, imageResult);
-
-        return 0;
-    }
-
-    void onDetectedObjects(uint32_t channelId, uint64_t frameId, cv::Mat &frame, ImageResult &imageResult)  {
         for (auto &p : imageResult.faces) {
             //针对人脸特殊处理，目前人脸算法中没有去重，这样简单处理
             if (!sink_.faceObjectSink.ObjectExist(p.guid)) {
@@ -58,8 +52,9 @@ private:
                 sink_.faceNotifier.OnRecognizedObject(channelId, frame, p);
             }
         }
+        sink_.faceObjectSink.OnDetectedObjects(imageResult.faces);
 
-        sink_.faceObjectSink.UpdateDetectedObjects(imageResult.faces);
+        return 0;
     }
 
 private:

@@ -12,7 +12,7 @@
 
 namespace vf {
 
-//Ä¿±ê³Ø
+//ç›®æ ‡æ± 
 template<class T>
 class ObjectSink {
 public:
@@ -36,33 +36,76 @@ public:
         this->objDisappearHandler_ = h;
     }
 
-    //¼ÆËãĞèÒªÊ¶±ğµÄÄ¿±ê
-    vector<T>  CalcNeedRecognizeObjects(vector<T> &objs) {
+    vector<T> OnDetectedObjects(vector<T> &objs) {
         unique_lock<mutex> lck(mutex_);
-        vector<T> recognizableObjs;
+        vector<T> toRecObjs = calcNeedRecognizeObjects(objs);
+        updateDetectedObjects(objs);
+        return toRecObjs;
+    }
+
+    void OnRecognizedObjects(vector<T> &objs) {
+        unique_lock<mutex> lck(mutex_);
+        updateRecognizedObjects(objs);
+    }
+
+    void IncreaseGofIdx() {
+        unique_lock<mutex> lck(mutex_);
+        gofIdx_++;
+    }
+
+    void GetShowableObjects(vector<T> &t1, vector<T> &t2) {
+        unique_lock<mutex> lck(mutex_);
+        for (auto &o : existObjs_) {
+            if (o.second.Showable()) {
+                t1.push_back(o.second.obj1);
+                t2.push_back(o.second.obj2);
+            }
+        }
+    }
+
+    bool ObjectExist(const string &objId) {
+        unique_lock<mutex> lck(mutex_);
+        return existObjs_.find(objId) != existObjs_.end();
+    }
+
+private:
+    //ç›®æ ‡ä½ç§»ä¿®æ­£, shiftè¡¨ç¤ºçš„æ˜¯å½“å‰å¸§ä¸ä¸Šä¸€å¸§ä¹‹é—´çš„ä½ç§»
+    //ç›®æ ‡çš„ç§»åŠ¨ä¸€èˆ¬éƒ½æ˜¯æœ‰è§„å¾‹çš„ï¼Œå› ä¸ºæ˜¯æŠ½å¸§çš„ï¼Œæ‰€ä»¥ç”¨ç›®æ ‡å½“å‰åŒºåŸŸå’Œä½ç§»æ¥è®¡ç®—å‡ºé¢„ä¼°çš„ä½ç½®
+    algo::Rect fixObjectRect(algo::Rect &rect, algo::Shift &shift) {
+        int32_t x = rect[0], y = rect[1], w = rect[2], h = rect[3];
+        int32_t gofSize = (int32_t)gofSize_;
+        if (gofSize > 0) {
+            int32_t gofIdx = gofIdx_ > gofSize_ ? (int32_t)gofSize_ : (int32_t)gofIdx_;
+            int32_t sx = shift[0], sy = shift[1];
+            x += (sx / gofSize) * gofIdx;
+            y += (sy / gofSize) * gofIdx;
+        }
+        return algo::Rect{ x,y,w,h };
+    }
+
+    //è®¡ç®—éœ€è¦è¯†åˆ«çš„ç›®æ ‡
+    vector<T>  calcNeedRecognizeObjects(vector<T> &objs) {
+        vector<T> toRecObjs;
         for (auto &o : objs) {
-            // 1. Ä¿±êµÚÒ»´Î³öÏÖ
-            // 2. Ä¿±ê×îĞÂµÄÆÀ·Ö±ÈÉÏÒ»´Î¸ß
+            // 1. ç›®æ ‡ç¬¬ä¸€æ¬¡å‡ºç°
+            // 2. ç›®æ ‡æœ€æ–°çš„è¯„åˆ†æ¯”ä¸Šä¸€æ¬¡é«˜
             if (existObjs_.find(o.guid) == existObjs_.end()) {
-                recognizableObjs.push_back(o);
+                toRecObjs.push_back(o);
             } else {
                 uint32_t currScore = o.score;
                 uint32_t lastScore = existObjs_[o.guid].obj1.score;
                 if ((currScore > lastScore) &&
                         (currScore - lastScore > GlobalSettings::getInstance().scoreDiff4ReRecognize)) {
-                    recognizableObjs.push_back(o);
+                    toRecObjs.push_back(o);
                 }
             }
         }
-        return recognizableObjs;
+        return toRecObjs;
     }
 
-    //¸üĞÂ¼ì²âµ½µÄÄ¿±ê
-    void UpdateDetectedObjects(vector<T> &objs) {
-        unique_lock<mutex> lck(mutex_);
-
+    void updateDetectedObjects(vector<T> &objs) {
         for (auto &o : objs) {
-            //Èç¹ûÃ»ÓĞÕÒµ½£¬ÔòÌí¼Óµ½ÒÑ´æÔÚÄ¿±êÈİÆ÷ÖĞ
+            //å¦‚æœæ²¡æœ‰æ‰¾åˆ°ï¼Œåˆ™æ·»åŠ åˆ°å·²å­˜åœ¨ç›®æ ‡å®¹å™¨ä¸­
             if (existObjs_.find(o.guid) == existObjs_.end()) {
                 ObjectVO newObj;
                 newObj.obj1 = o;
@@ -72,7 +115,7 @@ public:
                 }
             } else {
                 existObjs_[o.guid].obj1 = o;
-                //ÖØÖÃ¼ÆÊı
+                //é‡ç½®è®¡æ•°
                 existObjs_[o.guid].ResetCounter();
             }
         }
@@ -88,10 +131,10 @@ public:
             }
             if (!exist) {
                 /*
-                * ÔÚ×îĞÂµÄÄ¿±êÖĞ²»´æÔÚ£¬ÓĞÁ½ÖÖÇé¿ö
-                * 1. Ä¿±êÒÑ¾­ÍêÈ«ÏûÊ§
-                * 2. Ä¿±êÖ»ÊÇÔÚ¸ÕºÃÕâÒ»Ö¡ÖĞÃ»ÓĞ¼ì²âµ½£¬²¢²»´ú±íÄ¿±êÒÑ¾­ÏûÊ§ÁË
-                * Õë¶ÔÕâÁ½ÖÖÇé¿ö£¬Í¨¹ı¼õÉÙÄ¿±êµÄ¼ÆÊı£¬µ±Ä¿±ê¼ÆÊıÎª0µÄÊ±ºò£¬±íÊ¾Ä¿±êÕæµÄÏûÊ§ÁË¡£¾ÍÉ¾³ıµô
+                * åœ¨æœ€æ–°çš„ç›®æ ‡ä¸­ä¸å­˜åœ¨ï¼Œæœ‰ä¸¤ç§æƒ…å†µ
+                * 1. ç›®æ ‡å·²ç»å®Œå…¨æ¶ˆå¤±
+                * 2. ç›®æ ‡åªæ˜¯åœ¨åˆšå¥½è¿™ä¸€å¸§ä¸­æ²¡æœ‰æ£€æµ‹åˆ°ï¼Œå¹¶ä¸ä»£è¡¨ç›®æ ‡å·²ç»æ¶ˆå¤±äº†
+                * é’ˆå¯¹è¿™ä¸¤ç§æƒ…å†µï¼Œé€šè¿‡å‡å°‘ç›®æ ‡çš„è®¡æ•°ï¼Œå½“ç›®æ ‡è®¡æ•°ä¸º0çš„æ—¶å€™ï¼Œè¡¨ç¤ºç›®æ ‡çœŸçš„æ¶ˆå¤±äº†ã€‚å°±åˆ é™¤æ‰
                 */
                 o.second.cnt = o.second.cnt - 1;
                 if (o.second.cnt == 0) {
@@ -100,7 +143,7 @@ public:
             }
         }
 
-        //É¾µôÏûÊ§µÄÄ¿±ê
+        //åˆ æ‰æ¶ˆå¤±çš„ç›®æ ‡
         for (auto &o : disappearedObjs) {
             if (nullptr != objDisappearHandler_) {
                 objDisappearHandler_(o);	//callback
@@ -108,18 +151,16 @@ public:
             existObjs_.erase(o);
         }
 
-        //¸üĞÂgofsize£¬gofidxÇå0
+        //æ›´æ–°gofsizeï¼Œgofidxæ¸…0
         gofSize_ = gofIdx_;
         gofIdx_ = 0;
     }
 
-    //¸üĞÂÊ¶±ğµ½µÄÄ¿±ê
-    void UpdateRecognizedObjects(vector<T> &objs) {
-        unique_lock<mutex> lck(mutex_);
+    void updateRecognizedObjects(vector<T> &objs) {
         for (auto &o : objs) {
             if (existObjs_.find(o.guid) != existObjs_.end()) {
                 auto &lastObj = existObjs_[o.guid].obj2;
-                //¶Ô±ÈÊôĞÔ£¬¸ù¾İÊôĞÔµÄÆÀ·ÖÅĞ¶ÏÊÇ·ñ¸üĞÂÄ¿±êµÄÊôĞÔ
+                //å¯¹æ¯”å±æ€§ï¼Œæ ¹æ®å±æ€§çš„è¯„åˆ†åˆ¤æ–­æ˜¯å¦æ›´æ–°ç›®æ ‡çš„å±æ€§
                 for (auto &p : o.attrs) {
                     uint32_t attrKey = p.first;
                     if (lastObj.attrs.find(attrKey) != lastObj.attrs.end()) {
@@ -135,51 +176,13 @@ public:
         }
     }
 
-    void IncreaseGofIdx() {
-        unique_lock<mutex> lck(mutex_);
-        gofIdx_++;
-    }
-
-    void GetShowableObjects(vector<T> &t1, vector<T> &t2) {
-        unique_lock<mutex> lck(mutex_);
-        for (auto &o : existObjs_) {
-            if (o.second.Showable()) {
-//                 T tmp;
-//                 tmp = o.second.obj1;
-//                 tmp.detect = fixObjectRect(tmp.detect, tmp.trail);
-                t1.push_back(o.second.obj1);
-                t2.push_back(o.second.obj2);
-            }
-        }
-    }
-
-    bool ObjectExist(const string &objId) {
-        unique_lock<mutex> lck(mutex_);
-        return existObjs_.find(objId) != existObjs_.end();
-    }
-
-private:
-    //Ä¿±êÎ»ÒÆĞŞÕı, shift±íÊ¾µÄÊÇµ±Ç°Ö¡ÓëÉÏÒ»Ö¡Ö®¼äµÄÎ»ÒÆ
-    //Ä¿±êµÄÒÆ¶¯Ò»°ã¶¼ÊÇÓĞ¹æÂÉµÄ£¬ÒòÎªÊÇ³éÖ¡µÄ£¬ËùÒÔÓÃÄ¿±êµ±Ç°ÇøÓòºÍÎ»ÒÆÀ´¼ÆËã³öÔ¤¹ÀµÄÎ»ÖÃ
-    algo::Rect fixObjectRect(algo::Rect &rect, algo::Shift &shift) {
-        int32_t x = rect[0], y = rect[1], w = rect[2], h = rect[3];
-        int32_t gofSize = (int32_t)gofSize_;
-        if (gofSize > 0) {
-            int32_t gofIdx = gofIdx_ > gofSize_ ? (int32_t)gofSize_ : (int32_t)gofIdx_;
-            int32_t sx = shift[0], sy = shift[1];
-            x += (sx / gofSize) * gofIdx;
-            y += (sy / gofSize) * gofIdx;
-        }
-        return algo::Rect{ x,y,w,h };
-    }
-
 private:
     class ObjectVO {
     public:
         typedef uint32_t DisappearCounter;
 
-        T obj1;		//obj1 ´æ´¢¼ì²â½á¹û£¬¼ì²â½á¹û²»´øÊôĞÔĞÅÏ¢
-        T obj2;		//obj2 ´æ´¢Ê¶±ğ½á¹û£¬Ê¶±ğ½á¹û´øÊôĞÔĞÅÏ¢
+        T obj1;		//obj1 å­˜å‚¨æ£€æµ‹ç»“æœï¼Œæ£€æµ‹ç»“æœä¸å¸¦å±æ€§ä¿¡æ¯
+        T obj2;		//obj2 å­˜å‚¨è¯†åˆ«ç»“æœï¼Œè¯†åˆ«ç»“æœå¸¦å±æ€§ä¿¡æ¯
         DisappearCounter cnt;
 
         ObjectVO() {
@@ -196,11 +199,11 @@ private:
     };
 
     mutex mutex_;
-    //ÒÑ¾­´æÔÚµÄÄ¿±ê<id, obj>
+    //å·²ç»å­˜åœ¨çš„ç›®æ ‡<id, obj>
     map<string, ObjectVO> existObjs_;
     ObjectAppearHandler objAppearHandler_;
     ObjectDisappearHandler objDisappearHandler_;
-    //ÒòÎªÊÇ³éÖ¡¼ì²â£¬ËùÒÔ£¬°ÑÏàÁÚÁ½´Î¼ì²âÖ®¼äµÄÖ¡ÈÏ×÷Ò»¸ögof£¨group of frame£©£¬gofSize±íÊ¾Ò»¸ögofÖĞµÄÖ¡ÊıÄ¿£¬gofidx±íÊ¾Ò»Ö¡ÔÚµ±Ç°gofÖĞµÄĞòºÅ
+    //å› ä¸ºæ˜¯æŠ½å¸§æ£€æµ‹ï¼Œæ‰€ä»¥ï¼ŒæŠŠç›¸é‚»ä¸¤æ¬¡æ£€æµ‹ä¹‹é—´çš„å¸§è®¤ä½œä¸€ä¸ªgofï¼ˆgroup of frameï¼‰ï¼ŒgofSizeè¡¨ç¤ºä¸€ä¸ªgofä¸­çš„å¸§æ•°ç›®ï¼Œgofidxè¡¨ç¤ºä¸€å¸§åœ¨å½“å‰gofä¸­çš„åºå·
     uint32_t gofSize_;
     uint32_t gofIdx_;
 };

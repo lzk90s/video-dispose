@@ -11,47 +11,48 @@ using namespace  std;
 
 namespace algo {
 
-//¼ì²â¸ú×Ù²ÎÊı
+//æ£€æµ‹è·Ÿè¸ªå‚æ•°
 class TrailParam {
 public:
-    vector<Point> roi;	//ROIÇøÓò£¬Ã¿Ò»¸öpointÊÇROI¶à±ßĞÎÇøÓòµÄÒ»¸öµã
+    vector<Point> roi;	//ROIåŒºåŸŸï¼Œæ¯ä¸€ä¸ªpointæ˜¯ROIå¤šè¾¹å½¢åŒºåŸŸçš„ä¸€ä¸ªç‚¹
 };
 
-//Ê¶±ğ²ÎÊı
+//è¯†åˆ«å‚æ•°
 class RecogParam {
 public:
     typedef struct tagObjLocation {
         string ContextCode;
-        ObjectType type;			// Ä¿±êÀàĞÍ
-        Rect detect;		// Ä¿±êËùÔÚÇøÓò(x,y,w,h)
-        Shift trail;		// Ä¿±ê¸ú×Ù±ä»¯(x,y)
+        string guid;
+        ObjectType type;			// ç›®æ ‡ç±»å‹
+        Rect detect;		// ç›®æ ‡æ‰€åœ¨åŒºåŸŸ(x,y,w,h)
+        Shift trail;		// ç›®æ ‡è·Ÿè¸ªå˜åŒ–(x,y)
     } ObjLocation;
 
     vector<ObjLocation> locations;
 };
 
-//¼ì²â½á¹û
+//æ£€æµ‹ç»“æœ
 class ImageResult {
 public:
-    vector<VehicleObject> vehicles;		// »ú¶¯³µ
-    vector<PersonObject> pedestrains;		// ĞĞÈË
-    vector<BikeObject> bikes;			// ·Ç»ú¶¯³µ
-    vector<FaceObject> faces;			// ÈËÁ³
+    vector<VehicleObject> vehicles;		// æœºåŠ¨è½¦
+    vector<PersonObject> pedestrains;		// è¡Œäºº
+    vector<BikeObject> bikes;			// éæœºåŠ¨è½¦
+    vector<FaceObject> faces;			// äººè„¸
 };
 
-//¸ú×ÙÔñÓÅ½á¹û
+//è·Ÿè¸ªæ‹©ä¼˜ç»“æœ
 class FilterResult {
 public:
-    vector<VehicleFilter> vehicles;		// »ú¶¯³µ
-    vector<PersonFilter> pedestrains;		// ĞĞÈË
-    vector<BikeFilter> bikes;			// ·Ç»ú¶¯³µ
-    vector<FaceFilter> faces;			// ÈËÁ³
-    vector<int32_t> releasedFrames;	// ¿ÉÒÔÊÍ·ÅµÄÖ¡
+    vector<VehicleFilter> vehicles;		// æœºåŠ¨è½¦
+    vector<PersonFilter> pedestrains;		// è¡Œäºº
+    vector<BikeFilter> bikes;			// éæœºåŠ¨è½¦
+    vector<FaceFilter> faces;			// äººè„¸
+    vector<int32_t> releasedFrames;	// å¯ä»¥é‡Šæ”¾çš„å¸§
 };
 
 class AlgoStub {
 public:
-    //¼ì²â¸ú×Ù + È¥ÖØÔñÓÅ
+    //æ£€æµ‹è·Ÿè¸ª + å»é‡æ‹©ä¼˜
     virtual int32_t Trail(
         uint32_t channelId,
         uint64_t frameId,
@@ -65,7 +66,7 @@ public:
         throw runtime_error("unimplemented method");
     };
 
-    //Ê¶±ğ
+    //è¯†åˆ«
     virtual int32_t Recognize(
         uint32_t channelId,
         const uint8_t *bgr24,

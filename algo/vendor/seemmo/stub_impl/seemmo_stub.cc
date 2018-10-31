@@ -47,7 +47,7 @@ public:
         TrailReply reply;
         brpc::Controller cntl;
 
-        // ³õÊ¼»¯¹²ÏíÄÚ´æ
+        // åˆå§‹åŒ–å…±äº«å†…å­˜
         if (!SIMMNG::getInstance().Exist(channelId)) {
             SIMMNG::getInstance().Create(channelId, width, height, false);
         }
@@ -56,8 +56,8 @@ public:
 
         request.set_videochl(channelId);
         request.set_timestamp(frameId);
-        //request.set_bgr24((char*)bgr24, width*height * 3);		//bgr24Í¼Æ¬×Ö½Ú´óĞ¡Îªh*w*3
-        memcpy(bgr24Dst, bgr24, width*height * 3);	//¿½±´µ½¹²ÏíÄÚ´æÖĞ
+        //request.set_bgr24((char*)bgr24, width*height * 3);		//bgr24å›¾ç‰‡å­—èŠ‚å¤§å°ä¸ºh*w*3
+        memcpy(bgr24Dst, bgr24, width*height * 3);	//æ‹·è´åˆ°å…±äº«å†…å­˜ä¸­
         bgr24Dst[width*height * 3] = '\0';
         request.set_width(width);
         request.set_height(height);
@@ -105,8 +105,8 @@ public:
         uint8_t *bgr24Dst = SIMMNG::getInstance().Get(channelId)->GetBuffer().bgr24Buff2;
 
         request.set_videochl(channelId);
-        //request.set_bgr24((char*)bgr24, width*height * 3);		//bgr24Í¼Æ¬×Ö½Ú´óĞ¡Îªh*w*3
-        memcpy(bgr24Dst, bgr24, width*height * 3);	//Í¼Æ¬¿½±´µ½¹²ÏíÄÚ´æÖĞ
+        //request.set_bgr24((char*)bgr24, width*height * 3);		//bgr24å›¾ç‰‡å­—èŠ‚å¤§å°ä¸ºh*w*3
+        memcpy(bgr24Dst, bgr24, width*height * 3);	//å›¾ç‰‡æ‹·è´åˆ°å…±äº«å†…å­˜ä¸­
         bgr24Dst[width*height * 3] = '\0';
         request.set_width(width);
         request.set_height(height);
@@ -160,7 +160,7 @@ private:
             return;
         }
 
-        //Ä¿Ç°Ã»ÓĞÓÃÅúÁ¿·½Ê½£¬ËùÒÔ£¬Ö»È¡µÚÒ»¸öimageresult¼´¿É
+        //ç›®å‰æ²¡æœ‰ç”¨æ‰¹é‡æ–¹å¼ï¼Œæ‰€ä»¥ï¼Œåªå–ç¬¬ä¸€ä¸ªimageresultå³å¯
         detect::ImageResultPO root = p.ImageResults.at(0);
 
         for (auto &a : root.Bikes) {
@@ -210,7 +210,7 @@ private:
             return;
         }
 
-        //Ä¿Ç°Ã»ÓĞÓÃÅúÁ¿·½Ê½£¬ËùÒÔ£¬Ö»È¡µÚÒ»¸öimageresult¼´¿É
+        //ç›®å‰æ²¡æœ‰ç”¨æ‰¹é‡æ–¹å¼ï¼Œæ‰€ä»¥ï¼Œåªå–ç¬¬ä¸€ä¸ªimageresultå³å¯
         trail::FilterResultPO root = p.FilterResults.at(0);
 
         for (auto &a : root.Bikes) {
@@ -258,7 +258,7 @@ private:
             return;
         }
 
-        //Ä¿Ç°Ã»ÓĞÓÃÅúÁ¿·½Ê½£¬ËùÒÔ£¬Ö»È¡µÚÒ»¸öimageresult¼´¿É
+        //ç›®å‰æ²¡æœ‰ç”¨æ‰¹é‡æ–¹å¼ï¼Œæ‰€ä»¥ï¼Œåªå–ç¬¬ä¸€ä¸ªimageresultå³å¯
         rec::ImageResultPO root = p.ImageResults.at(0);
 
         for (auto &a : root.Bikes) {
