@@ -262,7 +262,7 @@ private:
         sink_.personObjectSink.UpdateDetectedObjects(imageResult.pedestrains);
         sink_.vehicleObjectSink.UpdateDetectedObjects(imageResult.vehicles);
         sink_.bikeObjectSink.UpdateDetectedObjects(imageResult.bikes);
-        sink_.faceObjectSink.UpdateDetectedObjects(imageResult.faces);
+        //sink_.faceObjectSink.UpdateDetectedObjects(imageResult.faces);
     }
 
     //识别到目标
@@ -270,7 +270,7 @@ private:
         sink_.personObjectSink.UpdateRecognizedObjects(imageResult.pedestrains);
         sink_.vehicleObjectSink.UpdateRecognizedObjects(imageResult.vehicles);
         sink_.bikeObjectSink.UpdateRecognizedObjects(imageResult.bikes);
-        sink_.faceObjectSink.UpdateRecognizedObjects(imageResult.faces);
+        //sink_.faceObjectSink.UpdateRecognizedObjects(imageResult.faces);
     }
 
     //识别到择优后的目标
@@ -285,7 +285,7 @@ private:
             sink_.vehicleNotifier.OnRecognizedObject(channelId, frame, p);
         }
         for (auto &p : imageResult.faces) {
-            sink_.faceNotifier.OnRecognizedObject(channelId, frame, p);
+            //sink_.faceNotifier.OnRecognizedObject(channelId, frame, p);
         }
     }
 
