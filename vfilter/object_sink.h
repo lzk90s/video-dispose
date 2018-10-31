@@ -57,7 +57,10 @@ public:
         unique_lock<mutex> lck(mutex_);
         for (auto &o : existObjs_) {
             if (o.second.Showable()) {
-                t1.push_back(o.second.obj1);
+                T tmp = o.second.obj1;
+                //修正抽帧导致的位置偏移
+                tmp.detect = fixObjectRect(tmp.detect, tmp.trail);
+                t1.push_back(tmp);
                 t2.push_back(o.second.obj2);
             }
         }
