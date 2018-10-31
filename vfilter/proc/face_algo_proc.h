@@ -59,7 +59,7 @@ private:
             }
         }
 
-        //sink_.faceObjectSink.UpdateDetectedObjects(imageResult.faces);
+        sink_.faceObjectSink.UpdateDetectedObjects(imageResult.faces);
     }
 
 private:

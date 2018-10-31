@@ -27,33 +27,45 @@ typedef struct tagAttributePO {
 } AttributePO;
 
 typedef struct tagVehicleAttributeGroup {
-    AttributePO Color;
-    AttributePO Type;
-    AttributePO Brand;
-    AttributePO Plate;
+    AttributePO Color;	//车辆颜色
+    AttributePO Type;	//车辆类型
+    AttributePO Brand;	//品牌型号
+    AttributePO Plate;	//号牌号码
+    AttributePO Marker;	//标识物
+    AttributePO Slag;	//渣土车识别
+    AttributePO Rack;	//行李架识别
+    AttributePO Sunroof;	//天窗识别
+    AttributePO SpareTire;	//备胎识别
+    AttributePO Belt;	//安全带识别
+    AttributePO Call;	//打电话识别
+    AttributePO Crash;	//车辆撞损识别
+    AttributePO Danger;	//危险品车辆识别
+    AttributePO Tricycle; //三轮车识别项
+    AttributePO Convertible;	//是否敞篷
+    AttributePO Manned;	//是否载人
 } VehicleAttributeGroup;
 
 typedef struct tagPersonAttributeGroup {
-    AttributePO Sex;
-    AttributePO Age;
-    AttributePO UpperColor;
-    AttributePO BottomColor;
-    AttributePO Orientation;
-    AttributePO Hair;
-    AttributePO Umbrella;
-    AttributePO Hat;
-    AttributePO UpperType;
-    AttributePO BottomType;
-    AttributePO Knapsack;
-    AttributePO Bag;
-    AttributePO Baby;
-    AttributePO MessengerBag;
-    AttributePO ShoulderBag;
-    AttributePO Glasses;
-    AttributePO Mask;
-    AttributePO UpperTexture;
-    AttributePO Barrow;
-    AttributePO TrolleyCase;
+    AttributePO Sex;	//性别
+    AttributePO Age;	//人的年龄
+    AttributePO UpperColor;	//上身衣服颜色
+    AttributePO BottomColor;	//下身衣服颜色
+    AttributePO Orientation;	//人的朝向（前，后，左，右）
+    AttributePO Hair;	//头发类型
+    AttributePO Umbrella;	//是否打伞
+    AttributePO Hat;	//是否带帽子以及头盔
+    AttributePO UpperType;	//上身衣服类型
+    AttributePO BottomType;	//下身衣服类型
+    AttributePO Knapsack;	//是否背包
+    AttributePO Bag;	//是否有拎东西
+    AttributePO Baby;	//是否抱小孩
+    AttributePO MessengerBag;	//
+    AttributePO ShoulderBag;	//
+    AttributePO Glasses;	//眼镜
+    AttributePO Mask;	//口罩
+    AttributePO UpperTexture;	//上衣纹理
+    AttributePO Barrow;	//
+    AttributePO TrolleyCase;	//
 } PersonAttributeGroupPO;
 
 typedef struct tagDetectRectPO {

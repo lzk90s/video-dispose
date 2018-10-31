@@ -5,6 +5,7 @@
 #include <iostream>
 
 #include "common/helper/singleton.h"
+#include "spdlog/sinks/stdout_sinks.h"
 #include "spdlog/spdlog.h"
 
 namespace spd = spdlog;
