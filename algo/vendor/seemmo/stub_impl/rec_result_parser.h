@@ -27,43 +27,43 @@ typedef struct tagAttributePO {
 } AttributePO;
 
 typedef struct tagVehicleAttributeGroup {
-    AttributePO Color;	//³µÁ¾ÑÕÉ«
-    AttributePO Type;	//³µÁ¾ÀàĞÍ
-    AttributePO Brand;	//Æ·ÅÆĞÍºÅ
-    AttributePO Plate;	//ºÅÅÆºÅÂë
-    AttributePO Marker;	//±êÊ¶Îï
-    AttributePO Slag;	//ÔüÍÁ³µÊ¶±ğ
-    AttributePO Rack;	//ĞĞÀî¼ÜÊ¶±ğ
-    AttributePO Sunroof;	//Ìì´°Ê¶±ğ
-    AttributePO SpareTire;	//±¸Ì¥Ê¶±ğ
-    AttributePO Belt;	//°²È«´øÊ¶±ğ
-    AttributePO Call;	//´òµç»°Ê¶±ğ
-    AttributePO Crash;	//³µÁ¾×²ËğÊ¶±ğ
-    AttributePO Danger;	//Î£ÏÕÆ·³µÁ¾Ê¶±ğ
-    AttributePO Tricycle; //ÈıÂÖ³µÊ¶±ğÏî
-    AttributePO Convertible;	//ÊÇ·ñ³¨Åñ
-    AttributePO Manned;	//ÊÇ·ñÔØÈË
+    AttributePO Color;	//è½¦è¾†é¢œè‰²
+    AttributePO Type;	//è½¦è¾†ç±»å‹
+    AttributePO Brand;	//å“ç‰Œå‹å·
+    AttributePO Plate;	//å·ç‰Œå·ç 
+    AttributePO Marker;	//æ ‡è¯†ç‰©
+    AttributePO Slag;	//æ¸£åœŸè½¦è¯†åˆ«
+    AttributePO Rack;	//è¡Œææ¶è¯†åˆ«
+    AttributePO Sunroof;	//å¤©çª—è¯†åˆ«
+    AttributePO SpareTire;	//å¤‡èƒè¯†åˆ«
+    AttributePO Belt;	//å®‰å…¨å¸¦è¯†åˆ«
+    AttributePO Call;	//æ‰“ç”µè¯è¯†åˆ«
+    AttributePO Crash;	//è½¦è¾†æ’æŸè¯†åˆ«
+    AttributePO Danger;	//å±é™©å“è½¦è¾†è¯†åˆ«
+    AttributePO Tricycle; //ä¸‰è½®è½¦è¯†åˆ«é¡¹
+    AttributePO Convertible;	//æ˜¯å¦æ•ç¯·
+    AttributePO Manned;	//æ˜¯å¦è½½äºº
 } VehicleAttributeGroup;
 
 typedef struct tagPersonAttributeGroup {
-    AttributePO Sex;	//ĞÔ±ğ
-    AttributePO Age;	//ÈËµÄÄêÁä
-    AttributePO UpperColor;	//ÉÏÉíÒÂ·şÑÕÉ«
-    AttributePO BottomColor;	//ÏÂÉíÒÂ·şÑÕÉ«
-    AttributePO Orientation;	//ÈËµÄ³¯Ïò£¨Ç°£¬ºó£¬×ó£¬ÓÒ£©
-    AttributePO Hair;	//Í··¢ÀàĞÍ
-    AttributePO Umbrella;	//ÊÇ·ñ´òÉ¡
-    AttributePO Hat;	//ÊÇ·ñ´øÃ±×ÓÒÔ¼°Í·¿ø
-    AttributePO UpperType;	//ÉÏÉíÒÂ·şÀàĞÍ
-    AttributePO BottomType;	//ÏÂÉíÒÂ·şÀàĞÍ
-    AttributePO Knapsack;	//ÊÇ·ñ±³°ü
-    AttributePO Bag;	//ÊÇ·ñÓĞÁà¶«Î÷
-    AttributePO Baby;	//ÊÇ·ñ±§Ğ¡º¢
+    AttributePO Sex;	//æ€§åˆ«
+    AttributePO Age;	//äººçš„å¹´é¾„
+    AttributePO UpperColor;	//ä¸Šèº«è¡£æœé¢œè‰²
+    AttributePO BottomColor;	//ä¸‹èº«è¡£æœé¢œè‰²
+    AttributePO Orientation;	//äººçš„æœå‘ï¼ˆå‰ï¼Œåï¼Œå·¦ï¼Œå³ï¼‰
+    AttributePO Hair;	//å¤´å‘ç±»å‹
+    AttributePO Umbrella;	//æ˜¯å¦æ‰“ä¼
+    AttributePO Hat;	//æ˜¯å¦å¸¦å¸½å­ä»¥åŠå¤´ç›”
+    AttributePO UpperType;	//ä¸Šèº«è¡£æœç±»å‹
+    AttributePO BottomType;	//ä¸‹èº«è¡£æœç±»å‹
+    AttributePO Knapsack;	//æ˜¯å¦èƒŒåŒ…
+    AttributePO Bag;	//æ˜¯å¦æœ‰æ‹ä¸œè¥¿
+    AttributePO Baby;	//æ˜¯å¦æŠ±å°å­©
     AttributePO MessengerBag;	//
     AttributePO ShoulderBag;	//
-    AttributePO Glasses;	//ÑÛ¾µ
-    AttributePO Mask;	//¿ÚÕÖ
-    AttributePO UpperTexture;	//ÉÏÒÂÎÆÀí
+    AttributePO Glasses;	//çœ¼é•œ
+    AttributePO Mask;	//å£ç½©
+    AttributePO UpperTexture;	//ä¸Šè¡£çº¹ç†
     AttributePO Barrow;	//
     AttributePO TrolleyCase;	//
 } PersonAttributeGroupPO;
@@ -81,7 +81,7 @@ typedef struct tagDetectRectPO {
     }
 } DetectRectPO;
 
-// ÈË
+// äºº
 typedef struct tagPersonObjectPO {
     int32_t Type;
     string GUID;
@@ -93,19 +93,19 @@ typedef struct tagPersonObjectPO {
     }
 } PersonObjectPO;
 
-// ·Ç»ú¶¯³µ
+// éæœºåŠ¨è½¦
 typedef struct tagBikeObjectPO {
     int32_t Type;
     string GUID;
     DetectRectPO Detect;
-    vector<PersonObjectPO> Persons;	//·Ç»ú¶¯³µÉÏµÄÈË
+    vector<PersonObjectPO> Persons;	//éæœºåŠ¨è½¦ä¸Šçš„äºº
 
     tagBikeObjectPO() {
         Type = 0;
     }
 } BikeObjectPO;
 
-// »ú¶¯³µ
+// æœºåŠ¨è½¦
 typedef struct tagVehicleObjectPO {
     int32_t Type;
     string GUID;
@@ -145,7 +145,7 @@ void from_json(const json& j, AttributePO& p) {
         int32_t code = j.at("Code").get<int32_t>();
         if (0 == code) {
             json toplist = j.at("TopList");
-            //Ö»È¡Ò»¸ö
+            //åªå–ä¸€ä¸ª
             for (auto it = toplist.begin(); it != toplist.end(); ++it) {
                 p.Code = (*it).at("Code").get<string>();
                 p.Name = (*it).at("Name").get<string>();
@@ -161,10 +161,24 @@ void from_json(const json& j, AttributePO& p) {
 void from_json(const json& j, VehicleAttributeGroup& p) {
     try {
         p.Brand = j.at("Brand").get<AttributePO>();
-        p.Color = j.at("Color").get<AttributePO>();
-        p.Type = j.at("Type").get<AttributePO>();
+    } catch (exception &e) {
+        LOG_ERROR("Parse json error, {}, {}", j.dump(), e.what());
+    }
 
-        //³µÅÆµ¥¶À½â
+    try {
+        p.Color = j.at("Color").get<AttributePO>();
+    } catch (exception &e) {
+        LOG_ERROR("Parse json error, {}, {}", j.dump(), e.what());
+    }
+
+    try {
+        p.Type = j.at("Type").get<AttributePO>();
+    } catch (exception &e) {
+        LOG_ERROR("Parse json error, {}, {}", j.dump(), e.what());
+    }
+
+    try {
+        //è½¦ç‰Œå•ç‹¬è§£
         if (0 == j.at("Plate").at("Code")) {
             string license = j.at("Plate").at("Licence").get<string>();
             p.Plate.Name = license;
@@ -209,7 +223,7 @@ void from_json(const json& j, DetectRectPO& p) {
             if (j.end() != j.find("Body")) {
                 p.Body.Rect = j.at("Body").at("Rect").get<vector<int>>();
             }
-            //carÊ±£¬ÓÃcar.rect¸²¸Çbody.rect
+            //caræ—¶ï¼Œç”¨car.rectè¦†ç›–body.rect
             if (j.end() != j.find("Car")) {
                 p.Body.Rect = j.at("Car").at("Rect").get<vector<int>>();
             }

@@ -51,7 +51,7 @@ private:
     void init() {
         //根据环境变量重新设置值
         framePickInternalMs = parseEnvNumValue("FRAME_PICK_INTERNAL_MS", 100);
-        framePickInternalNum = parseEnvNumValue("FRAME_PICK_INTERNAL_NUM", 3);
+        framePickInternalNum = parseEnvNumValue("FRAME_PICK_INTERNAL_NUM", 5);
         objectDisappearCount = parseEnvNumValue("OBJECT_DISAPPEAR_COUNT", 10);
         facePictureMinWidth = parseEnvNumValue("FACE_PICTURE_MIN_WIDTH", 80);
         personPictureMinWidth = parseEnvNumValue("PERSON_PICTURE_MIN_WIDTH", 80);
