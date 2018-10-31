@@ -46,11 +46,6 @@ RUN cd /root/video-dispose && \
 
 #------------ 生成runtime包 ------------
 FROM nvidia/cuda:9.2-runtime-ubuntu16.04 as cuda_runtime
-COPY --from=base_builder /root/gosun_sdk /root/gosun_sdk
-COPY --from=base_builder /usr/local/bin/ /usr/local/bin/
-COPY --from=base_builder /usr/local/lib/*.so /usr/local/lib/
-COPY --from=base_builder /usr/share/fonts/truetype /usr/share/fonts/truetype
-
 
 ENV GOSUN_SDK_HOME /root/gosun_sdk
 ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
@@ -76,3 +71,7 @@ RUN sed -i 's/archive.ubuntu.com/mirrors.aliyun.com/g' /etc/apt/sources.list && 
     ##设置locale为en_US.UTF8
     locale-gen $LC_ALL
     
+COPY --from=base_builder /root/gosun_sdk /root/gosun_sdk
+COPY --from=base_builder /usr/local/bin/ /usr/local/bin/
+COPY --from=base_builder /usr/local/lib/*.so /usr/local/lib/
+COPY --from=base_builder /usr/share/fonts/truetype /usr/share/fonts/truetype
