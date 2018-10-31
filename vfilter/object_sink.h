@@ -59,7 +59,9 @@ public:
             if (o.second.Showable()) {
                 T tmp = o.second.obj1;
                 //修正抽帧导致的位置偏移
-                tmp.detect = fixObjectRect(tmp.detect, tmp.trail);
+                algo::Rect rect = fixObjectRect(tmp.detect, tmp.trail);
+                tmp.detect = rect;
+
                 t1.push_back(tmp);
                 t2.push_back(o.second.obj2);
             }
