@@ -59,9 +59,7 @@ public:
             if (o.second.Showable()) {
                 T tmp = o.second.obj1;
                 //修正抽帧导致的位置偏移
-                algo::Rect rect = fixObjectRect(tmp.detect, tmp.trail);
-                tmp.detect = rect;
-
+                tmp.detect = fixObjectRect(tmp.detect, tmp.trail);
                 t1.push_back(tmp);
                 t2.push_back(o.second.obj2);
             }
@@ -77,6 +75,9 @@ private:
     //目标位移修正, shift表示的是当前帧与上一帧之间的位移
     //目标的移动一般都是有规律的，因为是抽帧的，所以用目标当前区域和位移来计算出预估的位置
     algo::Rect fixObjectRect(algo::Rect &rect, algo::Shift &shift) {
+        if (rect.size() != 4 || shift.size() != 2) {
+            return rect;
+        }
         int32_t x = rect[0], y = rect[1], w = rect[2], h = rect[3];
         int32_t gofSize = (int32_t)gofSize_;
         if (gofSize > 0) {
