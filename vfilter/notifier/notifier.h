@@ -38,19 +38,23 @@ public:
         }
 
         int32_t x = obj.detect[0], y = obj.detect[1], w = obj.detect[2], h = obj.detect[3];
+        if (x < 0 || y < 0 || w < 0 || h < 0) {
+            LOG_WARN("Invalid object with x={}, y={}, w={}, h={}", x, y, w, h);
+            return;
+        }
 
-        //过滤掉无效的图片
+        //杩囨护鎺夋棤鏁堢殑鍥剧墖
         if (isInvalidPicture(w, h)) {
             LOG_DEBUG("The picture is too small, ignore it, width {}, height{}", w, h);
             return;
         }
 
-        //抠图
+        //鎶犲浘
         cv::Rect  rect = cv::Rect(x, y, w, h);
         cv::Mat roi = frame(rect);
         cv::Mat img = roi.clone();
 
-        //生成通知消息，并通过http发送通知消息
+        //鐢熸垚閫氱煡娑堟伅锛屽苟閫氳繃http鍙戦�侀�氱煡娑堟伅
         string msg = buildNotifyMsg(channelId, img, obj);
         if (!msg.empty()) {
             cli_->Post(getRequestURL().c_str(), msg, "application/json");
@@ -59,13 +63,13 @@ public:
     }
 
 protected:
-    //生成通知消息
+    //鐢熸垚閫氱煡娑堟伅
     virtual string buildNotifyMsg(uint32_t channelId, cv::Mat &img, T &obj) = 0;
 
-    //获取http请求url
+    //鑾峰彇http璇锋眰url
     virtual string getRequestURL() = 0;
 
-    //判断是否是无效的图片
+    //鍒ゆ柇鏄惁鏄棤鏁堢殑鍥剧墖
     virtual bool isInvalidPicture(uint32_t width, uint32_t height) = 0;
 
 private:

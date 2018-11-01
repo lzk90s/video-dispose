@@ -44,6 +44,12 @@ protected:
     //画目标的矩形框
     virtual void mixObjectRectangle(cv::Mat &frame, int32_t x, int32_t y, int32_t w, int32_t h,
                                     CvScalar color = CV_RGB(255, 255, 255)) {
+        //check param
+        if (x < 0 || y < 0 || w < 0 || h < 0) {
+            LOG_WARN("Invalid param x={}, y={} w={} h={}", x, y, w, h);
+            return;
+        }
+
         int32_t thickness = 2;
         cv::rectangle(frame, cvPoint(x, y), cvPoint(x + w, y + h), color, thickness, 1, 0);
     }
@@ -51,6 +57,12 @@ protected:
     //画目标的属性文字
     virtual void mixObjectAttributeText(cv::Mat &frame, int32_t x, int32_t y, int32_t w, int32_t h,
                                         vector<algo::Attribute> &attrs, CvScalar color = CV_RGB(255, 255, 255)) {
+        //check param
+        if (x < 0 || y < 0 || w < 0 || h < 0) {
+            LOG_WARN("Invalid param x={}, y={} w={} h={}", x, y, w, h);
+            return;
+        }
+
         // 根据目标的远近，计算字体大小
         int32_t fontSize = FONT_MIN_SIZE + (w / (frame.cols / (FONT_MAX_SIZE - FONT_MIN_SIZE)));
         cv::Scalar size{ (double)fontSize, 0.5, 0.1, 0 };

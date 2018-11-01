@@ -85,6 +85,9 @@ private:
             int32_t sx = shift[0], sy = shift[1];
             x += (sx / gofSize) * gofIdx;
             y += (sy / gofSize) * gofIdx;
+            //计算后，可能会导致x，或者y小于0，小于0时，设置为0
+            x = (x < 0) ? 0 : x;
+            y = (y < 0) ? 0 : y;
         }
         return algo::Rect{ x,y,w,h };
     }
