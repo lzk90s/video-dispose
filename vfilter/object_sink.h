@@ -36,14 +36,14 @@ public:
         this->objDisappearHandler_ = h;
     }
 
-    vector<T> OnDetectedObjects(vector<T> &objs) {
+    vector<T> OnDetectedObjects(const vector<T> &objs) {
         unique_lock<mutex> lck(mutex_);
         vector<T> toRecObjs = calcNeedRecognizeObjects(objs);
         updateDetectedObjects(objs);
         return toRecObjs;
     }
 
-    void OnRecognizedObjects(vector<T> &objs) {
+    void OnRecognizedObjects(const vector<T> &objs) {
         unique_lock<mutex> lck(mutex_);
         updateRecognizedObjects(objs);
     }
@@ -93,7 +93,7 @@ private:
     }
 
     //计算需要识别的目标
-    vector<T>  calcNeedRecognizeObjects(vector<T> &objs) {
+    vector<T>  calcNeedRecognizeObjects(const vector<T> &objs) {
         vector<T> toRecObjs;
         for (auto &o : objs) {
             // 1. 目标第一次出现
@@ -112,7 +112,7 @@ private:
         return toRecObjs;
     }
 
-    void updateDetectedObjects(vector<T> &objs) {
+    void updateDetectedObjects(const vector<T> &objs) {
         for (auto &o : objs) {
             //如果没有找到，则添加到已存在目标容器中
             if (existObjs_.find(o.guid) == existObjs_.end()) {
@@ -165,22 +165,23 @@ private:
         gofIdx_ = 0;
     }
 
-    void updateRecognizedObjects(vector<T> &objs) {
+    void updateRecognizedObjects(const vector<T> &objs) {
         for (auto &o : objs) {
             if (existObjs_.find(o.guid) != existObjs_.end()) {
-                auto &lastObj = existObjs_[o.guid].obj2;
+                auto newObj = o;
+                auto &oldObj = existObjs_[o.guid].obj2;
                 //对比属性，根据属性的评分判断是否更新目标的属性
-                for (auto &p : o.attrs) {
+                for (auto &p : newObj.attrs) {
                     uint32_t attrKey = p.first;
-                    if (lastObj.attrs.find(attrKey) != lastObj.attrs.end()) {
-                        uint32_t currScore = p.second.score;
-                        uint32_t lastScore = lastObj.attrs[attrKey].score;
-                        if (currScore < lastScore) {
-                            p.second = lastObj.attrs[attrKey];
+                    if (oldObj.attrs.find(attrKey) != oldObj.attrs.end()) {
+                        uint32_t newScore = p.second.score;
+                        uint32_t oldScore = oldObj.attrs[attrKey].score;
+                        if (newScore < oldScore) {
+                            p.second = oldObj.attrs[attrKey];
                         }
                     }
                 }
-                existObjs_[o.guid].obj2 = o;
+                existObjs_[o.guid].obj2 = newObj;
             }
         }
     }

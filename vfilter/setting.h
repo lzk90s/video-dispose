@@ -57,7 +57,7 @@ private:
         personPictureMinWidth = parseEnvNumValue("PERSON_PICTURE_MIN_WIDTH", 80);
         bikePictureMinWidth = parseEnvNumValue("BIKE_PICTURE_MIN_WIDTH", 80);
         vehiclePictureMinWidth = parseEnvNumValue("VEHICLE_PICTURE_MIN_WIDTH", 80);
-        frameCacheMaxNum = parseEnvNumValue("FRAME_CACHE_MAX_NUM", 20 * (1000 / framePickInternalMs));
+        frameCacheMaxNum = parseEnvNumValue("FRAME_CACHE_MAX_NUM", 300);
         compressFrameCache = parseEnvBoolValue("COMPRESS_FRAME_CACHE", true);
         notifyServerHost = parseEnvStringValue("NOTIFY_SERVER_HOST", "message-transfer:9091");
         scoreDiff4ReRecognize = parseEnvNumValue("SCORE_DIFF_4_RE_RECOGNIZE", 10);
