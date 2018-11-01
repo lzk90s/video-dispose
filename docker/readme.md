@@ -32,7 +32,7 @@ brpc + opencv + ffmpeg 开发环境
 
 生成深瞐机器码命令，生成后的机器码文件hdinfo.data在用户目录下
 
-> docker run --rm --net host --privileged -v ~:/tmp/hdinfo -it registry.cn-hangzhou.aliyuncs.com/gosun/seemmo-algo-server:latest  /root/seemmo_sdk/tool/tool_hdinfo -p /tmp/hdinfo/hdinfo.data
+> docker run --rm --net host --privileged -v ~:/tmp/hdinfo -it registry.cn-hangzhou.aliyuncs.com/gosun/seemmo-algo-server:latest  /root/seemmo_sdk/tool/tool_hdinfo -p /tmp/hdinfo/hdinfo.dat
 
 
 ## video-dispose
