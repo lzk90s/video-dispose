@@ -45,7 +45,7 @@ public:
 
         //过滤掉无效的图片
         if (isInvalidPicture(w, h)) {
-            LOG_DEBUG("The picture is too small, ignore it, width {}, height{}", w, h);
+            LOG_DEBUG("The {} picture is too small, ignore it, width {}, height{}", type_, w, h);
             return;
         }
 

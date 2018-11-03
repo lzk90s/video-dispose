@@ -19,8 +19,6 @@ public:
     uint32_t framePickInternalNum;
     // 默认缓存的最大帧数(30秒的帧数)
     uint32_t frameCacheMaxNum;
-    //是否压缩缓存的帧
-    bool compressFrameCache;
     //目标消失初始计数(当某个目标在超过设置的帧后，还没有检测到，则认为目标已经消失，需要从内存中删掉)
     uint32_t objectDisappearCount;
     //人脸图片最小宽度
@@ -53,12 +51,11 @@ private:
         framePickInternalMs = parseEnvNumValue("FRAME_PICK_INTERNAL_MS", 100);
         framePickInternalNum = parseEnvNumValue("FRAME_PICK_INTERNAL_NUM", 5);
         objectDisappearCount = parseEnvNumValue("OBJECT_DISAPPEAR_COUNT", 10);
-        facePictureMinWidth = parseEnvNumValue("FACE_PICTURE_MIN_WIDTH", 80);
+        facePictureMinWidth = parseEnvNumValue("FACE_PICTURE_MIN_WIDTH", 50);
         personPictureMinWidth = parseEnvNumValue("PERSON_PICTURE_MIN_WIDTH", 80);
         bikePictureMinWidth = parseEnvNumValue("BIKE_PICTURE_MIN_WIDTH", 80);
         vehiclePictureMinWidth = parseEnvNumValue("VEHICLE_PICTURE_MIN_WIDTH", 80);
         frameCacheMaxNum = parseEnvNumValue("FRAME_CACHE_MAX_NUM", 300);
-        compressFrameCache = parseEnvBoolValue("COMPRESS_FRAME_CACHE", true);
         notifyServerHost = parseEnvStringValue("NOTIFY_SERVER_HOST", "message-transfer:9091");
         scoreDiff4ReRecognize = parseEnvNumValue("SCORE_DIFF_4_RE_RECOGNIZE", 10);
         enableGosunAlgo = parseEnvBoolValue("ENABLE_GOSUN_ALGO", true);
@@ -71,7 +68,6 @@ private:
              << "framePickInternalMs: " << framePickInternalMs << ", "
              << "framePickInternalNum: " << framePickInternalNum << ", "
              << "frameCacheMaxNum: " << frameCacheMaxNum << ", "
-             << "compressFrameCache: " << compressFrameCache << ", "
              << "objectDisappearCount: " << objectDisappearCount << ", "
              << "enableGosunAlgo: " << enableGosunAlgo << ", "
              << "enableSeemmoAlgo: " << enableSeemmoAlgo << ", "
