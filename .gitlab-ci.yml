@@ -1,18 +1,12 @@
 image: tico/docker
 
-variables:
-  DOCKER_HOST: "172.18.18.138:2375"
-
-before_script:
-  - "docker login -u ${REGISTRY_USER} -p ${REGISTRY_PASSWORD} ${REGISTRY_URL}"
-  
 build:
   stage: build
   script:
-    - "docker -H $DOCKER_HOST build -t ${REGISTRY_URL}/gosun/seemmo-algo-server:latest -f docker/seemmo_server/Dockerfile ."
-    - "docker -H $DOCKER_HOST build -t ${REGISTRY_URL}/gosun/video-dispose:latest -f docker/video-dispose/Dockerfile ."
-    - "docker -H $DOCKER_HOST push ${REGISTRY_URL}/gosun/seemmo-algo-server:latest"
-    - "docker -H $DOCKER_HOST push ${REGISTRY_URL}/gosun/video-dispose:latest"
+    - "docker build -t ${REGISTRY_URL}/gosun/seemmo-algo-server:latest -f docker/seemmo_server/Dockerfile ."
+    - "docker build -t ${REGISTRY_URL}/gosun/video-dispose:latest -f docker/video-dispose/Dockerfile ."
+    - "docker push ${REGISTRY_URL}/gosun/seemmo-algo-server:latest"
+    - "docker push ${REGISTRY_URL}/gosun/video-dispose:latest"
   only:
     - master
   tags:
