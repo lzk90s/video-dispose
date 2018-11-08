@@ -38,7 +38,7 @@ public:
         }
 
         int32_t x = obj.detect[0], y = obj.detect[1], w = obj.detect[2], h = obj.detect[3];
-        if (x < 0 || y < 0 || w < 0 || h < 0) {
+        if (x < 0 || y < 0 || w <= 0 || h <= 0) {
             LOG_WARN("Invalid object with x={}, y={}, w={}, h={}", x, y, w, h);
             return;
         }
