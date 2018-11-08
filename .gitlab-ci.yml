@@ -1,5 +1,8 @@
 image: tico/docker
 
+before_script:
+  - "docker login -u ${REGISTRY_USER} -p ${REGISTRY_PASSWORD} ${REGISTRY_URL}"
+
 build:
   stage: build
   script:
