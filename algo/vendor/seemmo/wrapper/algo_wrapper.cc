@@ -14,7 +14,7 @@ namespace algo {
 namespace seemmo {
 
 
-//Ëã·¨·şÎñ
+//ç®—æ³•æœåŠ¡
 class AlgoController {
 public:
     AlgoController() {
@@ -40,20 +40,21 @@ public:
         LOG_INFO("Init seemmo sdk, basedir={}, imgThrNum={}, videoThrNum={}, imgCoreNum={}, videoCoreNum={}, authServer={}, authType={}, hwDevId={}",
                  basedir_, imgThrNum, videoThrNum, imgCoreNum_, videoCoreNum_, authServer_, authType_, gpuDevId_);
 
-        // Éî²asdk½ø³Ì³õÊ¼»¯
+        // æ·±çsdkè¿›ç¨‹åˆå§‹åŒ–
         int ret = seemmo_process_init(basedir_.c_str(), imgCoreNum_, videoCoreNum_, authServer_.c_str(), authType_, true);
         if (0 != ret) {
             throw runtime_error("Init seemmo sdk error, ret " + std::to_string(ret));
         }
 
-        LOG_INFO("Init seemmo sdk succeed");
+        const char *version = seemmo_version();
+        LOG_INFO("Init seemmo sdk succeed, version {}", version);
 
-        // ³õÊ¼»¯worker
+        // åˆå§‹åŒ–worker
         trailWorker = std::make_shared<TrailWorker>(gpuDevId_, videoThrNum);
         recWorker = std::make_shared<RecognizeWorker>(gpuDevId_, imgThrNum);
         //decRecWorker = std::make_shared<DetectRecognizeWorker>(gpuDevId_, imgThrNum);
 
-        // µÈ´ıËùÓĞworkerÆô¶¯Íê³É
+        // ç­‰å¾…æ‰€æœ‰workerå¯åŠ¨å®Œæˆ
         trailWorker->WaitStartOk();
         recWorker->WaitStartOk();
         //decRecWorker->WaitStartOk();
@@ -61,17 +62,17 @@ public:
 
     void Destroy() {
         LOG_INFO("Release resources");
-        //Éî²asdkĞèÒª²¢·¢ÍË³ö£¬²»ÄÜ´®ĞĞÍ££¬·ñÔò»áËÀËø
+        //æ·±çsdkéœ€è¦å¹¶å‘é€€å‡ºï¼Œä¸èƒ½ä¸²è¡Œåœï¼Œå¦åˆ™ä¼šæ­»é”
         trailWorker->Close();
         recWorker->Close();
         //decRecWorker->Close();
 
-        //µÈ´ı¸÷¸öworkerÍË³öÍê³É
+        //ç­‰å¾…å„ä¸ªworkeré€€å‡ºå®Œæˆ
         trailWorker->WaitStopOk();
         recWorker->WaitStopOk();
         //decRecWorker->WaitStopOk();
 
-        // Ğ¶ÔØÉî²asdk
+        // å¸è½½æ·±çsdk
         seemmo_uninit();
         LOG_INFO("Destroy seemmo sdk succeed");
     }
