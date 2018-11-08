@@ -45,7 +45,7 @@ protected:
     virtual void mixObjectRectangle(cv::Mat &frame, int32_t x, int32_t y, int32_t w, int32_t h,
                                     CvScalar color = CV_RGB(255, 255, 255)) {
         //check param
-        if (x < 0 || y < 0 || w < 0 || h < 0) {
+        if (x < 0 || y < 0 || w <= 0 || h <= 0) {
             LOG_WARN("Invalid param x={}, y={} w={} h={}", x, y, w, h);
             return;
         }
