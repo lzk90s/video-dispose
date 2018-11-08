@@ -3,23 +3,24 @@
 #include "vfilter/proc/abstract_algo_proc.h"
 
 using namespace std;
-using namespace algo;
 
 namespace vf {
 
 //人脸的单独出来，是因为人脸的效果还需要优化，避免影响其他算法的效果
 class FaceAlgoProcessor : public AbstractAlgoProcessor {
 public:
-    FaceAlgoProcessor(VSink &vsink, AlgoStub *stub = NewAlgoStub(false, GlobalSettings::getInstance().enableGosunAlgo))
-        : AbstractAlgoProcessor(vsink, *stub) {
-        this->stub_ = stub;
+    FaceAlgoProcessor(VSink &vsink)
+        : AbstractAlgoProcessor(vsink) {
+        algo_ = algo::NewAlgoStub(false, GlobalSettings::getInstance().enableGosunAlgo);
     }
 
     ~FaceAlgoProcessor() {
-        FreeAlgoStub(stub_);
+        algo::FreeAlgoStub(algo_);
     }
 
-    int32_t AlgoRoutine(uint32_t channelId, uint64_t frameId, cv::Mat &frame) override {
+protected:
+
+    int32_t algoRoutine(uint32_t channelId, uint64_t frameId, cv::Mat &frame) override {
         return trailAndRecognize(channelId, frameId, frame);
     }
 
@@ -39,7 +40,7 @@ private:
 
         ImageResult imageResult;
         FilterResult filterResult;
-        ret = algo_.Trail(channelId, frameId, bgr24, width, height, trailParam, imageResult, filterResult);
+        ret = algo_->Trail(channelId, frameId, bgr24, width, height, trailParam, imageResult, filterResult);
         if (0 != ret) {
             LOG_ERROR("Trail error, ret {}", ret);
             return ret;
@@ -58,7 +59,7 @@ private:
     }
 
 private:
-    AlgoStub * stub_;
+    algo::AlgoStub * algo_;
 };
 
 }
