@@ -12,3 +12,4 @@ thirdparty/opencv
 thirdparty/brpc
 thirdparty
 docker/brpc_opencv_ffmpeg/package
+benchmark/tmp/

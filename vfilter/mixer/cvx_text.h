@@ -102,7 +102,7 @@ public:
     void setFont(int* type, cv::Scalar* size = nullptr, bool* underline = nullptr, float* diaphaneity = nullptr) {
         // 参数合法性检查
         if (type) {
-            if (type >= 0) m_fontType = *type;
+            m_fontType = *type;
         }
         if (size) {
             m_fontSize.val[0] = std::fabs(size->val[0]);
