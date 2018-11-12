@@ -1,11 +1,10 @@
 #pragma once
 
-// ´úÂë²Î¿¼:  https://blog.csdn.net/subfate/article/details/46700675
+// ä»£ç å‚è€ƒ:  https://blog.csdn.net/subfate/article/details/46700675
 
 #include <cstdint>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <setjmp.h>
 #include <math.h>
 #include <sys/time.h>
@@ -68,7 +67,7 @@ public:
 
         jpeg_read_header(&cinfo, TRUE);
 
-        cinfo.out_color_space = JCS_EXT_BGR; //JCS_YCbCr;  // ÉèÖÃÊä³ö¸ñÊ½
+        cinfo.out_color_space = JCS_EXT_BGR; //JCS_YCbCr;  // è®¾ç½®è¾“å‡ºæ ¼å¼
 
         if (!jpeg_start_decompress(&cinfo)) {
             printf("decompress error");
@@ -79,15 +78,15 @@ public:
         width = cinfo.output_width;
         height = cinfo.output_height;
 
-        rgb_size = row_stride * cinfo.output_height; // ×Ü´óĞ¡
+        rgb_size = row_stride * cinfo.output_height; // æ€»å¤§å°
 
         buffer = (*cinfo.mem->alloc_sarray)((j_common_ptr)&cinfo, JPOOL_IMAGE, row_stride, 1);
 
         rgb_buffer.reset(new unsigned char[rgb_size + 1]);
         tmp_buffer = rgb_buffer.get();
-        while (cinfo.output_scanline < cinfo.output_height) { // ½âÑ¹Ã¿Ò»ĞĞ
+        while (cinfo.output_scanline < cinfo.output_height) { // è§£å‹æ¯ä¸€è¡Œ
             jpeg_read_scanlines(&cinfo, buffer, 1);
-            // ¸´ÖÆµ½ÄÚ´æ
+            // å¤åˆ¶åˆ°å†…å­˜
             memcpy(tmp_buffer, buffer[0], row_stride);
             tmp_buffer += row_stride;
         }
@@ -128,7 +127,7 @@ public:
 
         jpeg_read_header(&cinfo, TRUE);
 
-        cinfo.out_color_space = JCS_EXT_BGR; //JCS_YCbCr;  // ÉèÖÃÊä³ö¸ñÊ½
+        cinfo.out_color_space = JCS_EXT_BGR; //JCS_YCbCr;  // è®¾ç½®è¾“å‡ºæ ¼å¼
         if (!jpeg_start_decompress(&cinfo)) {
             printf("decompress error");
             return -1;
@@ -138,15 +137,15 @@ public:
         width = cinfo.output_width;
         height = cinfo.output_height;
 
-        rgb_size = row_stride * cinfo.output_height; // ×Ü´óĞ¡
+        rgb_size = row_stride * cinfo.output_height; // æ€»å¤§å°
 
         buffer = (*cinfo.mem->alloc_sarray)((j_common_ptr)&cinfo, JPOOL_IMAGE, row_stride, 1);
 
         rgb_buffer.reset(new unsigned char[rgb_size + 1]);
         tmp_buffer = rgb_buffer.get();
-        while (cinfo.output_scanline < cinfo.output_height) { // ½âÑ¹Ã¿Ò»ĞĞ
+        while (cinfo.output_scanline < cinfo.output_height) { // è§£å‹æ¯ä¸€è¡Œ
             jpeg_read_scanlines(&cinfo, buffer, 1);
-            // ¸´ÖÆµ½ÄÚ´æ
+            // å¤åˆ¶åˆ°å†…å­˜
             memcpy(tmp_buffer, buffer[0], row_stride);
             tmp_buffer += row_stride;
         }
@@ -229,32 +228,32 @@ public:
     }
 
     int SaveJpeg(const char *filename, unsigned char *bits, int width, int height) {
-        struct jpeg_compress_struct jcinfo;  //ÉêÇëjpegÑ¹Ëõ¶ÔÏó
+        struct jpeg_compress_struct jcinfo;  //ç”³è¯·jpegå‹ç¼©å¯¹è±¡
         struct jpeg_error_mgr jerr;
         FILE * outfile;                 //target file
-        JSAMPROW row_pointer[1];        //pointer to JSAMPLE row[s] Ò»ĞĞÎ»Í¼
-        int     row_stride;             //Ã¿Ò»ĞĞµÄ×Ö½ÚÊı
-        jcinfo.err = jpeg_std_error(&jerr);   //Ö¸¶¨´íÎó´¦ÀíÆ÷
-        jpeg_create_compress(&jcinfo);      //³õÊ¼»¯jpegÑ¹Ëõ¶ÔÏó
+        JSAMPROW row_pointer[1];        //pointer to JSAMPLE row[s] ä¸€è¡Œä½å›¾
+        int     row_stride;             //æ¯ä¸€è¡Œçš„å­—èŠ‚æ•°
+        jcinfo.err = jpeg_std_error(&jerr);   //æŒ‡å®šé”™è¯¯å¤„ç†å™¨
+        jpeg_create_compress(&jcinfo);      //åˆå§‹åŒ–jpegå‹ç¼©å¯¹è±¡
 
-        //Ö¸¶¨Ñ¹ËõºóµÄÍ¼ÏñËù´æ·ÅµÄÄ¿±êÎÄ¼ş£¬×¢Òâ£¬Ä¿±êÎÄ¼şÓ¦ÒÔ¶ş½øÖÆÄ£Ê½´ò¿ª
+        //æŒ‡å®šå‹ç¼©åçš„å›¾åƒæ‰€å­˜æ”¾çš„ç›®æ ‡æ–‡ä»¶ï¼Œæ³¨æ„ï¼Œç›®æ ‡æ–‡ä»¶åº”ä»¥äºŒè¿›åˆ¶æ¨¡å¼æ‰“å¼€
         if ((outfile = fopen(filename, "wb")) == NULL) {
             fprintf(stderr, "can't open %s/n", filename);
             return -1;
         }
 
-        jpeg_stdio_dest(&jcinfo, outfile);   //Ö¸¶¨Ñ¹ËõºóµÄÍ¼ÏñËù´æ·ÅµÄÄ¿±êÎÄ¼ş
-        jcinfo.image_width = width;      // ÎªÍ¼µÄ¿íºÍ¸ß£¬µ¥Î»ÎªÏñËØ
+        jpeg_stdio_dest(&jcinfo, outfile);   //æŒ‡å®šå‹ç¼©åçš„å›¾åƒæ‰€å­˜æ”¾çš„ç›®æ ‡æ–‡ä»¶
+        jcinfo.image_width = width;      // ä¸ºå›¾çš„å®½å’Œé«˜ï¼Œå•ä½ä¸ºåƒç´ 
         jcinfo.image_height = height;
-        jcinfo.input_components = 3;         // ÔÚ´ËÎª3,±íÊ¾²ÊÉ«Î»Í¼£¬ Èç¹ûÊÇ»Ò¶ÈÍ¼£¬ÔòÎª1
-        jcinfo.in_color_space = JCS_EXT_BGR;         //JCS_GRAYSCALE±íÊ¾»Ò¶ÈÍ¼£¬JCS_RGB±íÊ¾²ÊÉ«Í¼Ïñ
+        jcinfo.input_components = 3;         // åœ¨æ­¤ä¸º3,è¡¨ç¤ºå½©è‰²ä½å›¾ï¼Œ å¦‚æœæ˜¯ç°åº¦å›¾ï¼Œåˆ™ä¸º1
+        jcinfo.in_color_space = JCS_EXT_BGR;         //JCS_GRAYSCALEè¡¨ç¤ºç°åº¦å›¾ï¼ŒJCS_RGBè¡¨ç¤ºå½©è‰²å›¾åƒ
 
         jpeg_set_defaults(&jcinfo);
         jpeg_set_quality(&jcinfo, 100, TRUE);//limit to baseline-JPEG values
         jpeg_start_compress(&jcinfo, TRUE);
 
-        row_stride = width * jcinfo.input_components; // JSAMPLEs per row in image_buffer(Èç¹ûÊÇË÷ÒıÍ¼Ôò²»ĞèÒª³ËÒÔ3)
-        //¶ÔÃ¿Ò»ĞĞ½øĞĞÑ¹Ëõ
+        row_stride = width * jcinfo.input_components; // JSAMPLEs per row in image_buffer(å¦‚æœæ˜¯ç´¢å¼•å›¾åˆ™ä¸éœ€è¦ä¹˜ä»¥3)
+        //å¯¹æ¯ä¸€è¡Œè¿›è¡Œå‹ç¼©
         while (jcinfo.next_scanline < jcinfo.image_height) {
             //row_pointer[0] = & bits[jcinfo.next_scanline * row_stride];
             row_pointer[0] = &bits[(jcinfo.image_height - jcinfo.next_scanline - 1) * row_stride];

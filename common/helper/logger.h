@@ -2,7 +2,6 @@
 
 #include <string>
 #include <memory>
-#include <iostream>
 
 #include "common/helper/singleton.h"
 #include "spdlog/sinks/stdout_sinks.h"

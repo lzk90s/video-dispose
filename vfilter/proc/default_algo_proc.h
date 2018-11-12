@@ -100,50 +100,69 @@ private:
     void asyncRecognizeObject(uint32_t channelId, uint64_t frameId, cv::Mat &frame, ImageResult &imageResult) {
         recogWorker_.commit([=]() {
             cv::Mat f = frame;
-            //非机动车
-            {
-                algo::RecogParam recParam;
-                auto objs = sink_.bikeObjectSink.OnDetectedObjects(imageResult.bikes);
-                for (auto &p : objs) {
-                    RecogParam::ObjLocation loc;
-                    loc.type = p.type;
-                    loc.trail = p.trail;
-                    loc.detect = p.detect;
-                    loc.guid = p.guid;
-                    recParam.locations.push_back(loc);
-                }
-                recognizeObjectInner(channelId, frameId, f, recParam);
+            algo::RecogParam recParam;
+
+            auto bikeObjs = sink_.bikeObjectSink.OnDetectedObjects(imageResult.bikes);
+            for (auto &p : bikeObjs) {
+                RecogParam::ObjLocation loc;
+                loc.type = p.type;
+                loc.trail = p.trail;
+                loc.detect = p.detect;
+                loc.guid = p.guid;
+                recParam.locations.push_back(loc);
+            }
+            auto vehicleObjs = sink_.vehicleObjectSink.OnDetectedObjects(imageResult.vehicles);
+            for (auto &p : vehicleObjs) {
+                RecogParam::ObjLocation loc;
+                loc.type = p.type;
+                loc.trail = p.trail;
+                loc.detect = p.detect;
+                loc.guid = p.guid;
+                recParam.locations.push_back(loc);
+            }
+            auto personObjs = sink_.personObjectSink.OnDetectedObjects(imageResult.pedestrains);
+            for (auto &p : personObjs) {
+                RecogParam::ObjLocation loc;
+                loc.type = p.type;
+                loc.trail = p.trail;
+                loc.detect = p.detect;
+                loc.guid = p.guid;
+                recParam.locations.push_back(loc);
             }
 
-            //机动车
-            {
-                algo::RecogParam recParam;
-                auto objs = sink_.vehicleObjectSink.OnDetectedObjects(imageResult.vehicles);
-                for (auto &p : objs) {
-                    RecogParam::ObjLocation loc;
-                    loc.type = p.type;
-                    loc.trail = p.trail;
-                    loc.detect = p.detect;
-                    loc.guid = p.guid;
-                    recParam.locations.push_back(loc);
-                }
-                recognizeObjectInner(channelId, frameId, f, recParam);
+            if (recParam.locations.empty()) {
+                return;
             }
 
-            //行人
-            {
-                algo::RecogParam recParam;
-                auto objs = sink_.personObjectSink.OnDetectedObjects(imageResult.pedestrains);
-                for (auto &p : objs) {
-                    RecogParam::ObjLocation loc;
-                    loc.type = p.type;
-                    loc.trail = p.trail;
-                    loc.detect = p.detect;
-                    loc.guid = p.guid;
-                    recParam.locations.push_back(loc);
-                }
-                recognizeObjectInner(channelId, frameId, f, recParam);
+            ImageResult recImageResult;
+            int32_t ret = algo_->Recognize(channelId, frame.data, frame.cols, frame.rows, recParam, recImageResult);
+            if (0 != ret) {
+                LOG_ERROR("Recognize error, ret {}", ret);
+                return;
             }
+
+            size_t sz = recImageResult.bikes.size() + recImageResult.vehicles.size() + recImageResult.pedestrains.size();
+            if ( sz != recParam.locations.size()) {
+                LOG_WARN("The recognize result size is error, request num {}, rsp num {}", recParam.locations.size(), sz);
+                return;
+            }
+
+            auto itr = recParam.locations.begin();
+            //深瞐识别时没有返回guid，这里手动设置一下
+            //注意：这里的顺序和上面的存入recparam的顺序必须一致，否则对应关系会错误
+            for (uint32_t idx = 0; idx < recImageResult.bikes.size(); idx++, ++itr) {
+                recImageResult.bikes[idx].guid = (*itr).guid;
+            }
+            for (uint32_t idx = 0; idx < recImageResult.vehicles.size(); idx++, ++itr) {
+                recImageResult.vehicles[idx].guid = (*itr).guid;
+            }
+            for (uint32_t idx = 0; idx < recImageResult.pedestrains.size(); idx++, ++itr) {
+                recImageResult.pedestrains[idx].guid = (*itr).guid;
+            }
+
+            sink_.vehicleObjectSink.OnRecognizedObjects(recImageResult.vehicles);
+            sink_.bikeObjectSink.OnRecognizedObjects(recImageResult.bikes);
+            sink_.personObjectSink.OnRecognizedObjects(recImageResult.pedestrains);
         });
     }
 
@@ -208,36 +227,6 @@ private:
                 frameCache_.ManualRelase(fid);
             }
         });
-    }
-
-    int32_t recognizeObjectInner(uint32_t channelId, uint64_t frameId, cv::Mat &frame, RecogParam &recParam) {
-        if (recParam.locations.empty()) {
-            return 0;
-        }
-
-        ImageResult imageResult;
-        int32_t ret = algo_->Recognize(channelId, frame.data, frame.cols, frame.rows, recParam, imageResult);
-        if (0 != ret) {
-            LOG_ERROR("Recognize error, ret {}", ret);
-            return ret;
-        }
-
-        //深瞐识别时没有返回guid，这里手动设置一下
-        for (uint32_t idx = 0; idx < imageResult.bikes.size(); idx++) {
-            imageResult.bikes[idx].guid = recParam.locations[idx].guid;
-        }
-        for (uint32_t idx = 0; idx < imageResult.vehicles.size(); idx++) {
-            imageResult.vehicles[idx].guid = recParam.locations[idx].guid;
-        }
-        for (uint32_t idx = 0; idx < imageResult.pedestrains.size(); idx++) {
-            imageResult.pedestrains[idx].guid = recParam.locations[idx].guid;
-        }
-
-        sink_.vehicleObjectSink.OnRecognizedObjects(imageResult.vehicles);
-        sink_.bikeObjectSink.OnRecognizedObjects(imageResult.bikes);
-        sink_.personObjectSink.OnRecognizedObjects(imageResult.pedestrains);
-
-        return 0;
     }
 
     int32_t recognizeFilterObjectInner(uint32_t channelId, cv::Mat &frame, RecogParam &recParam) {

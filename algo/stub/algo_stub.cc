@@ -11,6 +11,7 @@ namespace algo {
 
 class AlgoStubDelegate : public AlgoStub {
 public:
+    ~AlgoStubDelegate() override {}
 
     AlgoStubDelegate(bool enableSeemmoAlgo = true, bool enableGosunAlgo = true)
         : tp_(2) {
@@ -22,10 +23,10 @@ public:
             seemmoAlgo_.reset(new algo::seemmo::SeemmoAlgoStub());
         }
         if (enableGosunAlgo) {
-            //ÓÉÓÚ¸ß´´Ëã·¨»¹ÐèÒª¼ÓÔØËã·¨¿â£¬±È½ÏÂý¡£Òì²½¼ÓÔØ
+            //ç”±äºŽé«˜åˆ›ç®—æ³•è¿˜éœ€è¦åŠ è½½ç®—æ³•åº“ï¼Œæ¯”è¾ƒæ…¢ã€‚å¼‚æ­¥åŠ è½½
             tp_.commit([this]() {
                 gosunAlgo_.reset(new algo::gosun::GosunAlgoStub());
-                gosunAlgoStartOk = true;	//ÉèÖÃÆô¶¯ok
+                gosunAlgoStartOk = true;	//è®¾ç½®å¯åŠ¨ok
             });
         }
     }
@@ -39,12 +40,12 @@ public:
         const TrailParam &param,
         ImageResult &imageResult,
         FilterResult &filterResult
-    ) {
+    ) override {
         const TrailParam *paramPtr = &param;
         ImageResult *imageResultPtr = &imageResult;
         FilterResult *filterResultPtr = &filterResult;
 
-        //lamba²¶»ñÒýÓÃ»á³öÏÖÄªÃûÆäÃîµÄ±ÀÀ££¬ËùÒÔ£¬ÕâÀï¸ÄÎª²¶»ñÖµ
+        //lambaæ•èŽ·å¼•ç”¨ä¼šå‡ºçŽ°èŽ«åå…¶å¦™çš„å´©æºƒï¼Œæ‰€ä»¥ï¼Œè¿™é‡Œæ”¹ä¸ºæ•èŽ·å€¼
         auto f1 = tp_.commit([=]() {
             if (enableSeemmoAlgo_) {
                 CountTimer t1("Seemmo_Trail", 80 * 1000);
@@ -56,7 +57,7 @@ public:
         auto f2 = tp_.commit([=]() {
             if (enableGosunAlgo_) {
                 CountTimer t1("Gosun_Trail", 80*1000);
-                //double check¶àÏß³Ì¿ÉÄÜÓÐÎÊÌâ£¬²»¹ýÓ°Ïì²»´ó£¬¿ÉÒÔºöÂÔ
+                //double checkå¤šçº¿ç¨‹å¯èƒ½æœ‰é—®é¢˜ï¼Œä¸è¿‡å½±å“ä¸å¤§ï¼Œå¯ä»¥å¿½ç•¥
                 if (gosunAlgoStartOk) {
                     if (gosunAlgoStartOk) {
                         return gosunAlgo_->Trail(channelId, frameId, bgr24, width, height, *paramPtr, *imageResultPtr, *filterResultPtr);
@@ -111,11 +112,11 @@ public:
         uint32_t height,
         const RecogParam &param,
         ImageResult &imageResult
-    ) {
+    ) override {
         const RecogParam *paramPtr = &param;
         ImageResult *imageResultPtr = &imageResult;
 
-        //lamba²¶»ñÒýÓÃ»á³öÏÖÄªÃûÆäÃîµÄ±ÀÀ££¬ËùÒÔ£¬ÕâÀï¸ÄÎª²¶»ñÖµ
+        //lambaæ•èŽ·å¼•ç”¨ä¼šå‡ºçŽ°èŽ«åå…¶å¦™çš„å´©æºƒï¼Œæ‰€ä»¥ï¼Œè¿™é‡Œæ”¹ä¸ºæ•èŽ·å€¼
         auto f1 = tp_.commit([=]() {
             if (enableSeemmoAlgo_) {
                 CountTimer t1("Seemmo_Recognize", 80 * 1000);
@@ -127,7 +128,7 @@ public:
         auto f2 = tp_.commit([=]() {
             if (enableGosunAlgo_) {
                 CountTimer t1("Gosun_Recognize", 80 * 1000);
-                //double check¶àÏß³Ì¿ÉÄÜÓÐÎÊÌâ£¬²»¹ýÓ°Ïì²»´ó£¬¿ÉÒÔºöÂÔ
+                //double checkå¤šçº¿ç¨‹å¯èƒ½æœ‰é—®é¢˜ï¼Œä¸è¿‡å½±å“ä¸å¤§ï¼Œå¯ä»¥å¿½ç•¥
                 if (gosunAlgoStartOk) {
                     if (gosunAlgoStartOk) {
                         return gosunAlgo_->Recognize(channelId, bgr24, width, height, *paramPtr, *imageResultPtr);
@@ -172,7 +173,7 @@ public:
 #endif
 
         return 0;
-    };
+    }
 
 private:
     unique_ptr<algo::seemmo::SeemmoAlgoStub> seemmoAlgo_;

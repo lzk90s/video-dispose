@@ -7,16 +7,13 @@
 
 #include "opencv/cv.h"
 
-#include "common/helper/logger.h"
-
 #include "vfilter/setting.h"
-#include "vfilter/buffered_frame.h"
 
 using namespace std;
 
 namespace vf {
 
-//±£´æÃ¿Ò»Ö¡Í¼ÏñÖĞµÄÄ¿±ê
+//ä¿å­˜æ¯ä¸€å¸§å›¾åƒä¸­çš„ç›®æ ‡
 class FrameCache {
 public:
     typedef uint64_t FrameId;
@@ -69,7 +66,7 @@ public:
         return mat;
     }
 
-    //ÊÖ¶¯ÊÍ·ÅÒ»Ö¡
+    //æ‰‹åŠ¨é‡Šæ”¾ä¸€å¸§
     void ManualRelase(FrameCache::FrameId fid) {
         unique_lock<mutex> lck(mutex_);
 

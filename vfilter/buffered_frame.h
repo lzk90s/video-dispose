@@ -1,12 +1,9 @@
-﻿#pragma once
+#pragma once
 
 #include "opencv/cv.h"
-#include "opencv2/opencv.hpp"
 
 #include "common/helper/jpeg_helper.h"
-#include "libyuv.h"
-
-#include "vfilter/setting.h"
+#include "common/helper/color_conv_util.h"
 
 namespace vf {
 
@@ -56,16 +53,11 @@ public:
         //cvmat默认虽然是bgr排列，不过直接用rgb也没有关系，转回来的时候用相应的方法就不会有问题
         int width = width_;
         int height = height_;
-        const uint8_t* src_rgb24 = frame.data;
-        int src_stride_rgb24 = width * 3;
+        uint8_t* src_rgb24 = frame.data;
         uint8_t* dst_y = yuv_.get();
-        int dst_stride_y = width;
-        uint8_t* dst_u = yuv_.get() + height * width * 5 / 4;
-        int dst_stride_u = width / 2;
-        uint8_t* dst_v = yuv_.get() + height * width;
-        int dst_stride_v = width / 2;
-        libyuv::RGB24ToI420(src_rgb24, src_stride_rgb24, dst_y, dst_stride_y, dst_u, dst_stride_u, dst_v, dst_stride_v, width,
-                            height);
+        uint8_t* dst_u = dst_y + height * width;
+        uint8_t* dst_v = dst_u + (height * width/4);
+        I420ToBGR24Converter::Convert(dst_y, dst_u, dst_v, src_rgb24, width, height);
     }
 
     cv::Mat Get() override {
@@ -73,16 +65,11 @@ public:
 
         int width = width_;
         int height = height_;
-        const uint8_t* src_y = yuv_.get();
-        int src_stride_y = width;
-        const uint8_t* src_u = yuv_.get() + width * height * 5 / 4;
-        int src_stride_u = width / 2;
-        const uint8_t* src_v = yuv_.get() + width * height;
-        int src_stride_v = width / 2;
+        uint8_t* src_y = yuv_.get();
+        uint8_t* src_u = src_y + width * height;
+        uint8_t* src_v = src_u + (width * height/4);
         uint8_t* dst_rgb24 = rgb.get();
-        int dst_stride_rgb24 = width * 3;
-        libyuv::I420ToRGB24(src_y, src_stride_y, src_u, src_stride_u, src_v, src_stride_v, dst_rgb24, dst_stride_rgb24, width,
-                            height);
+        BGR24ToI420Converter::Convert(src_y, src_u, src_v, dst_rgb24, width, height);
 
         cv::Mat mat = cv::Mat(height, width, CV_8UC3);
         memcpy(mat.data, rgb.get(), width*height * 3);

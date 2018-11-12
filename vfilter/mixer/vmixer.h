@@ -2,14 +2,10 @@
 
 #include <string>
 #include <map>
-#include <mutex>
 #include <vector>
 
-#include "opencv/cv.h"
 #include "opencv2/opencv.hpp"
 
-#include "vfilter/setting.h"
-#include "vfilter/mixer/cvx_text.h"
 #include "vfilter/mixer/cvx_text.h"
 #include "algo/stub/object_type.h"
 #include "vfilter/object_sink.h"

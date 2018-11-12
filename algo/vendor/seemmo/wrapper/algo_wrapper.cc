@@ -1,7 +1,6 @@
 #include <iostream>
 #include <string>
 #include <memory>
-#include <sstream>
 
 #include "common/helper/logger.h"
 
@@ -30,18 +29,11 @@ public:
         uint32_t authType,
         uint32_t hwDevId
     ) {
-        basedir_ = basedir;
-        imgCoreNum_ = imgCoreNum;
-        videoCoreNum_ = videoCoreNum;
-        authServer_ = authServer;
-        authType_ = authType;
-        gpuDevId_ = hwDevId;
-
         LOG_INFO("Init seemmo sdk, basedir={}, imgThrNum={}, videoThrNum={}, imgCoreNum={}, videoCoreNum={}, authServer={}, authType={}, hwDevId={}",
-                 basedir_, imgThrNum, videoThrNum, imgCoreNum_, videoCoreNum_, authServer_, authType_, gpuDevId_);
+                 basedir, imgThrNum, videoThrNum, imgCoreNum, videoCoreNum, authServer, authType, hwDevId);
 
         // 深瞐sdk进程初始化
-        int ret = seemmo_process_init(basedir_.c_str(), imgCoreNum_, videoCoreNum_, authServer_.c_str(), authType_, true);
+        int ret = seemmo_process_init(basedir.c_str(), imgCoreNum, videoCoreNum, authServer.c_str(), authType, true);
         if (0 != ret) {
             throw runtime_error("Init seemmo sdk error, ret " + std::to_string(ret));
         }
@@ -50,9 +42,9 @@ public:
         LOG_INFO("Init seemmo sdk succeed, version {}", version);
 
         // 初始化worker
-        trailWorker = std::make_shared<TrailWorker>(gpuDevId_, videoThrNum);
-        recWorker = std::make_shared<RecognizeWorker>(gpuDevId_, imgThrNum);
-        //decRecWorker = std::make_shared<DetectRecognizeWorker>(gpuDevId_, imgThrNum);
+        trailWorker = std::make_shared<TrailWorker>(hwDevId, videoThrNum);
+        recWorker = std::make_shared<RecognizeWorker>(hwDevId, imgThrNum);
+        //decRecWorker = std::make_shared<DetectRecognizeWorker>(hwDevId, imgThrNum);
 
         // 等待所有worker启动完成
         trailWorker->WaitStartOk();
@@ -127,12 +119,6 @@ public:
     }
 
 private:
-    string basedir_;
-    uint32_t imgCoreNum_;
-    uint32_t videoCoreNum_;
-    string authServer_;
-    uint32_t authType_;
-    uint32_t gpuDevId_;
     shared_ptr<TrailWorker> trailWorker;
     shared_ptr<RecognizeWorker> recWorker;
     shared_ptr<DetectRecognizeWorker> decRecWorker;

@@ -1,9 +1,5 @@
 #pragma once
 
-#include <memory>
-#include <string>
-#include <vector>
-
 #include "algo/stub/algo_stub.h"
 
 using namespace  std;
@@ -24,8 +20,8 @@ public:
         uint32_t width,
         uint32_t height,
         const TrailParam &param,
-        ImageResult &image,
-        FilterResult &filter
+        ImageResult & imageResult,
+        FilterResult & filterResult
     ) override;
 
     int32_t Recognize(
@@ -34,7 +30,7 @@ public:
         uint32_t width,
         uint32_t height,
         const RecogParam &param,
-        ImageResult &rec
+        ImageResult & imageResult
     ) override;
 };
 

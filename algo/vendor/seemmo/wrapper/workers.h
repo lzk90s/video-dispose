@@ -18,7 +18,7 @@ namespace algo {
 namespace seemmo {
 
 
-//ҵ��worker����
+//业务worker基类
 class BusinessWorker {
 public:
     BusinessWorker(uint32_t gpuDevId, uint32_t algoThrType, uint32_t thrNum)
@@ -27,12 +27,21 @@ public:
           cwStop_(thrNum_),
           gpuDevId_(gpuDevId),
           algoThrType_(algoThrType) {
-        tp_.reset(new threadpool(thrNum_,
-                                 std::bind(&BusinessWorker::threadInitProc, this), std::bind(&BusinessWorker::threadFiniProc, this), true));
+        for (uint32_t i = 0; i < thrNum; i++) {
+            shared_ptr<threadpool> w(
+                new threadpool(1,std::bind(&BusinessWorker::threadInitProc, this),
+                               std::bind(&BusinessWorker::threadFiniProc, this),true)
+            );
+            executors_.push_back(w);
+        }
+    }
+
+    virtual ~BusinessWorker() {
+        executors_.clear();
     }
 
     void Close() {
-        tp_->reset();
+        executors_.clear();
     }
 
     void WaitStartOk() {
@@ -41,6 +50,19 @@ public:
 
     void WaitStopOk() {
         cwStop_.wait();
+    }
+
+    shared_ptr<threadpool> ChooseExecutor(int32_t seed) {
+        uint32_t idx = 0;
+        if (seed < 0) {
+            //seed小于0时，随机选取一个
+            auto t = std::chrono::time_point_cast<std::chrono::milliseconds>
+                     (std::chrono::steady_clock::now()).time_since_epoch().count();
+            idx = t % thrNum_;
+        } else {
+            idx = seed % thrNum_;
+        }
+        return executors_[idx];
     }
 
 private:
@@ -71,14 +93,14 @@ private:
 
 protected:
     int32_t thrNum_;
-    unique_ptr<threadpool> tp_;
+    vector<shared_ptr<threadpool>> executors_;
     CountDownLatch cwStart_;
     CountDownLatch cwStop_;
     uint32_t gpuDevId_;
     uint32_t algoThrType_;
 };
 
-// ����worker
+// 跟踪worker
 class TrailWorker : public BusinessWorker {
 public:
     TrailWorker(uint32_t gpuDevId, uint32_t thrNum)
@@ -95,7 +117,8 @@ public:
         char *jsonRsp,
         uint32_t *rspLen
     ) {
-        return tp_->commit(trail, videoChl, timestamp, bgr24, width, height, param, jsonRsp, rspLen);
+        //根据videochannel选择executor，使得同一个channel的检测落在同一个executor上执行
+        return ChooseExecutor(videoChl)->commit(trail, videoChl, timestamp, bgr24, width, height, param, jsonRsp, rspLen);
     }
 
     future<int32_t> commitAsyncEndTask(
@@ -104,7 +127,7 @@ public:
         char *jsonRsp,
         uint32_t *rspLen
     ) {
-        return tp_->commit(trailEnd, videoChl, param, jsonRsp, rspLen);
+        return ChooseExecutor(videoChl)->commit(trailEnd, videoChl, param, jsonRsp, rspLen);
     }
 
 private:
@@ -148,7 +171,7 @@ private:
     }
 };
 
-//���Ž��ʶ��worker
+//择优结果识别worker
 class RecognizeWorker : public BusinessWorker {
 public:
     RecognizeWorker(uint32_t gpuDevId, uint32_t thrNum)
@@ -163,7 +186,7 @@ public:
         char *jsonRsp,
         uint32_t *rspLen
     ) {
-        return tp_->commit(rec, bgr24, width, height, param, jsonRsp, rspLen);
+        return ChooseExecutor(-1)->commit(rec, bgr24, width, height, param, jsonRsp, rspLen);
     }
 
 private:
@@ -188,7 +211,7 @@ private:
 };
 
 
-//ͼƬ���+ʶ��worker
+//图片检测+识别worker
 class DetectRecognizeWorker : public BusinessWorker {
 public:
     DetectRecognizeWorker(uint32_t gpuDevId, uint32_t thrNum)
@@ -203,7 +226,7 @@ public:
         char *jsonRsp,
         uint32_t *rspLen
     ) {
-        return tp_->commit(detectAndRecog, bgr24, width, height, param, jsonRsp, rspLen);
+        return ChooseExecutor(-1)->commit(detectAndRecog, bgr24, width, height, param, jsonRsp, rspLen);
     }
 
 private:

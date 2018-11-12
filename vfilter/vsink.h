@@ -1,14 +1,8 @@
 #pragma once
 
-#include <deque>
 #include <cstdint>
-#include <memory>
 #include <chrono>
-#include <map>
-#include <mutex>
 #include <vector>
-
-#include "opencv/cv.h"
 
 #include "vfilter/frame_handler.h"
 #include "vfilter/object_sink.h"
@@ -54,7 +48,7 @@ public:
         this->channelId_ = channelId;
     }
 
-    // ´¦Àí½ÓÊÕµ½µÄÖ¡
+    // å¤„ç†æ¥æ”¶åˆ°çš„å¸§
     int32_t HandleReceivedFrame(cv::Mat &frame) {
         if (framePicker_.NeedPickFrame()) {
             cv::Mat cloneFrame = frame.clone();

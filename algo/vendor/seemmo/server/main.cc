@@ -19,9 +19,9 @@ DEFINE_int32(idle_timeout_s, -1, "Connection will be closed if there is no "
 DEFINE_string(base_dir, "../../", "the base dir");
 DEFINE_string(auth_server, "192.168.1.198:12821", "the address of auth server");
 DEFINE_int32(img_core_num, 20, "the number of image core");
-DEFINE_int32(video_core_num, 30, "the number of video core");
+DEFINE_int32(video_core_num, 20, "the number of video core");
 DEFINE_int32(img_thr_num, 1, "the number of image thread");
-DEFINE_int32(video_thr_num, 1, "the number of video thread");
+DEFINE_int32(video_thr_num, 3, "the number of video thread");
 DEFINE_int32(gpu_dev, 0, "the gpu device");
 DEFINE_int32(auth_type, 1, "the auth_type");
 

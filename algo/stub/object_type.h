@@ -1,11 +1,9 @@
 #pragma once
 
-#include <memory>
 #include <cstdint>
 #include <vector>
 #include <map>
 #include <string>
-#include <string.h>
 
 using namespace std;
 
@@ -13,25 +11,25 @@ namespace algo {
 
 enum ObjectType {
     INVALID = -1,
-    UNKNOWN = 0,		//Î´Öª
-    PEDESTRAIN = 1,		//ĞĞÈË
-    BIKE = 2,			//×ÔĞĞ³µ
-    MOTOBIKE = 3,		//Ä¦ÍĞ³µ
-    CAR = 4,			//Ğ¡Æû³µ
-    TRICYCLE = 5,		//ÈıÂÖ³µ
-    BUS = 6,			//¹«½»³µ
-    VAN = 7,			//Ãæ°ü³µ
-    TRUCK = 8,			//¿¨³µ
-    FACE = 100,			//ÈËÁ³
+    UNKNOWN = 0,		//æœªçŸ¥
+    PEDESTRAIN = 1,		//è¡Œäºº
+    BIKE = 2,			//è‡ªè¡Œè½¦
+    MOTOBIKE = 3,		//æ‘©æ‰˜è½¦
+    CAR = 4,			//å°æ±½è½¦
+    TRICYCLE = 5,		//ä¸‰è½®è½¦
+    BUS = 6,			//å…¬äº¤è½¦
+    VAN = 7,			//é¢åŒ…è½¦
+    TRUCK = 8,			//å¡è½¦
+    FACE = 100,			//äººè„¸
 };
 
 
-//Ä¿±êÊôĞÔ
+//ç›®æ ‡å±æ€§
 class Attribute {
 public:
-    string name;	// ÊôĞÔÖµ
-    bool visable;	// ÊÇ·ñÔÚÁ÷ÖĞ¿É¼û£¨Á÷µş¼Ó£©
-    uint32_t score;	// ÆÀ·Ö
+    string name;	// å±æ€§å€¼
+    bool visable;	// æ˜¯å¦åœ¨æµä¸­å¯è§ï¼ˆæµå åŠ ï¼‰
+    uint32_t score;	// è¯„åˆ†
 
     Attribute() {
         visable = true;
@@ -54,21 +52,21 @@ public:
     }
 };
 
-typedef vector<int32_t> Rect;		//¾ØĞÎ[x,y,w,h]
-typedef vector<int32_t> Shift;		//Î»ÒÆ[x,y]
-typedef vector<int32_t> Point;		//µã[x,y]
+typedef vector<int32_t> Rect;		//çŸ©å½¢[x,y,w,h]
+typedef vector<int32_t> Shift;		//ä½ç§»[x,y]
+typedef vector<int32_t> Point;		//ç‚¹[x,y]
 typedef map<uint32_t, Attribute> Attributes;
 
 
-// Ä¿±ê»ù´¡ÀàĞÍ
+// ç›®æ ‡åŸºç¡€ç±»å‹
 class BaseObject {
 public:
-    string guid;				// Ä¿±êguid
-    ObjectType type;			// Ä¿±êÀàĞÍ
-    Rect detect;				// Ä¿±êËùÔÚÇøÓò
-    Shift trail;				// Ä¿±ê¸ú×Ù±ä»¯
-    uint32_t score;				// Ä¿±êÆÀ·Ö
-    Attributes attrs; // Ä¿±êÊôĞÔ
+    string guid;				// ç›®æ ‡guid
+    ObjectType type;			// ç›®æ ‡ç±»å‹
+    Rect detect;				// ç›®æ ‡æ‰€åœ¨åŒºåŸŸ
+    Shift trail;				// ç›®æ ‡è·Ÿè¸ªå˜åŒ–
+    uint32_t score;				// ç›®æ ‡è¯„åˆ†
+    Attributes attrs; // ç›®æ ‡å±æ€§
 
     BaseObject() {
         type = UNKNOWN;
@@ -78,7 +76,7 @@ public:
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////
-// »ú¶¯³µ
+// æœºåŠ¨è½¦
 class VehicleObject : public BaseObject {
 public:
     enum AttrType {
@@ -89,11 +87,11 @@ public:
     } ;
 };
 
-// »ú¶¯³µÔñÓÅ
+// æœºåŠ¨è½¦æ‹©ä¼˜
 class VehicleFilter : public BaseObject {
 public:
-    string contextCode;			// ÉÏÏÂÎÄcode
-    int32_t frameId;		// ×îÓÅÖ¡µÄÍ¼Ïñid
+    string contextCode;			// ä¸Šä¸‹æ–‡code
+    int32_t frameId;		// æœ€ä¼˜å¸§çš„å›¾åƒid
 
     VehicleFilter() {
         frameId = 0;
@@ -101,7 +99,7 @@ public:
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////
-// ÈË
+// äºº
 class PersonObject : public BaseObject {
 public:
     enum AttrType {
@@ -128,11 +126,11 @@ public:
     };
 };
 
-// ÈËÔñÓÅ
+// äººæ‹©ä¼˜
 class PersonFilter : public BaseObject {
 public:
-    string contextCode;			// ÉÏÏÂÎÄcode
-    int32_t frameId;		// ×îÓÅÖ¡µÄÍ¼Ïñid
+    string contextCode;			// ä¸Šä¸‹æ–‡code
+    int32_t frameId;		// æœ€ä¼˜å¸§çš„å›¾åƒid
 
     PersonFilter() {
         frameId = 0;
@@ -140,17 +138,17 @@ public:
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////
-// ·Ç»ú¶¯³µ
+// éæœºåŠ¨è½¦
 class BikeObject : public BaseObject {
 public:
-    vector<PersonObject> persons;		// ×ÔĞĞ³µÉÏµÄÈË
+    vector<PersonObject> persons;		// è‡ªè¡Œè½¦ä¸Šçš„äºº
 };
 
-// ·Ç»ú¶¯³µÔñÓÅ
+// éæœºåŠ¨è½¦æ‹©ä¼˜
 class BikeFilter : public BaseObject {
 public:
-    string contextCode;			// ÉÏÏÂÎÄcode
-    int32_t frameId;		// ×îÓÅÖ¡µÄÍ¼Ïñid
+    string contextCode;			// ä¸Šä¸‹æ–‡code
+    int32_t frameId;		// æœ€ä¼˜å¸§çš„å›¾åƒid
 
     BikeFilter() {
         frameId = 0;
@@ -158,15 +156,15 @@ public:
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////
-// ÈËÁ³
+// äººè„¸
 class FaceObject : public BaseObject {
 };
 
-// ÈËÁ³ÔñÓÅ
+// äººè„¸æ‹©ä¼˜
 class FaceFilter : public BaseObject {
 public:
-    string contextCode;			// ÉÏÏÂÎÄcode
-    int32_t frameId;		// ×îÓÅÖ¡µÄÍ¼Ïñid
+    string contextCode;			// ä¸Šä¸‹æ–‡code
+    int32_t frameId;		// æœ€ä¼˜å¸§çš„å›¾åƒid
 
     FaceFilter() {
         frameId = 0;

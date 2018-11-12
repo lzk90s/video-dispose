@@ -16,7 +16,8 @@
 
 typedef int32_t (*PF_VFilter_Init)(void);
 typedef int32_t (*PF_VFilter_Destroy)(void);
-typedef int32_t (*PF_VFilter_Routine)(uint32_t channelId, uint8_t *bgr24, uint32_t width, uint32_t height);
+typedef int32_t (*PF_VFilter_Routine)(uint32_t channelId, uint8_t *y, uint8_t *u, uint8_t *v, uint32_t width,
+                                      uint32_t height);
 
 static void *handle = NULL;
 const static char *VFILTER_DLL_NAME = "libvideo_filter.so";
@@ -33,89 +34,6 @@ typedef struct AlgoContext {
 typedef struct ThreadData {
     AVFrame *in, *out;
 } ThreadData;
-
-
-#if 0
-static int i420p_to_bgr24(const AVFrame *src, AVFrame *dst) {
-    if (src->format != AV_PIX_FMT_YUV420P) {
-        av_log(NULL, AV_LOG_ERROR, "i420p_to_bgr24 only for yuv420p, but the format is %d\n", src->format);
-        return AVERROR(EINVAL);
-    }
-
-    int w = src->width, h = src->height;
-    enum AVPixelFormat src_pixfmt = (enum AVPixelFormat)src->format;
-    enum AVPixelFormat dst_pixfmt = AV_PIX_FMT_BGR24;   // to bgr24
-
-    // allocate memory for data, release by caller
-    int buf_len = av_image_get_buffer_size(dst_pixfmt, w, h, 1);
-    int8_t * buffer = (int8_t*)av_malloc(buf_len);
-    if (NULL == buffer) {
-        av_log(NULL, AV_LOG_ERROR, "No memory");
-        return ENOMEM;
-    }
-    av_image_fill_arrays(dst->data, dst->linesize, buffer, dst_pixfmt, w, h, 1);
-
-    // convert
-    struct SwsContext *convert_ctx = NULL;
-    convert_ctx = sws_getContext(w, h, src_pixfmt, w, h, dst_pixfmt, SWS_POINT, NULL, NULL, NULL);
-    sws_scale(convert_ctx, src->data, src->linesize, 0, h, dst->data, dst->linesize);
-    sws_freeContext(convert_ctx);
-
-    // copy extra data
-    dst->format = dst_pixfmt;
-    dst->width = src->width;
-    dst->height = src->height;
-    dst->key_frame = src->key_frame;
-    dst->pict_type = src->pict_type;
-    dst->pts = src->pts;
-    dst->pkt_pts = src->pkt_pts;
-    dst->pkt_dts = src->pkt_dts;
-    dst->pkt_pos = src->pkt_pos;
-    dst->pkt_size = src->pkt_size;
-
-    return 0;
-}
-
-static int bgr24_to_i420p(const  AVFrame *src, AVFrame *dst) {
-    if (src->format != AV_PIX_FMT_BGR24) {
-        av_log(NULL, AV_LOG_ERROR, "bgr24_to_i420p only for bgr24, but the format is %d\n", src->format);
-        return -1;
-    }
-
-    int w = src->width, h = src->height;
-    enum AVPixelFormat src_pixfmt = (enum AVPixelFormat)src->format;
-    enum AVPixelFormat dst_pixfmt = AV_PIX_FMT_YUV420P;
-
-    // allocate memory, release by caller
-    int buf_len = av_image_get_buffer_size(dst_pixfmt, w, h, 1);
-    int8_t * buffer = (int8_t*)av_malloc(buf_len);
-    if (NULL == buffer) {
-        av_log(NULL, AV_LOG_ERROR, "No memory");
-        return ENOMEM;
-    }
-    av_image_fill_arrays(dst->data, dst->linesize, buffer, dst_pixfmt, w, h, 1);
-
-    // convert
-    struct SwsContext *convert_ctx = NULL;
-    convert_ctx = sws_getContext(w, h, src_pixfmt, w, h, dst_pixfmt, SWS_POINT, NULL, NULL, NULL);
-    sws_scale(convert_ctx, src->data, src->linesize, 0, h, dst->data, dst->linesize);
-    sws_freeContext(convert_ctx);
-
-    // copy extra data
-    dst->format = dst_pixfmt;
-    dst->width = src->width;
-    dst->height = src->height;
-    dst->key_frame = src->key_frame;
-    dst->pict_type = src->pict_type;
-    dst->pts = src->pts;
-    dst->pkt_pts = src->pkt_pts;
-    dst->pkt_dts = src->pkt_dts;
-    dst->pkt_pos = src->pkt_pos;
-    dst->pkt_size = src->pkt_size;
-
-    return 0;
-}
-#endif
 
 static void image_copy_plane(uint8_t *dst, int dst_linesize,
                              const uint8_t *src, int src_linesize,
@@ -186,7 +104,9 @@ static int filter_frame(AVFilterLink *link, AVFrame *in) {
     out->height = outlink->h;
 
     // filter routine
-    pf_VFilter_Routine(privCtx->cid, in->data[0], in->width, in->height);
+    // YUV420P, y= avframe->data[0], u=avframe->data[1], v=avframe->data[2]
+    // 传递ffmpeg默认的yuv420p格式到下层，不在ffmpeg中转成bgr24，是因为ffmpg的sws格式转换性能比较差，在下层使用libyuv转换
+    pf_VFilter_Routine(privCtx->cid, in->data[0], in->data[1], in->data[2], in->width, in->height);
 
     // copy video
     frame_copy_video(out, in);
@@ -256,7 +176,7 @@ static av_cold void uninit(AVFilterContext *ctx) {
 //currently we just support the most common YUV420, can add more if needed
 static int query_formats(AVFilterContext *ctx) {
     static const enum AVPixelFormat pix_fmts[] = {
-        AV_PIX_FMT_BGR24,
+        AV_PIX_FMT_YUV420P,
         AV_PIX_FMT_NONE
     };
     AVFilterFormats *fmts_list = ff_make_format_list(pix_fmts);

@@ -2,12 +2,10 @@
 
 #include "opencv/cv.h"
 
-#include "algo/stub/object_type.h"
 #include "common/helper/logger.h"
 
 #include "vfilter/setting.h"
 #include "vfilter/notifier/httplib.h"
-#include "vfilter/setting.h"
 
 
 namespace vf {

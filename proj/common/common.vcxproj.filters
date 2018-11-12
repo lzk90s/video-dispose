@@ -36,5 +36,8 @@
     <ClInclude Include="..\..\common\helper\jpeg_helper.h">
       <Filter>源文件</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\common\helper\color_conv_util.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

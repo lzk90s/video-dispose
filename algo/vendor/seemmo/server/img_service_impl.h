@@ -45,7 +45,7 @@ public:
 
         int ret = 0;
 
-        //¼ì²â£¨È«Í¼£©
+        //æ£€æµ‹ï¼ˆå…¨å›¾ï¼‰
         uint32_t bufLen1 = 1024 * 1024 * 5;
         unique_ptr<char[]> buf1(new char[bufLen1]);
         detect::DetectRegionPO detectRegionPo;
@@ -55,7 +55,7 @@ public:
         detectRegionPo.regions.push_back({ converter.GetWidth(), 0 });
 
         ret = algo_.Trail(
-                  -1,
+                  INT32_MAX-2,
                   timestamp_++,
                   converter.GetImgBuffer(),
                   converter.GetWidth(),
@@ -69,7 +69,7 @@ public:
             return;
         }
 
-        //¸ù¾İ¼ì²â½á¹ûÉú³ÉÊ¶±ğ²ÎÊı
+        //æ ¹æ®æ£€æµ‹ç»“æœç”Ÿæˆè¯†åˆ«å‚æ•°
         vector<rec::LocationPO> locs;
         detect::DetectReplyPO detectReply;
         detect::DetectResponseParser().Parse(buf1.get(), detectReply);
@@ -80,7 +80,7 @@ public:
             return;
         }
 
-        //Ê¶±ğ
+        //è¯†åˆ«
         uint32_t bufLen2 = 1024 * 1024 * 5;
         unique_ptr<char[]> buf2(new char[bufLen2]);
         ret = algo_.Recognize(
@@ -101,7 +101,7 @@ public:
 private:
     void buildRecLocationByImageResult(detect::DetectReplyPO &p, vector<rec::LocationPO> &locs) {
         if (p.Code == 0) {
-            //Ä¿Ç°Ã»ÓĞÓÃÅúÁ¿·½Ê½£¬ËùÒÔ£¬Ö»È¡µÚÒ»¸öimageresult¼´¿É
+            //ç›®å‰æ²¡æœ‰ç”¨æ‰¹é‡æ–¹å¼ï¼Œæ‰€ä»¥ï¼Œåªå–ç¬¬ä¸€ä¸ªimageresultå³å¯
             detect::ImageResultPO root = p.ImageResults.at(0);
             for (auto &a : root.Bikes) {
                 if (a.GUID.empty()) {

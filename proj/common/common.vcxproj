@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\common\helper\color_conv_util.h" />
     <ClInclude Include="..\..\common\helper\countdownlatch.h" />
     <ClInclude Include="..\..\common\helper\counttimer.h" />
     <ClInclude Include="..\..\common\helper\jpeg_helper.h" />
@@ -81,6 +82,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);..\..\;..\..\thirdparty;..\..\thirdparty\libyuv</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>

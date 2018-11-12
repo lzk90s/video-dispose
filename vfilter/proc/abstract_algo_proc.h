@@ -2,9 +2,7 @@
 
 #include <functional>
 #include "common/helper/threadpool.h"
-#include "common/helper/logger.h"
 
-#include "vfilter/setting.h"
 #include "algo/stub/algo_stub.h"
 #include "vfilter/frame_cache.h"
 #include "vfilter/vsink.h"

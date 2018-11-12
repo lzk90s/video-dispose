@@ -3,7 +3,6 @@
 #include <string>
 #include <vector>
 #include <map>
-#include <memory>
 
 #include "algo/stub/object_type.h"
 
@@ -52,6 +51,9 @@ public:
 
 class AlgoStub {
 public:
+    virtual ~AlgoStub() {
+    }
+
     //检测跟踪 + 去重择优
     virtual int32_t Trail(
         uint32_t channelId,

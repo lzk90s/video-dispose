@@ -1,9 +1,5 @@
 #pragma once
 
-#include <map>
-#include <string>
-
-#include "common/helper/logger.h"
 #include "algo/stub/object_type.h"
 #include "vfilter/mixer/vmixer.h"
 
@@ -18,7 +14,7 @@ public:
 
 protected:
     void doMixFrame(cv::Mat &frame, vector<algo::FaceObject> &objs1, vector<algo::FaceObject> &objs2) override {
-        //ÈËÁ³µÄ²»×ö»ìÁ÷
+        //äººè„¸çš„ä¸åšæ··æµ
     }
 };
 
