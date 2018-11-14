@@ -7,6 +7,7 @@
 #include "vfilter/mixer/vmixer.h"
 
 using namespace std;
+using namespace algo;
 
 namespace vf {
 
@@ -22,7 +23,7 @@ protected:
             mixObjectRectangle(frame, x, y, w, h, CV_RGB(255, 0, 0));
 
             // 需要混到流中的属性
-            vector<Attribute> mixableAttrs;
+            vector<algo::Attribute> mixableAttrs;
 
             algo::Attributes &attrs = objs2[idx].attrs;
             mixableAttrs.push_back(algo::Attribute().WithName(getTypeString(objs1[idx].type)));

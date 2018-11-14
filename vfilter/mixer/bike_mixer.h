@@ -7,6 +7,7 @@
 #include "vfilter/mixer/vmixer.h"
 
 using namespace std;
+using namespace algo;
 
 namespace vf {
 
@@ -27,7 +28,7 @@ protected:
                 // 只输出一个人
                 for (auto &p : objs2[idx].persons) {
                     // 需要混到流中的属性
-                    vector<Attribute> mixableAttrs;
+                    vector<algo::Attribute> mixableAttrs;
 
                     algo::Attributes &attrs = p.attrs;
                     mixableAttrs.push_back(algo::Attribute().WithName(getTypeString(objs1[idx].type)));
