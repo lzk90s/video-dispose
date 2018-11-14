@@ -58,6 +58,14 @@ protected:
         return j.dump();
     }
 
+    string getAttrName(algo::Attributes &attrs, algo::PersonObject::AttrType type) {
+        if (attrs.find(type) != attrs.end()) {
+            return attrs[type].name;
+        } else {
+            return "";
+        }
+    }
+
     string getRequestURL() override {
         return "/internal/snap/face";
     }

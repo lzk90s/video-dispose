@@ -7,7 +7,6 @@
 #include "vfilter/mixer/vmixer.h"
 
 using namespace std;
-using namespace algo;
 
 namespace vf {
 
@@ -24,12 +23,14 @@ protected:
 
             // 需要混到流中的属性
             vector<Attribute> mixableAttrs;
+
+            algo::Attributes &attrs = objs2[idx].attrs;
             mixableAttrs.push_back(algo::Attribute().WithName(getTypeString(objs1[idx].type)));
-            mixableAttrs.push_back(objs2[idx].attrs[algo::PersonObject::AttrType::SEX]);
-            mixableAttrs.push_back(objs2[idx].attrs[algo::PersonObject::AttrType::AGE]);
-            mixableAttrs.push_back(objs2[idx].attrs[algo::PersonObject::AttrType::HAIR]);
-            mixableAttrs.push_back(objs2[idx].attrs[algo::PersonObject::AttrType::HAT]);
-            mixableAttrs.push_back(objs2[idx].attrs[algo::PersonObject::AttrType::UPPER_COLOR]);
+            mixableAttrs.push_back(attrs[algo::PersonObject::AttrType::SEX]);
+            mixableAttrs.push_back(attrs[algo::PersonObject::AttrType::AGE]);
+            mixableAttrs.push_back(attrs[algo::PersonObject::AttrType::HAIR]);
+            mixableAttrs.push_back(attrs[algo::PersonObject::AttrType::HAT]);
+            mixableAttrs.push_back(attrs[algo::PersonObject::AttrType::UPPER_COLOR]);
 
             mixObjectAttributeText(frame, x, y, w, h, mixableAttrs);
         }

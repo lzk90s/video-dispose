@@ -26,6 +26,8 @@ public:
         gofSize_ = 0;
         objAppearHandler_ = nullptr;
         objDisappearHandler_ = nullptr;
+        lastTime_ = chrono::steady_clock::now();
+        currTime_ = chrono::steady_clock::now();
     }
 
     void SetObjectAppearHandler(ObjectAppearHandler h) {
@@ -78,13 +80,14 @@ private:
         if (rect.size() != 4 || shift.size() != 2) {
             return rect;
         }
+
         int32_t x = rect[0], y = rect[1], w = rect[2], h = rect[3];
         int32_t gofSize = (int32_t)gofSize_;
         if (gofSize > 0) {
             int32_t gofIdx = gofIdx_ > gofSize_ ? (int32_t)gofSize_ : (int32_t)gofIdx_;
             int32_t sx = shift[0], sy = shift[1];
-            x += (sx / gofSize) * gofIdx;
-            y += (sy / gofSize) * gofIdx;
+            x += round((double)sx / (double)gofSize) * gofIdx;
+            y += round((double)sy / (double)gofSize) * gofIdx;
             //计算后，可能会导致x，或者y小于0，小于0时，设置为0
             x = (x < 0) ? 0 : x;
             y = (y < 0) ? 0 : y;
@@ -95,17 +98,24 @@ private:
     //计算需要识别的目标
     vector<T>  calcNeedRecognizeObjects(const vector<T> &objs) {
         vector<T> toRecObjs;
-        for (auto &o : objs) {
-            // 1. 目标第一次出现
-            // 2. 目标最新的评分比上一次高
-            if (existObjs_.find(o.guid) == existObjs_.end()) {
-                toRecObjs.push_back(o);
-            } else {
-                uint32_t currScore = o.score;
-                uint32_t lastScore = existObjs_[o.guid].obj1.score;
-                if ((currScore > lastScore) &&
-                        (currScore - lastScore > GlobalSettings::getInstance().scoreDiff4ReRecognize)) {
+        // 1. 超过全识别时间间隔【有时候第一次识别是识别错的，定时刷新当前目标的全部结果】
+        // 2. 目标第一次出现【目标第一次出现，进行识别】
+        // 3. 目标最新的评分比上一次高【目标的评分高，说明可能清晰度更好，识别结果可能更准确】
+        currTime_ = chrono::steady_clock::now();
+        auto diffTime = std::chrono::duration_cast<std::chrono::milliseconds>(currTime_ - lastTime_).count();
+        if (diffTime >= GlobalSettings::getInstance().fullRecognizeInternalMs) {
+            toRecObjs = objs;
+            lastTime_ = currTime_;
+        } else {
+            for (auto &o : objs) {
+                if (existObjs_.find(o.guid) == existObjs_.end()) {
                     toRecObjs.push_back(o);
+                } else {
+                    uint32_t currScore = o.score;
+                    uint32_t lastScore = existObjs_[o.guid].obj1.score;
+                    if ((currScore > lastScore) && (currScore - lastScore > GlobalSettings::getInstance().scoreDiff4ReRecognize)) {
+                        toRecObjs.push_back(o);
+                    }
                 }
             }
         }
@@ -216,6 +226,9 @@ private:
     //因为是抽帧检测，所以，把相邻两次检测之间的帧认作一个gof（group of frame），gofSize表示一个gof中的帧数目，gofidx表示一帧在当前gof中的序号
     uint32_t gofSize_;
     uint32_t gofIdx_;
+    //time for pick frame
+    chrono::steady_clock::time_point lastTime_;
+    chrono::steady_clock::time_point currTime_;
 };
 
 typedef ObjectSink<algo::BikeObject> BikeObjectSink;

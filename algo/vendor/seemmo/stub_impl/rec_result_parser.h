@@ -160,28 +160,21 @@ void from_json(const json& j, AttributePO& p) {
 
 void from_json(const json& j, VehicleAttributeGroup& p) {
     try {
-        p.Brand = j.at("Brand").get<AttributePO>();
-    } catch (exception &e) {
-        LOG_ERROR("Parse json error, {}, {}", j.dump(), e.what());
-    }
-
-    try {
-        p.Color = j.at("Color").get<AttributePO>();
-    } catch (exception &e) {
-        LOG_ERROR("Parse json error, {}, {}", j.dump(), e.what());
-    }
-
-    try {
-        p.Type = j.at("Type").get<AttributePO>();
-    } catch (exception &e) {
-        LOG_ERROR("Parse json error, {}, {}", j.dump(), e.what());
-    }
-
-    try {
-        //车牌单独解
-        if (0 == j.at("Plate").at("Code")) {
-            string license = j.at("Plate").at("Licence").get<string>();
-            p.Plate.Name = license;
+        if (j.find("Brand") != j.end()) {
+            p.Brand = j.at("Brand").get<AttributePO>();
+        }
+        if (j.find("Color") != j.end()) {
+            p.Color = j.at("Color").get<AttributePO>();
+        }
+        if (j.find("Type") != j.end()) {
+            p.Type = j.at("Type").get<AttributePO>();
+        }
+        if (j.find("Plate") != j.end()) {
+            //车牌单独解
+            if (0 == j.at("Plate").at("Code")) {
+                string license = j.at("Plate").at("Licence").get<string>();
+                p.Plate.Name = license;
+            }
         }
     } catch (exception &e) {
         LOG_ERROR("Parse json error, {}, {}", j.dump(), e.what());

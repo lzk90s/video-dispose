@@ -12,8 +12,10 @@ namespace vf {
 
 class Settings {
 public:
-    // 默认抽帧时间间隔（毫秒）
-    uint32_t framePickInternalMs;
+    // 全识别时间间隔（毫秒）
+    uint32_t fullRecognizeInternalMs;
+    // 最小检测抽帧时间间隔
+    uint32_t minFramePickInternalMs;
     // 默认抽帧间隔数目（抽帧检测）
     uint32_t framePickInternalNum;
     // 默认缓存的最大帧数(30秒的帧数)
@@ -47,7 +49,8 @@ public:
 private:
     void init() {
         //根据环境变量重新设置值
-        framePickInternalMs = parseEnvNumValue("FRAME_PICK_INTERNAL_MS", 100);
+        fullRecognizeInternalMs = parseEnvNumValue("FULL_RECOGNIZE_INTERNAL_MS", 30000);
+        minFramePickInternalMs = parseEnvNumValue("MIN_FRAME_PICK_INTERNAL_MS", 100);
         framePickInternalNum = parseEnvNumValue("FRAME_PICK_INTERNAL_NUM", 5);
         objectDisappearCount = parseEnvNumValue("OBJECT_DISAPPEAR_COUNT", 10);
         facePictureMinWidth = parseEnvNumValue("FACE_PICTURE_MIN_WIDTH", 50);
@@ -64,7 +67,8 @@ private:
 
     void dump() {
         cout << "Settings -> {"
-             << "framePickInternalMs: " << framePickInternalMs << ", "
+             << "fullRecognizeInternalMs: " << fullRecognizeInternalMs << ", "
+             << "minFramePickInternalMs: " << minFramePickInternalMs << ", "
              << "framePickInternalNum: " << framePickInternalNum << ", "
              << "frameCacheMaxNum: " << frameCacheMaxNum << ", "
              << "objectDisappearCount: " << objectDisappearCount << ", "

@@ -90,29 +90,37 @@ protected:
         msg.channelId = channelId;
         msg.type = obj.type;
 
-        msg.sexCodeName = obj.attrs[algo::PersonObject::AttrType::SEX].name;
-        msg.ageCodeName = obj.attrs[algo::PersonObject::AttrType::AGE].name;
-        msg.hairCodeName = obj.attrs[algo::PersonObject::AttrType::HAIR].name;
-        msg.hatCodeName = obj.attrs[algo::PersonObject::AttrType::HAT].name;
-        msg.orientationCodeName = obj.attrs[algo::PersonObject::AttrType::ORIENTATION].name;
-        msg.knapsackCodeName = obj.attrs[algo::PersonObject::AttrType::KNAPSACK].name;
-        msg.umbrellaCodeName = obj.attrs[algo::PersonObject::AttrType::UMBERLLA].name;
-        msg.bagCodeName = obj.attrs[algo::PersonObject::AttrType::BAG].name;
-        msg.maskCodeName = obj.attrs[algo::PersonObject::AttrType::MASK].name;
-        msg.glassesCodeName = obj.attrs[algo::PersonObject::AttrType::GLASSES].name;
-        msg.trolleyCaseCodeName = obj.attrs[algo::PersonObject::AttrType::TROLLEY_CASE].name;
-        msg.barrowCodeName = obj.attrs[algo::PersonObject::AttrType::BARROW].name;
-        msg.upperTextureCodeName = obj.attrs[algo::PersonObject::AttrType::UPPER_TEXTURE].name;
-        msg.upperColorCodeName = obj.attrs[algo::PersonObject::AttrType::UPPER_COLOR].name;
-        msg.bottomColorCodeName = obj.attrs[algo::PersonObject::AttrType::BOTTOM_COLOR].name;
-        msg.upperCodeName = obj.attrs[algo::PersonObject::AttrType::UPPER_TYPE].name;
-        msg.bottomCodeName = obj.attrs[algo::PersonObject::AttrType::BOTTOM_TYPE].name;
-        msg.babyCodeName = obj.attrs[algo::PersonObject::AttrType::BABY].name;
+        using AttrType = algo::PersonObject::AttrType;
+        msg.sexCodeName = getAttrName(obj.attrs, AttrType::SEX);
+        msg.ageCodeName = getAttrName(obj.attrs, AttrType::AGE);
+        msg.hairCodeName = getAttrName(obj.attrs, AttrType::HAIR);
+        msg.hatCodeName = getAttrName(obj.attrs, AttrType::HAT);
+        msg.orientationCodeName = getAttrName(obj.attrs, AttrType::ORIENTATION);
+        msg.knapsackCodeName = getAttrName(obj.attrs, AttrType::KNAPSACK);
+        msg.umbrellaCodeName = getAttrName(obj.attrs, AttrType::UMBERLLA);
+        msg.bagCodeName = getAttrName(obj.attrs, AttrType::BAG);
+        msg.maskCodeName = getAttrName(obj.attrs, AttrType::MASK);
+        msg.glassesCodeName = getAttrName(obj.attrs, AttrType::GLASSES);
+        msg.trolleyCaseCodeName = getAttrName(obj.attrs, AttrType::TROLLEY_CASE);
+        msg.barrowCodeName = getAttrName(obj.attrs, AttrType::BARROW);
+        msg.upperTextureCodeName = getAttrName(obj.attrs, AttrType::UPPER_TEXTURE);
+        msg.upperColorCodeName = getAttrName(obj.attrs, AttrType::UPPER_COLOR);
+        msg.bottomColorCodeName = getAttrName(obj.attrs, AttrType::BOTTOM_COLOR);
+        msg.upperCodeName = getAttrName(obj.attrs, AttrType::UPPER_TYPE);
+        msg.bottomCodeName = getAttrName(obj.attrs, AttrType::BOTTOM_TYPE);
+        msg.babyCodeName = getAttrName(obj.attrs, AttrType::BABY);
 
         json j = msg;
         return j.dump();
     }
 
+    string getAttrName(algo::Attributes &attrs, algo::PersonObject::AttrType type) {
+        if (attrs.find(type) != attrs.end()) {
+            return attrs[type].name;
+        } else {
+            return "";
+        }
+    }
 
     string getRequestURL() override {
         return "/internal/snap/passerby";

@@ -61,19 +61,14 @@ public:
     }
 
     cv::Mat Get() override {
-        unique_ptr<uint8_t[]> rgb(new uint8_t[width_*height_ * 3] { 0 });
-
+        cv::Mat mat = cv::Mat(height_, width_, CV_8UC3);
         int width = width_;
         int height = height_;
         uint8_t* src_y = yuv_.get();
         uint8_t* src_u = src_y + width * height;
         uint8_t* src_v = src_u + (width * height/4);
-        uint8_t* dst_rgb24 = rgb.get();
+        uint8_t* dst_rgb24 = mat.data;
         BGR24ToI420Converter::Convert(src_y, src_u, src_v, dst_rgb24, width, height);
-
-        cv::Mat mat = cv::Mat(height, width, CV_8UC3);
-        memcpy(mat.data, rgb.get(), width*height * 3);
-
         return mat;
     }
 

@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "common/helper/base64.h"
 #include "common/helper/jpeg_helper.h"
@@ -93,24 +93,25 @@ protected:
 
         //非机动车显示其上人的属性
         for (auto &p : obj.persons) {
-            msg.sexCodeName = p.attrs[algo::PersonObject::AttrType::SEX].name;
-            msg.ageCodeName = p.attrs[algo::PersonObject::AttrType::AGE].name;
-            msg.hairCodeName = p.attrs[algo::PersonObject::AttrType::HAIR].name;
-            msg.hatCodeName = p.attrs[algo::PersonObject::AttrType::HAT].name;
-            msg.orientationCodeName = p.attrs[algo::PersonObject::AttrType::ORIENTATION].name;
-            msg.knapsackCodeName = p.attrs[algo::PersonObject::AttrType::KNAPSACK].name;
-            msg.umbrellaCodeName = p.attrs[algo::PersonObject::AttrType::UMBERLLA].name;
-            msg.bagCodeName = p.attrs[algo::PersonObject::AttrType::BAG].name;
-            msg.maskCodeName = p.attrs[algo::PersonObject::AttrType::MASK].name;
-            msg.glassesCodeName = p.attrs[algo::PersonObject::AttrType::GLASSES].name;
-            msg.trolleyCaseCodeName = p.attrs[algo::PersonObject::AttrType::TROLLEY_CASE].name;
-            msg.barrowCodeName = p.attrs[algo::PersonObject::AttrType::BARROW].name;
-            msg.upperTextureCodeName = p.attrs[algo::PersonObject::AttrType::UPPER_TEXTURE].name;
-            msg.upperColorCodeName = p.attrs[algo::PersonObject::AttrType::UPPER_COLOR].name;
-            msg.bottomColorCodeName = p.attrs[algo::PersonObject::AttrType::BOTTOM_COLOR].name;
-            msg.upperCodeName = p.attrs[algo::PersonObject::AttrType::UPPER_TYPE].name;
-            msg.bottomCodeName = p.attrs[algo::PersonObject::AttrType::BOTTOM_TYPE].name;
-            msg.babyCodeName = p.attrs[algo::PersonObject::AttrType::BABY].name;
+            using AttrType = algo::PersonObject::AttrType;
+            msg.sexCodeName = getAttrName(p.attrs, AttrType::SEX);
+            msg.ageCodeName = getAttrName(p.attrs, AttrType::AGE);
+            msg.hairCodeName = getAttrName(p.attrs, AttrType::HAIR);
+            msg.hatCodeName = getAttrName(p.attrs, AttrType::HAT);
+            msg.orientationCodeName = getAttrName(p.attrs, AttrType::ORIENTATION);
+            msg.knapsackCodeName = getAttrName(p.attrs, AttrType::KNAPSACK);
+            msg.umbrellaCodeName = getAttrName(p.attrs, AttrType::UMBERLLA);
+            msg.bagCodeName = getAttrName(p.attrs, AttrType::BAG);
+            msg.maskCodeName = getAttrName(p.attrs, AttrType::MASK);
+            msg.glassesCodeName = getAttrName(p.attrs, AttrType::GLASSES);
+            msg.trolleyCaseCodeName = getAttrName(p.attrs, AttrType::TROLLEY_CASE);
+            msg.barrowCodeName = getAttrName(p.attrs, AttrType::BARROW);
+            msg.upperTextureCodeName = getAttrName(p.attrs, AttrType::UPPER_TEXTURE);
+            msg.upperColorCodeName = getAttrName(p.attrs, AttrType::UPPER_COLOR);
+            msg.bottomColorCodeName = getAttrName(p.attrs, AttrType::BOTTOM_COLOR);
+            msg.upperCodeName = getAttrName(p.attrs, AttrType::UPPER_TYPE);
+            msg.bottomCodeName = getAttrName(p.attrs, AttrType::BOTTOM_TYPE);
+            msg.babyCodeName = getAttrName(p.attrs, AttrType::BABY);
 
             // only one
             break;
@@ -118,6 +119,14 @@ protected:
 
         json j = msg;
         return j.dump();
+    }
+
+    string getAttrName(algo::Attributes &attrs, algo::PersonObject::AttrType type) {
+        if (attrs.find(type) != attrs.end()) {
+            return attrs[type].name;
+        } else {
+            return "";
+        }
     }
 
     string getRequestURL() override {

@@ -75,10 +75,11 @@ protected:
         msg.channelId = channelId;
         msg.type = obj.type;
 
-        msg.plateLicence = obj.attrs[algo::VehicleObject::AttrType::PLATE].name;
-        msg.carPatternName = obj.attrs[algo::VehicleObject::AttrType::BRAND].name;
-        msg.plateTypeCodeName = obj.attrs[algo::VehicleObject::AttrType::TYPE].name;
-        msg.colorCodeName = obj.attrs[algo::VehicleObject::AttrType::COLOR].name;
+        using AttrType = algo::VehicleObject::AttrType;
+        msg.plateLicence = getAttrName(obj.attrs, AttrType::PLATE);
+        msg.carPatternName = getAttrName(obj.attrs, AttrType::BRAND);
+        msg.plateTypeCodeName = getAttrName(obj.attrs, AttrType::TYPE);
+        msg.colorCodeName = getAttrName(obj.attrs, AttrType::COLOR);
         msg.coDriverPersonCodeName = "";
         msg.callCodeName = "";
         msg.rackCodeName = "";
@@ -90,6 +91,14 @@ protected:
 
         json j = msg;
         return j.dump();
+    }
+
+    string getAttrName(algo::Attributes &attrs, algo::VehicleObject::AttrType type) {
+        if (attrs.find(type) != attrs.end()) {
+            return attrs[type].name;
+        } else {
+            return "";
+        }
     }
 
     string getRequestURL() override {

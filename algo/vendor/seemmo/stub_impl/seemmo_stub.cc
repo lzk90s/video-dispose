@@ -142,7 +142,7 @@ private:
         options.connection_type = "single";
         options.timeout_ms = 2000/*milliseconds*/;
         options.max_retry = 0;
-        if (channel_->Init("0.0.0.0:7000", "", &options) != 0) {
+        if (channel_->Init("seemmo-algo-server:7000", "", &options) != 0) {
             LOG_ERROR("Fail to initialize channel");
             throw runtime_error("brpc init error");
         }
@@ -309,33 +309,43 @@ private:
     }
 
     void recogAttributesConv(algo::seemmo::rec::PersonAttributeGroupPO &in, algo::Attributes &out) {
-        out[algo::PersonObject::AttrType::AGE] = algo::Attribute(in.Age.Name, in.Age.Score);
-        out[algo::PersonObject::AttrType::SEX] = algo::Attribute(in.Sex.Name, in.Sex.Score);
-        out[algo::PersonObject::AttrType::UPPER_COLOR] = algo::Attribute(in.UpperColor.Name, in.UpperColor.Score);
-        out[algo::PersonObject::AttrType::BOTTOM_COLOR] = algo::Attribute(in.BottomColor.Name, in.BottomColor.Score);
-        out[algo::PersonObject::AttrType::ORIENTATION] = algo::Attribute(in.Orientation.Name, in.Orientation.Score);
-        out[algo::PersonObject::AttrType::HAIR] = algo::Attribute(in.Hair.Name, in.Hair.Score);
-        out[algo::PersonObject::AttrType::UMBERLLA] = algo::Attribute(in.Umbrella.Name, in.Umbrella.Score);
-        out[algo::PersonObject::AttrType::HAT] = algo::Attribute(in.Hat.Name, in.Hat.Score);
-        out[algo::PersonObject::AttrType::UPPER_TYPE] = algo::Attribute(in.UpperType.Name, in.UpperType.Score);
-        out[algo::PersonObject::AttrType::BOTTOM_TYPE] = algo::Attribute(in.BottomType.Name, in.BottomType.Score);
-        out[algo::PersonObject::AttrType::KNAPSACK] = algo::Attribute(in.Knapsack.Name, in.Knapsack.Score);
-        out[algo::PersonObject::AttrType::BAG] = algo::Attribute(in.Bag.Name, in.Bag.Score);
-        out[algo::PersonObject::AttrType::BABY] = algo::Attribute(in.Baby.Name, in.Baby.Score);
-        out[algo::PersonObject::AttrType::MESSAGER_BAG] = algo::Attribute(in.MessengerBag.Name, in.MessengerBag.Score);
-        out[algo::PersonObject::AttrType::SHOULDER_BAG] = algo::Attribute(in.ShoulderBag.Name, in.ShoulderBag.Score);
-        out[algo::PersonObject::AttrType::GLASSES] = algo::Attribute(in.Glasses.Name, in.Glasses.Score);
-        out[algo::PersonObject::AttrType::MASK] = algo::Attribute(in.Mask.Name, in.Mask.Score);
-        out[algo::PersonObject::AttrType::UPPER_TEXTURE] = algo::Attribute(in.UpperTexture.Name, in.UpperTexture.Score);
-        out[algo::PersonObject::AttrType::BARROW] = algo::Attribute(in.Barrow.Name, in.Barrow.Score);
-        out[algo::PersonObject::AttrType::TROLLEY_CASE] = algo::Attribute(in.TrolleyCase.Name, in.TrolleyCase.Score);
+        using AttrType = algo::PersonObject::AttrType;
+        buildAttr(in.Age.Name, in.Age.Score, AttrType::AGE, out);
+        buildAttr(in.Sex.Name, in.Sex.Score, AttrType::SEX, out);
+        buildAttr(in.UpperColor.Name, in.UpperColor.Score, AttrType::UPPER_COLOR, out);
+        buildAttr(in.BottomColor.Name, in.BottomColor.Score, AttrType::BOTTOM_COLOR, out);
+        buildAttr(in.Orientation.Name, in.Orientation.Score, AttrType::ORIENTATION, out);
+        buildAttr(in.Hair.Name, in.Hair.Score, AttrType::HAIR, out);
+        buildAttr(in.Umbrella.Name, in.Umbrella.Score, AttrType::UMBERLLA, out);
+        buildAttr(in.Hat.Name, in.Hat.Score, AttrType::HAT, out);
+        buildAttr(in.UpperType.Name, in.UpperType.Score, AttrType::UPPER_TYPE, out);
+        buildAttr(in.BottomType.Name, in.BottomType.Score, AttrType::BOTTOM_TYPE, out);
+        buildAttr(in.Knapsack.Name, in.Knapsack.Score, AttrType::KNAPSACK, out);
+        buildAttr(in.Bag.Name, in.Bag.Score, AttrType::BAG, out);
+        buildAttr(in.Baby.Name, in.Baby.Score, AttrType::BABY, out);
+        buildAttr(in.MessengerBag.Name, in.MessengerBag.Score, AttrType::MESSAGER_BAG, out);
+        buildAttr(in.ShoulderBag.Name, in.ShoulderBag.Score, AttrType::SHOULDER_BAG, out);
+        buildAttr(in.Glasses.Name, in.Glasses.Score, AttrType::GLASSES, out);
+        buildAttr(in.Mask.Name, in.Mask.Score, AttrType::MASK, out);
+        buildAttr(in.UpperTexture.Name, in.UpperTexture.Score, AttrType::UPPER_TEXTURE, out);
+        buildAttr(in.Barrow.Name, in.Barrow.Score, AttrType::BARROW, out);
+        buildAttr(in.TrolleyCase.Name, in.TrolleyCase.Score, AttrType::TROLLEY_CASE, out);
     }
 
     void recogAttributesConv(algo::seemmo::rec::VehicleAttributeGroup &in, algo::Attributes &out) {
-        out[algo::VehicleObject::AttrType::BRAND] = algo::Attribute(in.Brand.Name, in.Brand.Score);
-        out[algo::VehicleObject::AttrType::COLOR] = algo::Attribute(in.Color.Name, in.Color.Score);
-        out[algo::VehicleObject::AttrType::TYPE] = algo::Attribute(in.Type.Name, in.Type.Score);
-        out[algo::VehicleObject::AttrType::PLATE] =algo::Attribute(in.Plate.Name, in.Plate.Score);
+        using AttrType = algo::VehicleObject::AttrType;
+        buildAttr(in.Brand.Name, in.Brand.Score, AttrType::BRAND, out);
+        buildAttr(in.Color.Name, in.Color.Score, AttrType::COLOR, out);
+        buildAttr(in.Type.Name, in.Type.Score, AttrType::TYPE, out);
+        buildAttr(in.Plate.Name, in.Plate.Score, AttrType::PLATE, out);
+    }
+
+    void buildAttr(const string &attrName, int32_t score, uint32_t attrType, algo::Attributes &out) {
+        if (!attrName.empty()) {
+            out[attrType] = algo::Attribute(attrName, score);
+        } else {
+            out[attrType] = algo::Attribute("", 0);
+        }
     }
 
 private:

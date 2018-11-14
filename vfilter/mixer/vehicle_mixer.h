@@ -7,7 +7,6 @@
 #include "vfilter/mixer/vmixer.h"
 
 using namespace std;
-using namespace algo;
 
 namespace vf {
 class VehicleMixer : public VMixer<algo::VehicleObject> {
@@ -26,11 +25,12 @@ protected:
             // 属性从objs2取
             vector<Attribute> mixableAttrs;
 
+            algo::Attributes &attrs = objs2[idx].attrs;
             mixableAttrs.push_back(algo::Attribute().WithName(getTypeString(objs1[idx].type)));
-            mixableAttrs.push_back(objs2[idx].attrs[algo::VehicleObject::AttrType::BRAND]);
-            mixableAttrs.push_back(objs2[idx].attrs[algo::VehicleObject::AttrType::COLOR]);
-            mixableAttrs.push_back(objs2[idx].attrs[algo::VehicleObject::AttrType::PLATE]);
-            mixableAttrs.push_back(objs2[idx].attrs[algo::VehicleObject::AttrType::TYPE]);
+            mixableAttrs.push_back(attrs[algo::VehicleObject::AttrType::BRAND]);
+            mixableAttrs.push_back(attrs[algo::VehicleObject::AttrType::COLOR]);
+            mixableAttrs.push_back(attrs[algo::VehicleObject::AttrType::PLATE]);
+            mixableAttrs.push_back(attrs[algo::VehicleObject::AttrType::TYPE]);
 
             mixObjectAttributeText(frame, x, y, w, h, mixableAttrs);
         }
