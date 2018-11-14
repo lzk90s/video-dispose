@@ -8,7 +8,7 @@
 
 #include "vfilter/mixer/cvx_text.h"
 #include "algo/stub/object_type.h"
-#include "vfilter/object_sink.h"
+#include "vfilter/core/object_sink.h"
 
 using namespace std;
 

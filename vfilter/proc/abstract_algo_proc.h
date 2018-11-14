@@ -4,9 +4,9 @@
 #include "common/helper/threadpool.h"
 
 #include "algo/stub/algo_stub.h"
-#include "vfilter/frame_cache.h"
-#include "vfilter/vsink.h"
-#include "vfilter/frame_handler.h"
+#include "vfilter/core/frame_cache.h"
+#include "vfilter/core/vsink.h"
+#include "vfilter/core/frame_handler.h"
 
 
 namespace vf {

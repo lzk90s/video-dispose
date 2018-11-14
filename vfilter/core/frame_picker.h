@@ -2,7 +2,7 @@
 
 #include <chrono>
 
-#include "vfilter/setting.h"
+#include "vfilter/config/setting.h"
 
 using namespace std;
 

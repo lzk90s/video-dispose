@@ -7,7 +7,7 @@
 
 #include "common/helper/logger.h"
 #include "algo/stub/object_type.h"
-#include "vfilter/setting.h"
+#include "vfilter/config/setting.h"
 
 
 namespace vf {

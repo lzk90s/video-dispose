@@ -4,10 +4,9 @@
 #include "common/helper/singleton.h"
 #include "common/helper/color_conv_util.h"
 
-#include "vfilter/setting.h"
+#include "vfilter/config/setting.h"
+#include "vfilter/core/vsink.h"
 #include "vfilter/vfilter.h"
-#include "vfilter/vsink.h"
-
 #include "vfilter/proc/default_algo_proc.h"
 #include "vfilter/proc/face_algo_proc.h"
 

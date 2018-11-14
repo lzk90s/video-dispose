@@ -5,7 +5,7 @@
 #include "common/helper/jpeg_helper.h"
 
 #include "vfilter/notifier/notifier.h"
-#include "vfilter/setting.h"
+#include "vfilter/config/setting.h"
 
 #include "json/json.hpp"
 

@@ -4,9 +4,9 @@
 #include <chrono>
 #include <vector>
 
-#include "vfilter/frame_handler.h"
-#include "vfilter/object_sink.h"
-#include "vfilter/frame_picker.h"
+#include "vfilter/core/frame_handler.h"
+#include "vfilter/core/object_sink.h"
+#include "vfilter/core/frame_picker.h"
 
 #include "vfilter/mixer/bike_mixer.h"
 #include "vfilter/mixer/person_mixer.h"

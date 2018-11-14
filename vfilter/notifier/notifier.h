@@ -4,7 +4,7 @@
 
 #include "common/helper/logger.h"
 
-#include "vfilter/setting.h"
+#include "vfilter/config/setting.h"
 #include "vfilter/notifier/httplib.h"
 
 

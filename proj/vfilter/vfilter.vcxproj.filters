@@ -22,6 +22,12 @@
     <Filter Include="源文件\proc">
       <UniqueIdentifier>{e6c74a94-c6d5-458c-a779-b0ed8270899d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="源文件\core">
+      <UniqueIdentifier>{4d5d1dfe-6eef-4c79-88d7-229c07e3d73d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\config">
+      <UniqueIdentifier>{07ff6227-ac09-4827-bef5-737925b16ea4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\vfilter\Makefile">
@@ -35,9 +41,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\vfilter\vfilter.h">
-      <Filter>源文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\vfilter\frame_cache.h">
       <Filter>源文件</Filter>
     </ClInclude>
     <ClInclude Include="..\..\vfilter\mixer\vmixer.h">
@@ -55,12 +58,6 @@
     <ClInclude Include="..\..\vfilter\mixer\bike_mixer.h">
       <Filter>源文件\mixer</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\vfilter\app.h">
-      <Filter>源文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\vfilter\setting.h">
-      <Filter>源文件</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\vfilter\notifier\bike_notifier.h">
       <Filter>源文件\notifier</Filter>
     </ClInclude>
@@ -76,26 +73,11 @@
     <ClInclude Include="..\..\vfilter\notifier\httplib.h">
       <Filter>源文件\notifier</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\vfilter\frame_handler.h">
-      <Filter>源文件</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\vfilter\mixer\face_mixer.h">
       <Filter>源文件\mixer</Filter>
     </ClInclude>
     <ClInclude Include="..\..\vfilter\notifier\face_notifier.h">
       <Filter>源文件\notifier</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\vfilter\object_sink.h">
-      <Filter>源文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\vfilter\buffered_frame.h">
-      <Filter>源文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\vfilter\vsink.h">
-      <Filter>源文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\vfilter\frame_picker.h">
-      <Filter>源文件</Filter>
     </ClInclude>
     <ClInclude Include="..\..\vfilter\proc\abstract_algo_proc.h">
       <Filter>源文件\proc</Filter>
@@ -105,6 +87,30 @@
     </ClInclude>
     <ClInclude Include="..\..\vfilter\proc\face_algo_proc.h">
       <Filter>源文件\proc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\vfilter\core\app.h">
+      <Filter>源文件\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\vfilter\core\buffered_frame.h">
+      <Filter>源文件\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\vfilter\core\frame_cache.h">
+      <Filter>源文件\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\vfilter\core\frame_handler.h">
+      <Filter>源文件\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\vfilter\core\frame_picker.h">
+      <Filter>源文件\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\vfilter\core\object_sink.h">
+      <Filter>源文件\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\vfilter\core\vsink.h">
+      <Filter>源文件\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\vfilter\config\setting.h">
+      <Filter>源文件\config</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
