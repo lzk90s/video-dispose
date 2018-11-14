@@ -22,7 +22,8 @@ GosunAlgoStub::GosunAlgoStub() {
 
     createSmartFace();
 
-    //第一次算法比较慢，用空数据做几次算法热身
+#if 0
+    //绗竴娆＄畻娉曟瘮杈冩參锛岀敤绌烘暟鎹仛鍑犳绠楁硶鐑韩
     uint32_t count = 5;
     do {
         uint32_t w = 1920;
@@ -38,6 +39,7 @@ GosunAlgoStub::GosunAlgoStub() {
         }
         count--;
     } while (count >0);
+#endif
 
     LOG_INFO("Gosun algo init ok");
 }
