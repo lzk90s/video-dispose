@@ -66,9 +66,6 @@ public:
                           ::algo::seemmo::TrailEndReply* response, ::google::protobuf::Closure* done) {
         brpc::ClosureGuard done_guard(done);
 
-        brpc::Controller* cntl =
-            static_cast<brpc::Controller*>(controller);
-
         //如果存在共享内存，则删除掉
         if (SIMMNG::getInstance().Exist(request->videochl())) {
             SIMMNG::getInstance().Delete(request->videochl());
