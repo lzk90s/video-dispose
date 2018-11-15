@@ -1,6 +1,5 @@
 #include <memory>
-#include <functional>
-#include <future>
+#include <thread>
 
 #include "common/helper/logger.h"
 #include "common/helper/counttimer.h"
@@ -16,24 +15,28 @@ namespace gosun {
 
 GosunAlgoStub::GosunAlgoStub() {
     startOk_ = false;
+
     //async start
-    std::future<void> f1 = std::async(std::launch::async, [=]() {
+    std::thread t([this]() {
         char *gosunSdkHome = getenv("GOSUN_SDK_HOME");
         if (nullptr != gosunSdkHome) {
             string h(gosunSdkHome);
             h.append("/lib");
             if (chdir(h.c_str()) != 0) {
-                LOG_ERROR("chdir error");
+                cout << "chdir error" << endl;
             }
         }
-
         createSmartFace();
         this->startOk_ = true;
-        LOG_INFO("Gosun algo init ok");
+        cout <<"Gosun algo init ok" << endl;
     });
+    t.detach();
 }
 
 GosunAlgoStub::~GosunAlgoStub() {
+    if (!started()) {
+        return;
+    }
     releaseSmartFace();
 }
 
@@ -47,11 +50,8 @@ int32_t GosunAlgoStub::Trail(
     ImageResult &imageResult,
     FilterResult &filterResult
 ) {
-    //double check多线程可能有问题，不过影响不大，可以忽略
-    if (!startOk_) {
-        if (!startOk_) {
-            return -1;
-        }
+    if (!started()) {
+        return -1;
     }
 
     CountTimer t1("GosunAlgoStub::Trail", 80 * 1000);
@@ -96,11 +96,8 @@ int32_t GosunAlgoStub::Recognize(
     const RecogParam &param,
     ImageResult &imageResult
 ) {
-    //double check多线程可能有问题，不过影响不大，可以忽略
-    if (!startOk_) {
-        if (!startOk_) {
-            return -1;
-        }
+    if (!started()) {
+        return -1;
     }
 
     CountTimer t1("GosunAlgoStub::Recognize", 80 * 1000);

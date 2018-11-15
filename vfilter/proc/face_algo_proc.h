@@ -39,7 +39,7 @@ private:
         FilterResult filterResult;
         ret = algo_->Trail(chl.GetChannelId(), frameId, bgr24, width, height, trailParam, imageResult, filterResult);
         if (0 != ret) {
-            LOG_ERROR("Trail error, ret {}", ret);
+            LOG_ERROR("Face trail error, ret {}", ret);
             return ret;
         }
 

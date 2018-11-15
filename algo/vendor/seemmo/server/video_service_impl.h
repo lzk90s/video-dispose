@@ -71,6 +71,7 @@ public:
             SIMMNG::getInstance().Delete(request->videochl());
         }
 
+        LOG_INFO("Trail end for channel {}", request->videochl());
         response->set_data("ok");
     }
 

@@ -36,6 +36,17 @@ public:
     ) override;
 
 private:
+    bool started() {
+        //double check，无影响
+        if (startOk_) {
+            if (startOk_) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+private:
     bool startOk_;
 };
 

@@ -25,6 +25,9 @@ int32_t VFilter_Init() {
 }
 
 int32_t VFilter_Destroy() {
+    vf::CSMS().sinks.clear();
+    defaultProcessor.reset();
+    faceProcessor.reset();
     return 0;
 }
 
