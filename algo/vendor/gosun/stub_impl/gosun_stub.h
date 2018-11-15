@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "algo/stub/algo_stub.h"
+#include "common/helper/countdownlatch.h"
 
 namespace algo {
 namespace gosun {
@@ -48,6 +49,7 @@ private:
 
 private:
     bool startOk_;
+    CountDownLatch latch;
 };
 
 }

@@ -13,7 +13,7 @@ using namespace std;
 namespace algo {
 namespace gosun {
 
-GosunAlgoStub::GosunAlgoStub() {
+GosunAlgoStub::GosunAlgoStub() : latch(1) {
     startOk_ = false;
 
     //async start
@@ -28,15 +28,15 @@ GosunAlgoStub::GosunAlgoStub() {
         }
         createSmartFace();
         this->startOk_ = true;
+        latch.countDown();
         cout <<"Gosun algo init ok" << endl;
     });
     t.detach();
 }
 
 GosunAlgoStub::~GosunAlgoStub() {
-    if (!started()) {
-        return;
-    }
+    //必须等待启动完成后才能relese，否则可能会导致崩溃
+    latch.wait();
     releaseSmartFace();
 }
 
