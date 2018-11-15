@@ -8,6 +8,8 @@
 #include <brpc/channel.h>
 
 #include "common/helper/logger.h"
+#include "common/helper/counttimer.h"
+
 #include "algo/vendor/seemmo/stub_impl/seemmo_stub.h"
 #include "algo/vendor/seemmo/rpc/service.pb.h"
 #include "algo/vendor/seemmo/stub_impl/detect_param_builder.h"
@@ -82,6 +84,28 @@ public:
         // convert
         fillDetectResult(imageResult, detectRspPO);
         fillFilterResult(filterResult, trailRspPO);
+
+        return 0;
+    }
+
+    int32_t TrailEnd(uint32_t channelId) {
+        TrailEndRequest request;
+        TrailEndReply reply;
+        brpc::Controller cntl;
+
+        if (SIMMNG::getInstance().Exist(channelId)) {
+            SIMMNG::getInstance().Delete(channelId);
+        }
+
+        request.set_videochl(channelId);
+
+        stub_->TrailEnd(&cntl, &request, &reply, NULL);
+        if (cntl.Failed()) {
+            LOG_ERROR("TrailEnd error, {}", cntl.ErrorText());
+            return cntl.ErrorCode();
+        }
+
+        LOG_INFO("Trail end for channel {}", channelId);
 
         return 0;
     }
@@ -353,7 +377,7 @@ private:
     unique_ptr<VideoProcService_Stub> stub_;
 };
 
-VideoProcClient videoProcClient;
+static VideoProcClient videoProcClient;
 
 int32_t SeemmoAlgoStub::Trail(
     uint32_t channelId,
@@ -365,7 +389,13 @@ int32_t SeemmoAlgoStub::Trail(
     ImageResult &imageResult,
     FilterResult &filterResult
 ) {
+    CountTimer t1("SeemmoAlgoStub::Trail", 80 * 1000);
     return videoProcClient.Trail(channelId, frameId, bgr24, width, height, param, imageResult, filterResult);
+}
+
+int32_t SeemmoAlgoStub::TrailEnd(uint32_t channelId) {
+    CountTimer t1("SeemmoAlgoStub::TrailEnd", 80 * 1000);
+    return videoProcClient.TrailEnd(channelId);
 }
 
 int32_t SeemmoAlgoStub::Recognize(
@@ -376,6 +406,7 @@ int32_t SeemmoAlgoStub::Recognize(
     const RecogParam &param,
     ImageResult &imageResult
 ) {
+    CountTimer t1("SeemmoAlgoStub::Recognize", 80 * 1000);
     return videoProcClient.Recognize(channelId, bgr24, width, height, param, imageResult);
 }
 

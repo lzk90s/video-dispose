@@ -1,6 +1,10 @@
 #include <memory>
+#include <functional>
+#include <future>
 
 #include "common/helper/logger.h"
+#include "common/helper/counttimer.h"
+
 #include "algo/vendor/gosun/stub_impl/gosun_stub.h"
 
 #include "interface/faceApi.h"
@@ -11,37 +15,22 @@ namespace algo {
 namespace gosun {
 
 GosunAlgoStub::GosunAlgoStub() {
-    char *gosunSdkHome = getenv("GOSUN_SDK_HOME");
-    if (nullptr != gosunSdkHome) {
-        string h(gosunSdkHome);
-        h.append("/lib");
-        if (chdir(h.c_str()) != 0) {
-            LOG_ERROR("chdir error");
+    startOk_ = false;
+    //async start
+    std::future<void> f1 = std::async(std::launch::async, [=]() {
+        char *gosunSdkHome = getenv("GOSUN_SDK_HOME");
+        if (nullptr != gosunSdkHome) {
+            string h(gosunSdkHome);
+            h.append("/lib");
+            if (chdir(h.c_str()) != 0) {
+                LOG_ERROR("chdir error");
+            }
         }
-    }
 
-    createSmartFace();
-
-#if 0
-    //第一次算法比较慢，用空数据做几次算法热身
-    uint32_t count = 5;
-    do {
-        uint32_t w = 1920;
-        uint32_t h = 1080;
-        faceId faceIds[30] = { 0 };
-        int32_t faceNum = 30;
-        unique_ptr<uint8_t[]> emptyImg(new uint8_t[w*h * 3] {0});
-
-        int ret = faceTrack((uint8_t*)emptyImg.get(), h, w, faceIds, faceNum);
-        if (0 != ret) {
-            LOG_ERROR("Failed to track face, ret {}", ret);
-            continue;
-        }
-        count--;
-    } while (count >0);
-#endif
-
-    LOG_INFO("Gosun algo init ok");
+        createSmartFace();
+        this->startOk_ = true;
+        LOG_INFO("Gosun algo init ok");
+    });
 }
 
 GosunAlgoStub::~GosunAlgoStub() {
@@ -58,6 +47,15 @@ int32_t GosunAlgoStub::Trail(
     ImageResult &imageResult,
     FilterResult &filterResult
 ) {
+    //double check多线程可能有问题，不过影响不大，可以忽略
+    if (!startOk_) {
+        if (!startOk_) {
+            return -1;
+        }
+    }
+
+    CountTimer t1("GosunAlgoStub::Trail", 80 * 1000);
+
     faceId faceIds[30] = { 0 };
     int32_t faceNum = 30;
 
@@ -98,6 +96,15 @@ int32_t GosunAlgoStub::Recognize(
     const RecogParam &param,
     ImageResult &imageResult
 ) {
+    //double check多线程可能有问题，不过影响不大，可以忽略
+    if (!startOk_) {
+        if (!startOk_) {
+            return -1;
+        }
+    }
+
+    CountTimer t1("GosunAlgoStub::Recognize", 80 * 1000);
+
     return 0;
 }
 

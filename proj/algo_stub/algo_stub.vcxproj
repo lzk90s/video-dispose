@@ -19,9 +19,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\algo\stub\algo_stub.cc" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="..\..\algo\stub\algo_stub.h" />
     <ClInclude Include="..\..\algo\stub\object_type.h" />
   </ItemGroup>

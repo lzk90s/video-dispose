@@ -89,11 +89,12 @@
     <ClInclude Include="..\..\vfilter\config\setting.h" />
     <ClInclude Include="..\..\vfilter\core\app.h" />
     <ClInclude Include="..\..\vfilter\core\buffered_frame.h" />
+    <ClInclude Include="..\..\vfilter\core\channel_sink_mng.h" />
     <ClInclude Include="..\..\vfilter\core\frame_cache.h" />
     <ClInclude Include="..\..\vfilter\core\frame_handler.h" />
     <ClInclude Include="..\..\vfilter\core\frame_picker.h" />
     <ClInclude Include="..\..\vfilter\core\object_sink.h" />
-    <ClInclude Include="..\..\vfilter\core\vsink.h" />
+    <ClInclude Include="..\..\vfilter\core\channel_sink.h" />
     <ClInclude Include="..\..\vfilter\mixer\face_mixer.h" />
     <ClInclude Include="..\..\vfilter\notifier\bike_notifier.h" />
     <ClInclude Include="..\..\vfilter\notifier\face_notifier.h" />

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "algo/stub/algo_stub_factory.h"
 #include "vfilter/proc/abstract_algo_proc.h"
 
 using namespace std;
@@ -9,23 +10,19 @@ namespace vf {
 //人脸的单独出来，是因为人脸的效果还需要优化，避免影响其他算法的效果
 class FaceAlgoProcessor : public AbstractAlgoProcessor {
 public:
-    FaceAlgoProcessor(VSink &vsink)
-        : AbstractAlgoProcessor(vsink) {
-        algo_ = algo::NewAlgoStub(false, GlobalSettings::getInstance().enableGosunAlgo);
-    }
-
-    ~FaceAlgoProcessor() {
-        algo::FreeAlgoStub(algo_);
+    FaceAlgoProcessor() {
+        string vendor = GlobalSettings::getInstance().enableGosunAlgo ? "gosun" : "null";
+        algo_ = algo::AlgoStubFactory::NewAlgoStub(vendor);
     }
 
 protected:
 
-    int32_t algoRoutine(uint32_t channelId, uint64_t frameId, cv::Mat &frame) override {
-        return trailAndRecognize(channelId, frameId, frame);
+    int32_t algoRoutine(ChannelSink &chl, uint64_t frameId, cv::Mat &frame) override {
+        return trailAndRecognize(chl, frameId, frame);
     }
 
 private:
-    int32_t trailAndRecognize(uint32_t channelId, uint64_t frameId, cv::Mat &frame) {
+    int32_t trailAndRecognize(ChannelSink &chl, uint64_t frameId, cv::Mat &frame) {
         int32_t ret = 0;
         const uint8_t *bgr24 = frame.data;
         uint32_t width = frame.cols;
@@ -40,7 +37,7 @@ private:
 
         ImageResult imageResult;
         FilterResult filterResult;
-        ret = algo_->Trail(channelId, frameId, bgr24, width, height, trailParam, imageResult, filterResult);
+        ret = algo_->Trail(chl.GetChannelId(), frameId, bgr24, width, height, trailParam, imageResult, filterResult);
         if (0 != ret) {
             LOG_ERROR("Trail error, ret {}", ret);
             return ret;
@@ -48,18 +45,18 @@ private:
 
         for (auto &p : imageResult.faces) {
             //针对人脸特殊处理，目前人脸算法中没有去重，这样简单处理
-            if (!sink_.faceObjectSink.ObjectExist(p.guid)) {
+            if (!chl.faceObjectSink.ObjectExist(p.guid)) {
                 LOG_INFO("New face object {}", p.guid);
-                sink_.faceNotifier.OnRecognizedObject(channelId, frame, p);
+                chl.faceNotifier.OnRecognizedObject(chl.GetChannelId(), frame, p);
             }
         }
-        sink_.faceObjectSink.OnDetectedObjects(imageResult.faces);
+        chl.faceObjectSink.OnDetectedObjects(imageResult.faces);
 
         return 0;
     }
 
 private:
-    algo::AlgoStub * algo_;
+    shared_ptr<algo::AlgoStub> algo_;
 };
 
 }

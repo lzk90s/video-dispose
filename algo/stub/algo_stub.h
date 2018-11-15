@@ -65,8 +65,14 @@ public:
         ImageResult &imageResult,
         FilterResult &filterResult
     ) {
-        throw runtime_error("unimplemented method");
+        return 0;
     };
+
+    virtual int32_t TrailEnd(
+        uint32_t channelId
+    ) {
+        return 0;
+    }
 
     //识别
     virtual int32_t Recognize(
@@ -77,12 +83,8 @@ public:
         const RecogParam &param,
         ImageResult &imageResult
     ) {
-        throw runtime_error("unimplemented method");
+        return 0;
     };
 };
-
-AlgoStub *NewAlgoStub(bool enableSeemmoAlgo = true, bool enableGosunAlgo = true);
-
-void FreeAlgoStub(AlgoStub *&stub);
 
 }

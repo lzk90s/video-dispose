@@ -34,7 +34,7 @@ public:
 
         uint8_t *bgr24 = nullptr;
         if (request->bgr24().empty()) {
-            //Ã»ÓÐ¹²ÏíÄÚ´æÊ±£¬´´½¨¹²ÏíÄÚ´æ
+            //æ²¡æœ‰å…±äº«å†…å­˜æ—¶ï¼Œåˆ›å»ºå…±äº«å†…å­˜
             if (!SIMMNG::getInstance().Exist(request->videochl())) {
                 SIMMNG::getInstance().Create(request->videochl(), request->width(), request->height(), true);
             }
@@ -62,6 +62,21 @@ public:
         response->set_data(buf.get(), bufLen);
     }
 
+    virtual void TrailEnd(::google::protobuf::RpcController* controller, const ::algo::seemmo::TrailEndRequest* request,
+                          ::algo::seemmo::TrailEndReply* response, ::google::protobuf::Closure* done) {
+        brpc::ClosureGuard done_guard(done);
+
+        brpc::Controller* cntl =
+            static_cast<brpc::Controller*>(controller);
+
+        //å¦‚æžœå­˜åœ¨å…±äº«å†…å­˜ï¼Œåˆ™åˆ é™¤æŽ‰
+        if (SIMMNG::getInstance().Exist(request->videochl())) {
+            SIMMNG::getInstance().Delete(request->videochl());
+        }
+
+        response->set_data("ok");
+    }
+
     virtual void Recognize(::google::protobuf::RpcController* controller, const ::algo::seemmo::RecognizeRequest* request,
                            ::algo::seemmo::RecognizeReply* response, ::google::protobuf::Closure* done) {
         brpc::ClosureGuard done_guard(done);
@@ -71,7 +86,7 @@ public:
 
         uint8_t *bgr24 = nullptr;
         if (request->bgr24().empty()) {
-            // Ã»ÓÐ¹²ÏíÄÚ´æÊ±£¬´´½¨
+            // æ²¡æœ‰å…±äº«å†…å­˜æ—¶ï¼Œåˆ›å»º
             if (!SIMMNG::getInstance().Exist(request->videochl())) {
                 SIMMNG::getInstance().Create(request->videochl(), request->width(), request->height(), true);
             }

@@ -2,14 +2,17 @@
 
 #include <cstdint>
 #include "opencv/cv.h"
+#include <memory>
+
+#include "vfilter/core/channel_sink.h"
 
 namespace vf {
 
-using OnFrameHandler = function<void(uint32_t chanelId, cv::Mat &frame)>;
-
 class FrameHandler {
 public:
-    virtual void OnFrame(uint32_t chanelId, cv::Mat &frame) = 0;
+    virtual void OnFrame(ChannelSink &chl, cv::Mat &frame) = 0;
+
+    virtual void OnFrameEnd(ChannelSink &chl) = 0;
 };
 
 }

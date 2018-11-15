@@ -10,10 +10,10 @@
 #include "common/helper/singleton.h"
 
 
-//¹²ÏíÍ¼Æ¬buffer
+//å…±äº«å›¾ç‰‡buffer
 typedef struct {
-    uint8_t *bgr24Buff1;	// bgr24 Í¼Æ¬»º´æ1£¨¼ì²â¸ú×Ù£©
-    uint8_t *bgr24Buff2;	// bgr24 Í¼Æ¬»º´æ2£¨Ê¶±ğ£©
+    uint8_t *bgr24Buff1;	// bgr24 å›¾ç‰‡ç¼“å­˜1ï¼ˆæ£€æµ‹è·Ÿè¸ªï¼‰
+    uint8_t *bgr24Buff2;	// bgr24 å›¾ç‰‡ç¼“å­˜2ï¼ˆè¯†åˆ«ï¼‰
 } SharedImageBuffer;
 
 using namespace  std;
@@ -30,17 +30,17 @@ public:
         width_ = width;
         height_ = height;
 
-        //Ä©Î²ÁôÒ»×Ö½Ú
+        //æœ«å°¾ç•™ä¸€å­—èŠ‚
         uint32_t frameSize = width * height * 3 + 1;
 
-        //¼ÓÒ»¸ö´óÊı£¬±ÜÃâ³åÍ»
+        //åŠ ä¸€ä¸ªå¤§æ•°ï¼Œé¿å…å†²çª
         key_t key = (key_t)(channelId_ + 20000);
 
         //framesize*2
         shmid_ = shmget(key, frameSize*2,  0666 | IPC_CREAT | IPC_EXCL);
         if (shmid_ == -1) {
             cout << "Shared memory already exist" << endl;
-            //ÒÑ¾­´æÔÚ£¬Ö±½Óget
+            //å·²ç»å­˜åœ¨ï¼Œç›´æ¥get
             shmid_ = shmget(key, sizeof(SharedImageBuffer), 0666 | IPC_CREAT);
             if (shmid_ == -1) {
                 throw runtime_error("Create shared memory failed");
@@ -54,13 +54,13 @@ public:
 
         cout << "Allocate shared memory " << shmid_ << " for channel " << channelId << ", frameSize " << frameSize <<  endl;
 
-        //ĞŞ¸ÄÖ¸ÕëÎ»ÖÃ
+        //ä¿®æ”¹æŒ‡é’ˆä½ç½®
         buffer_.bgr24Buff1 = (uint8_t*)shm_;
         buffer_.bgr24Buff2 = (uint8_t*)shm_ + frameSize;
     }
 
     ~SharedImageMemory() {
-        // °Ñ¹²ÏíÄÚ´æ´Óµ±Ç°½ø³ÌÖĞ·ÖÀë
+        // æŠŠå…±äº«å†…å­˜ä»å½“å‰è¿›ç¨‹ä¸­åˆ†ç¦»
         shmdt(shm_);
         if (autoDelete_) {
             shmctl(shmid_, IPC_RMID, 0);

@@ -2,7 +2,10 @@
 
 #include <string>
 
+#include "common/helper/logger.h"
 #include "common/helper/singleton.h"
+
+#include "vfilter/config/setting.h"
 
 using namespace std;
 
@@ -10,19 +13,16 @@ namespace vf {
 
 class App {
 public:
-    const char *VFILTER_HOME_ENV = "VFILTER_HOME";
-
-public:
     App() {
+        LOG_INFO("------------------------START------------------------");
+        init();
     }
     ~App() {}
 
-    string GetAppHome() {
-        return appHome;
-    }
-
 private:
-    string appHome;
+    void init() {
+        vf::GlobalSettings::getInstance();
+    }
 };
 
 typedef Singleton<App> ThisApp;

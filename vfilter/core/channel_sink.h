@@ -4,9 +4,9 @@
 #include <chrono>
 #include <vector>
 
-#include "vfilter/core/frame_handler.h"
 #include "vfilter/core/object_sink.h"
 #include "vfilter/core/frame_picker.h"
+#include "vfilter/core/frame_cache.h"
 
 #include "vfilter/mixer/bike_mixer.h"
 #include "vfilter/mixer/person_mixer.h"
@@ -18,13 +18,16 @@
 #include "vfilter/notifier/vehicle_notifier.h"
 #include "vfilter/notifier/face_notifier.h"
 
-
 using namespace std;
 
 namespace vf {
 
-class VSink {
+//通道池（1个通道一个对象）
+class ChannelSink {
 public:
+    using OnFrameHandler = function<void(ChannelSink &chl, cv::Mat &frame)>;
+    using OnFrameEndHandler = function<void(ChannelSink &chl)>;
+
     //object sink
     VehicleObjectSink vehicleObjectSink;
     BikeObjectSink bikeObjectSink;
@@ -43,9 +46,18 @@ public:
     PersonNotifier personNotifier;
     FaceNotifier faceNotifier;
 
+    //frame cache
+    FrameCache frameCache_;
+
 public:
-    VSink(uint32_t channelId) {
+    ChannelSink(uint32_t channelId) {
         this->channelId_ = channelId;
+    }
+
+    ~ChannelSink() {
+        for (auto &h : onFrameEndHandlers_) {
+            h(*this);
+        }
     }
 
     // 处理接收到的帧
@@ -53,15 +65,19 @@ public:
         if (framePicker_.NeedPickFrame()) {
             cv::Mat cloneFrame = frame.clone();
             for (auto &h : onFrameHandlers_) {
-                h(channelId_, cloneFrame);
+                h(*this, cloneFrame);
             }
         }
         mixFrame(frame);
         return 0;
     }
 
-    void RegisterFrameHandler(OnFrameHandler h) {
-        onFrameHandlers_.push_back(h);
+    void RegOnFrameHander(OnFrameHandler h) {
+        this->onFrameHandlers_.push_back(h);
+    }
+
+    void RegOnFrameEndHandler(OnFrameEndHandler h) {
+        this->onFrameEndHandlers_.push_back(h);
     }
 
     uint32_t GetChannelId() {
@@ -89,6 +105,7 @@ private:
     FramePicker framePicker_;
     //callback
     vector<OnFrameHandler> onFrameHandlers_;
+    vector<OnFrameEndHandler> onFrameEndHandlers_;
 };
 
 

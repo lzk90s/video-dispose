@@ -24,6 +24,8 @@ public:
         FilterResult & filterResult
     ) override;
 
+    int32_t TrailEnd(uint32_t channelId) override;
+
     int32_t Recognize(
         uint32_t channelId,
         const uint8_t *bgr24,

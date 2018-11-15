@@ -9,7 +9,6 @@
 namespace algo {
 namespace gosun {
 
-
 class GosunAlgoStub : public algo::AlgoStub {
 public:
     GosunAlgoStub();
@@ -35,6 +34,9 @@ public:
         const RecogParam &param,
         ImageResult &rec
     ) override;
+
+private:
+    bool startOk_;
 };
 
 }

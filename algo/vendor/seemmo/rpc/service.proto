@@ -17,6 +17,15 @@ message TrailReply {
     string data = 1;
 }
 
+message TrailEndRequest {
+    uint32 videoChl = 1;
+	string param = 2;
+}
+
+message TrailEndReply {
+    string data = 1;
+}
+
 message RecognizeRequest{
     uint32 videoChl = 1;
     bytes bgr24 = 2;
@@ -29,9 +38,10 @@ message RecognizeReply{
     string data = 1;
 }
 
-//视频处理服务
+//瑙嗛澶勭悊鏈嶅姟
 service VideoProcService{
     rpc Trail(TrailRequest) returns (TrailReply) {}
+	rpc TrailEnd(TrailEndRequest) returns (TrailEndReply) {}
     rpc Recognize(RecognizeRequest) returns (RecognizeReply){}
 }
 
@@ -45,7 +55,7 @@ message ImgRecognizeReply{
 	string data = 1;
 }
 
-//图片处理服务
+//鍥剧墖澶勭悊鏈嶅姟
 service ImgProcService{
     rpc Recognize(ImgRecognizeRequest) returns (ImgRecognizeReply) {}
 }

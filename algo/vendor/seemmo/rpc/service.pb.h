@@ -44,6 +44,12 @@ extern RecognizeReplyDefaultTypeInternal _RecognizeReply_default_instance_;
 class RecognizeRequest;
 class RecognizeRequestDefaultTypeInternal;
 extern RecognizeRequestDefaultTypeInternal _RecognizeRequest_default_instance_;
+class TrailEndReply;
+class TrailEndReplyDefaultTypeInternal;
+extern TrailEndReplyDefaultTypeInternal _TrailEndReply_default_instance_;
+class TrailEndRequest;
+class TrailEndRequestDefaultTypeInternal;
+extern TrailEndRequestDefaultTypeInternal _TrailEndRequest_default_instance_;
 class TrailReply;
 class TrailReplyDefaultTypeInternal;
 extern TrailReplyDefaultTypeInternal _TrailReply_default_instance_;
@@ -285,6 +291,195 @@ class TrailReply : public ::google::protobuf::Message /* @@protoc_insertion_poin
   void set_allocated_data(::std::string* data);
 
   // @@protoc_insertion_point(class_scope:algo.seemmo.TrailReply)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::google::protobuf::internal::ArenaStringPtr data_;
+  mutable int _cached_size_;
+  friend struct  protobuf_service_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
+
+class TrailEndRequest : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:algo.seemmo.TrailEndRequest) */ {
+ public:
+  TrailEndRequest();
+  virtual ~TrailEndRequest();
+
+  TrailEndRequest(const TrailEndRequest& from);
+
+  inline TrailEndRequest& operator=(const TrailEndRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const TrailEndRequest& default_instance();
+
+  static inline const TrailEndRequest* internal_default_instance() {
+    return reinterpret_cast<const TrailEndRequest*>(
+               &_TrailEndRequest_default_instance_);
+  }
+
+  void Swap(TrailEndRequest* other);
+
+  // implements Message ----------------------------------------------
+
+  inline TrailEndRequest* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  TrailEndRequest* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CopyFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
+  void MergeFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
+  void CopyFrom(const TrailEndRequest& from);
+  void MergeFrom(const TrailEndRequest& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* target) const PROTOBUF_FINAL;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output)
+      const PROTOBUF_FINAL {
+    return InternalSerializeWithCachedSizesToArray(
+        ::google::protobuf::io::CodedOutputStream::IsDefaultSerializationDeterministic(), output);
+  }
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const PROTOBUF_FINAL;
+  void InternalSwap(TrailEndRequest* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // string param = 2;
+  void clear_param();
+  static const int kParamFieldNumber = 2;
+  const ::std::string& param() const;
+  void set_param(const ::std::string& value);
+  #if LANG_CXX11
+  void set_param(::std::string&& value);
+  #endif
+  void set_param(const char* value);
+  void set_param(const char* value, size_t size);
+  ::std::string* mutable_param();
+  ::std::string* release_param();
+  void set_allocated_param(::std::string* param);
+
+  // uint32 videoChl = 1;
+  void clear_videochl();
+  static const int kVideoChlFieldNumber = 1;
+  ::google::protobuf::uint32 videochl() const;
+  void set_videochl(::google::protobuf::uint32 value);
+
+  // @@protoc_insertion_point(class_scope:algo.seemmo.TrailEndRequest)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::google::protobuf::internal::ArenaStringPtr param_;
+  ::google::protobuf::uint32 videochl_;
+  mutable int _cached_size_;
+  friend struct  protobuf_service_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
+
+class TrailEndReply : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:algo.seemmo.TrailEndReply) */ {
+ public:
+  TrailEndReply();
+  virtual ~TrailEndReply();
+
+  TrailEndReply(const TrailEndReply& from);
+
+  inline TrailEndReply& operator=(const TrailEndReply& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const TrailEndReply& default_instance();
+
+  static inline const TrailEndReply* internal_default_instance() {
+    return reinterpret_cast<const TrailEndReply*>(
+               &_TrailEndReply_default_instance_);
+  }
+
+  void Swap(TrailEndReply* other);
+
+  // implements Message ----------------------------------------------
+
+  inline TrailEndReply* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  TrailEndReply* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CopyFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
+  void MergeFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
+  void CopyFrom(const TrailEndReply& from);
+  void MergeFrom(const TrailEndReply& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* target) const PROTOBUF_FINAL;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output)
+      const PROTOBUF_FINAL {
+    return InternalSerializeWithCachedSizesToArray(
+        ::google::protobuf::io::CodedOutputStream::IsDefaultSerializationDeterministic(), output);
+  }
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const PROTOBUF_FINAL;
+  void InternalSwap(TrailEndReply* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // string data = 1;
+  void clear_data();
+  static const int kDataFieldNumber = 1;
+  const ::std::string& data() const;
+  void set_data(const ::std::string& value);
+  #if LANG_CXX11
+  void set_data(::std::string&& value);
+  #endif
+  void set_data(const char* value);
+  void set_data(const char* value, size_t size);
+  ::std::string* mutable_data();
+  ::std::string* release_data();
+  void set_allocated_data(::std::string* data);
+
+  // @@protoc_insertion_point(class_scope:algo.seemmo.TrailEndReply)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
@@ -718,6 +913,10 @@ class VideoProcService : public ::google::protobuf::Service {
                        const ::algo::seemmo::TrailRequest* request,
                        ::algo::seemmo::TrailReply* response,
                        ::google::protobuf::Closure* done);
+  virtual void TrailEnd(::google::protobuf::RpcController* controller,
+                       const ::algo::seemmo::TrailEndRequest* request,
+                       ::algo::seemmo::TrailEndReply* response,
+                       ::google::protobuf::Closure* done);
   virtual void Recognize(::google::protobuf::RpcController* controller,
                        const ::algo::seemmo::RecognizeRequest* request,
                        ::algo::seemmo::RecognizeReply* response,
@@ -754,6 +953,10 @@ class VideoProcService_Stub : public VideoProcService {
   void Trail(::google::protobuf::RpcController* controller,
                        const ::algo::seemmo::TrailRequest* request,
                        ::algo::seemmo::TrailReply* response,
+                       ::google::protobuf::Closure* done);
+  void TrailEnd(::google::protobuf::RpcController* controller,
+                       const ::algo::seemmo::TrailEndRequest* request,
+                       ::algo::seemmo::TrailEndReply* response,
                        ::google::protobuf::Closure* done);
   void Recognize(::google::protobuf::RpcController* controller,
                        const ::algo::seemmo::RecognizeRequest* request,
@@ -1047,6 +1250,132 @@ inline void TrailReply::set_allocated_data(::std::string* data) {
   }
   data_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), data);
   // @@protoc_insertion_point(field_set_allocated:algo.seemmo.TrailReply.data)
+}
+
+// -------------------------------------------------------------------
+
+// TrailEndRequest
+
+// uint32 videoChl = 1;
+inline void TrailEndRequest::clear_videochl() {
+  videochl_ = 0u;
+}
+inline ::google::protobuf::uint32 TrailEndRequest::videochl() const {
+  // @@protoc_insertion_point(field_get:algo.seemmo.TrailEndRequest.videoChl)
+  return videochl_;
+}
+inline void TrailEndRequest::set_videochl(::google::protobuf::uint32 value) {
+  
+  videochl_ = value;
+  // @@protoc_insertion_point(field_set:algo.seemmo.TrailEndRequest.videoChl)
+}
+
+// string param = 2;
+inline void TrailEndRequest::clear_param() {
+  param_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& TrailEndRequest::param() const {
+  // @@protoc_insertion_point(field_get:algo.seemmo.TrailEndRequest.param)
+  return param_.GetNoArena();
+}
+inline void TrailEndRequest::set_param(const ::std::string& value) {
+  
+  param_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:algo.seemmo.TrailEndRequest.param)
+}
+#if LANG_CXX11
+inline void TrailEndRequest::set_param(::std::string&& value) {
+  
+  param_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:algo.seemmo.TrailEndRequest.param)
+}
+#endif
+inline void TrailEndRequest::set_param(const char* value) {
+  
+  param_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:algo.seemmo.TrailEndRequest.param)
+}
+inline void TrailEndRequest::set_param(const char* value, size_t size) {
+  
+  param_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:algo.seemmo.TrailEndRequest.param)
+}
+inline ::std::string* TrailEndRequest::mutable_param() {
+  
+  // @@protoc_insertion_point(field_mutable:algo.seemmo.TrailEndRequest.param)
+  return param_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* TrailEndRequest::release_param() {
+  // @@protoc_insertion_point(field_release:algo.seemmo.TrailEndRequest.param)
+  
+  return param_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void TrailEndRequest::set_allocated_param(::std::string* param) {
+  if (param != NULL) {
+    
+  } else {
+    
+  }
+  param_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), param);
+  // @@protoc_insertion_point(field_set_allocated:algo.seemmo.TrailEndRequest.param)
+}
+
+// -------------------------------------------------------------------
+
+// TrailEndReply
+
+// string data = 1;
+inline void TrailEndReply::clear_data() {
+  data_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& TrailEndReply::data() const {
+  // @@protoc_insertion_point(field_get:algo.seemmo.TrailEndReply.data)
+  return data_.GetNoArena();
+}
+inline void TrailEndReply::set_data(const ::std::string& value) {
+  
+  data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:algo.seemmo.TrailEndReply.data)
+}
+#if LANG_CXX11
+inline void TrailEndReply::set_data(::std::string&& value) {
+  
+  data_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:algo.seemmo.TrailEndReply.data)
+}
+#endif
+inline void TrailEndReply::set_data(const char* value) {
+  
+  data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:algo.seemmo.TrailEndReply.data)
+}
+inline void TrailEndReply::set_data(const char* value, size_t size) {
+  
+  data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:algo.seemmo.TrailEndReply.data)
+}
+inline ::std::string* TrailEndReply::mutable_data() {
+  
+  // @@protoc_insertion_point(field_mutable:algo.seemmo.TrailEndReply.data)
+  return data_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* TrailEndReply::release_data() {
+  // @@protoc_insertion_point(field_release:algo.seemmo.TrailEndReply.data)
+  
+  return data_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void TrailEndReply::set_allocated_data(::std::string* data) {
+  if (data != NULL) {
+    
+  } else {
+    
+  }
+  data_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), data);
+  // @@protoc_insertion_point(field_set_allocated:algo.seemmo.TrailEndReply.data)
 }
 
 // -------------------------------------------------------------------
@@ -1382,6 +1711,10 @@ inline void ImgRecognizeReply::set_allocated_data(::std::string* data) {
 }
 
 #endif  // !PROTOBUF_INLINE_NOT_IN_HEADERS
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

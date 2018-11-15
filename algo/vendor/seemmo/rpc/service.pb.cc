@@ -23,6 +23,10 @@ class TrailRequestDefaultTypeInternal : public ::google::protobuf::internal::Exp
 } _TrailRequest_default_instance_;
 class TrailReplyDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<TrailReply> {
 } _TrailReply_default_instance_;
+class TrailEndRequestDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<TrailEndRequest> {
+} _TrailEndRequest_default_instance_;
+class TrailEndReplyDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<TrailEndReply> {
+} _TrailEndReply_default_instance_;
 class RecognizeRequestDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<RecognizeRequest> {
 } _RecognizeRequest_default_instance_;
 class RecognizeReplyDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<RecognizeReply> {
@@ -37,7 +41,7 @@ namespace protobuf_service_2eproto {
 
 namespace {
 
-::google::protobuf::Metadata file_level_metadata[6];
+::google::protobuf::Metadata file_level_metadata[8];
 const ::google::protobuf::ServiceDescriptor* file_level_service_descriptors[2];
 
 }  // namespace
@@ -58,6 +62,17 @@ const ::google::protobuf::uint32 TableStruct::offsets[] = {
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TrailReply, data_),
+  ~0u,  // no _has_bits_
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TrailEndRequest, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TrailEndRequest, videochl_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TrailEndRequest, param_),
+  ~0u,  // no _has_bits_
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TrailEndReply, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TrailEndReply, data_),
   ~0u,  // no _has_bits_
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RecognizeRequest, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -88,15 +103,19 @@ const ::google::protobuf::uint32 TableStruct::offsets[] = {
 static const ::google::protobuf::internal::MigrationSchema schemas[] = {
   { 0, -1, sizeof(TrailRequest)},
   { 10, -1, sizeof(TrailReply)},
-  { 15, -1, sizeof(RecognizeRequest)},
-  { 24, -1, sizeof(RecognizeReply)},
-  { 29, -1, sizeof(ImgRecognizeRequest)},
-  { 35, -1, sizeof(ImgRecognizeReply)},
+  { 15, -1, sizeof(TrailEndRequest)},
+  { 21, -1, sizeof(TrailEndReply)},
+  { 26, -1, sizeof(RecognizeRequest)},
+  { 35, -1, sizeof(RecognizeReply)},
+  { 40, -1, sizeof(ImgRecognizeRequest)},
+  { 46, -1, sizeof(ImgRecognizeReply)},
 };
 
 static ::google::protobuf::Message const * const file_default_instances[] = {
   reinterpret_cast<const ::google::protobuf::Message*>(&_TrailRequest_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&_TrailReply_default_instance_),
+  reinterpret_cast<const ::google::protobuf::Message*>(&_TrailEndRequest_default_instance_),
+  reinterpret_cast<const ::google::protobuf::Message*>(&_TrailEndReply_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&_RecognizeRequest_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&_RecognizeReply_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&_ImgRecognizeRequest_default_instance_),
@@ -121,7 +140,7 @@ void protobuf_AssignDescriptorsOnce() {
 void protobuf_RegisterTypes(const ::std::string&) GOOGLE_ATTRIBUTE_COLD;
 void protobuf_RegisterTypes(const ::std::string&) {
   protobuf_AssignDescriptorsOnce();
-  ::google::protobuf::internal::RegisterAllTypes(file_level_metadata, 6);
+  ::google::protobuf::internal::RegisterAllTypes(file_level_metadata, 8);
 }
 
 }  // namespace
@@ -131,14 +150,18 @@ void TableStruct::Shutdown() {
   delete file_level_metadata[0].reflection;
   _TrailReply_default_instance_.Shutdown();
   delete file_level_metadata[1].reflection;
-  _RecognizeRequest_default_instance_.Shutdown();
+  _TrailEndRequest_default_instance_.Shutdown();
   delete file_level_metadata[2].reflection;
-  _RecognizeReply_default_instance_.Shutdown();
+  _TrailEndReply_default_instance_.Shutdown();
   delete file_level_metadata[3].reflection;
-  _ImgRecognizeRequest_default_instance_.Shutdown();
+  _RecognizeRequest_default_instance_.Shutdown();
   delete file_level_metadata[4].reflection;
-  _ImgRecognizeReply_default_instance_.Shutdown();
+  _RecognizeReply_default_instance_.Shutdown();
   delete file_level_metadata[5].reflection;
+  _ImgRecognizeRequest_default_instance_.Shutdown();
+  delete file_level_metadata[6].reflection;
+  _ImgRecognizeReply_default_instance_.Shutdown();
+  delete file_level_metadata[7].reflection;
 }
 
 void TableStruct::InitDefaultsImpl() {
@@ -147,6 +170,8 @@ void TableStruct::InitDefaultsImpl() {
   ::google::protobuf::internal::InitProtobufDefaults();
   _TrailRequest_default_instance_.DefaultConstruct();
   _TrailReply_default_instance_.DefaultConstruct();
+  _TrailEndRequest_default_instance_.DefaultConstruct();
+  _TrailEndReply_default_instance_.DefaultConstruct();
   _RecognizeRequest_default_instance_.DefaultConstruct();
   _RecognizeReply_default_instance_.DefaultConstruct();
   _ImgRecognizeRequest_default_instance_.DefaultConstruct();
@@ -164,22 +189,26 @@ void AddDescriptorsImpl() {
       "uest\022\020\n\010videoChl\030\001 \001(\r\022\021\n\ttimestamp\030\002 \001("
       "\004\022\r\n\005bgr24\030\003 \001(\014\022\016\n\006height\030\004 \001(\r\022\r\n\005widt"
       "h\030\005 \001(\r\022\r\n\005param\030\006 \001(\t\"\032\n\nTrailReply\022\014\n\004"
-      "data\030\001 \001(\t\"a\n\020RecognizeRequest\022\020\n\010videoC"
-      "hl\030\001 \001(\r\022\r\n\005bgr24\030\002 \001(\014\022\016\n\006height\030\003 \001(\r\022"
-      "\r\n\005width\030\004 \001(\r\022\r\n\005param\030\005 \001(\t\"\036\n\016Recogni"
-      "zeReply\022\014\n\004data\030\001 \001(\t\"4\n\023ImgRecognizeReq"
-      "uest\022\017\n\007imageId\030\001 \001(\r\022\014\n\004jpeg\030\002 \001(\014\"!\n\021I"
-      "mgRecognizeReply\022\014\n\004data\030\001 \001(\t2\234\001\n\020Video"
-      "ProcService\022=\n\005Trail\022\031.algo.seemmo.Trail"
-      "Request\032\027.algo.seemmo.TrailReply\"\000\022I\n\tRe"
-      "cognize\022\035.algo.seemmo.RecognizeRequest\032\033"
-      ".algo.seemmo.RecognizeReply\"\0002a\n\016ImgProc"
-      "Service\022O\n\tRecognize\022 .algo.seemmo.ImgRe"
-      "cognizeRequest\032\036.algo.seemmo.ImgRecogniz"
-      "eReply\"\000B\003\200\001\001b\006proto3"
+      "data\030\001 \001(\t\"2\n\017TrailEndRequest\022\020\n\010videoCh"
+      "l\030\001 \001(\r\022\r\n\005param\030\002 \001(\t\"\035\n\rTrailEndReply\022"
+      "\014\n\004data\030\001 \001(\t\"a\n\020RecognizeRequest\022\020\n\010vid"
+      "eoChl\030\001 \001(\r\022\r\n\005bgr24\030\002 \001(\014\022\016\n\006height\030\003 \001"
+      "(\r\022\r\n\005width\030\004 \001(\r\022\r\n\005param\030\005 \001(\t\"\036\n\016Reco"
+      "gnizeReply\022\014\n\004data\030\001 \001(\t\"4\n\023ImgRecognize"
+      "Request\022\017\n\007imageId\030\001 \001(\r\022\014\n\004jpeg\030\002 \001(\014\"!"
+      "\n\021ImgRecognizeReply\022\014\n\004data\030\001 \001(\t2\344\001\n\020Vi"
+      "deoProcService\022=\n\005Trail\022\031.algo.seemmo.Tr"
+      "ailRequest\032\027.algo.seemmo.TrailReply\"\000\022F\n"
+      "\010TrailEnd\022\034.algo.seemmo.TrailEndRequest\032"
+      "\032.algo.seemmo.TrailEndReply\"\000\022I\n\tRecogni"
+      "ze\022\035.algo.seemmo.RecognizeRequest\032\033.algo"
+      ".seemmo.RecognizeReply\"\0002a\n\016ImgProcServi"
+      "ce\022O\n\tRecognize\022 .algo.seemmo.ImgRecogni"
+      "zeRequest\032\036.algo.seemmo.ImgRecognizeRepl"
+      "y\"\000B\003\200\001\001b\006proto3"
   };
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-      descriptor, 661);
+      descriptor, 816);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "service.proto", &protobuf_RegisterTypes);
   ::google::protobuf::internal::OnShutdown(&TableStruct::Shutdown);
@@ -1063,6 +1092,620 @@ void TrailReply::set_allocated_data(::std::string* data) {
 // ===================================================================
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int TrailEndRequest::kVideoChlFieldNumber;
+const int TrailEndRequest::kParamFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+TrailEndRequest::TrailEndRequest()
+  : ::google::protobuf::Message(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_service_2eproto::InitDefaults();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:algo.seemmo.TrailEndRequest)
+}
+TrailEndRequest::TrailEndRequest(const TrailEndRequest& from)
+  : ::google::protobuf::Message(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  param_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.param().size() > 0) {
+    param_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.param_);
+  }
+  videochl_ = from.videochl_;
+  // @@protoc_insertion_point(copy_constructor:algo.seemmo.TrailEndRequest)
+}
+
+void TrailEndRequest::SharedCtor() {
+  param_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  videochl_ = 0u;
+  _cached_size_ = 0;
+}
+
+TrailEndRequest::~TrailEndRequest() {
+  // @@protoc_insertion_point(destructor:algo.seemmo.TrailEndRequest)
+  SharedDtor();
+}
+
+void TrailEndRequest::SharedDtor() {
+  param_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+
+void TrailEndRequest::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* TrailEndRequest::descriptor() {
+  protobuf_service_2eproto::protobuf_AssignDescriptorsOnce();
+  return protobuf_service_2eproto::file_level_metadata[2].descriptor;
+}
+
+const TrailEndRequest& TrailEndRequest::default_instance() {
+  protobuf_service_2eproto::InitDefaults();
+  return *internal_default_instance();
+}
+
+TrailEndRequest* TrailEndRequest::New(::google::protobuf::Arena* arena) const {
+  TrailEndRequest* n = new TrailEndRequest;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void TrailEndRequest::Clear() {
+// @@protoc_insertion_point(message_clear_start:algo.seemmo.TrailEndRequest)
+  param_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  videochl_ = 0u;
+}
+
+bool TrailEndRequest::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:algo.seemmo.TrailEndRequest)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // uint32 videoChl = 1;
+      case 1: {
+        if (tag == 8u) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &videochl_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // string param = 2;
+      case 2: {
+        if (tag == 18u) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_param()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->param().data(), this->param().length(),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "algo.seemmo.TrailEndRequest.param"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:algo.seemmo.TrailEndRequest)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:algo.seemmo.TrailEndRequest)
+  return false;
+#undef DO_
+}
+
+void TrailEndRequest::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:algo.seemmo.TrailEndRequest)
+  // uint32 videoChl = 1;
+  if (this->videochl() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->videochl(), output);
+  }
+
+  // string param = 2;
+  if (this->param().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->param().data(), this->param().length(),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "algo.seemmo.TrailEndRequest.param");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      2, this->param(), output);
+  }
+
+  // @@protoc_insertion_point(serialize_end:algo.seemmo.TrailEndRequest)
+}
+
+::google::protobuf::uint8* TrailEndRequest::InternalSerializeWithCachedSizesToArray(
+    bool deterministic, ::google::protobuf::uint8* target) const {
+  (void)deterministic;  // Unused
+  // @@protoc_insertion_point(serialize_to_array_start:algo.seemmo.TrailEndRequest)
+  // uint32 videoChl = 1;
+  if (this->videochl() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->videochl(), target);
+  }
+
+  // string param = 2;
+  if (this->param().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->param().data(), this->param().length(),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "algo.seemmo.TrailEndRequest.param");
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        2, this->param(), target);
+  }
+
+  // @@protoc_insertion_point(serialize_to_array_end:algo.seemmo.TrailEndRequest)
+  return target;
+}
+
+size_t TrailEndRequest::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:algo.seemmo.TrailEndRequest)
+  size_t total_size = 0;
+
+  // string param = 2;
+  if (this->param().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->param());
+  }
+
+  // uint32 videoChl = 1;
+  if (this->videochl() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt32Size(
+        this->videochl());
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void TrailEndRequest::MergeFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:algo.seemmo.TrailEndRequest)
+  GOOGLE_DCHECK_NE(&from, this);
+  const TrailEndRequest* source =
+      ::google::protobuf::internal::DynamicCastToGenerated<const TrailEndRequest>(
+          &from);
+  if (source == NULL) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:algo.seemmo.TrailEndRequest)
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:algo.seemmo.TrailEndRequest)
+    MergeFrom(*source);
+  }
+}
+
+void TrailEndRequest::MergeFrom(const TrailEndRequest& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:algo.seemmo.TrailEndRequest)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  if (from.param().size() > 0) {
+
+    param_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.param_);
+  }
+  if (from.videochl() != 0) {
+    set_videochl(from.videochl());
+  }
+}
+
+void TrailEndRequest::CopyFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:algo.seemmo.TrailEndRequest)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void TrailEndRequest::CopyFrom(const TrailEndRequest& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:algo.seemmo.TrailEndRequest)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool TrailEndRequest::IsInitialized() const {
+  return true;
+}
+
+void TrailEndRequest::Swap(TrailEndRequest* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void TrailEndRequest::InternalSwap(TrailEndRequest* other) {
+  param_.Swap(&other->param_);
+  std::swap(videochl_, other->videochl_);
+  std::swap(_cached_size_, other->_cached_size_);
+}
+
+::google::protobuf::Metadata TrailEndRequest::GetMetadata() const {
+  protobuf_service_2eproto::protobuf_AssignDescriptorsOnce();
+  return protobuf_service_2eproto::file_level_metadata[2];
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// TrailEndRequest
+
+// uint32 videoChl = 1;
+void TrailEndRequest::clear_videochl() {
+  videochl_ = 0u;
+}
+::google::protobuf::uint32 TrailEndRequest::videochl() const {
+  // @@protoc_insertion_point(field_get:algo.seemmo.TrailEndRequest.videoChl)
+  return videochl_;
+}
+void TrailEndRequest::set_videochl(::google::protobuf::uint32 value) {
+  
+  videochl_ = value;
+  // @@protoc_insertion_point(field_set:algo.seemmo.TrailEndRequest.videoChl)
+}
+
+// string param = 2;
+void TrailEndRequest::clear_param() {
+  param_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& TrailEndRequest::param() const {
+  // @@protoc_insertion_point(field_get:algo.seemmo.TrailEndRequest.param)
+  return param_.GetNoArena();
+}
+void TrailEndRequest::set_param(const ::std::string& value) {
+  
+  param_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:algo.seemmo.TrailEndRequest.param)
+}
+#if LANG_CXX11
+void TrailEndRequest::set_param(::std::string&& value) {
+  
+  param_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:algo.seemmo.TrailEndRequest.param)
+}
+#endif
+void TrailEndRequest::set_param(const char* value) {
+  
+  param_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:algo.seemmo.TrailEndRequest.param)
+}
+void TrailEndRequest::set_param(const char* value, size_t size) {
+  
+  param_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:algo.seemmo.TrailEndRequest.param)
+}
+::std::string* TrailEndRequest::mutable_param() {
+  
+  // @@protoc_insertion_point(field_mutable:algo.seemmo.TrailEndRequest.param)
+  return param_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* TrailEndRequest::release_param() {
+  // @@protoc_insertion_point(field_release:algo.seemmo.TrailEndRequest.param)
+  
+  return param_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void TrailEndRequest::set_allocated_param(::std::string* param) {
+  if (param != NULL) {
+    
+  } else {
+    
+  }
+  param_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), param);
+  // @@protoc_insertion_point(field_set_allocated:algo.seemmo.TrailEndRequest.param)
+}
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int TrailEndReply::kDataFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+TrailEndReply::TrailEndReply()
+  : ::google::protobuf::Message(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_service_2eproto::InitDefaults();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:algo.seemmo.TrailEndReply)
+}
+TrailEndReply::TrailEndReply(const TrailEndReply& from)
+  : ::google::protobuf::Message(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  data_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.data().size() > 0) {
+    data_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.data_);
+  }
+  // @@protoc_insertion_point(copy_constructor:algo.seemmo.TrailEndReply)
+}
+
+void TrailEndReply::SharedCtor() {
+  data_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  _cached_size_ = 0;
+}
+
+TrailEndReply::~TrailEndReply() {
+  // @@protoc_insertion_point(destructor:algo.seemmo.TrailEndReply)
+  SharedDtor();
+}
+
+void TrailEndReply::SharedDtor() {
+  data_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+
+void TrailEndReply::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* TrailEndReply::descriptor() {
+  protobuf_service_2eproto::protobuf_AssignDescriptorsOnce();
+  return protobuf_service_2eproto::file_level_metadata[3].descriptor;
+}
+
+const TrailEndReply& TrailEndReply::default_instance() {
+  protobuf_service_2eproto::InitDefaults();
+  return *internal_default_instance();
+}
+
+TrailEndReply* TrailEndReply::New(::google::protobuf::Arena* arena) const {
+  TrailEndReply* n = new TrailEndReply;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void TrailEndReply::Clear() {
+// @@protoc_insertion_point(message_clear_start:algo.seemmo.TrailEndReply)
+  data_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+
+bool TrailEndReply::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:algo.seemmo.TrailEndReply)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // string data = 1;
+      case 1: {
+        if (tag == 10u) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_data()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->data().data(), this->data().length(),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "algo.seemmo.TrailEndReply.data"));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:algo.seemmo.TrailEndReply)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:algo.seemmo.TrailEndReply)
+  return false;
+#undef DO_
+}
+
+void TrailEndReply::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:algo.seemmo.TrailEndReply)
+  // string data = 1;
+  if (this->data().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->data().data(), this->data().length(),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "algo.seemmo.TrailEndReply.data");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      1, this->data(), output);
+  }
+
+  // @@protoc_insertion_point(serialize_end:algo.seemmo.TrailEndReply)
+}
+
+::google::protobuf::uint8* TrailEndReply::InternalSerializeWithCachedSizesToArray(
+    bool deterministic, ::google::protobuf::uint8* target) const {
+  (void)deterministic;  // Unused
+  // @@protoc_insertion_point(serialize_to_array_start:algo.seemmo.TrailEndReply)
+  // string data = 1;
+  if (this->data().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->data().data(), this->data().length(),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "algo.seemmo.TrailEndReply.data");
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        1, this->data(), target);
+  }
+
+  // @@protoc_insertion_point(serialize_to_array_end:algo.seemmo.TrailEndReply)
+  return target;
+}
+
+size_t TrailEndReply::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:algo.seemmo.TrailEndReply)
+  size_t total_size = 0;
+
+  // string data = 1;
+  if (this->data().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->data());
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void TrailEndReply::MergeFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:algo.seemmo.TrailEndReply)
+  GOOGLE_DCHECK_NE(&from, this);
+  const TrailEndReply* source =
+      ::google::protobuf::internal::DynamicCastToGenerated<const TrailEndReply>(
+          &from);
+  if (source == NULL) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:algo.seemmo.TrailEndReply)
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:algo.seemmo.TrailEndReply)
+    MergeFrom(*source);
+  }
+}
+
+void TrailEndReply::MergeFrom(const TrailEndReply& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:algo.seemmo.TrailEndReply)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  if (from.data().size() > 0) {
+
+    data_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.data_);
+  }
+}
+
+void TrailEndReply::CopyFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:algo.seemmo.TrailEndReply)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void TrailEndReply::CopyFrom(const TrailEndReply& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:algo.seemmo.TrailEndReply)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool TrailEndReply::IsInitialized() const {
+  return true;
+}
+
+void TrailEndReply::Swap(TrailEndReply* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void TrailEndReply::InternalSwap(TrailEndReply* other) {
+  data_.Swap(&other->data_);
+  std::swap(_cached_size_, other->_cached_size_);
+}
+
+::google::protobuf::Metadata TrailEndReply::GetMetadata() const {
+  protobuf_service_2eproto::protobuf_AssignDescriptorsOnce();
+  return protobuf_service_2eproto::file_level_metadata[3];
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// TrailEndReply
+
+// string data = 1;
+void TrailEndReply::clear_data() {
+  data_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+const ::std::string& TrailEndReply::data() const {
+  // @@protoc_insertion_point(field_get:algo.seemmo.TrailEndReply.data)
+  return data_.GetNoArena();
+}
+void TrailEndReply::set_data(const ::std::string& value) {
+  
+  data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:algo.seemmo.TrailEndReply.data)
+}
+#if LANG_CXX11
+void TrailEndReply::set_data(::std::string&& value) {
+  
+  data_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:algo.seemmo.TrailEndReply.data)
+}
+#endif
+void TrailEndReply::set_data(const char* value) {
+  
+  data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:algo.seemmo.TrailEndReply.data)
+}
+void TrailEndReply::set_data(const char* value, size_t size) {
+  
+  data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:algo.seemmo.TrailEndReply.data)
+}
+::std::string* TrailEndReply::mutable_data() {
+  
+  // @@protoc_insertion_point(field_mutable:algo.seemmo.TrailEndReply.data)
+  return data_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+::std::string* TrailEndReply::release_data() {
+  // @@protoc_insertion_point(field_release:algo.seemmo.TrailEndReply.data)
+  
+  return data_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+void TrailEndReply::set_allocated_data(::std::string* data) {
+  if (data != NULL) {
+    
+  } else {
+    
+  }
+  data_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), data);
+  // @@protoc_insertion_point(field_set_allocated:algo.seemmo.TrailEndReply.data)
+}
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int RecognizeRequest::kVideoChlFieldNumber;
 const int RecognizeRequest::kBgr24FieldNumber;
 const int RecognizeRequest::kHeightFieldNumber;
@@ -1122,7 +1765,7 @@ void RecognizeRequest::SetCachedSize(int size) const {
 }
 const ::google::protobuf::Descriptor* RecognizeRequest::descriptor() {
   protobuf_service_2eproto::protobuf_AssignDescriptorsOnce();
-  return protobuf_service_2eproto::file_level_metadata[2].descriptor;
+  return protobuf_service_2eproto::file_level_metadata[4].descriptor;
 }
 
 const RecognizeRequest& RecognizeRequest::default_instance() {
@@ -1437,7 +2080,7 @@ void RecognizeRequest::InternalSwap(RecognizeRequest* other) {
 
 ::google::protobuf::Metadata RecognizeRequest::GetMetadata() const {
   protobuf_service_2eproto::protobuf_AssignDescriptorsOnce();
-  return protobuf_service_2eproto::file_level_metadata[2];
+  return protobuf_service_2eproto::file_level_metadata[4];
 }
 
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
@@ -1638,7 +2281,7 @@ void RecognizeReply::SetCachedSize(int size) const {
 }
 const ::google::protobuf::Descriptor* RecognizeReply::descriptor() {
   protobuf_service_2eproto::protobuf_AssignDescriptorsOnce();
-  return protobuf_service_2eproto::file_level_metadata[3].descriptor;
+  return protobuf_service_2eproto::file_level_metadata[5].descriptor;
 }
 
 const RecognizeReply& RecognizeReply::default_instance() {
@@ -1812,7 +2455,7 @@ void RecognizeReply::InternalSwap(RecognizeReply* other) {
 
 ::google::protobuf::Metadata RecognizeReply::GetMetadata() const {
   protobuf_service_2eproto::protobuf_AssignDescriptorsOnce();
-  return protobuf_service_2eproto::file_level_metadata[3];
+  return protobuf_service_2eproto::file_level_metadata[5];
 }
 
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
@@ -1922,7 +2565,7 @@ void ImgRecognizeRequest::SetCachedSize(int size) const {
 }
 const ::google::protobuf::Descriptor* ImgRecognizeRequest::descriptor() {
   protobuf_service_2eproto::protobuf_AssignDescriptorsOnce();
-  return protobuf_service_2eproto::file_level_metadata[4].descriptor;
+  return protobuf_service_2eproto::file_level_metadata[6].descriptor;
 }
 
 const ImgRecognizeRequest& ImgRecognizeRequest::default_instance() {
@@ -2119,7 +2762,7 @@ void ImgRecognizeRequest::InternalSwap(ImgRecognizeRequest* other) {
 
 ::google::protobuf::Metadata ImgRecognizeRequest::GetMetadata() const {
   protobuf_service_2eproto::protobuf_AssignDescriptorsOnce();
-  return protobuf_service_2eproto::file_level_metadata[4];
+  return protobuf_service_2eproto::file_level_metadata[6];
 }
 
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
@@ -2240,7 +2883,7 @@ void ImgRecognizeReply::SetCachedSize(int size) const {
 }
 const ::google::protobuf::Descriptor* ImgRecognizeReply::descriptor() {
   protobuf_service_2eproto::protobuf_AssignDescriptorsOnce();
-  return protobuf_service_2eproto::file_level_metadata[5].descriptor;
+  return protobuf_service_2eproto::file_level_metadata[7].descriptor;
 }
 
 const ImgRecognizeReply& ImgRecognizeReply::default_instance() {
@@ -2414,7 +3057,7 @@ void ImgRecognizeReply::InternalSwap(ImgRecognizeReply* other) {
 
 ::google::protobuf::Metadata ImgRecognizeReply::GetMetadata() const {
   protobuf_service_2eproto::protobuf_AssignDescriptorsOnce();
-  return protobuf_service_2eproto::file_level_metadata[5];
+  return protobuf_service_2eproto::file_level_metadata[7];
 }
 
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
@@ -2495,6 +3138,14 @@ void VideoProcService::Trail(::google::protobuf::RpcController* controller,
   done->Run();
 }
 
+void VideoProcService::TrailEnd(::google::protobuf::RpcController* controller,
+                         const ::algo::seemmo::TrailEndRequest*,
+                         ::algo::seemmo::TrailEndReply*,
+                         ::google::protobuf::Closure* done) {
+  controller->SetFailed("Method TrailEnd() not implemented.");
+  done->Run();
+}
+
 void VideoProcService::Recognize(::google::protobuf::RpcController* controller,
                          const ::algo::seemmo::RecognizeRequest*,
                          ::algo::seemmo::RecognizeReply*,
@@ -2517,6 +3168,12 @@ void VideoProcService::CallMethod(const ::google::protobuf::MethodDescriptor* me
              done);
       break;
     case 1:
+      TrailEnd(controller,
+             ::google::protobuf::down_cast<const ::algo::seemmo::TrailEndRequest*>(request),
+             ::google::protobuf::down_cast< ::algo::seemmo::TrailEndReply*>(response),
+             done);
+      break;
+    case 2:
       Recognize(controller,
              ::google::protobuf::down_cast<const ::algo::seemmo::RecognizeRequest*>(request),
              ::google::protobuf::down_cast< ::algo::seemmo::RecognizeReply*>(response),
@@ -2535,6 +3192,8 @@ const ::google::protobuf::Message& VideoProcService::GetRequestPrototype(
     case 0:
       return ::algo::seemmo::TrailRequest::default_instance();
     case 1:
+      return ::algo::seemmo::TrailEndRequest::default_instance();
+    case 2:
       return ::algo::seemmo::RecognizeRequest::default_instance();
     default:
       GOOGLE_LOG(FATAL) << "Bad method index; this should never happen.";
@@ -2550,6 +3209,8 @@ const ::google::protobuf::Message& VideoProcService::GetResponsePrototype(
     case 0:
       return ::algo::seemmo::TrailReply::default_instance();
     case 1:
+      return ::algo::seemmo::TrailEndReply::default_instance();
+    case 2:
       return ::algo::seemmo::RecognizeReply::default_instance();
     default:
       GOOGLE_LOG(FATAL) << "Bad method index; this should never happen.";
@@ -2576,11 +3237,18 @@ void VideoProcService_Stub::Trail(::google::protobuf::RpcController* controller,
   channel_->CallMethod(descriptor()->method(0),
                        controller, request, response, done);
 }
+void VideoProcService_Stub::TrailEnd(::google::protobuf::RpcController* controller,
+                              const ::algo::seemmo::TrailEndRequest* request,
+                              ::algo::seemmo::TrailEndReply* response,
+                              ::google::protobuf::Closure* done) {
+  channel_->CallMethod(descriptor()->method(1),
+                       controller, request, response, done);
+}
 void VideoProcService_Stub::Recognize(::google::protobuf::RpcController* controller,
                               const ::algo::seemmo::RecognizeRequest* request,
                               ::algo::seemmo::RecognizeReply* response,
                               ::google::protobuf::Closure* done) {
-  channel_->CallMethod(descriptor()->method(1),
+  channel_->CallMethod(descriptor()->method(2),
                        controller, request, response, done);
 }
 // ===================================================================

@@ -15,11 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\algo\stub\algo_stub.cc">
-      <Filter>源文件</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="..\..\algo\stub\algo_stub.h">
       <Filter>源文件</Filter>
     </ClInclude>
