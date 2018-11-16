@@ -21,6 +21,9 @@
     <ClInclude Include="..\..\algo\stub\object_type.h">
       <Filter>源文件</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\algo\stub\algo_stub_factory.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\algo\stub\Makefile">

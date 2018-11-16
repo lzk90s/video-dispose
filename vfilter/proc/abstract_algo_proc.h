@@ -26,7 +26,7 @@ public:
     }
 
     void OnFrame(ChannelSink &chl,  cv::Mat &frame) override {
-        worker_.commit(std::bind(&AbstractAlgoProcessor::algoRoutine,this, ref(chl), chl.frameCache_.AllocateEmptyFrame(),
+        worker_.commit(std::bind(&AbstractAlgoProcessor::algoRoutine,this, ref(chl), chl.frameCache.AllocateEmptyFrame(),
                                  frame));
     }
 

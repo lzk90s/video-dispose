@@ -94,7 +94,7 @@ private:
 
         //保存目标抠图，后续的择优识别需要用到
         if (!objectImages.empty()) {
-            chl.frameCache_.SaveAllObjectImageInFrame(frameId, objectImages);
+            chl.frameCache.SaveAllObjectImageInFrame(frameId, objectImages);
         }
     }
 
@@ -174,7 +174,7 @@ private:
         recogWorker_.commit([=]() {
             for (auto &p : filterResult.bikes) {
                 bool exist = false;
-                cv::Mat img = chlPtr->frameCache_.GetObjectImageInFrame(p.frameId, p.guid, exist);
+                cv::Mat img = chlPtr->frameCache.GetObjectImageInFrame(p.frameId, p.guid, exist);
                 if (!exist) {
                     LOG_WARN("The saved object {} in frame {} not exist", p.guid, p.frameId);
                     continue;
@@ -192,7 +192,7 @@ private:
 
             for (auto &p : filterResult.vehicles) {
                 bool exist = false;
-                cv::Mat img = chlPtr->frameCache_.GetObjectImageInFrame(p.frameId, p.guid, exist);
+                cv::Mat img = chlPtr->frameCache.GetObjectImageInFrame(p.frameId, p.guid, exist);
                 if (!exist) {
                     LOG_WARN("The saved object {} in frame {} not exist", p.guid, p.frameId);
                     continue;
@@ -210,7 +210,7 @@ private:
 
             for (auto &p : filterResult.pedestrains) {
                 bool exist = false;
-                cv::Mat img = chlPtr->frameCache_.GetObjectImageInFrame(p.frameId, p.guid, exist);
+                cv::Mat img = chlPtr->frameCache.GetObjectImageInFrame(p.frameId, p.guid, exist);
                 if (!exist) {
                     LOG_WARN("The saved object {} in frame {} not exist", p.guid, p.frameId);
                     continue;
@@ -228,7 +228,7 @@ private:
 
             //把不需要的帧手动释放掉
             for (auto &fid : filterResult.releasedFrames) {
-                chlPtr->frameCache_.ManualRelase(fid);
+                chlPtr->frameCache.ManualRelase(fid);
             }
         });
     }

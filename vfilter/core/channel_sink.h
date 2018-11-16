@@ -47,7 +47,7 @@ public:
     FaceNotifier faceNotifier;
 
     //frame cache
-    FrameCache frameCache_;
+    FrameCache frameCache;
 
 public:
     ChannelSink(uint32_t channelId) {
