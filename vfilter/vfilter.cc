@@ -3,6 +3,7 @@
 
 #include "common/helper/singleton.h"
 #include "common/helper/color_conv_util.h"
+#include "common/helper/timer.h"
 
 #include "vfilter/core/app.h"
 #include "vfilter/config/setting.h"
@@ -14,13 +15,44 @@
 
 using namespace std;
 
+//看门狗，虽然是多线程，没有加锁的必要
+class Watchdog {
+public:
+    ~Watchdog() {
+        timer.Expire();
+    }
+
+    void Watch(std::function<void()> die) {
+        timer.StartTimer(1000, [=]() {
+            //10秒钟还没有喂狗，表示程序可能出现问题了，强制 go die
+            if (dogCount_++ > 10) {
+                die();
+            }
+        });
+    }
+
+    void Feed() {
+        dogCount_ = 0;
+    }
+
+private:
+    Timer timer;
+    uint32_t dogCount_;
+};
+
 static shared_ptr<vf::AbstractAlgoProcessor> defaultProcessor;
 static shared_ptr<vf::AbstractAlgoProcessor> faceProcessor;
+static Watchdog watchdog;
 
 int32_t VFilter_Init() {
     vf::ThisApp::getInstance();
     defaultProcessor.reset(new vf::DefaultAlgoProcessor());
     faceProcessor.reset(new vf::FaceAlgoProcessor());
+    //启动看门狗监听
+    watchdog.Watch([]() {
+        cout << "-------GO DIE, oops!---------" << endl;
+        exit(5);
+    });
     return 0;
 }
 
@@ -39,6 +71,9 @@ int32_t VFilter_Routine(uint32_t channelId, uint8_t *y, uint8_t *u, uint8_t *v, 
         vf::CSMS().sinks[channelId] = chl;
         LOG_INFO("New channel {}", channelId);
     }
+
+    //喂狗
+    watchdog.Feed();
 
     unique_ptr<uint8_t[]> img(new uint8_t[width*height * 3] { 0 });
     //YUV420P->BGR24
