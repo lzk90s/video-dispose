@@ -27,6 +27,7 @@
     <ClInclude Include="..\..\common\helper\singleton.h" />
     <ClInclude Include="..\..\common\helper\stringconv.h" />
     <ClInclude Include="..\..\common\helper\threadpool.h" />
+    <ClInclude Include="..\..\common\helper\timer.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
