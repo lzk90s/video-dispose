@@ -46,8 +46,26 @@ protected:
             return;
         }
 
-        int32_t thickness = 2;
-        cv::rectangle(frame, cvPoint(x, y), cvPoint(x + w, y + h), color, thickness, 1, 0);
+        //计算矩形的4个转角坐标, a,b,c,d 表示矩形的4个顶点（顺时针）
+        int32_t len = 8;
+        cv::Point a(x, y), b(x + w, y), c(x + w, y + h), d(x, y + h);
+        cv::Point a1(a.x, a.y+ len), a2(a.x+ len, a.y), b1(b.x, b.y+len), b2(b.x-len, b.y), c1(c.x, c.y-len), c2(c.x-len, c.y),
+        d1(d.x, d.y-len), d2(d.x+len, d.y);
+
+        //画矩形的4个转角
+        int32_t thickness = 3;
+        cv::line(frame, a, a1, color, thickness);
+        cv::line(frame, a, a2, color, thickness);
+        cv::line(frame, b, b1, color, thickness);
+        cv::line(frame, b, b2, color, thickness);
+        cv::line(frame, c, c1, color, thickness);
+        cv::line(frame, c, c2, color, thickness);
+        cv::line(frame, d, d1, color, thickness);
+        cv::line(frame, d, d2, color, thickness);
+
+        //画矩形边框
+        thickness = 1;
+        cv::rectangle(frame, cvPoint(x, y), cvPoint(x + w, y + h), color, thickness);
     }
 
     //画目标的属性文字
