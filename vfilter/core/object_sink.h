@@ -169,10 +169,10 @@ private:
 private:
     class ObjectVO {
     public:
-        T			obj1;			//obj1 存储检测结果，检测结果不带属性信息
-        T			obj2;			//obj2 存储识别结果，识别结果带属性信息
-        uint32_t	maxScore;		//目标最大分数，用来判断是否需要重新识别
-        uint32_t	absentCount;	//消失计数
+        T           obj1;			//obj1 存储检测结果，检测结果不带属性信息
+        T           obj2;			//obj2 存储识别结果，识别结果带属性信息
+        uint32_t    maxScore;		//目标最大分数，用来判断是否需要重新识别
+        uint32_t    absentCount;	//消失计数
 
         ObjectVO() {
             maxScore = 0;

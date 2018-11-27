@@ -170,7 +170,6 @@ private:
     }
 
     void asyncRecognizeFilterObject(ChannelSink &chl, uint64_t frameId, FilterResult &filterResult) {
-        return;
         ChannelSink *chlPtr = &chl;
         recogWorker_.commit([=]() {
             for (auto &p : filterResult.bikes) {
