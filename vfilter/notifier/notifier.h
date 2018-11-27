@@ -16,7 +16,7 @@ public:
     Notifier(const string &type) {
         this->type_ = type;
 
-        string host = GlobalSettings::getInstance().notifyServerHost;
+        string host = G_CFG().notifyServerHost;
         if (host.empty()) {
             throw runtime_error("The notify url is empty");
         }

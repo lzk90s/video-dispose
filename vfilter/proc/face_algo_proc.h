@@ -11,7 +11,7 @@ namespace vf {
 class FaceAlgoProcessor : public AbstractAlgoProcessor {
 public:
     FaceAlgoProcessor() {
-        string vendor = GlobalSettings::getInstance().enableGosunAlgo ? "gosun" : "null";
+        string vendor = G_CFG().enableGosunAlgo ? "gosun" : "null";
         algo_ = algo::AlgoStubFactory::NewAlgoStub(vendor);
     }
 

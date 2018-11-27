@@ -72,14 +72,18 @@ int32_t VFilter_Routine(uint32_t channelId, uint8_t *y, uint8_t *u, uint8_t *v, 
         LOG_INFO("New channel {}", channelId);
     }
 
-    //喂狗
+    //feed the watch dog
     watchdog.Feed();
 
-    unique_ptr<uint8_t[]> img(new uint8_t[width*height * 3] { 0 });
+    //allocate mat memory
+    cv::Mat frame = cv::Mat(height, width, CV_8UC3);
+
     //YUV420P->BGR24
-    I420ToBGR24Converter::Convert(y, u, v, img.get(), width, height);
-    cv::Mat frame = cv::Mat(height, width, CV_8UC3, (void*)img.get());
+    I420ToBGR24Converter::Convert(y, u, v, frame.data, width, height);
+
+    //handle frame
     vf::CSMS().sinks[channelId]->HandleReceivedFrame(frame);
+
     //BGR24->YUV420P
     BGR24ToI420Converter::Convert(y, u, v, frame.data, frame.cols, frame.rows);
 

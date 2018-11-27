@@ -21,7 +21,7 @@ public:
 
 private:
     void init() {
-        vf::GlobalSettings::getInstance();
+        vf::G_CFG();
     }
 };
 

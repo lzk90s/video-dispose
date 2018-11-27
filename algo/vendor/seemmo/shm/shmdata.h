@@ -88,27 +88,21 @@ public:
         sharedMemMap_.clear();
     }
 
-    void Create(int32_t channelId, uint32_t width, uint32_t height, bool autoDelete=false) {
-        unique_lock<mutex> lck(mutex_);
-        if (sharedMemMap_.find(channelId) != sharedMemMap_.end()) {
-            return;
-        }
-        sharedMemMap_[channelId] = make_shared<SharedImageMemory>(channelId, width, height, autoDelete);
-    }
-
     void Delete(int32_t channelId) {
         unique_lock<mutex> lck(mutex_);
         sharedMemMap_.erase(channelId);
     }
 
-    shared_ptr<SharedImageMemory> Get(int32_t channelId) {
+    shared_ptr<SharedImageMemory> CreateAndGet(int32_t channelId, uint32_t width, uint32_t height,
+            bool autoDelete = false) {
         unique_lock<mutex> lck(mutex_);
-        return sharedMemMap_[channelId];
-    }
-
-    bool Exist(int32_t channelId) {
-        unique_lock<mutex> lck(mutex_);
-        return sharedMemMap_.find(channelId) != sharedMemMap_.end();
+        if (sharedMemMap_.find(channelId) == sharedMemMap_.end()) {
+            auto m = make_shared<SharedImageMemory>(channelId, width, height, autoDelete);
+            sharedMemMap_[channelId] = m;
+            return m;
+        } else {
+            return sharedMemMap_[channelId];
+        }
     }
 
 private:

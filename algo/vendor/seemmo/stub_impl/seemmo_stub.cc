@@ -50,11 +50,7 @@ public:
         brpc::Controller cntl;
 
         // 初始化共享内存
-        if (!SIMMNG::getInstance().Exist(channelId)) {
-            SIMMNG::getInstance().Create(channelId, width, height, false);
-        }
-
-        uint8_t *bgr24Dst = SIMMNG::getInstance().Get(channelId)->GetBuffer().bgr24Buff1;
+        uint8_t *bgr24Dst = SIMMNG::getInstance().CreateAndGet(channelId, width, height, false)->GetBuffer().bgr24Buff1;
 
         request.set_videochl(channelId);
         request.set_timestamp(frameId);
@@ -93,9 +89,7 @@ public:
         TrailEndReply reply;
         brpc::Controller cntl;
 
-        if (SIMMNG::getInstance().Exist(channelId)) {
-            SIMMNG::getInstance().Delete(channelId);
-        }
+        SIMMNG::getInstance().Delete(channelId);
 
         request.set_videochl(channelId);
 
@@ -122,11 +116,7 @@ public:
         RecognizeReply reply;
         brpc::Controller cntl;
 
-        if (!SIMMNG::getInstance().Exist(channelId)) {
-            SIMMNG::getInstance().Create(channelId, width, height, false);
-        }
-
-        uint8_t *bgr24Dst = SIMMNG::getInstance().Get(channelId)->GetBuffer().bgr24Buff2;
+        uint8_t *bgr24Dst = SIMMNG::getInstance().CreateAndGet(channelId, width, height, false)->GetBuffer().bgr24Buff2;
 
         request.set_videochl(channelId);
         //request.set_bgr24((char*)bgr24, width*height * 3);		//bgr24图片字节大小为h*w*3

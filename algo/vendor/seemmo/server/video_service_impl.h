@@ -34,11 +34,8 @@ public:
 
         uint8_t *bgr24 = nullptr;
         if (request->bgr24().empty()) {
-            //没有共享内存时，创建共享内存
-            if (!SIMMNG::getInstance().Exist(request->videochl())) {
-                SIMMNG::getInstance().Create(request->videochl(), request->width(), request->height(), true);
-            }
-            bgr24 = SIMMNG::getInstance().Get(request->videochl())->GetBuffer().bgr24Buff1;
+            bgr24 = SIMMNG::getInstance().CreateAndGet(request->videochl(), request->width(), request->height(),
+                    true)->GetBuffer().bgr24Buff1;
         } else {
             bgr24 = (uint8_t*)request->bgr24().data();
         }
@@ -66,10 +63,7 @@ public:
                           ::algo::seemmo::TrailEndReply* response, ::google::protobuf::Closure* done) {
         brpc::ClosureGuard done_guard(done);
 
-        //如果存在共享内存，则删除掉
-        if (SIMMNG::getInstance().Exist(request->videochl())) {
-            SIMMNG::getInstance().Delete(request->videochl());
-        }
+        SIMMNG::getInstance().Delete(request->videochl());
 
         LOG_INFO("Trail end for channel {}", request->videochl());
         response->set_data("ok");
@@ -84,11 +78,8 @@ public:
 
         uint8_t *bgr24 = nullptr;
         if (request->bgr24().empty()) {
-            // 没有共享内存时，创建
-            if (!SIMMNG::getInstance().Exist(request->videochl())) {
-                SIMMNG::getInstance().Create(request->videochl(), request->width(), request->height(), true);
-            }
-            bgr24 = SIMMNG::getInstance().Get(request->videochl())->GetBuffer().bgr24Buff2;
+            bgr24 = SIMMNG::getInstance().CreateAndGet(request->videochl(), request->width(), request->height(),
+                    true)->GetBuffer().bgr24Buff2;
         } else {
             bgr24 = (uint8_t*)request->bgr24().data();
         }
@@ -96,7 +87,7 @@ public:
         uint32_t bufLen = 1024 * 1024 * 5;
         unique_ptr<char[]> buf(new char[bufLen]);
         int ret = algo_.Recognize(
-                      /*((const uint8_t*)request->bgr24().data()*/ bgr24,
+                      bgr24,
                       request->width(),
                       request->height(),
                       request->param(),

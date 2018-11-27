@@ -21,7 +21,7 @@ public:
     // 默认缓存的最大帧数(30秒的帧数)
     uint32_t frameCacheMaxNum;
     //目标消失初始计数(当某个目标在超过设置的帧后，还没有检测到，则认为目标已经消失，需要从内存中删掉)
-    uint32_t objectDisappearCount;
+    uint32_t objectAbsentCount;
     //人脸图片最小宽度
     uint32_t facePictureMinWidth;
     //行人图片最小宽度
@@ -49,10 +49,10 @@ public:
 private:
     void init() {
         //根据环境变量重新设置值
-        fullRecognizeInternalMs = parseEnvNumValue("FULL_RECOGNIZE_INTERNAL_MS", 30000);
+        fullRecognizeInternalMs = parseEnvNumValue("FULL_RECOGNIZE_INTERNAL_MS", 60000);
         minFramePickInternalMs = parseEnvNumValue("MIN_FRAME_PICK_INTERNAL_MS", 100);
         framePickInternalNum = parseEnvNumValue("FRAME_PICK_INTERNAL_NUM", 5);
-        objectDisappearCount = parseEnvNumValue("OBJECT_DISAPPEAR_COUNT", 10);
+        objectAbsentCount = parseEnvNumValue("OBJECT_ABSENT_COUNT", 20);
         facePictureMinWidth = parseEnvNumValue("FACE_PICTURE_MIN_WIDTH", 50);
         personPictureMinWidth = parseEnvNumValue("PERSON_PICTURE_MIN_WIDTH", 80);
         bikePictureMinWidth = parseEnvNumValue("BIKE_PICTURE_MIN_WIDTH", 80);
@@ -71,7 +71,7 @@ private:
              << "minFramePickInternalMs: " << minFramePickInternalMs << ", "
              << "framePickInternalNum: " << framePickInternalNum << ", "
              << "frameCacheMaxNum: " << frameCacheMaxNum << ", "
-             << "objectDisappearCount: " << objectDisappearCount << ", "
+             << "objectAbsentCount: " << objectAbsentCount << ", "
              << "enableGosunAlgo: " << enableGosunAlgo << ", "
              << "enableSeemmoAlgo: " << enableSeemmoAlgo << ", "
              << "scoreDiff4ReRecognize: " << scoreDiff4ReRecognize << ", "
@@ -112,6 +112,8 @@ private:
     }
 };
 
-typedef Singleton<Settings> GlobalSettings;
+const Settings & G_CFG() {
+    return Singleton<Settings>::getInstance();
+}
 
 }

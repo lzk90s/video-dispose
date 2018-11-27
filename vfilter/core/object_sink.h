@@ -16,26 +16,10 @@ namespace vf {
 template<class T>
 class ObjectSink {
 public:
-    using ObjectAppearHandler = function<void(const string&, void *)> ;
-    using ObjectDisappearHandler = function<void(const string&)>;
-
-public:
 
     ObjectSink() {
         gofIdx_ = 0;
         gofSize_ = 0;
-        objAppearHandler_ = nullptr;
-        objDisappearHandler_ = nullptr;
-        lastTime_ = chrono::steady_clock::now();
-        currTime_ = chrono::steady_clock::now();
-    }
-
-    void SetObjectAppearHandler(ObjectAppearHandler h) {
-        this->objAppearHandler_ = h;
-    }
-
-    void SetObjectDisappearHandler(ObjectDisappearHandler h) {
-        this->objDisappearHandler_ = h;
     }
 
     vector<T> OnDetectedObjects(const vector<T> &objs) {
@@ -95,27 +79,19 @@ private:
         return algo::Rect{ x,y,w,h };
     }
 
-    //计算需要识别的目标
     vector<T>  calcNeedRecognizeObjects(const vector<T> &objs) {
         vector<T> toRecObjs;
-        // 1. 超过全识别时间间隔【有时候第一次识别是识别错的，定时刷新当前目标的全部结果】
-        // 2. 目标第一次出现【目标第一次出现，进行识别】
-        // 3. 目标最新的评分比上一次高【目标的评分高，说明可能清晰度更好，识别结果可能更准确】
-        currTime_ = chrono::steady_clock::now();
-        auto diffTime = std::chrono::duration_cast<std::chrono::milliseconds>(currTime_ - lastTime_).count();
-        if (diffTime >= GlobalSettings::getInstance().fullRecognizeInternalMs) {
-            toRecObjs = objs;
-            lastTime_ = currTime_;
-        } else {
-            for (auto &o : objs) {
-                if (existObjs_.find(o.guid) == existObjs_.end()) {
+        //计算需要重新识别的目标，以下情况需要从新识别
+        // 1. 目标第一次出现【目标第一次出现，进行识别】
+        // 2. 目标最新的评分比历史最高评分高【目标的评分高，说明可能清晰度更好，识别结果可能更准确】
+        for (auto &o : objs) {
+            if (existObjs_.find(o.guid) == existObjs_.end()) {
+                toRecObjs.push_back(o);
+            } else {
+                auto &p = existObjs_[o.guid];
+                if ((o.score > p.maxScore) && (o.score - p.maxScore > G_CFG().scoreDiff4ReRecognize)) {
                     toRecObjs.push_back(o);
-                } else {
-                    uint32_t currScore = o.score;
-                    uint32_t lastScore = existObjs_[o.guid].obj1.score;
-                    if ((currScore > lastScore) && (currScore - lastScore > GlobalSettings::getInstance().scoreDiff4ReRecognize)) {
-                        toRecObjs.push_back(o);
-                    }
+                    p.maxScore = o.score;	//update max score
                 }
             }
         }
@@ -129,9 +105,6 @@ private:
                 ObjectVO newObj;
                 newObj.obj1 = o;
                 existObjs_[o.guid] = newObj;
-                if (nullptr != objAppearHandler_) {
-                    objAppearHandler_(o.guid, (void*)&o);	//callback
-                }
             } else {
                 existObjs_[o.guid].obj1 = o;
                 //重置计数
@@ -155,8 +128,8 @@ private:
                 * 2. 目标只是在刚好这一帧中没有检测到，并不代表目标已经消失了
                 * 针对这两种情况，通过减少目标的计数，当目标计数为0的时候，表示目标真的消失了。就删除掉
                 */
-                o.second.cnt = o.second.cnt - 1;
-                if (o.second.cnt == 0) {
+                o.second.absentCount--;
+                if (o.second.absentCount == 0) {
                     disappearedObjs.push_back(o.first);
                 }
             }
@@ -164,9 +137,6 @@ private:
 
         //删掉消失的目标
         for (auto &o : disappearedObjs) {
-            if (nullptr != objDisappearHandler_) {
-                objDisappearHandler_(o);	//callback
-            }
             existObjs_.erase(o);
         }
 
@@ -199,36 +169,32 @@ private:
 private:
     class ObjectVO {
     public:
-        typedef uint32_t DisappearCounter;
-
-        T obj1;		//obj1 存储检测结果，检测结果不带属性信息
-        T obj2;		//obj2 存储识别结果，识别结果带属性信息
-        DisappearCounter cnt;
+        T			obj1;			//obj1 存储检测结果，检测结果不带属性信息
+        T			obj2;			//obj2 存储识别结果，识别结果带属性信息
+        uint32_t	maxScore;		//目标最大分数，用来判断是否需要重新识别
+        uint32_t	absentCount;	//消失计数
 
         ObjectVO() {
-            cnt = GlobalSettings::getInstance().objectDisappearCount;
+            maxScore = 0;
+            absentCount = G_CFG().objectAbsentCount;
         }
 
         void ResetCounter() {
-            cnt = GlobalSettings::getInstance().objectDisappearCount;
+            absentCount = G_CFG().objectAbsentCount;
         }
 
         bool Showable() {
-            return cnt >= GlobalSettings::getInstance().objectDisappearCount;
+            return absentCount >= G_CFG().objectAbsentCount;
         }
     };
 
     mutex mutex_;
     //已经存在的目标<id, obj>
     map<string, ObjectVO> existObjs_;
-    ObjectAppearHandler objAppearHandler_;
-    ObjectDisappearHandler objDisappearHandler_;
-    //因为是抽帧检测，所以，把相邻两次检测之间的帧认作一个gof（group of frame），gofSize表示一个gof中的帧数目，gofidx表示一帧在当前gof中的序号
+    //因为是抽帧检测，所以，把相邻两次检测之间的帧认作一个gof（group of frame）
+    //gofSize表示一个gof中的帧数目，gofidx表示一帧在当前gof中的序号
     uint32_t gofSize_;
     uint32_t gofIdx_;
-    //time for pick frame
-    chrono::steady_clock::time_point lastTime_;
-    chrono::steady_clock::time_point currTime_;
 };
 
 typedef ObjectSink<algo::BikeObject> BikeObjectSink;

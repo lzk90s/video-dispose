@@ -106,7 +106,7 @@ protected:
     }
 
     bool isInvalidPicture(uint32_t width, uint32_t height) override {
-        return (uint32_t)width < GlobalSettings::getInstance().vehiclePictureMinWidth;
+        return (uint32_t)width < G_CFG().vehiclePictureMinWidth;
     }
 };
 

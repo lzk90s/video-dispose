@@ -10,7 +10,7 @@ namespace vf {
 class DefaultAlgoProcessor : public AbstractAlgoProcessor {
 public:
     DefaultAlgoProcessor() : recogWorker_(1) {
-        string vendor = GlobalSettings::getInstance().enableSeemmoAlgo ? "seemmo" : "null";
+        string vendor = G_CFG().enableSeemmoAlgo ? "seemmo" : "null";
         algo_ = algo::AlgoStubFactory::NewAlgoStub(vendor);
     }
 
@@ -170,6 +170,7 @@ private:
     }
 
     void asyncRecognizeFilterObject(ChannelSink &chl, uint64_t frameId, FilterResult &filterResult) {
+        return;
         ChannelSink *chlPtr = &chl;
         recogWorker_.commit([=]() {
             for (auto &p : filterResult.bikes) {

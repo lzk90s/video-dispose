@@ -22,8 +22,8 @@ public:
 public:
     FrameCache() {
         currFrameId_ = 0;
-        frameCacheMaxNum_ = GlobalSettings::getInstance().frameCacheMaxNum;
-        bufferedFrameType_ = GlobalSettings::getInstance().bufferedFrameType;
+        frameCacheMaxNum_ = G_CFG().frameCacheMaxNum;
+        bufferedFrameType_ = G_CFG().bufferedFrameType;
     }
 
     ~FrameCache() {
