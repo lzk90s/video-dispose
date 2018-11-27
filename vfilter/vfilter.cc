@@ -51,7 +51,7 @@ int32_t VFilter_Init() {
     //启动看门狗监听
     watchdog.Watch([]() {
         cout << "-------GO DIE, oops!---------" << endl;
-        exit(5);
+        _exit(5);
     });
     return 0;
 }
