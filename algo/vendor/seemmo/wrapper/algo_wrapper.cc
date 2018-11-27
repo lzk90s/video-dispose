@@ -3,6 +3,7 @@
 #include <memory>
 
 #include "common/helper/logger.h"
+#include "common/helper/counttimer.h"
 
 #include "algo/vendor/seemmo/wrapper/algo_wrapper.h"
 #include "algo/vendor/seemmo/wrapper/workers.h"
@@ -162,6 +163,7 @@ int32_t SeemmoAlgo_Trail(
     char *jsonRsp,
     uint32_t &rspLen
 ) {
+    CountTimer timer("SeemmoAlgo_Trail", 80 * 1000);
     return AlgoSingleton::getInstance().Trail(videoChl, timestamp, bgr24, width, height, param, jsonRsp, &rspLen);
 }
 
@@ -171,6 +173,7 @@ int32_t SeemmoAlgo_TrailEnd(
     char *jsonRsp,
     uint32_t &rspLen
 ) {
+    CountTimer timer("SeemmoAlgo_TrailEnd", 80 * 1000);
     return AlgoSingleton::getInstance().TrailEnd(videoChl, param, jsonRsp, &rspLen);
 }
 
@@ -182,6 +185,7 @@ int32_t SeemmoAlgo_Recognize(
     char *jsonRsp,
     uint32_t &rspLen
 ) {
+    CountTimer timer("SeemmoAlgo_Recognize", 80 * 1000);
     return AlgoSingleton::getInstance().Recognize(bgr24, width, height, param, jsonRsp, &rspLen);
 }
 
@@ -193,5 +197,6 @@ int32_t SeemmoAlgo_DetectRecognize(
     char *jsonRsp,
     uint32_t &rspLen
 ) {
+    CountTimer timer("SeemmoAlgo_DetectRecognize", 80 * 1000);
     return AlgoSingleton::getInstance().DetectRecognize(bgr24, width, height, param, jsonRsp, &rspLen);
 }
