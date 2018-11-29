@@ -20,7 +20,6 @@ typedef int32_t (*PF_VFilter_Routine)(uint32_t channelId, uint8_t *y, uint8_t *u
                                       uint32_t height);
 
 static void *handle = NULL;
-const static char *VFILTER_DLL_NAME = "libvideo_filter.so";
 static PF_VFilter_Init pf_VFilter_Init = NULL;
 static PF_VFilter_Destroy pf_VFilter_Destroy = NULL;
 static PF_VFilter_Routine pf_VFilter_Routine = NULL;
@@ -30,61 +29,6 @@ typedef struct AlgoContext {
     int cid;	// channel id
     //add some private data if you want
 } AlgoContext;
-
-typedef struct ThreadData {
-    AVFrame *in, *out;
-} ThreadData;
-
-static void image_copy_plane(uint8_t *dst, int dst_linesize,
-                             const uint8_t *src, int src_linesize,
-                             int bytewidth, int height) {
-    if (!dst || !src)
-        return;
-    av_assert0(abs(src_linesize) >= bytewidth);
-    av_assert0(abs(dst_linesize) >= bytewidth);
-    for (; height > 0; height--) {
-        memcpy(dst, src, bytewidth);
-        dst += dst_linesize;
-        src += src_linesize;
-    }
-}
-
-//for YUV data, frame->data[0] save Y, frame->data[1] save U, frame->data[2] save V
-static int frame_copy_video(AVFrame *dst, const AVFrame *src) {
-    int i, planes;
-    const AVPixFmtDescriptor *desc = NULL;
-    int planes_nb = 0;
-
-    if (dst->width  > src->width ||
-            dst->height > src->height)
-        return AVERROR(EINVAL);
-
-    planes = av_pix_fmt_count_planes(dst->format);
-    //make sure data is valid
-    for (i = 0; i < planes; i++)
-        if (!dst->data[i] || !src->data[i])
-            return AVERROR(EINVAL);
-
-    desc = av_pix_fmt_desc_get(dst->format);
-    for (i = 0; i < desc->nb_components; i++)
-        planes_nb = FFMAX(planes_nb, desc->comp[i].plane + 1);
-
-    for (i = 0; i < planes_nb; i++) {
-        int h = dst->height;
-        int bwidth = av_image_get_linesize(dst->format, dst->width, i);
-        if (bwidth < 0) {
-            av_log(NULL, AV_LOG_ERROR, "av_image_get_linesize failed\n");
-            return AVERROR(EINVAL);
-        }
-        if (i == 1 || i == 2) {
-            h = AV_CEIL_RSHIFT(dst->height, desc->log2_chroma_h);
-        }
-        image_copy_plane(dst->data[i], dst->linesize[i],
-                         src->data[i], src->linesize[i],
-                         bwidth, h);
-    }
-    return 0;
-}
 
 static int filter_frame(AVFilterLink *link, AVFrame *in) {
     AVFilterContext *avctx = link->dst;
@@ -114,6 +58,7 @@ static av_cold int config_output(AVFilterLink *outlink) {
 static av_cold int init(AVFilterContext *ctx) {
     int ret = 0;
     AlgoContext *privCtx = ctx->priv;
+    const char *DLL_NAME = "libvideo_filter.so";
 
     uint64_t channel_id = 0;
     av_opt_get_int(privCtx, "cid", 0, (int64_t*)&channel_id);
@@ -123,9 +68,9 @@ static av_cold int init(AVFilterContext *ctx) {
     av_log(NULL, AV_LOG_INFO, "Channel id %ld\n", channel_id);
     privCtx->cid = (int)channel_id;
 
-    handle = dlopen(VFILTER_DLL_NAME, RTLD_LAZY);
+    handle = dlopen(DLL_NAME, RTLD_LAZY);
     if (NULL == handle) {
-        av_log(NULL, AV_LOG_ERROR, "load library %s failed, error %s\n", VFILTER_DLL_NAME, dlerror());
+        av_log(NULL, AV_LOG_ERROR, "load library %s failed, error %s\n", DLL_NAME, dlerror());
         return AVERROR(EINVAL);
     }
 
@@ -154,6 +99,7 @@ static av_cold void uninit(AVFilterContext *ctx) {
     if (NULL != pf_VFilter_Destroy) {
         pf_VFilter_Destroy();
     }
+    dlclose(handle);
 }
 
 //currently we just support the most common YUV420, can add more if needed

@@ -11,7 +11,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\FFmpeg-patch\libavfilter\scale\yuvscale_impl.cc" />
     <ClCompile Include="..\..\FFmpeg-patch\libavfilter\vf_algo.c" />
+    <ClCompile Include="..\..\FFmpeg-patch\libavfilter\vf_yuvscale.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\FFmpeg-patch\libavfilter\scale\Makefile" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{412E9ACC-20AF-4FD3-8F84-402D468C25C2}</ProjectGuid>

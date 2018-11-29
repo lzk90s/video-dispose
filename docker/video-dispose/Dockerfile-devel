@@ -37,6 +37,7 @@ RUN cd /root/video-dispose && \
     make install && \
     ##编译video-dispose插件
     cd /root/video-dispose && \
+    make -C FFmpeg-patch/libavfilter/scale -j$(nproc) -B install && \
     make -C algo/vendor/seemmo -j$(nproc) -B -f Makefile_stub install && \
     make -C algo/vendor/gosun -j$(nproc) -B -f Makefile_stub install && \
     make -C vfilter -j$(nproc) -B install && \

@@ -13,10 +13,24 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="源文件\scale">
+      <UniqueIdentifier>{00e3ab43-bf6f-417d-a344-2b0980abdb67}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\FFmpeg-patch\libavfilter\vf_algo.c">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\FFmpeg-patch\libavfilter\vf_yuvscale.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\FFmpeg-patch\libavfilter\scale\yuvscale_impl.cc">
+      <Filter>源文件\scale</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\FFmpeg-patch\libavfilter\scale\Makefile">
+      <Filter>源文件\scale</Filter>
+    </None>
   </ItemGroup>
 </Project>
