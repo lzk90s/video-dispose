@@ -69,7 +69,7 @@ int32_t VFilter_Routine(uint32_t channelId, uint8_t *y, uint8_t *u, uint8_t *v, 
         defaultProcessor->LinkHandler(*chl);
         faceProcessor->LinkHandler(*chl);
         vf::CSMS().sinks[channelId] = chl;
-        LOG_INFO("New channel {}", channelId);
+        LOG_INFO("New channel {}, {}*{}", channelId, width, height);
     }
 
     //feed the watch dog

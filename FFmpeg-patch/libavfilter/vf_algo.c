@@ -89,31 +89,14 @@ static int frame_copy_video(AVFrame *dst, const AVFrame *src) {
 static int filter_frame(AVFilterLink *link, AVFrame *in) {
     AVFilterContext *avctx = link->dst;
     AVFilterLink *outlink = avctx->outputs[0];
-    AVFrame *out;
     AlgoContext *privCtx = avctx->priv;
-
-    //allocate a new buffer, data is null
-    out = ff_get_video_buffer(outlink, outlink->w, outlink->h);
-    if (!out) {
-        av_frame_free(&in);
-        return AVERROR(ENOMEM);
-    }
-
-    av_frame_copy_props(out, in);
-    out->width  = outlink->w;
-    out->height = outlink->h;
 
     // filter routine
     // YUV420P, y= avframe->data[0], u=avframe->data[1], v=avframe->data[2]
     // 传递ffmpeg默认的yuv420p格式到下层，不在ffmpeg中转成bgr24，是因为ffmpg的sws格式转换性能比较差，在下层使用libyuv转换
     pf_VFilter_Routine(privCtx->cid, in->data[0], in->data[1], in->data[2], in->width, in->height);
 
-    // copy video
-    frame_copy_video(out, in);
-
-    av_frame_free(&in);
-
-    return ff_filter_frame(outlink, out);
+    return ff_filter_frame(outlink, in);
 }
 
 static av_cold int config_output(AVFilterLink *outlink) {
