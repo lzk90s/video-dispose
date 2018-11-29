@@ -16,13 +16,19 @@
 #include <dlfcn.h>
 
 typedef int(*PF_Scale_i420)(const uint8_t* src_y,
+                            int src_stride_y,
                             const uint8_t* src_u,
+                            int src_stride_u,
                             const uint8_t* src_v,
+                            int src_stride_v,
                             int src_width,
                             int src_height,
                             uint8_t* dst_y,
+                            int dst_stride_y,
                             uint8_t* dst_u,
+                            int dst_stride_u,
                             uint8_t* dst_v,
+                            int dst_stride_v,
                             int dst_width,
                             int dst_height);
 
@@ -52,14 +58,21 @@ typedef struct ThreadData {
 static void *handle = NULL;
 static PF_Scale_i420 pf_Scale_i420 = NULL;
 
+
 static int do_conversion(AVFilterContext *ctx, void *arg, int jobnr,
                          int nb_jobs) {
     ThreadData *td = arg;
     AVFrame *dst = td->out;
     AVFrame *src = td->in;
     //YUV scale
-    return pf_Scale_i420(src->data[0], src->data[1], src->data[2], src->width, src->height,
-                         dst->data[0], dst->data[1], dst->data[2], dst->width, dst->height);
+    return pf_Scale_i420(src->data[0], src->linesize[0],
+                         src->data[1], src->linesize[1],
+                         src->data[2], src->linesize[2],
+                         src->width, src->height,
+                         dst->data[0], dst->linesize[0],
+                         dst->data[1], dst->linesize[1],
+                         dst->data[2], dst->linesize[2],
+                         dst->width, dst->height);
 }
 
 static int filter_frame(AVFilterLink *link, AVFrame *in) {

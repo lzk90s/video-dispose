@@ -63,7 +63,11 @@ int32_t VFilter_Destroy() {
     return 0;
 }
 
-int32_t VFilter_Routine(uint32_t channelId, uint8_t *y, uint8_t *u, uint8_t *v, uint32_t width, uint32_t height) {
+int32_t VFilter_Routine(uint32_t channelId,
+                        uint8_t *y, uint32_t stride_y,
+                        uint8_t *u, uint32_t stride_u,
+                        uint8_t *v, uint32_t stride_v,
+                        uint32_t width, uint32_t height) {
     if (vf::CSMS().sinks.find(channelId) == vf::CSMS().sinks.end()) {
         auto chl = make_shared<vf::ChannelSink>(channelId);
         defaultProcessor->LinkHandler(*chl);
@@ -79,13 +83,13 @@ int32_t VFilter_Routine(uint32_t channelId, uint8_t *y, uint8_t *u, uint8_t *v, 
     cv::Mat frame = cv::Mat(height, width, CV_8UC3);
 
     //YUV420P->BGR24
-    I420ToBGR24Converter::Convert(y, u, v, frame.data, width, height);
+    I420ToBGR24Converter::Convert(y, stride_y, u, stride_u, v, stride_v, frame.data, width*3, width, height);
 
     //handle frame
     vf::CSMS().sinks[channelId]->HandleReceivedFrame(frame);
 
     //BGR24->YUV420P
-    BGR24ToI420Converter::Convert(y, u, v, frame.data, frame.cols, frame.rows);
+    BGR24ToI420Converter::Convert(frame.data, width*3, y, stride_y, u, stride_u, v, stride_v, width, height);
 
     return 0;
 }

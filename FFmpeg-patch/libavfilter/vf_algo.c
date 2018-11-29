@@ -16,8 +16,11 @@
 
 typedef int32_t (*PF_VFilter_Init)(void);
 typedef int32_t (*PF_VFilter_Destroy)(void);
-typedef int32_t (*PF_VFilter_Routine)(uint32_t channelId, uint8_t *y, uint8_t *u, uint8_t *v, uint32_t width,
-                                      uint32_t height);
+typedef int32_t(*PF_VFilter_Routine)(uint32_t channelId,
+                                     uint8_t *y, uint32_t stride_y,
+                                     uint8_t *u, uint32_t stride_u,
+                                     uint8_t *v, uint32_t stride_v,
+                                     uint32_t width, uint32_t height);
 
 static void *handle = NULL;
 static PF_VFilter_Init pf_VFilter_Init = NULL;
@@ -38,7 +41,11 @@ static int filter_frame(AVFilterLink *link, AVFrame *in) {
     // filter routine
     // YUV420P, y= avframe->data[0], u=avframe->data[1], v=avframe->data[2]
     // 传递ffmpeg默认的yuv420p格式到下层，不在ffmpeg中转成bgr24，是因为ffmpg的sws格式转换性能比较差，在下层使用libyuv转换
-    pf_VFilter_Routine(privCtx->cid, in->data[0], in->data[1], in->data[2], in->width, in->height);
+    pf_VFilter_Routine(privCtx->cid,
+                       in->data[0], in->linesize[0],
+                       in->data[1], in->linesize[1],
+                       in->data[2], in->linesize[2],
+                       in->width, in->height);
 
     return ff_filter_frame(outlink, in);
 }

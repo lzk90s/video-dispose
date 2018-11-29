@@ -3,6 +3,12 @@
 #include <cstdint>
 #include "libyuv.h"
 
+/*
+stride-跨距的解释
+跨距就是指图像中的一行图像数据所占的存储空间的长度，它是一个大于等于图像宽度的内存对齐的长度。这样每次以行为基准读取数据的时候就能内存对齐
+和ffmpeg相对应的就是AVFrame的linesize
+*/
+
 //RGB <-> BGR R和B互换
 class RGBConverter {
 public:
@@ -21,15 +27,11 @@ public:
 //RGB24转I420
 class BGR24ToI420Converter {
 public:
-    static void Convert(uint8_t *y, uint8_t *u, uint8_t *v, uint8_t *src, uint32_t width, uint32_t height) {
-        const uint8_t* src_rgb24 = src;
-        int src_stride_rgb24 = width * 3;
-        uint8_t* dst_y = y;
-        int dst_stride_y = width;
-        uint8_t* dst_u = u;
-        int dst_stride_u = width / 2;
-        uint8_t* dst_v = v;
-        int dst_stride_v = width / 2;
+    static void Convert(const uint8_t* src_rgb24, int src_stride_rgb24,
+                        uint8_t* dst_y, int dst_stride_y,
+                        uint8_t* dst_u, int dst_stride_u,
+                        uint8_t* dst_v, int dst_stride_v,
+                        int width, int height) {
         //libyuv虽然函数名是RGB24，实际测试下来是BGR24
         libyuv::RGB24ToI420(src_rgb24, src_stride_rgb24, dst_y, dst_stride_y, dst_u, dst_stride_u, dst_v, dst_stride_v, width,
                             height);
@@ -39,15 +41,11 @@ public:
 //I420转RGB24
 class I420ToBGR24Converter {
 public:
-    static void Convert(uint8_t *y, uint8_t *u, uint8_t *v, uint8_t *src, uint32_t width, uint32_t height) {
-        const uint8_t* src_y = y;
-        int src_stride_y = width;
-        const uint8_t* src_u = u;
-        int src_stride_u = width / 2;
-        const uint8_t* src_v = v;
-        int src_stride_v = width / 2;
-        uint8_t* dst_rgb24 = src;
-        int dst_stride_rgb24 = width * 3;
+    static void Convert(const uint8_t* src_y, int src_stride_y,
+                        const uint8_t* src_u, int src_stride_u,
+                        const uint8_t* src_v, int src_stride_v,
+                        uint8_t* dst_rgb24, int dst_stride_rgb24,
+                        int width, int height) {
         //libyuv虽然函数名是RGB24，实际测试下来，格式是BGR，详见下面的test
         libyuv::I420ToRGB24(src_y, src_stride_y, src_u, src_stride_u, src_v, src_stride_v, dst_rgb24, dst_stride_rgb24, width,
                             height);
@@ -82,12 +80,15 @@ void test() {
     //yuv420p的排列格式是: yyyyyyyy uu uu
     uint8_t *y, *u, *v;
     y = yuv.data;
+    stride_y = w;
     u = y + w * h;
+    stride_u = w / 2;
     v = u + w * h / 4;
+    stride_v = w / 2;
 
     //libyuv yuv420p->bgr24
     Mat dst(h, w, CV_8UC3);
-    I420ToBGR24Converter::Convert(y, u, v, dst.data, w, h);
+    I420ToBGR24Converter::Convert(y, stride_y, u, stride_u, v, stride_v, dst.data, w*3, w, h);
 
     //输出数据，发现是BGR24格式
     src = dst.data;
