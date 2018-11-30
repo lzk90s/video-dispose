@@ -38,6 +38,9 @@ static int filter_frame(AVFilterLink *link, AVFrame *in) {
     AVFilterLink *outlink = avctx->outputs[0];
     AlgoContext *privCtx = avctx->priv;
 
+    //make input frame writable
+    av_frame_make_writable(in);
+
     // filter routine
     // YUV420P, y= avframe->data[0], u=avframe->data[1], v=avframe->data[2]
     // 传递ffmpeg默认的yuv420p格式到下层，不在ffmpeg中转成bgr24，是因为ffmpg的sws格式转换性能比较差，在下层使用libyuv转换
