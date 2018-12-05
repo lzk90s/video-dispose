@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package algo.gosun_ext;
+
+option cc_generic_services = true;
+
+
+message ImgRecognizeRequest{
+    uint32 imageId =1;
+	bytes imageData = 2;
+	string pictureFormat =3;
+	string calcParam = 4;
+}
+
+message ImgRecognizeReply{
+	string data = 1;
+}
+
+//图片处理服务
+service ImgProcService{
+    rpc Recognize(ImgRecognizeRequest) returns (ImgRecognizeReply) {}
+}

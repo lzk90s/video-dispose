@@ -7,8 +7,10 @@ build:
   stage: build
   script:
     - "docker build -t ${REGISTRY_URL}/gosun/seemmo-algo-server:latest -f docker/seemmo_server/Dockerfile ."
+    - "docker build -t ${REGISTRY_URL}/gosun/gosun-ext-algo-server:latest -f docker/gosun_ext_server/Dockerfile ."
     - "docker build -t ${REGISTRY_URL}/gosun/video-dispose:latest -f docker/video-dispose/Dockerfile ."
     - "docker push ${REGISTRY_URL}/gosun/seemmo-algo-server:latest"
+    - "docker push ${REGISTRY_URL}/gosun/gosun-ext-algo-server:latest"
     - "docker push ${REGISTRY_URL}/gosun/video-dispose:latest"
   only:
     - master

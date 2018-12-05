@@ -1,0 +1,14 @@
+TOP_DIR=../../../
+
+MODULE_NAME=gosun_ext_algo_server
+MODULE_SUFFIX=
+
+INC =-I$(TOP_DIR) -I$(TOP_DIR)/thirdparty -I$(TOP_DIR)/common
+LIB =-L/usr/local/lib -lbrpc -lgflags -lprotobuf -lz -lleveldb -lpthread -ldl -lssl -lcrypto -lturbojpeg
+
+CXXFLAGS = $(INC) -std=c++11 -fPIC -Wall
+LDFLAGS = $(LIB)
+
+SRC_DIRS=server rpc
+
+include $(TOP_DIR)/makefiles/rule.mk

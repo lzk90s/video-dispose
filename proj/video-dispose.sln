@@ -15,6 +15,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "algo_stub", "algo_stub\algo
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "common", "common\common.vcxproj", "{1F92150B-85B1-4139-9297-88A3245D66AD}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gosun_ext_algo", "gosun_ext_algo\gosun_ext_algo.vcxproj", "{0802D30A-5558-41B6-BD38-1652EE383BBB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -63,6 +65,14 @@ Global
 		{1F92150B-85B1-4139-9297-88A3245D66AD}.Release|Win32.Build.0 = Release|Win32
 		{1F92150B-85B1-4139-9297-88A3245D66AD}.Release|x64.ActiveCfg = Release|x64
 		{1F92150B-85B1-4139-9297-88A3245D66AD}.Release|x64.Build.0 = Release|x64
+		{0802D30A-5558-41B6-BD38-1652EE383BBB}.Debug|Win32.ActiveCfg = Debug|Win32
+		{0802D30A-5558-41B6-BD38-1652EE383BBB}.Debug|Win32.Build.0 = Debug|Win32
+		{0802D30A-5558-41B6-BD38-1652EE383BBB}.Debug|x64.ActiveCfg = Debug|x64
+		{0802D30A-5558-41B6-BD38-1652EE383BBB}.Debug|x64.Build.0 = Debug|x64
+		{0802D30A-5558-41B6-BD38-1652EE383BBB}.Release|Win32.ActiveCfg = Release|Win32
+		{0802D30A-5558-41B6-BD38-1652EE383BBB}.Release|Win32.Build.0 = Release|Win32
+		{0802D30A-5558-41B6-BD38-1652EE383BBB}.Release|x64.ActiveCfg = Release|x64
+		{0802D30A-5558-41B6-BD38-1652EE383BBB}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

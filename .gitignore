@@ -13,3 +13,6 @@ thirdparty/brpc
 thirdparty
 docker/brpc_opencv_ffmpeg/package
 benchmark/tmp/
+docker/gosun_netlib_sdk/sdk/
+docker/gosun_sdk/sdk/
+docker/seemmo_sdk/sdk/

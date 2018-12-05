@@ -1,0 +1,16 @@
+TOP_DIR=../../../
+
+MODULE_NAME=libgosun_ext_wrapper
+MODULE_SUFFIX=.so
+
+
+INC =-I$(TOP_DIR) -I$(TOP_DIR)/thirdparty -I$(GOSUN_EXT_SDK_HOME)/include
+LIB =-L/usr/local/lib -L$(TOP_DIR) -L$(GOSUN_EXT_SDK_HOME)/face_libs -L$(OPENCV_HOME)/lib -lface_api -lpthread
+
+
+CXXFLAGS = $(INC) -std=c++11 -fPIC -Wall
+LDFLAGS = $(LIB)
+
+SRC_DIRS=wrapper
+
+include $(TOP_DIR)/makefiles/rule.mk
