@@ -16,7 +16,7 @@ DEFINE_int32(idle_timeout_s, -1, "Connection will be closed if there is no "
              "read/write operations during the last `idle_timeout_s'");
 
 //----------------algo params----------------
-DEFINE_string(base_dir, "../../", "the base dir");
+DEFINE_string(base_dir, "/root/seemmo_sdk", "the base dir");
 DEFINE_string(auth_server, "192.168.1.198:12821", "the address of auth server");
 DEFINE_int32(img_core_num, 20, "the number of image core");
 DEFINE_int32(video_core_num, 20, "the number of video core");

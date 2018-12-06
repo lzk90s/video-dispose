@@ -48,4 +48,5 @@ COPY --from=base_builder /root/seemmo_sdk /root/seemmo_sdk
 COPY --from=base_builder /usr/local/bin/seemmo_algo_server /usr/local/bin/
 COPY --from=base_builder /usr/local/lib/*.so /usr/local/lib/
     
-CMD ["seemmo_algo_server", "--base_dir=/root/seemmo_sdk"]    
+CMD [""]    
+ENTRYPOINT ["seemmo_algo_server"]

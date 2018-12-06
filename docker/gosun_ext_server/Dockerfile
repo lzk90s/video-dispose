@@ -51,5 +51,6 @@ ENV LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${GOSUN_EXT_SDK_HOME}/face_libs
 COPY --from=base_builder ${GOSUN_EXT_SDK_HOME} ${GOSUN_EXT_SDK_HOME}
 COPY --from=base_builder /usr/local/bin/gosun_ext_algo_server /usr/local/bin/
 COPY --from=base_builder /usr/local/lib/*.so /usr/local/lib/
-    
-CMD ["gosun_ext_algo_server"]      
+
+CMD [""]
+ENTRYPOINT ["gosun_ext_algo_server"]
