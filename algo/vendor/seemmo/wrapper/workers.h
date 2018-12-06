@@ -30,7 +30,7 @@ public:
         for (uint32_t i = 0; i < thrNum; i++) {
             shared_ptr<threadpool> w(
                 new threadpool(1,std::bind(&BusinessWorker::threadInitProc, this),
-                               std::bind(&BusinessWorker::threadFiniProc, this),true)
+                               std::bind(&BusinessWorker::threadFiniProc, this))
             );
             executors_.push_back(w);
         }

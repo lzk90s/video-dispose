@@ -30,7 +30,7 @@ public:
         for (uint32_t i = 0; i < thrNum; i++) {
             shared_ptr<threadpool> w(
                 new threadpool(1,std::bind(&BusinessWorker::threadInitProc, this),
-                               std::bind(&BusinessWorker::threadFiniProc, this),true)
+                               std::bind(&BusinessWorker::threadFiniProc, this))
             );
             executors_.push_back(w);
         }
@@ -75,13 +75,11 @@ private:
 
     void threadInitProc() {
         // sdk进程初始化
-        gosun_face_api_init();
         LOG_INFO("Succeed to init gosun face api thread, tid {}", getCurrentThreadId());
         cwStart_.countDown();
     }
 
     void threadFiniProc() {
-        gosun_face_api_deinit();
         LOG_INFO("Succeed to destroy gosun face api thread, tid {}", getCurrentThreadId());
         cwStop_.countDown();
     }

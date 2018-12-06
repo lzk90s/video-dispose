@@ -32,8 +32,9 @@ public:
         uint32_t authType,
         uint32_t hwDevId
     ) {
-        LOG_INFO("Init gosun sdk, basedir={}, imgThrNum={}, videoThrNum={}, imgCoreNum={}, videoCoreNum={}, authServer={}, authType={}, hwDevId={}",
-                 basedir, imgThrNum, videoThrNum, imgCoreNum, videoCoreNum, authServer, authType, hwDevId);
+        LOG_INFO("Init gosun sdk, basedir={}, imgThrNum={}, hwDevId={}", basedir, imgThrNum, hwDevId);
+
+        gosun_face_api_init(imgThrNum);
 
         LOG_INFO("Init gosun sdk succeed");
 
@@ -46,10 +47,13 @@ public:
 
     void Destroy() {
         LOG_INFO("Release resources");
+
         decRecWorker->Close();
 
         //等待各个worker退出完成
         decRecWorker->WaitStopOk();
+
+        gosun_face_api_deinit();
 
         LOG_INFO("Destroy gosun sdk succeed");
     }
