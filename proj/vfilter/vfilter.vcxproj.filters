@@ -115,5 +115,8 @@
     <ClInclude Include="..\..\vfilter\core\channel_sink_mng.h">
       <Filter>源文件\core</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\vfilter\core\watchdog.h">
+      <Filter>源文件\core</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

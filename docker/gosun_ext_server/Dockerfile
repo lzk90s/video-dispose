@@ -52,5 +52,4 @@ COPY --from=base_builder ${GOSUN_EXT_SDK_HOME} ${GOSUN_EXT_SDK_HOME}
 COPY --from=base_builder /usr/local/bin/gosun_ext_algo_server /usr/local/bin/
 COPY --from=base_builder /usr/local/lib/*.so /usr/local/lib/
 
-CMD [""]
-ENTRYPOINT ["gosun_ext_algo_server"]
+CMD ["gosun_ext_algo_server"]

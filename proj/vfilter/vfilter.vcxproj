@@ -95,6 +95,7 @@
     <ClInclude Include="..\..\vfilter\core\frame_picker.h" />
     <ClInclude Include="..\..\vfilter\core\object_sink.h" />
     <ClInclude Include="..\..\vfilter\core\channel_sink.h" />
+    <ClInclude Include="..\..\vfilter\core\watchdog.h" />
     <ClInclude Include="..\..\vfilter\mixer\face_mixer.h" />
     <ClInclude Include="..\..\vfilter\notifier\bike_notifier.h" />
     <ClInclude Include="..\..\vfilter\notifier\face_notifier.h" />
