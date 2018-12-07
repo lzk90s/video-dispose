@@ -9,25 +9,45 @@ namespace vf {
 
 class DefaultAlgoProcessor : public AbstractAlgoProcessor {
 public:
-    DefaultAlgoProcessor() : recogWorker_(1) {
-        string vendor = G_CFG().enableSeemmoAlgo ? "seemmo" : "null";
-        algo_ = algo::AlgoStubFactory::NewAlgoStub(vendor);
+    DefaultAlgoProcessor()
+        : AbstractAlgoProcessor("seemmo"),
+          algo_(algo::AlgoStubFactory::NewAlgoStub("seemmo")),
+          worker_(1),
+          recogWorker_(1) {
     }
 
-protected:
-
-    int32_t algoRoutine(ChannelSink &chl, uint64_t frameId, cv::Mat &frame) override {
-        return trailAndRecognize(chl, frameId, frame);
+    ~DefaultAlgoProcessor() {
+        waitForComplete();
     }
 
-    int32_t algoRoutineEnd(ChannelSink &chl) override {
-        return algo_->TrailEnd(chl.GetChannelId());
+    void OnFrame(shared_ptr<ChannelSink> chl, cv::Mat &frame) override {
+        uint64_t frameId = chl->frameCache.AllocateEmptyFrame();
+        worker_.commit(std::bind(&DefaultAlgoProcessor::algoRoutine, this, chl, frameId,frame));
+    }
+
+    void OnFrameEnd(shared_ptr<ChannelSink> chl) override {
+        waitForComplete();
+        algo_->TrailEnd(chl->GetChannelId());
     }
 
 private:
+    void waitForComplete() {
+        while (true) {
+            if ((worker_.taskCount() == 0) && (recogWorker_.taskCount() == 0)) {
+                break;
+            }
+            LOG_INFO("Waiting for uncompleted tasks, count ({}, {})", worker_.taskCount(), recogWorker_.taskCount());
+            std::this_thread::sleep_for(std::chrono::milliseconds(500));
+        }
+    }
+
+    int32_t algoRoutine(shared_ptr<ChannelSink> chl, uint64_t frameId, cv::Mat &frame) {
+        chl->watchdog.Feed();
+        return trailAndRecognize(chl, frameId, frame);
+    }
 
     //跟踪+识别
-    int32_t trailAndRecognize(ChannelSink &chl, uint64_t frameId, cv::Mat &frame) {
+    int32_t trailAndRecognize(shared_ptr<ChannelSink> chl, uint64_t frameId, cv::Mat &frame) {
         int32_t ret = 0;
         uint32_t width = frame.cols;
         uint32_t height = frame.rows;
@@ -42,7 +62,7 @@ private:
         //检测
         ImageResult imageResult;
         FilterResult filterResult;
-        ret = algo_->Trail(chl.GetChannelId(), frameId, frame.data, width, height, trailParam, imageResult, filterResult);
+        ret = algo_->Trail(chl->GetChannelId(), frameId, frame.data, width, height, trailParam, imageResult, filterResult);
         if (0 != ret) {
             LOG_ERROR("Trail error, ret {}", ret);
             return ret;
@@ -60,7 +80,7 @@ private:
         return 0;
     }
 
-    void saveImage(ChannelSink &chl, uint64_t frameId, cv::Mat &frame, ImageResult &imageResult) {
+    void saveImage(shared_ptr<ChannelSink> chl, uint64_t frameId, cv::Mat &frame, ImageResult &imageResult) {
         //根据检测结果抠图
         FrameCache::ObjectImageMap objectImages;
         for (auto &p : imageResult.bikes) {
@@ -94,18 +114,17 @@ private:
 
         //保存目标抠图，后续的择优识别需要用到
         if (!objectImages.empty()) {
-            chl.frameCache.SaveAllObjectImageInFrame(frameId, objectImages);
+            chl->frameCache.SaveAllObjectImageInFrame(frameId, objectImages);
         }
     }
 
     //检测到目标
-    void asyncRecognizeObject(ChannelSink &chl, uint64_t frameId, cv::Mat &frame, ImageResult &imageResult) {
-        ChannelSink *chlPtr = &chl;
+    void asyncRecognizeObject(shared_ptr<ChannelSink> chl, uint64_t frameId, cv::Mat &frame, ImageResult &imageResult) {
         recogWorker_.commit([=]() {
             cv::Mat f = frame;
             algo::RecogParam recParam;
 
-            auto bikeObjs = chlPtr->bikeObjectSink.OnDetectedObjects(imageResult.bikes);
+            auto bikeObjs = chl->bikeObjectSink.OnDetectedObjects(imageResult.bikes);
             for (auto &p : bikeObjs) {
                 RecogParam::ObjLocation loc;
                 loc.type = p.type;
@@ -114,7 +133,7 @@ private:
                 loc.guid = p.guid;
                 recParam.locations.push_back(loc);
             }
-            auto vehicleObjs = chlPtr->vehicleObjectSink.OnDetectedObjects(imageResult.vehicles);
+            auto vehicleObjs = chl->vehicleObjectSink.OnDetectedObjects(imageResult.vehicles);
             for (auto &p : vehicleObjs) {
                 RecogParam::ObjLocation loc;
                 loc.type = p.type;
@@ -123,7 +142,7 @@ private:
                 loc.guid = p.guid;
                 recParam.locations.push_back(loc);
             }
-            auto personObjs = chlPtr->personObjectSink.OnDetectedObjects(imageResult.pedestrains);
+            auto personObjs = chl->personObjectSink.OnDetectedObjects(imageResult.pedestrains);
             for (auto &p : personObjs) {
                 RecogParam::ObjLocation loc;
                 loc.type = p.type;
@@ -138,7 +157,7 @@ private:
             }
 
             ImageResult recImageResult;
-            int32_t ret = algo_->Recognize(chlPtr->GetChannelId(), frame.data, frame.cols, frame.rows, recParam, recImageResult);
+            int32_t ret = algo_->Recognize(chl->GetChannelId(), frame.data, frame.cols, frame.rows, recParam, recImageResult);
             if (0 != ret) {
                 LOG_ERROR("Recognize error, ret {}", ret);
                 return;
@@ -163,18 +182,18 @@ private:
                 recImageResult.pedestrains[idx].guid = (*itr).guid;
             }
 
-            chlPtr->vehicleObjectSink.OnRecognizedObjects(recImageResult.vehicles);
-            chlPtr->bikeObjectSink.OnRecognizedObjects(recImageResult.bikes);
-            chlPtr->personObjectSink.OnRecognizedObjects(recImageResult.pedestrains);
+            chl->vehicleObjectSink.OnRecognizedObjects(recImageResult.vehicles);
+            chl->bikeObjectSink.OnRecognizedObjects(recImageResult.bikes);
+            chl->personObjectSink.OnRecognizedObjects(recImageResult.pedestrains);
         });
     }
 
-    void asyncRecognizeFilterObject(ChannelSink &chl, uint64_t frameId, FilterResult &filterResult) {
-        ChannelSink *chlPtr = &chl;
+    void asyncRecognizeFilterObject(shared_ptr<ChannelSink> chl, uint64_t frameId, FilterResult &filterResult) {
+
         recogWorker_.commit([=]() {
             for (auto &p : filterResult.bikes) {
                 bool exist = false;
-                cv::Mat img = chlPtr->frameCache.GetObjectImageInFrame(p.frameId, p.guid, exist);
+                cv::Mat img = chl->frameCache.GetObjectImageInFrame(p.frameId, p.guid, exist);
                 if (!exist) {
                     LOG_WARN("The saved object {} in frame {} not exist", p.guid, p.frameId);
                     continue;
@@ -187,12 +206,12 @@ private:
                 loc.trail = p.trail;
                 loc.detect = { 0, 0, img.cols, img.rows };
                 recParam.locations.push_back(loc);
-                recognizeFilterObjectInner(*chlPtr, img, recParam);
+                recognizeFilterObjectInner(chl, img, recParam);
             }
 
             for (auto &p : filterResult.vehicles) {
                 bool exist = false;
-                cv::Mat img = chlPtr->frameCache.GetObjectImageInFrame(p.frameId, p.guid, exist);
+                cv::Mat img = chl->frameCache.GetObjectImageInFrame(p.frameId, p.guid, exist);
                 if (!exist) {
                     LOG_WARN("The saved object {} in frame {} not exist", p.guid, p.frameId);
                     continue;
@@ -205,12 +224,12 @@ private:
                 loc.trail = p.trail;
                 loc.detect = { 0, 0, img.cols, img.rows };
                 recParam.locations.push_back(loc);
-                recognizeFilterObjectInner(*chlPtr, img, recParam);
+                recognizeFilterObjectInner(chl, img, recParam);
             }
 
             for (auto &p : filterResult.pedestrains) {
                 bool exist = false;
-                cv::Mat img = chlPtr->frameCache.GetObjectImageInFrame(p.frameId, p.guid, exist);
+                cv::Mat img = chl->frameCache.GetObjectImageInFrame(p.frameId, p.guid, exist);
                 if (!exist) {
                     LOG_WARN("The saved object {} in frame {} not exist", p.guid, p.frameId);
                     continue;
@@ -223,36 +242,36 @@ private:
                 loc.trail = p.trail;
                 loc.detect = { 0, 0, img.cols, img.rows };
                 recParam.locations.push_back(loc);
-                recognizeFilterObjectInner(*chlPtr, img, recParam);
+                recognizeFilterObjectInner(chl, img, recParam);
             }
 
             //把不需要的帧手动释放掉
             for (auto &fid : filterResult.releasedFrames) {
-                chlPtr->frameCache.ManualRelase(fid);
+                chl->frameCache.ManualRelase(fid);
             }
         });
     }
 
-    int32_t recognizeFilterObjectInner(ChannelSink &chl, cv::Mat &frame, RecogParam &recParam) {
+    int32_t recognizeFilterObjectInner(shared_ptr<ChannelSink> chl, cv::Mat &frame, RecogParam &recParam) {
         if (recParam.locations.empty()) {
             return 0;
         }
 
         ImageResult imageResult;
-        int32_t ret = algo_->Recognize(chl.GetChannelId(), frame.data, frame.cols, frame.rows, recParam, imageResult);
+        int32_t ret = algo_->Recognize(chl->GetChannelId(), frame.data, frame.cols, frame.rows, recParam, imageResult);
         if (0 != ret) {
             LOG_ERROR("Recognize error, ret {}", ret);
             return ret;
         }
 
         for (auto &p : imageResult.bikes) {
-            chl.bikeNotifier.OnRecognizedObject(chl.GetChannelId(), frame, p);
+            chl->bikeNotifier.OnRecognizedObject(chl->GetChannelId(), frame, p);
         }
         for (auto &p : imageResult.pedestrains) {
-            chl.personNotifier.OnRecognizedObject(chl.GetChannelId(), frame, p);
+            chl->personNotifier.OnRecognizedObject(chl->GetChannelId(), frame, p);
         }
         for (auto &p : imageResult.vehicles) {
-            chl.vehicleNotifier.OnRecognizedObject(chl.GetChannelId(), frame, p);
+            chl->vehicleNotifier.OnRecognizedObject(chl->GetChannelId(), frame, p);
         }
 
         return 0;
@@ -260,6 +279,7 @@ private:
 
 private:
     shared_ptr<algo::AlgoStub> algo_;
+    threadpool worker_;
     threadpool recogWorker_;
 };
 

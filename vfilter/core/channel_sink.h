@@ -7,6 +7,7 @@
 #include "vfilter/core/object_sink.h"
 #include "vfilter/core/frame_picker.h"
 #include "vfilter/core/frame_cache.h"
+#include "vfilter/core/watchdog.h"
 
 #include "vfilter/mixer/bike_mixer.h"
 #include "vfilter/mixer/person_mixer.h"
@@ -25,8 +26,6 @@ namespace vf {
 //通道池（1个通道一个对象）
 class ChannelSink {
 public:
-    using OnFrameHandler = function<void(ChannelSink &chl, cv::Mat &frame)>;
-    using OnFrameEndHandler = function<void(ChannelSink &chl)>;
 
     //object sink
     VehicleObjectSink vehicleObjectSink;
@@ -49,44 +48,26 @@ public:
     //frame cache
     FrameCache frameCache;
 
+    //watchdog
+    Watchdog watchdog;
+
 public:
     ChannelSink(uint32_t channelId) {
         this->channelId_ = channelId;
+        watchdog.Watch([=]() {
+            cout << "** OOPS! " << channelId_ << " die abnormally **" << endl;
+            _exit(5);
+        });
     }
 
     ~ChannelSink() {
-        for (auto &h : onFrameEndHandlers_) {
-            h(*this);
-        }
-    }
-
-    // 处理接收到的帧
-    int32_t HandleReceivedFrame(cv::Mat &frame) {
-        if (framePicker_.NeedPickFrame()) {
-            cv::Mat cloneFrame = frame.clone();
-            for (auto &h : onFrameHandlers_) {
-                h(*this, cloneFrame);
-            }
-        }
-        mixFrame(frame);
-        return 0;
-    }
-
-    void RegOnFrameHander(OnFrameHandler h) {
-        this->onFrameHandlers_.push_back(h);
-    }
-
-    void RegOnFrameEndHandler(OnFrameEndHandler h) {
-        this->onFrameEndHandlers_.push_back(h);
     }
 
     uint32_t GetChannelId() {
         return this->channelId_;
     }
 
-protected:
-
-    void mixFrame(cv::Mat &frame) {
+    void MixFrame(cv::Mat &frame) {
         vehicleMixer.MixFrame(frame, vehicleObjectSink);
         personMixer.MixFrame(frame, personObjectSink);
         bikeMixer.MixFrame(frame, bikeObjectSink);
@@ -101,11 +82,6 @@ protected:
 private:
     //channel id
     uint32_t channelId_;
-    //frame picker
-    FramePicker framePicker_;
-    //callback
-    vector<OnFrameHandler> onFrameHandlers_;
-    vector<OnFrameEndHandler> onFrameEndHandlers_;
 };
 
 

@@ -10,19 +10,42 @@ namespace vf {
 //人脸的单独出来，是因为人脸的效果还需要优化，避免影响其他算法的效果
 class FaceAlgoProcessor : public AbstractAlgoProcessor {
 public:
-    FaceAlgoProcessor() {
-        string vendor = G_CFG().enableGosunAlgo ? "gosun" : "null";
-        algo_ = algo::AlgoStubFactory::NewAlgoStub(vendor);
+    FaceAlgoProcessor()
+        : AbstractAlgoProcessor("face"),
+          algo_(algo::AlgoStubFactory::NewAlgoStub("gosun")),
+          worker_(1) {
     }
 
-protected:
+    ~FaceAlgoProcessor() {
+        waitForComplete();
+    }
 
-    int32_t algoRoutine(ChannelSink &chl, uint64_t frameId, cv::Mat &frame) override {
-        return trailAndRecognize(chl, frameId, frame);
+    void OnFrame(shared_ptr<ChannelSink> chl, cv::Mat &frame) override {
+        uint64_t frameId = chl->frameCache.AllocateEmptyFrame();
+        worker_.commit(std::bind(&FaceAlgoProcessor::algoRoutine, this, chl, frameId, frame));
+    }
+
+    void OnFrameEnd(shared_ptr<ChannelSink> chl) override {
+        waitForComplete();
     }
 
 private:
-    int32_t trailAndRecognize(ChannelSink &chl, uint64_t frameId, cv::Mat &frame) {
+    void waitForComplete() {
+        while (true) {
+            if ((worker_.taskCount() == 0)) {
+                break;
+            }
+            LOG_INFO("Waiting for uncompleted tasks, count ({})", worker_.taskCount());
+            std::this_thread::sleep_for(std::chrono::milliseconds(500));
+        }
+    }
+
+    int32_t algoRoutine(shared_ptr<ChannelSink> chl, uint64_t frameId, cv::Mat &frame) {
+        chl->watchdog.Feed();
+        return trailAndRecognize(chl, frameId, frame);
+    }
+
+    int32_t trailAndRecognize(shared_ptr<ChannelSink> chl, uint64_t frameId, cv::Mat &frame) {
         int32_t ret = 0;
         const uint8_t *bgr24 = frame.data;
         uint32_t width = frame.cols;
@@ -37,7 +60,7 @@ private:
 
         ImageResult imageResult;
         FilterResult filterResult;
-        ret = algo_->Trail(chl.GetChannelId(), frameId, bgr24, width, height, trailParam, imageResult, filterResult);
+        ret = algo_->Trail(chl->GetChannelId(), frameId, bgr24, width, height, trailParam, imageResult, filterResult);
         if (0 != ret) {
             LOG_ERROR("Face trail error, ret {}", ret);
             return ret;
@@ -45,18 +68,19 @@ private:
 
         for (auto &p : imageResult.faces) {
             //针对人脸特殊处理，目前人脸算法中没有去重，这样简单处理
-            if (!chl.faceObjectSink.ObjectExist(p.guid)) {
+            if (!chl->faceObjectSink.ObjectExist(p.guid)) {
                 LOG_INFO("New face object {}", p.guid);
-                chl.faceNotifier.OnRecognizedObject(chl.GetChannelId(), frame, p);
+                chl->faceNotifier.OnRecognizedObject(chl->GetChannelId(), frame, p);
             }
         }
-        chl.faceObjectSink.OnDetectedObjects(imageResult.faces);
+        chl->faceObjectSink.OnDetectedObjects(imageResult.faces);
 
         return 0;
     }
 
 private:
     shared_ptr<algo::AlgoStub> algo_;
+    threadpool worker_;
 };
 
 }

@@ -15,20 +15,20 @@
 namespace std {
 
 
-//Ïß³Ì³Ø×î´óÈİÁ¿,Ó¦¾¡Á¿ÉèĞ¡Ò»µã
+//çº¿ç¨‹æ± æœ€å¤§å®¹é‡,åº”å°½é‡è®¾å°ä¸€ç‚¹
 #define  THREADPOOL_MAX_NUM 64
 //#define  THREADPOOL_AUTO_GROW
 
-//Ïß³Ì³Ø,¿ÉÒÔÌá½»±ä²Îº¯Êı»òlamba±í´ïÊ½µÄÄäÃûº¯ÊıÖ´ĞĞ,¿ÉÒÔ»ñÈ¡Ö´ĞĞ·µ»ØÖµ
-//²»Ö±½ÓÖ§³ÖÀà³ÉÔ±º¯Êı, Ö§³ÖÀà¾²Ì¬³ÉÔ±º¯Êı»òÈ«¾Öº¯Êı,Opteron()º¯ÊıµÈ
+//çº¿ç¨‹æ± ,å¯ä»¥æäº¤å˜å‚å‡½æ•°æˆ–lambaè¡¨è¾¾å¼çš„åŒ¿åå‡½æ•°æ‰§è¡Œ,å¯ä»¥è·å–æ‰§è¡Œè¿”å›å€¼
+//ä¸ç›´æ¥æ”¯æŒç±»æˆå‘˜å‡½æ•°, æ”¯æŒç±»é™æ€æˆå‘˜å‡½æ•°æˆ–å…¨å±€å‡½æ•°,Opteron()å‡½æ•°ç­‰
 class threadpool {
-    using Task = function<void()>;  //¶¨ÒåÀàĞÍ
-    vector<thread> _pool;     //Ïß³Ì³Ø
-    queue<Task> _tasks;            //ÈÎÎñ¶ÓÁĞ
-    mutex _lock;                   //Í¬²½
-    condition_variable _task_cv;   //Ìõ¼ş×èÈû
-    atomic<bool> _run{ true };     //Ïß³Ì³ØÊÇ·ñÖ´ĞĞ
-    atomic<int>  _idlThrNum{ 0 };  //¿ÕÏĞÏß³ÌÊıÁ¿
+    using Task = function<void()>;  //å®šä¹‰ç±»å‹
+    vector<thread> _pool;     //çº¿ç¨‹æ± 
+    queue<Task> _tasks;            //ä»»åŠ¡é˜Ÿåˆ—
+    mutex _lock;                   //åŒæ­¥
+    condition_variable _task_cv;   //æ¡ä»¶é˜»å¡
+    atomic<bool> _run{ true };     //çº¿ç¨‹æ± æ˜¯å¦æ‰§è¡Œ
+    atomic<int>  _idlThrNum{ 0 };  //ç©ºé—²çº¿ç¨‹æ•°é‡
     bool _detachable;
 
     using thr_oncreate_cb = function<void()>;
@@ -53,23 +53,23 @@ public:
 
     inline void reset() {
         _run = false;
-        _task_cv.notify_all(); // »½ĞÑËùÓĞÏß³ÌÖ´ĞĞ
+        _task_cv.notify_all(); // å”¤é†’æ‰€æœ‰çº¿ç¨‹æ‰§è¡Œ
         for (thread &thread : _pool) {
             if (_detachable) {
-                thread.detach(); // ÈÃÏß³Ì¡°×ÔÉú×ÔÃğ¡±
+                thread.detach(); // è®©çº¿ç¨‹â€œè‡ªç”Ÿè‡ªç­â€
             }
             if (thread.joinable()) {
-                thread.join();    // µÈ´ıÈÎÎñ½áÊø£¬ Ç°Ìá£ºÏß³ÌÒ»¶¨»áÖ´ĞĞÍê
+                thread.join();    // ç­‰å¾…ä»»åŠ¡ç»“æŸï¼Œ å‰æï¼šçº¿ç¨‹ä¸€å®šä¼šæ‰§è¡Œå®Œ
             }
         }
     }
 
 public:
-    // Ìá½»Ò»¸öÈÎÎñ
-    // µ÷ÓÃ.get()»ñÈ¡·µ»ØÖµ»áµÈ´ıÈÎÎñÖ´ĞĞÍê,»ñÈ¡·µ»ØÖµ
-    // ÓĞÁ½ÖÖ·½·¨¿ÉÒÔÊµÏÖµ÷ÓÃÀà³ÉÔ±£¬
-    // Ò»ÖÖÊÇÊ¹ÓÃ   bind£º .commit(std::bind(&Dog::sayHello, &dog));
-    // Ò»ÖÖÊÇÓÃ   mem_fn£º .commit(std::mem_fn(&Dog::sayHello), this)
+    // æäº¤ä¸€ä¸ªä»»åŠ¡
+    // è°ƒç”¨.get()è·å–è¿”å›å€¼ä¼šç­‰å¾…ä»»åŠ¡æ‰§è¡Œå®Œ,è·å–è¿”å›å€¼
+    // æœ‰ä¸¤ç§æ–¹æ³•å¯ä»¥å®ç°è°ƒç”¨ç±»æˆå‘˜ï¼Œ
+    // ä¸€ç§æ˜¯ä½¿ç”¨   bindï¼š .commit(std::bind(&Dog::sayHello, &dog));
+    // ä¸€ç§æ˜¯ç”¨   mem_fnï¼š .commit(std::mem_fn(&Dog::sayHello), this)
     template<class F, class... Args>
     auto commit(F &&f, Args &&... args) ->future<decltype(f(args...))> {
         if (!_run) {  // stoped ??
@@ -77,15 +77,15 @@ public:
         }
 
         using RetType = decltype(f(
-                                     args...)); // typename std::result_of<F(Args...)>::type, º¯Êı f µÄ·µ»ØÖµÀàĞÍ
+                                     args...)); // typename std::result_of<F(Args...)>::type, å‡½æ•° f çš„è¿”å›å€¼ç±»å‹
         auto task = make_shared<packaged_task<RetType()>>(
                         bind(forward<F>(f), forward<Args>(args)...)
-                    ); // °Ñº¯ÊıÈë¿Ú¼°²ÎÊı,´ò°ü(°ó¶¨)
+                    ); // æŠŠå‡½æ•°å…¥å£åŠå‚æ•°,æ‰“åŒ…(ç»‘å®š)
         future<RetType> future = task->get_future();
         {
-            // Ìí¼ÓÈÎÎñµ½¶ÓÁĞ
-            lock_guard<mutex> lock{ _lock };//¶Ôµ±Ç°¿éµÄÓï¾ä¼ÓËø  lock_guard ÊÇ mutex µÄ stack ·â×°Àà£¬¹¹ÔìµÄÊ±ºò lock()£¬Îö¹¹µÄÊ±ºò unlock()
-            _tasks.emplace([task]() { // push(Task{...}) ·Åµ½¶ÓÁĞºóÃæ
+            // æ·»åŠ ä»»åŠ¡åˆ°é˜Ÿåˆ—
+            lock_guard<mutex> lock{ _lock };//å¯¹å½“å‰å—çš„è¯­å¥åŠ é”  lock_guard æ˜¯ mutex çš„ stack å°è£…ç±»ï¼Œæ„é€ çš„æ—¶å€™ lock()ï¼Œææ„çš„æ—¶å€™ unlock()
+            _tasks.emplace([task]() { // push(Task{...}) æ”¾åˆ°é˜Ÿåˆ—åé¢
                 (*task)();
             });
         }
@@ -94,46 +94,51 @@ public:
             addThread(1);
         }
 #endif // !THREADPOOL_AUTO_GROW
-        _task_cv.notify_one(); // »½ĞÑÒ»¸öÏß³ÌÖ´ĞĞ
+        _task_cv.notify_one(); // å”¤é†’ä¸€ä¸ªçº¿ç¨‹æ‰§è¡Œ
 
         return future;
     }
 
-    //¿ÕÏĞÏß³ÌÊıÁ¿
+    int taskCount() {
+        lock_guard<mutex> lock{ _lock };
+        return _tasks.size();
+    }
+
+    //ç©ºé—²çº¿ç¨‹æ•°é‡
     int idlCount() {
         return _idlThrNum;
     }
-    //Ïß³ÌÊıÁ¿
+    //çº¿ç¨‹æ•°é‡
     int thrCount() {
         return _pool.size();
     }
 #ifndef THREADPOOL_AUTO_GROW
 private:
 #endif // !THREADPOOL_AUTO_GROW
-    //Ìí¼ÓÖ¸¶¨ÊıÁ¿µÄÏß³Ì
+    //æ·»åŠ æŒ‡å®šæ•°é‡çš„çº¿ç¨‹
     void addThread(unsigned short size) {
         for (; _pool.size() < THREADPOOL_MAX_NUM && size > 0; --size) {
-            //Ôö¼ÓÏß³ÌÊıÁ¿,µ«²»³¬¹ı Ô¤¶¨ÒåÊıÁ¿ THREADPOOL_MAX_NUM
-            _pool.emplace_back([this] { //¹¤×÷Ïß³Ìº¯Êı
+            //å¢åŠ çº¿ç¨‹æ•°é‡,ä½†ä¸è¶…è¿‡ é¢„å®šä¹‰æ•°é‡ THREADPOOL_MAX_NUM
+            _pool.emplace_back([this] { //å·¥ä½œçº¿ç¨‹å‡½æ•°
                 if (_oncreate_cb) {
                     _oncreate_cb();
                 }
                 while (_run) {
-                    Task task; // »ñÈ¡Ò»¸ö´ıÖ´ĞĞµÄ task
+                    Task task; // è·å–ä¸€ä¸ªå¾…æ‰§è¡Œçš„ task
                     {
-                        // unique_lock Ïà±È lock_guard µÄºÃ´¦ÊÇ£º¿ÉÒÔËæÊ± unlock() ºÍ lock()
+                        // unique_lock ç›¸æ¯” lock_guard çš„å¥½å¤„æ˜¯ï¼šå¯ä»¥éšæ—¶ unlock() å’Œ lock()
                         unique_lock<mutex> lock{ _lock };
                         _task_cv.wait(lock, [this] {
                             return !_run || !_tasks.empty();
-                        }); // wait Ö±µ½ÓĞ task
+                        }); // wait ç›´åˆ°æœ‰ task
                         if (!_run && _tasks.empty()) {
                             break;
                         }
-                        task = move(_tasks.front()); // °´ÏÈ½øÏÈ³ö´Ó¶ÓÁĞÈ¡Ò»¸ö task
+                        task = move(_tasks.front()); // æŒ‰å…ˆè¿›å…ˆå‡ºä»é˜Ÿåˆ—å–ä¸€ä¸ª task
                         _tasks.pop();
                     }
                     _idlThrNum--;
-                    task();//Ö´ĞĞÈÎÎñ
+                    task();//æ‰§è¡Œä»»åŠ¡
                     _idlThrNum++;
                 }
                 if (_ondestroy_cb) {

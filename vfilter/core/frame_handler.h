@@ -10,9 +10,9 @@ namespace vf {
 
 class FrameHandler {
 public:
-    virtual void OnFrame(ChannelSink &chl, cv::Mat &frame) = 0;
+    virtual void OnFrame(shared_ptr<ChannelSink> chl, cv::Mat &frame) = 0;
 
-    virtual void OnFrameEnd(ChannelSink &chl) = 0;
+    virtual void OnFrameEnd(shared_ptr<ChannelSink> chl) = 0;
 };
 
 }
