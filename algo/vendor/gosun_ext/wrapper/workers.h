@@ -21,15 +21,15 @@ namespace gosun_ext {
 //业务worker基类
 class BusinessWorker {
 public:
-    BusinessWorker(uint32_t gpuDevId, uint32_t algoThrType, uint32_t thrNum)
-        : thrNum_(thrNum),
-          cwStart_(thrNum_),
-          cwStop_(thrNum_),
+    BusinessWorker(uint32_t gpuDevId, uint32_t algoThrType, uint32_t thrGroupNum, uint32_t thrNumEachGroup)
+        : thrGroupNum_(thrGroupNum),
+          cwStart_(thrGroupNum*thrNumEachGroup),
+          cwStop_(thrGroupNum*thrNumEachGroup),
           gpuDevId_(gpuDevId),
           algoThrType_(algoThrType) {
-        for (uint32_t i = 0; i < thrNum; i++) {
+        for (uint32_t i = 0; i < thrGroupNum; i++) {
             shared_ptr<threadpool> w(
-                new threadpool(1,std::bind(&BusinessWorker::threadInitProc, this),
+                new threadpool(thrNumEachGroup,std::bind(&BusinessWorker::threadInitProc, this),
                                std::bind(&BusinessWorker::threadFiniProc, this))
             );
             executors_.push_back(w);
@@ -52,15 +52,15 @@ public:
         cwStop_.wait();
     }
 
-    shared_ptr<threadpool> ChooseExecutor(int32_t seed) {
+    shared_ptr<threadpool> SelectExecutorGroup(int32_t seed) {
         uint32_t idx = 0;
         if (seed < 0) {
             //seed小于0时，随机选取一个
             auto t = std::chrono::time_point_cast<std::chrono::milliseconds>
                      (std::chrono::steady_clock::now()).time_since_epoch().count();
-            idx = t % thrNum_;
+            idx = t % thrGroupNum_;
         } else {
-            idx = seed % thrNum_;
+            idx = seed % thrGroupNum_;
         }
         return executors_[idx];
     }
@@ -85,7 +85,7 @@ private:
     }
 
 protected:
-    int32_t thrNum_;
+    uint32_t thrGroupNum_;
     vector<shared_ptr<threadpool>> executors_;
     CountDownLatch cwStart_;
     CountDownLatch cwStop_;
@@ -97,7 +97,7 @@ protected:
 class DetectRecognizeWorker : public BusinessWorker {
 public:
     DetectRecognizeWorker(uint32_t gpuDevId, uint32_t thrNum)
-        : BusinessWorker(gpuDevId, 3, thrNum) {
+        : BusinessWorker(gpuDevId, 3, 1, thrNum) {
     }
 
     future<int32_t> CommitAsyncTask(
@@ -108,7 +108,7 @@ public:
         char *jsonRsp,
         uint32_t *rspLen
     ) {
-        return ChooseExecutor(-1)->commit(detectAndRecog, bgr24, width, height, param, jsonRsp, rspLen);
+        return SelectExecutorGroup(-1)->commit(detectAndRecog, bgr24, width, height, param, jsonRsp, rspLen);
     }
 
 private:

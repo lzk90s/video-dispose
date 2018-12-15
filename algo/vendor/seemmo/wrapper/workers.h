@@ -21,15 +21,15 @@ namespace seemmo {
 //业务worker基类
 class BusinessWorker {
 public:
-    BusinessWorker(uint32_t gpuDevId, uint32_t algoThrType, uint32_t thrNum)
-        : thrNum_(thrNum),
-          cwStart_(thrNum_),
-          cwStop_(thrNum_),
+    BusinessWorker(uint32_t gpuDevId, uint32_t algoThrType, uint32_t thrGroupNum, uint32_t thrNumEachGroup)
+        : thrGroupNum_(thrGroupNum),
+          cwStart_(thrGroupNum*thrNumEachGroup),
+          cwStop_(thrGroupNum*thrNumEachGroup),
           gpuDevId_(gpuDevId),
           algoThrType_(algoThrType) {
-        for (uint32_t i = 0; i < thrNum; i++) {
+        for (uint32_t i = 0; i < thrGroupNum; i++) {
             shared_ptr<threadpool> w(
-                new threadpool(1,std::bind(&BusinessWorker::threadInitProc, this),
+                new threadpool(thrNumEachGroup, std::bind(&BusinessWorker::threadInitProc, this),
                                std::bind(&BusinessWorker::threadFiniProc, this))
             );
             executors_.push_back(w);
@@ -52,15 +52,16 @@ public:
         cwStop_.wait();
     }
 
-    shared_ptr<threadpool> ChooseExecutor(int32_t seed) {
+    //选取一个执行组
+    shared_ptr<threadpool> SelectExecutorGroup(int32_t seed) {
         uint32_t idx = 0;
         if (seed < 0) {
             //seed小于0时，随机选取一个
             auto t = std::chrono::time_point_cast<std::chrono::milliseconds>
                      (std::chrono::steady_clock::now()).time_since_epoch().count();
-            idx = t % thrNum_;
+            idx = t % thrGroupNum_;
         } else {
-            idx = seed % thrNum_;
+            idx = seed % thrGroupNum_;
         }
         return executors_[idx];
     }
@@ -92,7 +93,7 @@ private:
     }
 
 protected:
-    int32_t thrNum_;
+    int32_t thrGroupNum_;
     vector<shared_ptr<threadpool>> executors_;
     CountDownLatch cwStart_;
     CountDownLatch cwStop_;
@@ -103,8 +104,9 @@ protected:
 // 跟踪worker
 class TrailWorker : public BusinessWorker {
 public:
+    //说明：深瞐一路视频跟踪只能在一个线程中，不能跨线程，所以，每组线程池中设置1个线程，开多个线程组来处理N路视频
     TrailWorker(uint32_t gpuDevId, uint32_t thrNum)
-        : BusinessWorker(gpuDevId, SEEMMO_LOAD_TYPE_FILTER, thrNum) {
+        : BusinessWorker(gpuDevId, SEEMMO_LOAD_TYPE_FILTER, thrNum, 1) {
     }
 
     future<int32_t> commitAsyncTask(
@@ -118,7 +120,7 @@ public:
         uint32_t *rspLen
     ) {
         //根据videochannel选择executor，使得同一个channel的检测落在同一个executor上执行
-        return ChooseExecutor(videoChl)->commit(trail, videoChl, timestamp, bgr24, width, height, param, jsonRsp, rspLen);
+        return SelectExecutorGroup(videoChl)->commit(trail, videoChl, timestamp, bgr24, width, height, param, jsonRsp, rspLen);
     }
 
     future<int32_t> commitAsyncEndTask(
@@ -127,7 +129,7 @@ public:
         char *jsonRsp,
         uint32_t *rspLen
     ) {
-        return ChooseExecutor(videoChl)->commit(trailEnd, videoChl, param, jsonRsp, rspLen);
+        return SelectExecutorGroup(videoChl)->commit(trailEnd, videoChl, param, jsonRsp, rspLen);
     }
 
 private:
@@ -175,7 +177,7 @@ private:
 class RecognizeWorker : public BusinessWorker {
 public:
     RecognizeWorker(uint32_t gpuDevId, uint32_t thrNum)
-        : BusinessWorker(gpuDevId, SEEMMO_LOAD_TYPE_RECOG, thrNum) {
+        : BusinessWorker(gpuDevId, SEEMMO_LOAD_TYPE_RECOG, 1, thrNum) {
     }
 
     future<int32_t> CommitAsyncTask(
@@ -186,7 +188,7 @@ public:
         char *jsonRsp,
         uint32_t *rspLen
     ) {
-        return ChooseExecutor(-1)->commit(rec, bgr24, width, height, param, jsonRsp, rspLen);
+        return SelectExecutorGroup(-1)->commit(rec, bgr24, width, height, param, jsonRsp, rspLen);
     }
 
 private:
@@ -215,7 +217,7 @@ private:
 class DetectRecognizeWorker : public BusinessWorker {
 public:
     DetectRecognizeWorker(uint32_t gpuDevId, uint32_t thrNum)
-        : BusinessWorker(gpuDevId, SEEMMO_LOAD_TYPE_ALL, thrNum) {
+        : BusinessWorker(gpuDevId, SEEMMO_LOAD_TYPE_ALL, 1, thrNum) {
     }
 
     future<int32_t> CommitAsyncTask(
@@ -226,7 +228,7 @@ public:
         char *jsonRsp,
         uint32_t *rspLen
     ) {
-        return ChooseExecutor(-1)->commit(detectAndRecog, bgr24, width, height, param, jsonRsp, rspLen);
+        return SelectExecutorGroup(-1)->commit(detectAndRecog, bgr24, width, height, param, jsonRsp, rspLen);
     }
 
 private:
