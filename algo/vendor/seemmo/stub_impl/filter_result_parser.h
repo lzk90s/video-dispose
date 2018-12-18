@@ -8,16 +8,17 @@
 using namespace  std;
 using json = nlohmann::json;
 
+namespace video {
 namespace algo {
 namespace seemmo {
 namespace trail {
 
 typedef struct tagDetectPO {
     int32_t Code;
-    string Message;
+    std::string Message;
     struct tagBody {
-        vector<int32_t> Rect;
-        vector<int32_t> MarginRect;
+        std::vector<int32_t> Rect;
+        std::vector<int32_t> MarginRect;
         int32_t Score;
     } Body;
 
@@ -28,10 +29,10 @@ typedef struct tagDetectPO {
 
 typedef struct tagObjectPO {
     int32_t Type;
-    string ContextCode;
+    std::string ContextCode;
     int64_t Timestamp;
-    string GUID;
-    vector<int32_t> Trail;
+    std::string GUID;
+    std::vector<int32_t> Trail;
     DetectPO Detect;
 
     tagObjectPO() {
@@ -43,11 +44,11 @@ typedef struct tagObjectPO {
 
 typedef struct tagFilterResultPO {
     int32_t Code;
-    string Message;
-    vector<ObjectPO> Vehicles;
-    vector<ObjectPO> Pedestrains;
-    vector<ObjectPO> Bikes;
-    vector<int32_t> ReleaseCacheFrames;
+    std::string Message;
+    std::vector<ObjectPO> Vehicles;
+    std::vector<ObjectPO> Pedestrains;
+    std::vector<ObjectPO> Bikes;
+    std::vector<int32_t> ReleaseCacheFrames;
 
     tagFilterResultPO() {
         Code = 0;
@@ -56,8 +57,8 @@ typedef struct tagFilterResultPO {
 
 typedef struct tagTrailReplyPO {
     int32_t Code;
-    string Message;
-    vector<FilterResultPO> FilterResults;
+    std::string Message;
+    std::vector<FilterResultPO> FilterResults;
 
     tagTrailReplyPO() {
         Code = 0;
@@ -70,11 +71,11 @@ void from_json(const json& j, DetectPO& p) {
         p.Code = j.at("Code").get<int>();
         p.Message = j.at("Message").get<std::string>();
         if (0 == p.Code) {
-            p.Body.Rect = j.at("Body").at("Rect").get<vector<int>>();
-            p.Body.MarginRect = j.at("Body").at("MarginRect").get<vector<int>>();
+            p.Body.Rect = j.at("Body").at("Rect").get<std::vector<int>>();
+            p.Body.MarginRect = j.at("Body").at("MarginRect").get<std::vector<int>>();
             p.Body.Score = j.at("Body").at("Score").get<int>();
         }
-    } catch (exception &e) {
+    } catch (std::exception &e) {
         LOG_ERROR("Parse json error, {}, {}", j.dump(), e.what());
     }
 }
@@ -82,12 +83,12 @@ void from_json(const json& j, DetectPO& p) {
 void from_json(const json &j, ObjectPO &p) {
     try {
         p.Type = j.at("Type").get<int>();
-        p.ContextCode = j.at("ContextCode").get<string>();
+        p.ContextCode = j.at("ContextCode").get<std::string>();
         p.Timestamp = j.at("Timestamp").get<int>();
-        p.GUID = j.at("GUID").get<string>();
-        p.Trail = j.at("Trail").get<vector<int>>();
+        p.GUID = j.at("GUID").get<std::string>();
+        p.Trail = j.at("Trail").get<std::vector<int>>();
         p.Detect = j.at("Detect").get<DetectPO>();
-    } catch (exception &e) {
+    } catch (std::exception &e) {
         LOG_ERROR("Parse json error, {}, {}", j.dump(), e.what());
     }
 }
@@ -95,14 +96,14 @@ void from_json(const json &j, ObjectPO &p) {
 void from_json(const json &j, FilterResultPO &p) {
     try {
         p.Code = j.at("Code").get<int32_t>();
-        p.Message = j.at("Message").get<string>();
+        p.Message = j.at("Message").get<std::string>();
         if (0 == p.Code) {
-            p.Vehicles = j.at("Vehicles").get<vector<ObjectPO>>();
-            p.Bikes = j.at("Bikes").get<vector<ObjectPO>>();
-            p.Pedestrains = j.at("Pedestrains").get<vector<ObjectPO>>();
-            p.ReleaseCacheFrames = j.at("ReleaseCacheFrames").get<vector<int32_t>>();
+            p.Vehicles = j.at("Vehicles").get<std::vector<ObjectPO>>();
+            p.Bikes = j.at("Bikes").get<std::vector<ObjectPO>>();
+            p.Pedestrains = j.at("Pedestrains").get<std::vector<ObjectPO>>();
+            p.ReleaseCacheFrames = j.at("ReleaseCacheFrames").get<std::vector<int32_t>>();
         }
-    } catch (exception &e) {
+    } catch (std::exception &e) {
         LOG_ERROR("Parse json error, {}, {}", j.dump(), e.what());
     }
 }
@@ -110,24 +111,25 @@ void from_json(const json &j, FilterResultPO &p) {
 void from_json(const json &j, TrailReplyPO &p) {
     try {
         p.Code = j.at("Code").get<int32_t>();
-        p.Message = j.at("Message").get<string>();
+        p.Message = j.at("Message").get<std::string>();
         if (0 == p.Code) {
-            p.FilterResults = j.at("FilterResults").get<vector<FilterResultPO>>();
+            p.FilterResults = j.at("FilterResults").get<std::vector<FilterResultPO>>();
         }
-    } catch (exception &e) {
+    } catch (std::exception &e) {
         LOG_ERROR("Parse json error, {}, {}", j.dump(), e.what());
     }
 }
 
 class FilterResponseParser {
 public:
-    void Parse(const string &response, TrailReplyPO &obj) {
+    void Parse(const std::string &response, TrailReplyPO &obj) {
         auto j = json::parse(response.c_str());
         obj = j.get<TrailReplyPO>();
     }
 private:
 
 };
+}
 }
 }
 }

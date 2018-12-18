@@ -4,9 +4,8 @@
 
 #include "vfilter/config/setting.h"
 
-using namespace std;
-
-namespace vf {
+namespace video {
+namespace filter {
 
 class FramePicker {
 public:
@@ -28,4 +27,5 @@ private:
     uint32_t pickCnt_;
 };
 
+}
 }

@@ -42,7 +42,7 @@ RUN sed -i 's/archive.ubuntu.com/mirrors.aliyun.com/g' /etc/apt/sources.list && 
     echo "Asia/Shanghai" > /etc/timezone
 
 ENV SEEMMO_SDK_HOME /root/seemmo_sdk
-ENV LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${SEEMMO_SDK_HOME}/ubuntu/lib
+ENV LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${SEEMMO_SDK_HOME}/ubuntu/lib:/usr/local/lib
     
 COPY --from=base_builder /root/seemmo_sdk /root/seemmo_sdk
 COPY --from=base_builder /usr/local/bin/seemmo_algo_server /usr/local/bin/

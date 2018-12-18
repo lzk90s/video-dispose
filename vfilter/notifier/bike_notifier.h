@@ -8,42 +8,41 @@
 
 #include "json/json.hpp"
 
-using namespace  std;
 using json = nlohmann::json;
 
-
-namespace vf {
+namespace video {
+namespace filter {
 
 typedef struct tagBikeNotifyMsg {
     uint8_t *image;
     uint64_t imageSize;
-    string flag;
+    std::string flag;
     int32_t channelId;
     int32_t type;
 
-    string sexCodeName;
-    string ageCodeName;
-    string hairCodeName;
-    string hatCodeName;
-    string orientationCodeName;
-    string knapsackCodeName;
-    string umbrellaCodeName;
-    string bagCodeName;
-    string maskCodeName;
-    string glassesCodeName;
-    string trolleyCaseCodeName;
-    string barrowCodeName;
-    string upperTextureCodeName;
-    string upperColorCodeName;
-    string bottomColorCodeName;
-    string upperCodeName;
-    string bottomCodeName;
-    string babyCodeName;
+    std::string sexCodeName;
+    std::string ageCodeName;
+    std::string hairCodeName;
+    std::string hatCodeName;
+    std::string orientationCodeName;
+    std::string knapsackCodeName;
+    std::string umbrellaCodeName;
+    std::string bagCodeName;
+    std::string maskCodeName;
+    std::string glassesCodeName;
+    std::string trolleyCaseCodeName;
+    std::string barrowCodeName;
+    std::string upperTextureCodeName;
+    std::string upperColorCodeName;
+    std::string bottomColorCodeName;
+    std::string upperCodeName;
+    std::string bottomCodeName;
+    std::string babyCodeName;
 } BikeNotifyMsg;
 
 void to_json(json& j, const BikeNotifyMsg& p) {
-    string img((char*)p.image, p.imageSize);
-    string base64Img;
+    std::string img((char*)p.image, p.imageSize);
+    std::string base64Img;
     Base64::Encode(img, &base64Img);
 
     j["image"] = base64Img;
@@ -79,7 +78,7 @@ public:
     }
 
 protected:
-    string buildNotifyMsg(uint32_t channelId, cv::Mat &img, algo::BikeObject &obj) override {
+    std::string buildNotifyMsg(uint32_t channelId, cv::Mat &img, algo::BikeObject &obj) override {
         BikeNotifyMsg msg;
 
         Bgr2JpegConverter converter;
@@ -121,7 +120,7 @@ protected:
         return j.dump();
     }
 
-    string getAttrName(algo::Attributes &attrs, algo::PersonObject::AttrType type) {
+    std::string getAttrName(algo::Attributes &attrs, algo::PersonObject::AttrType type) {
         if (attrs.find(type) != attrs.end()) {
             return attrs[type].name;
         } else {
@@ -129,7 +128,7 @@ protected:
         }
     }
 
-    string getRequestURL() override {
+    std::string getRequestURL() override {
         return "/internal/snap/passerby";
     }
 
@@ -138,4 +137,5 @@ protected:
     }
 };
 
+}
 }

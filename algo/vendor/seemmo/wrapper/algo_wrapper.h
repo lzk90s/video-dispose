@@ -6,15 +6,7 @@
 extern "C" {
 #endif
 
-enum ErrType {
-    ERR_OK = 0,
-    ERR_FAIL = 1,
-    ERR_NPE,
-
-    ERR_MAX = 0xffffffff
-};
-
-//Éî²aËã·¨³õÊ¼»¯
+//æ·±çç®—æ³•åˆå§‹åŒ–
 int32_t SeemmoAlgo_Init(
     const char *basedir,
     uint32_t imgThrNum,
@@ -26,10 +18,10 @@ int32_t SeemmoAlgo_Init(
     uint32_t hwDevId
 );
 
-//Éî²aËã·¨Ïú»Ù
+//æ·±çç®—æ³•é”€æ¯
 int32_t SeemmoAlgo_Destroy(void);
 
-//ÊÓÆµ¸ú×Ù+¼ì²â
+//è§†é¢‘è·Ÿè¸ª+æ£€æµ‹
 int32_t SeemmoAlgo_Trail(
     int32_t videoChl,
     uint64_t timestamp,
@@ -41,7 +33,7 @@ int32_t SeemmoAlgo_Trail(
     uint32_t &rspLen
 );
 
-//ÊÓÆµ¸ú×Ù½áÊø£¬Ç¿ÖÆÊä³ö½á¹û
+//è§†é¢‘è·Ÿè¸ªç»“æŸï¼Œå¼ºåˆ¶è¾“å‡ºç»“æœ
 int32_t SeemmoAlgo_TrailEnd(
     int32_t videoChl,
     const char *param,
@@ -49,7 +41,7 @@ int32_t SeemmoAlgo_TrailEnd(
     uint32_t &rspLen
 );
 
-//ÊÓÆµÍ¼ÏñÊ¶±ğ
+//è§†é¢‘å›¾åƒè¯†åˆ«
 int32_t SeemmoAlgo_Recognize(
     const uint8_t *bgr24,
     uint32_t width,
@@ -59,7 +51,7 @@ int32_t SeemmoAlgo_Recognize(
     uint32_t &rspLen
 );
 
-//¼ì²â+Ê¶±ğ
+//æ£€æµ‹+è¯†åˆ«
 int32_t SeemmoAlgo_DetectRecognize(
     const uint8_t *bgr24,
     uint32_t width,

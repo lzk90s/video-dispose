@@ -6,9 +6,8 @@
 
 #include "common/helper/singleton.h"
 
-using namespace std;
-
-namespace vf {
+namespace video {
+namespace filter {
 
 class Settings {
 public:
@@ -33,7 +32,7 @@ public:
     //使能深瞐算法
     bool enableSeemmoAlgo;
     //通知服务接收地址
-    string notifyServerHost;
+    std::string notifyServerHost;
     //使用的bufferedFrame类型: 0(原始), 1(做YUV压缩)，2(做jpeg压缩)
     uint32_t bufferedFrameType;
 
@@ -60,25 +59,25 @@ private:
     }
 
     void dump() {
-        cout << "Settings -> {"
-             << "framePickInternalNum: " << framePickInternalNum << ", "
-             << "frameCacheMaxNum: " << frameCacheMaxNum << ", "
-             << "objectAbsentCount: " << objectAbsentCount << ", "
-             << "enableGosunAlgo: " << enableGosunAlgo << ", "
-             << "enableSeemmoAlgo: " << enableSeemmoAlgo << ", "
-             << "scoreDiff4ReRecognize: " << scoreDiff4ReRecognize << ", "
-             << "bufferedFrameType: " << bufferedFrameType << ", "
-             << "facePictureMinWidth: " << facePictureMinWidth << ", "
-             << "personPictureMinWidth: " << personPictureMinWidth << ", "
-             << "bikePictureMinWidth: " << bikePictureMinWidth << ", "
-             << "vehiclePictureMinWidth: " << vehiclePictureMinWidth << ", "
-             << "notifyServerHost: " << notifyServerHost
-             << "}"
-             << endl;
+        std::cout << "Settings -> {"
+                  << "framePickInternalNum: " << framePickInternalNum << ", "
+                  << "frameCacheMaxNum: " << frameCacheMaxNum << ", "
+                  << "objectAbsentCount: " << objectAbsentCount << ", "
+                  << "enableGosunAlgo: " << enableGosunAlgo << ", "
+                  << "enableSeemmoAlgo: " << enableSeemmoAlgo << ", "
+                  << "scoreDiff4ReRecognize: " << scoreDiff4ReRecognize << ", "
+                  << "bufferedFrameType: " << bufferedFrameType << ", "
+                  << "facePictureMinWidth: " << facePictureMinWidth << ", "
+                  << "personPictureMinWidth: " << personPictureMinWidth << ", "
+                  << "bikePictureMinWidth: " << bikePictureMinWidth << ", "
+                  << "vehiclePictureMinWidth: " << vehiclePictureMinWidth << ", "
+                  << "notifyServerHost: " << notifyServerHost
+                  << "}"
+                  << std::endl;
     }
 
 
-    int32_t parseEnvNumValue(const string &env, int32_t defValue) {
+    int32_t parseEnvNumValue(const std::string &env, int32_t defValue) {
         char *e = std::getenv(env.c_str());
         if (e != nullptr) {
             return atoi(e);
@@ -86,7 +85,7 @@ private:
         return defValue;
     }
 
-    bool parseEnvBoolValue(const string &env, bool defValue) {
+    bool parseEnvBoolValue(const std::string &env, bool defValue) {
         char *e = std::getenv(env.c_str());
         if (e != nullptr) {
             uint32_t f = atoi(e);
@@ -95,10 +94,10 @@ private:
         return defValue;
     }
 
-    string parseEnvStringValue(const string &env, const string &defValue) {
+    std::string parseEnvStringValue(const std::string &env, const std::string &defValue) {
         char *e = std::getenv(env.c_str());
         if (e != nullptr) {
-            return string(e);
+            return std::string(e);
         }
         return defValue;
     }
@@ -108,4 +107,5 @@ const Settings & G_CFG() {
     return Singleton<Settings>::getInstance();
 }
 
+}
 }

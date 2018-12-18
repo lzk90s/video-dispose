@@ -6,12 +6,11 @@
 
 #include "common/helper/logger.h"
 
-using namespace std;
-
+namespace video {
 namespace algo {
 namespace gosun_ext {
 
-typedef int32_t (*PF_GosunAlgo_Init)(
+typedef int32_t(*PF_GosunAlgo_Init)(
     const char *basedir,
     uint32_t imgThrNum,
     uint32_t videoThrNum,
@@ -22,9 +21,9 @@ typedef int32_t (*PF_GosunAlgo_Init)(
     uint32_t hwDevId
 );
 
-typedef int32_t (*PF_GosunAlgo_Destroy)(void);
+typedef int32_t(*PF_GosunAlgo_Destroy)(void);
 
-typedef int32_t (*PF_GosunAlgo_DetectRecognize)(
+typedef int32_t(*PF_GosunAlgo_DetectRecognize)(
     const uint8_t *bgr24,
     uint32_t width,
     uint32_t height,
@@ -50,19 +49,19 @@ public:
         Unload();
     }
 
-    void Load(const string &baseDir,
+    void Load(const std::string &baseDir,
               uint32_t imgThrNum,
               uint32_t videoThrNum,
               uint32_t imgCoreNum,
               uint32_t videoCoreNum,
               uint32_t authType,
-              const string &authServer,
+              const std::string &authServer,
               uint32_t gpuDevId) {
         LOG_INFO("Load algo {}", ALGO_DLL_NAME);
 
         handle_ = dlopen(ALGO_DLL_NAME, RTLD_LAZY);
         if (nullptr == handle_) {
-            throw runtime_error("Load ALGO dll error, " + std::string(dlerror()));
+            throw std::runtime_error("Load ALGO dll error, " + std::string(dlerror()));
         }
 
         pf_GosunAlgo_Init_ = (PF_GosunAlgo_Init)dlsym(handle_, "GosunAlgo_Init");
@@ -72,13 +71,13 @@ public:
         if (nullptr == pf_GosunAlgo_Init_ ||
                 nullptr == pf_GosunAlgo_Destroy_ ||
                 nullptr == pf_GosunAlgo_DetectRecognize) {
-            throw runtime_error("invalid symbol in dll");
+            throw std::runtime_error("invalid symbol in dll");
         }
 
-        int ret = pf_GosunAlgo_Init_(baseDir.c_str(), imgThrNum, videoThrNum, imgCoreNum,videoCoreNum, authServer.c_str(),
+        int ret = pf_GosunAlgo_Init_(baseDir.c_str(), imgThrNum, videoThrNum, imgCoreNum, videoCoreNum, authServer.c_str(),
                                      authType, gpuDevId);
         if (0 != ret) {
-            throw runtime_error("init algorithm error, ret " + std::to_string(ret));
+            throw std::runtime_error("init algorithm error, ret " + std::to_string(ret));
         }
     }
 
@@ -93,10 +92,10 @@ public:
         }
     }
 
-    int32_t DetectRecognize(const uint8_t *bgr24, uint32_t width, uint32_t height, const string &param, char *jsonRsp,
+    int32_t DetectRecognize(const uint8_t *bgr24, uint32_t width, uint32_t height, const std::string &param, char *jsonRsp,
                             uint32_t &rspLen) {
         if (nullptr == pf_GosunAlgo_DetectRecognize) {
-            throw runtime_error("Nullpointer");
+            throw std::runtime_error("Nullpointer");
         }
         return pf_GosunAlgo_DetectRecognize(bgr24, width, height, param.c_str(), jsonRsp, rspLen);
     }
@@ -107,5 +106,6 @@ private:
     PF_GosunAlgo_Destroy pf_GosunAlgo_Destroy_;
     PF_GosunAlgo_DetectRecognize pf_GosunAlgo_DetectRecognize;
 };
+}
 }
 }

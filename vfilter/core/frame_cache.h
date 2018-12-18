@@ -9,15 +9,14 @@
 
 #include "vfilter/config/setting.h"
 
-using namespace std;
-
-namespace vf {
+namespace video {
+namespace filter {
 
 //保存每一帧图像中的目标
 class FrameCache {
 public:
     typedef uint64_t FrameId;
-    typedef map<string, cv::Mat> ObjectImageMap;
+    typedef std::map<std::string, cv::Mat> ObjectImageMap;
 
 public:
     FrameCache() {
@@ -27,16 +26,16 @@ public:
     }
 
     ~FrameCache() {
-        unique_lock<mutex> lck(mutex_);
+        std::unique_lock<std::mutex> lck(mutex_);
         deq_.clear();
         cache_.clear();
     }
 
     FrameId AllocateEmptyFrame() {
-        unique_lock<mutex> lck(mutex_);
+        std::unique_lock<std::mutex> lck(mutex_);
 
         FrameId thisId = currFrameId_;
-        cache_[currFrameId_] = map<string, cv::Mat> {};
+        cache_[currFrameId_] = std::map<std::string, cv::Mat> {};
         deq_.push_back(currFrameId_);
         currFrameId_++;
 
@@ -45,12 +44,12 @@ public:
     }
 
     void SaveAllObjectImageInFrame(FrameId fid, ObjectImageMap &imgs) {
-        unique_lock<mutex> lck(mutex_);
+        std::unique_lock<std::mutex> lck(mutex_);
         cache_[fid] = imgs;
     }
 
-    cv::Mat GetObjectImageInFrame(FrameCache::FrameId fid, const string &objId, bool &exist) {
-        unique_lock<mutex> lck(mutex_);
+    cv::Mat GetObjectImageInFrame(FrameCache::FrameId fid, const std::string &objId, bool &exist) {
+        std::unique_lock<std::mutex> lck(mutex_);
 
         cv::Mat mat;
         if (cache_.find(fid) != cache_.end()) {
@@ -68,7 +67,7 @@ public:
 
     //手动释放一帧
     void ManualRelase(FrameCache::FrameId fid) {
-        unique_lock<mutex> lck(mutex_);
+        std::unique_lock<std::mutex> lck(mutex_);
 
         cache_.erase(fid);
 
@@ -94,9 +93,10 @@ private:
     uint32_t frameCacheMaxNum_;
     uint32_t bufferedFrameType_;
     FrameId currFrameId_;
-    map<FrameId, ObjectImageMap> cache_;
-    deque<FrameId> deq_;
-    mutex mutex_;
+    std::map<FrameId, ObjectImageMap> cache_;
+    std::deque<FrameId> deq_;
+    std::mutex mutex_;
 };
 
+}
 }

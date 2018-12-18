@@ -7,24 +7,18 @@
 
 #include "vfilter/config/setting.h"
 
-using namespace std;
-
-namespace vf {
+namespace video {
+namespace filter {
 
 class App {
 public:
     App() {
         LOG_INFO("------------------------START------------------------");
-        init();
     }
     ~App() {}
-
-private:
-    void init() {
-        vf::G_CFG();
-    }
 };
 
 typedef Singleton<App> ThisApp;
 
+}
 }

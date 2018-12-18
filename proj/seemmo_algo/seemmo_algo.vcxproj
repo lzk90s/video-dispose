@@ -21,7 +21,7 @@
     <ClInclude Include="..\..\algo\vendor\seemmo\stub_impl\filter_result_parser.h" />
     <ClInclude Include="..\..\algo\vendor\seemmo\stub_impl\rec_param_builder.h" />
     <ClInclude Include="..\..\algo\vendor\seemmo\stub_impl\rec_result_parser.h" />
-    <ClInclude Include="..\..\algo\vendor\seemmo\stub_impl\seemmo_stub.h" />
+    <ClInclude Include="..\..\algo\vendor\seemmo\stub_impl\algo_stub_impl.h" />
     <ClInclude Include="..\..\algo\vendor\seemmo\wrapper\algo_wrapper.h" />
     <ClInclude Include="..\..\algo\vendor\seemmo\wrapper\workers.h" />
   </ItemGroup>
@@ -35,7 +35,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\algo\vendor\seemmo\rpc\service.pb.cc" />
     <ClCompile Include="..\..\algo\vendor\seemmo\server\main.cc" />
-    <ClCompile Include="..\..\algo\vendor\seemmo\stub_impl\seemmo_stub.cc" />
+    <ClCompile Include="..\..\algo\vendor\seemmo\stub_impl\algo_stub_impl.cc" />
     <ClCompile Include="..\..\algo\vendor\seemmo\wrapper\algo_wrapper.cc" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

@@ -17,6 +17,7 @@
 #include "algo/vendor/seemmo/stub_impl/detect_result_parser.h"
 #include "algo/vendor/seemmo/stub_impl/rec_param_builder.h"
 
+namespace video {
 namespace algo {
 namespace seemmo {
 
@@ -28,9 +29,8 @@ public:
 
     virtual ~ImgProcServiceImpl() {};
 
-    virtual void Recognize(::google::protobuf::RpcController* controller,
-                           const ::algo::seemmo::ImgRecognizeRequest* request, ::algo::seemmo::ImgRecognizeReply* response,
-                           ::google::protobuf::Closure* done) {
+    virtual void Recognize(::google::protobuf::RpcController* controller,const ImgRecognizeRequest* request,
+                           ImgRecognizeReply* response,::google::protobuf::Closure* done) {
         brpc::ClosureGuard done_guard(done);
 
         brpc::Controller* cntl =
@@ -47,7 +47,7 @@ public:
 
         //检测（全图）
         uint32_t bufLen1 = 1024 * 1024 * 5;
-        unique_ptr<char[]> buf1(new char[bufLen1]);
+        std::unique_ptr<char[]> buf1(new char[bufLen1]);
         detect::DetectRegionPO detectRegionPo;
         detectRegionPo.regions.push_back({ 0, 0 });
         detectRegionPo.regions.push_back({ 0, converter.GetHeight() });
@@ -55,7 +55,7 @@ public:
         detectRegionPo.regions.push_back({ converter.GetWidth(), 0 });
 
         ret = algo_.Trail(
-                  INT32_MAX-2,
+                  INT32_MAX - 2,
                   timestamp_++,
                   converter.GetImgBuffer(),
                   converter.GetWidth(),
@@ -70,7 +70,7 @@ public:
         }
 
         //根据检测结果生成识别参数
-        vector<rec::LocationPO> locs;
+        std::vector<rec::LocationPO> locs;
         detect::DetectReplyPO detectReply;
         detect::DetectResponseParser().Parse(buf1.get(), detectReply);
         buildRecLocationByImageResult(detectReply, locs);
@@ -82,7 +82,7 @@ public:
 
         //识别
         uint32_t bufLen2 = 1024 * 1024 * 5;
-        unique_ptr<char[]> buf2(new char[bufLen2]);
+        std::unique_ptr<char[]> buf2(new char[bufLen2]);
         ret = algo_.Recognize(
                   converter.GetImgBuffer(),
                   converter.GetWidth(),
@@ -99,7 +99,7 @@ public:
     }
 
 private:
-    void buildRecLocationByImageResult(detect::DetectReplyPO &p, vector<rec::LocationPO> &locs) {
+    void buildRecLocationByImageResult(detect::DetectReplyPO &p, std::vector<rec::LocationPO> &locs) {
         if (p.Code == 0) {
             //目前没有用批量方式，所以，只取第一个imageresult即可
             detect::ImageResultPO root = p.ImageResults.at(0);
@@ -136,8 +136,8 @@ private:
         }
     }
 
-    string buildEmptyResponse() {
-        string msg = "{\"Code\":0, \"Message\":\"ok\", \"ImageResults\":[]}";
+    std::string buildEmptyResponse() {
+        std::string msg = "{\"Code\":0, \"Message\":\"ok\", \"ImageResults\":[]}";
         return msg;
     }
 
@@ -146,5 +146,6 @@ private:
     uint64_t timestamp_;
 };
 
+}
 }
 }

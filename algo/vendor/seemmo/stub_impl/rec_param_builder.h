@@ -5,19 +5,20 @@
 #include <vector>
 #include "json/json.hpp"
 
-using namespace  std;
-using json = nlohmann::json;
 
+namespace video {
 namespace algo {
 namespace seemmo {
 namespace rec {
 
+using json = nlohmann::json;
+
 typedef struct tagLocationPO {
     int32_t Type;
-    string GUID;
-    string ContextCode;
-    vector<int32_t> Rect;
-    vector<int32_t> Trail;
+    std::string GUID;
+    std::string ContextCode;
+    std::vector<int32_t> Rect;
+    std::vector<int32_t> Trail;
 
     tagLocationPO() {
         Type = 0;
@@ -42,7 +43,7 @@ void to_json(json& j, const LocationPO& p) {
 
 class RecParamBuilder {
 public:
-    string Build(vector<LocationPO> &locations) {
+    std::string Build(std::vector<LocationPO> &locations) {
         json j = R"(
 		 {
 			"Detect": {
@@ -116,6 +117,7 @@ public:
 private:
 
 };
+}
 }
 }
 }

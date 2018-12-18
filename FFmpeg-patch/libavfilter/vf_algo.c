@@ -29,7 +29,7 @@ static PF_VFilter_Routine pf_VFilter_Routine = NULL;
 
 typedef struct AlgoContext {
     const AVClass *class;
-    int cid;	// channel id
+    int cid;    // channel id
     //add some private data if you want
 } AlgoContext;
 

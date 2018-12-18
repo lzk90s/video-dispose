@@ -8,17 +8,16 @@
 
 #include "json/json.hpp"
 
-
-using namespace  std;
-using json = nlohmann::json;
-
+namespace video {
 namespace algo {
 namespace seemmo {
 namespace rec {
 
+using json = nlohmann::json;
+
 typedef struct tagAttributePO {
-    string Code;
-    string Name;
+    std::string Code;
+    std::string Name;
     int32_t Score;
 
     tagAttributePO() {
@@ -70,9 +69,9 @@ typedef struct tagPersonAttributeGroup {
 
 typedef struct tagDetectRectPO {
     int32_t Code;
-    string Message;
+    std::string Message;
     struct tagBody {
-        vector<int32_t> Rect;
+        std::vector<int32_t> Rect;
         //int32_t Score;
     } Body;
 
@@ -84,7 +83,7 @@ typedef struct tagDetectRectPO {
 // 人
 typedef struct tagPersonObjectPO {
     int32_t Type;
-    string GUID;
+    std::string GUID;
     DetectRectPO Detect;
     PersonAttributeGroupPO Recognize;
 
@@ -96,9 +95,9 @@ typedef struct tagPersonObjectPO {
 // 非机动车
 typedef struct tagBikeObjectPO {
     int32_t Type;
-    string GUID;
+    std::string GUID;
     DetectRectPO Detect;
-    vector<PersonObjectPO> Persons;	//非机动车上的人
+    std::vector<PersonObjectPO> Persons;	//非机动车上的人
 
     tagBikeObjectPO() {
         Type = 0;
@@ -108,7 +107,7 @@ typedef struct tagBikeObjectPO {
 // 机动车
 typedef struct tagVehicleObjectPO {
     int32_t Type;
-    string GUID;
+    std::string GUID;
     DetectRectPO Detect;
     VehicleAttributeGroup Recognize;
 
@@ -120,10 +119,10 @@ typedef struct tagVehicleObjectPO {
 
 typedef struct tagImageResultPO {
     int32_t Code;
-    string Message;
-    vector<VehicleObjectPO> Vehicles;
-    vector<PersonObjectPO> Pedestrains;
-    vector<BikeObjectPO> Bikes;
+    std::string Message;
+    std::vector<VehicleObjectPO> Vehicles;
+    std::vector<PersonObjectPO> Pedestrains;
+    std::vector<BikeObjectPO> Bikes;
 
     tagImageResultPO() {
         Code = 0;
@@ -132,8 +131,8 @@ typedef struct tagImageResultPO {
 
 typedef struct tagRecogReplyPO {
     int32_t Code;
-    string Message;
-    vector<ImageResultPO> ImageResults;
+    std::string Message;
+    std::vector<ImageResultPO> ImageResults;
 
     tagRecogReplyPO() {
         Code = 0;
@@ -147,13 +146,13 @@ void from_json(const json& j, AttributePO& p) {
             json toplist = j.at("TopList");
             //只取一个
             for (auto it = toplist.begin(); it != toplist.end(); ++it) {
-                p.Code = (*it).at("Code").get<string>();
-                p.Name = (*it).at("Name").get<string>();
+                p.Code = (*it).at("Code").get<std::string>();
+                p.Name = (*it).at("Name").get<std::string>();
                 p.Score = (*it).at("Score").get<int32_t>();
                 break;
             }
         }
-    } catch (exception &e) {
+    } catch (std::exception &e) {
         LOG_ERROR("Parse json error, {}, {}", j.dump(), e.what());
     }
 }
@@ -172,11 +171,11 @@ void from_json(const json& j, VehicleAttributeGroup& p) {
         if (j.find("Plate") != j.end()) {
             //车牌单独解
             if (0 == j.at("Plate").at("Code")) {
-                string license = j.at("Plate").at("Licence").get<string>();
+                std::string license = j.at("Plate").at("Licence").get<std::string>();
                 p.Plate.Name = license;
             }
         }
-    } catch (exception &e) {
+    } catch (std::exception &e) {
         LOG_ERROR("Parse json error, {}, {}", j.dump(), e.what());
     }
 }
@@ -203,7 +202,7 @@ void from_json(const json& j, PersonAttributeGroupPO& p) {
         p.UpperTexture = j.at("UpperTexture").get<AttributePO>();
         p.Barrow = j.at("Barrow").get<AttributePO>();
         p.TrolleyCase = j.at("TrolleyCase").get<AttributePO>();
-    } catch (exception &e) {
+    } catch (std::exception &e) {
         LOG_ERROR("Parse json error, {}, {}", j.dump(), e.what());
     }
 }
@@ -214,14 +213,14 @@ void from_json(const json& j, DetectRectPO& p) {
         p.Message = j.at("Message").get<std::string>();
         if (0 == p.Code) {
             if (j.end() != j.find("Body")) {
-                p.Body.Rect = j.at("Body").at("Rect").get<vector<int>>();
+                p.Body.Rect = j.at("Body").at("Rect").get<std::vector<int>>();
             }
             //car时，用car.rect覆盖body.rect
             if (j.end() != j.find("Car")) {
-                p.Body.Rect = j.at("Car").at("Rect").get<vector<int>>();
+                p.Body.Rect = j.at("Car").at("Rect").get<std::vector<int>>();
             }
         }
-    } catch (exception &e) {
+    } catch (std::exception &e) {
         LOG_ERROR("Parse json error, {}, {}", j.dump(), e.what());
     }
 }
@@ -229,10 +228,10 @@ void from_json(const json& j, DetectRectPO& p) {
 void from_json(const json &j, PersonObjectPO &p) {
     try {
         p.Type = j.at("Type").get<int>();
-        p.GUID = j.at("GUID").get<string>();
+        p.GUID = j.at("GUID").get<std::string>();
         p.Detect = j.at("Detect").get<DetectRectPO>();
         p.Recognize = j.at("Recognize").get<PersonAttributeGroupPO>();
-    } catch (exception &e) {
+    } catch (std::exception &e) {
         LOG_ERROR("Parse json error, {}, {}", j.dump(), e.what());
     }
 }
@@ -240,10 +239,10 @@ void from_json(const json &j, PersonObjectPO &p) {
 void from_json(const json &j, VehicleObjectPO &p) {
     try {
         p.Type = j.at("Type").get<int>();
-        p.GUID = j.at("GUID").get<string>();
+        p.GUID = j.at("GUID").get<std::string>();
         p.Detect = j.at("Detect").get<DetectRectPO>();
         p.Recognize = j.at("Recognize").get<VehicleAttributeGroup>();
-    } catch (exception &e) {
+    } catch (std::exception &e) {
         LOG_ERROR("Parse json error, {}, {}", j.dump(), e.what());
     }
 }
@@ -251,10 +250,10 @@ void from_json(const json &j, VehicleObjectPO &p) {
 void from_json(const json &j, BikeObjectPO &p) {
     try {
         p.Type = j.at("Type").get<int>();
-        p.GUID = j.at("GUID").get<string>();
+        p.GUID = j.at("GUID").get<std::string>();
         p.Detect = j.at("Detect").get<DetectRectPO>();
-        p.Persons = j.at("Persons").get<vector<PersonObjectPO>>();
-    } catch (exception &e) {
+        p.Persons = j.at("Persons").get<std::vector<PersonObjectPO>>();
+    } catch (std::exception &e) {
         LOG_ERROR("Parse json error, {}, {}", j.dump(), e.what());
     }
 }
@@ -262,13 +261,13 @@ void from_json(const json &j, BikeObjectPO &p) {
 void from_json(const json &j, ImageResultPO &p) {
     try {
         p.Code = j.at("Code").get<int32_t>();
-        p.Message = j.at("Message").get<string>();
+        p.Message = j.at("Message").get<std::string>();
         if (0 == p.Code) {
-            p.Vehicles = j.at("Vehicles").get<vector<VehicleObjectPO>>();
-            p.Bikes = j.at("Bikes").get<vector<BikeObjectPO>>();
-            p.Pedestrains = j.at("Pedestrains").get<vector<PersonObjectPO>>();
+            p.Vehicles = j.at("Vehicles").get<std::vector<VehicleObjectPO>>();
+            p.Bikes = j.at("Bikes").get<std::vector<BikeObjectPO>>();
+            p.Pedestrains = j.at("Pedestrains").get<std::vector<PersonObjectPO>>();
         }
-    } catch (exception &e) {
+    } catch (std::exception &e) {
         LOG_ERROR("Parse json error, {}, {}", j.dump(), e.what());
     }
 }
@@ -276,11 +275,11 @@ void from_json(const json &j, ImageResultPO &p) {
 void from_json(const json &j, RecogReplyPO &p) {
     try {
         p.Code = j.at("Code").get<int32_t>();
-        p.Message = j.at("Message").get<string>();
+        p.Message = j.at("Message").get<std::string>();
         if (0 == p.Code) {
-            p.ImageResults = j.at("ImageResults").get<vector<ImageResultPO>>();
+            p.ImageResults = j.at("ImageResults").get<std::vector<ImageResultPO>>();
         }
-    } catch (exception &e) {
+    } catch (std::exception &e) {
         LOG_ERROR("Parse json error, {}, {}", j.dump(), e.what());
     }
 }
@@ -288,7 +287,7 @@ void from_json(const json &j, RecogReplyPO &p) {
 
 class RecResultParser {
 public:
-    void Parse(const string &response, RecogReplyPO &obj) {
+    void Parse(const std::string &response, RecogReplyPO &obj) {
         auto j = json::parse(response.c_str());
         obj = j.get<RecogReplyPO>();
     }
@@ -296,6 +295,7 @@ public:
 private:
 
 };
+}
 }
 }
 }

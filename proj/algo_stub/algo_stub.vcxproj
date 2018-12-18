@@ -23,9 +23,6 @@
     <ClInclude Include="..\..\algo\stub\algo_stub_factory.h" />
     <ClInclude Include="..\..\algo\stub\object_type.h" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\algo\stub\Makefile" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{ED941D97-9659-4C96-A752-BED9F099B6B4}</ProjectGuid>

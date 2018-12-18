@@ -50,7 +50,7 @@ FROM nvidia/cuda:9.2-runtime-ubuntu16.04 as cuda_runtime
 ENV GOSUN_SDK_HOME /root/gosun_sdk
 ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
 ENV PATH $PATH:${JAVA_HOME}/jre/bin:${JAVA_HOME}/bin
-ENV LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${GOSUN_SDK_HOME}/lib
+ENV LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${GOSUN_SDK_HOME}/lib:/usr/local/lib
 ENV LC_ALL en_US.UTF-8
 
 RUN sed -i 's/archive.ubuntu.com/mirrors.aliyun.com/g' /etc/apt/sources.list && \

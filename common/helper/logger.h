@@ -8,7 +8,6 @@
 #include "spdlog/spdlog.h"
 
 namespace spd = spdlog;
-using namespace std;
 
 class Logger {
 public:
@@ -16,7 +15,7 @@ public:
 
     }
 
-    Logger(const string &moduleLibraryName) {
+    Logger(const std::string &moduleLibraryName) {
         //delegate = spd::rotating_logger_mt(moduleName, ".", 1048576 * 5, 3);
         delegate = spd::stdout_logger_mt(moduleLibraryName);
 
@@ -28,7 +27,7 @@ public:
         spd::drop(moduleName);
     }
 
-    shared_ptr<spdlog::logger> getLogger() {
+    std::shared_ptr<spdlog::logger> getLogger() {
         return delegate;
     }
 
@@ -43,8 +42,8 @@ private:
     }
 
 private:
-    string moduleName;
-    shared_ptr<spdlog::logger> delegate;
+    std::string moduleName;
+    std::shared_ptr<spdlog::logger> delegate;
 };
 
 typedef Singleton<Logger> LoggerSingleton;

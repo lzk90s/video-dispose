@@ -3,14 +3,14 @@
 #include <memory>
 #include "vfilter/core/channel_sink.h"
 
-using namespace std;
+namespace video {
+namespace filter {
 
-namespace vf {
 //channel sink manager
 //暂不加锁，无需求
 class ChannelSinkManager {
 public:
-    map<uint32_t, shared_ptr<ChannelSink>> sinks;
+    std::map<uint32_t, std::shared_ptr<ChannelSink>> sinks;
 
     ~ChannelSinkManager() {
         sinks.clear();
@@ -22,4 +22,5 @@ ChannelSinkManager& CSMS() {
     return ChannelSinkManagerSingleton::getInstance();
 }
 
+}
 }

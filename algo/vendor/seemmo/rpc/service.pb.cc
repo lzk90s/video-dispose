@@ -17,6 +17,7 @@
 #include <google/protobuf/wire_format.h>
 // @@protoc_insertion_point(includes)
 
+namespace video {
 namespace algo {
 namespace seemmo {
 class TrailRequestDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<TrailRequest> {
@@ -185,30 +186,31 @@ void InitDefaults() {
 void AddDescriptorsImpl() {
   InitDefaults();
   static const char descriptor[] = {
-      "\n\rservice.proto\022\013algo.seemmo\"p\n\014TrailReq"
-      "uest\022\020\n\010videoChl\030\001 \001(\r\022\021\n\ttimestamp\030\002 \001("
-      "\004\022\r\n\005bgr24\030\003 \001(\014\022\016\n\006height\030\004 \001(\r\022\r\n\005widt"
-      "h\030\005 \001(\r\022\r\n\005param\030\006 \001(\t\"\032\n\nTrailReply\022\014\n\004"
-      "data\030\001 \001(\t\"2\n\017TrailEndRequest\022\020\n\010videoCh"
-      "l\030\001 \001(\r\022\r\n\005param\030\002 \001(\t\"\035\n\rTrailEndReply\022"
-      "\014\n\004data\030\001 \001(\t\"a\n\020RecognizeRequest\022\020\n\010vid"
-      "eoChl\030\001 \001(\r\022\r\n\005bgr24\030\002 \001(\014\022\016\n\006height\030\003 \001"
-      "(\r\022\r\n\005width\030\004 \001(\r\022\r\n\005param\030\005 \001(\t\"\036\n\016Reco"
-      "gnizeReply\022\014\n\004data\030\001 \001(\t\"4\n\023ImgRecognize"
-      "Request\022\017\n\007imageId\030\001 \001(\r\022\014\n\004jpeg\030\002 \001(\014\"!"
-      "\n\021ImgRecognizeReply\022\014\n\004data\030\001 \001(\t2\344\001\n\020Vi"
-      "deoProcService\022=\n\005Trail\022\031.algo.seemmo.Tr"
-      "ailRequest\032\027.algo.seemmo.TrailReply\"\000\022F\n"
-      "\010TrailEnd\022\034.algo.seemmo.TrailEndRequest\032"
-      "\032.algo.seemmo.TrailEndReply\"\000\022I\n\tRecogni"
-      "ze\022\035.algo.seemmo.RecognizeRequest\032\033.algo"
-      ".seemmo.RecognizeReply\"\0002a\n\016ImgProcServi"
-      "ce\022O\n\tRecognize\022 .algo.seemmo.ImgRecogni"
-      "zeRequest\032\036.algo.seemmo.ImgRecognizeRepl"
-      "y\"\000B\003\200\001\001b\006proto3"
+      "\n\rservice.proto\022\021video.algo.seemmo\"p\n\014Tr"
+      "ailRequest\022\020\n\010videoChl\030\001 \001(\r\022\021\n\ttimestam"
+      "p\030\002 \001(\004\022\r\n\005bgr24\030\003 \001(\014\022\016\n\006height\030\004 \001(\r\022\r"
+      "\n\005width\030\005 \001(\r\022\r\n\005param\030\006 \001(\t\"\032\n\nTrailRep"
+      "ly\022\014\n\004data\030\001 \001(\t\"2\n\017TrailEndRequest\022\020\n\010v"
+      "ideoChl\030\001 \001(\r\022\r\n\005param\030\002 \001(\t\"\035\n\rTrailEnd"
+      "Reply\022\014\n\004data\030\001 \001(\t\"a\n\020RecognizeRequest\022"
+      "\020\n\010videoChl\030\001 \001(\r\022\r\n\005bgr24\030\002 \001(\014\022\016\n\006heig"
+      "ht\030\003 \001(\r\022\r\n\005width\030\004 \001(\r\022\r\n\005param\030\005 \001(\t\"\036"
+      "\n\016RecognizeReply\022\014\n\004data\030\001 \001(\t\"4\n\023ImgRec"
+      "ognizeRequest\022\017\n\007imageId\030\001 \001(\r\022\014\n\004jpeg\030\002"
+      " \001(\014\"!\n\021ImgRecognizeReply\022\014\n\004data\030\001 \001(\t2"
+      "\210\002\n\020VideoProcService\022I\n\005Trail\022\037.video.al"
+      "go.seemmo.TrailRequest\032\035.video.algo.seem"
+      "mo.TrailReply\"\000\022R\n\010TrailEnd\022\".video.algo"
+      ".seemmo.TrailEndRequest\032 .video.algo.see"
+      "mmo.TrailEndReply\"\000\022U\n\tRecognize\022#.video"
+      ".algo.seemmo.RecognizeRequest\032!.video.al"
+      "go.seemmo.RecognizeReply\"\0002m\n\016ImgProcSer"
+      "vice\022[\n\tRecognize\022&.video.algo.seemmo.Im"
+      "gRecognizeRequest\032$.video.algo.seemmo.Im"
+      "gRecognizeReply\"\000B\003\200\001\001b\006proto3"
   };
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-      descriptor, 816);
+      descriptor, 870);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "service.proto", &protobuf_RegisterTypes);
   ::google::protobuf::internal::OnShutdown(&TableStruct::Shutdown);
@@ -245,7 +247,7 @@ TrailRequest::TrailRequest()
     protobuf_service_2eproto::InitDefaults();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:algo.seemmo.TrailRequest)
+  // @@protoc_insertion_point(constructor:video.algo.seemmo.TrailRequest)
 }
 TrailRequest::TrailRequest(const TrailRequest& from)
   : ::google::protobuf::Message(),
@@ -263,7 +265,7 @@ TrailRequest::TrailRequest(const TrailRequest& from)
   ::memcpy(&timestamp_, &from.timestamp_,
     reinterpret_cast<char*>(&width_) -
     reinterpret_cast<char*>(&timestamp_) + sizeof(width_));
-  // @@protoc_insertion_point(copy_constructor:algo.seemmo.TrailRequest)
+  // @@protoc_insertion_point(copy_constructor:video.algo.seemmo.TrailRequest)
 }
 
 void TrailRequest::SharedCtor() {
@@ -275,7 +277,7 @@ void TrailRequest::SharedCtor() {
 }
 
 TrailRequest::~TrailRequest() {
-  // @@protoc_insertion_point(destructor:algo.seemmo.TrailRequest)
+  // @@protoc_insertion_point(destructor:video.algo.seemmo.TrailRequest)
   SharedDtor();
 }
 
@@ -308,7 +310,7 @@ TrailRequest* TrailRequest::New(::google::protobuf::Arena* arena) const {
 }
 
 void TrailRequest::Clear() {
-// @@protoc_insertion_point(message_clear_start:algo.seemmo.TrailRequest)
+// @@protoc_insertion_point(message_clear_start:video.algo.seemmo.TrailRequest)
   bgr24_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   param_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   ::memset(&timestamp_, 0, reinterpret_cast<char*>(&width_) -
@@ -319,7 +321,7 @@ bool TrailRequest::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:algo.seemmo.TrailRequest)
+  // @@protoc_insertion_point(parse_start:video.algo.seemmo.TrailRequest)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -396,7 +398,7 @@ bool TrailRequest::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->param().data(), this->param().length(),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "algo.seemmo.TrailRequest.param"));
+            "video.algo.seemmo.TrailRequest.param"));
         } else {
           goto handle_unusual;
         }
@@ -416,17 +418,17 @@ bool TrailRequest::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:algo.seemmo.TrailRequest)
+  // @@protoc_insertion_point(parse_success:video.algo.seemmo.TrailRequest)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:algo.seemmo.TrailRequest)
+  // @@protoc_insertion_point(parse_failure:video.algo.seemmo.TrailRequest)
   return false;
 #undef DO_
 }
 
 void TrailRequest::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:algo.seemmo.TrailRequest)
+  // @@protoc_insertion_point(serialize_start:video.algo.seemmo.TrailRequest)
   // uint32 videoChl = 1;
   if (this->videochl() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->videochl(), output);
@@ -458,18 +460,18 @@ void TrailRequest::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->param().data(), this->param().length(),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "algo.seemmo.TrailRequest.param");
+      "video.algo.seemmo.TrailRequest.param");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       6, this->param(), output);
   }
 
-  // @@protoc_insertion_point(serialize_end:algo.seemmo.TrailRequest)
+  // @@protoc_insertion_point(serialize_end:video.algo.seemmo.TrailRequest)
 }
 
 ::google::protobuf::uint8* TrailRequest::InternalSerializeWithCachedSizesToArray(
     bool deterministic, ::google::protobuf::uint8* target) const {
   (void)deterministic;  // Unused
-  // @@protoc_insertion_point(serialize_to_array_start:algo.seemmo.TrailRequest)
+  // @@protoc_insertion_point(serialize_to_array_start:video.algo.seemmo.TrailRequest)
   // uint32 videoChl = 1;
   if (this->videochl() != 0) {
     target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->videochl(), target);
@@ -502,18 +504,18 @@ void TrailRequest::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->param().data(), this->param().length(),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "algo.seemmo.TrailRequest.param");
+      "video.algo.seemmo.TrailRequest.param");
     target =
       ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
         6, this->param(), target);
   }
 
-  // @@protoc_insertion_point(serialize_to_array_end:algo.seemmo.TrailRequest)
+  // @@protoc_insertion_point(serialize_to_array_end:video.algo.seemmo.TrailRequest)
   return target;
 }
 
 size_t TrailRequest::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:algo.seemmo.TrailRequest)
+// @@protoc_insertion_point(message_byte_size_start:video.algo.seemmo.TrailRequest)
   size_t total_size = 0;
 
   // bytes bgr24 = 3;
@@ -566,22 +568,22 @@ size_t TrailRequest::ByteSizeLong() const {
 }
 
 void TrailRequest::MergeFrom(const ::google::protobuf::Message& from) {
-// @@protoc_insertion_point(generalized_merge_from_start:algo.seemmo.TrailRequest)
+// @@protoc_insertion_point(generalized_merge_from_start:video.algo.seemmo.TrailRequest)
   GOOGLE_DCHECK_NE(&from, this);
   const TrailRequest* source =
       ::google::protobuf::internal::DynamicCastToGenerated<const TrailRequest>(
           &from);
   if (source == NULL) {
-  // @@protoc_insertion_point(generalized_merge_from_cast_fail:algo.seemmo.TrailRequest)
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:video.algo.seemmo.TrailRequest)
     ::google::protobuf::internal::ReflectionOps::Merge(from, this);
   } else {
-  // @@protoc_insertion_point(generalized_merge_from_cast_success:algo.seemmo.TrailRequest)
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:video.algo.seemmo.TrailRequest)
     MergeFrom(*source);
   }
 }
 
 void TrailRequest::MergeFrom(const TrailRequest& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:algo.seemmo.TrailRequest)
+// @@protoc_insertion_point(class_specific_merge_from_start:video.algo.seemmo.TrailRequest)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   if (from.bgr24().size() > 0) {
@@ -607,14 +609,14 @@ void TrailRequest::MergeFrom(const TrailRequest& from) {
 }
 
 void TrailRequest::CopyFrom(const ::google::protobuf::Message& from) {
-// @@protoc_insertion_point(generalized_copy_from_start:algo.seemmo.TrailRequest)
+// @@protoc_insertion_point(generalized_copy_from_start:video.algo.seemmo.TrailRequest)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
 void TrailRequest::CopyFrom(const TrailRequest& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:algo.seemmo.TrailRequest)
+// @@protoc_insertion_point(class_specific_copy_from_start:video.algo.seemmo.TrailRequest)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -651,13 +653,13 @@ void TrailRequest::clear_videochl() {
   videochl_ = 0u;
 }
 ::google::protobuf::uint32 TrailRequest::videochl() const {
-  // @@protoc_insertion_point(field_get:algo.seemmo.TrailRequest.videoChl)
+  // @@protoc_insertion_point(field_get:video.algo.seemmo.TrailRequest.videoChl)
   return videochl_;
 }
 void TrailRequest::set_videochl(::google::protobuf::uint32 value) {
   
   videochl_ = value;
-  // @@protoc_insertion_point(field_set:algo.seemmo.TrailRequest.videoChl)
+  // @@protoc_insertion_point(field_set:video.algo.seemmo.TrailRequest.videoChl)
 }
 
 // uint64 timestamp = 2;
@@ -665,13 +667,13 @@ void TrailRequest::clear_timestamp() {
   timestamp_ = GOOGLE_ULONGLONG(0);
 }
 ::google::protobuf::uint64 TrailRequest::timestamp() const {
-  // @@protoc_insertion_point(field_get:algo.seemmo.TrailRequest.timestamp)
+  // @@protoc_insertion_point(field_get:video.algo.seemmo.TrailRequest.timestamp)
   return timestamp_;
 }
 void TrailRequest::set_timestamp(::google::protobuf::uint64 value) {
   
   timestamp_ = value;
-  // @@protoc_insertion_point(field_set:algo.seemmo.TrailRequest.timestamp)
+  // @@protoc_insertion_point(field_set:video.algo.seemmo.TrailRequest.timestamp)
 }
 
 // bytes bgr24 = 3;
@@ -679,40 +681,40 @@ void TrailRequest::clear_bgr24() {
   bgr24_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 const ::std::string& TrailRequest::bgr24() const {
-  // @@protoc_insertion_point(field_get:algo.seemmo.TrailRequest.bgr24)
+  // @@protoc_insertion_point(field_get:video.algo.seemmo.TrailRequest.bgr24)
   return bgr24_.GetNoArena();
 }
 void TrailRequest::set_bgr24(const ::std::string& value) {
   
   bgr24_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:algo.seemmo.TrailRequest.bgr24)
+  // @@protoc_insertion_point(field_set:video.algo.seemmo.TrailRequest.bgr24)
 }
 #if LANG_CXX11
 void TrailRequest::set_bgr24(::std::string&& value) {
   
   bgr24_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:algo.seemmo.TrailRequest.bgr24)
+  // @@protoc_insertion_point(field_set_rvalue:video.algo.seemmo.TrailRequest.bgr24)
 }
 #endif
 void TrailRequest::set_bgr24(const char* value) {
   
   bgr24_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:algo.seemmo.TrailRequest.bgr24)
+  // @@protoc_insertion_point(field_set_char:video.algo.seemmo.TrailRequest.bgr24)
 }
 void TrailRequest::set_bgr24(const void* value, size_t size) {
   
   bgr24_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:algo.seemmo.TrailRequest.bgr24)
+  // @@protoc_insertion_point(field_set_pointer:video.algo.seemmo.TrailRequest.bgr24)
 }
 ::std::string* TrailRequest::mutable_bgr24() {
   
-  // @@protoc_insertion_point(field_mutable:algo.seemmo.TrailRequest.bgr24)
+  // @@protoc_insertion_point(field_mutable:video.algo.seemmo.TrailRequest.bgr24)
   return bgr24_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 ::std::string* TrailRequest::release_bgr24() {
-  // @@protoc_insertion_point(field_release:algo.seemmo.TrailRequest.bgr24)
+  // @@protoc_insertion_point(field_release:video.algo.seemmo.TrailRequest.bgr24)
   
   return bgr24_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -723,7 +725,7 @@ void TrailRequest::set_allocated_bgr24(::std::string* bgr24) {
     
   }
   bgr24_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), bgr24);
-  // @@protoc_insertion_point(field_set_allocated:algo.seemmo.TrailRequest.bgr24)
+  // @@protoc_insertion_point(field_set_allocated:video.algo.seemmo.TrailRequest.bgr24)
 }
 
 // uint32 height = 4;
@@ -731,13 +733,13 @@ void TrailRequest::clear_height() {
   height_ = 0u;
 }
 ::google::protobuf::uint32 TrailRequest::height() const {
-  // @@protoc_insertion_point(field_get:algo.seemmo.TrailRequest.height)
+  // @@protoc_insertion_point(field_get:video.algo.seemmo.TrailRequest.height)
   return height_;
 }
 void TrailRequest::set_height(::google::protobuf::uint32 value) {
   
   height_ = value;
-  // @@protoc_insertion_point(field_set:algo.seemmo.TrailRequest.height)
+  // @@protoc_insertion_point(field_set:video.algo.seemmo.TrailRequest.height)
 }
 
 // uint32 width = 5;
@@ -745,13 +747,13 @@ void TrailRequest::clear_width() {
   width_ = 0u;
 }
 ::google::protobuf::uint32 TrailRequest::width() const {
-  // @@protoc_insertion_point(field_get:algo.seemmo.TrailRequest.width)
+  // @@protoc_insertion_point(field_get:video.algo.seemmo.TrailRequest.width)
   return width_;
 }
 void TrailRequest::set_width(::google::protobuf::uint32 value) {
   
   width_ = value;
-  // @@protoc_insertion_point(field_set:algo.seemmo.TrailRequest.width)
+  // @@protoc_insertion_point(field_set:video.algo.seemmo.TrailRequest.width)
 }
 
 // string param = 6;
@@ -759,40 +761,40 @@ void TrailRequest::clear_param() {
   param_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 const ::std::string& TrailRequest::param() const {
-  // @@protoc_insertion_point(field_get:algo.seemmo.TrailRequest.param)
+  // @@protoc_insertion_point(field_get:video.algo.seemmo.TrailRequest.param)
   return param_.GetNoArena();
 }
 void TrailRequest::set_param(const ::std::string& value) {
   
   param_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:algo.seemmo.TrailRequest.param)
+  // @@protoc_insertion_point(field_set:video.algo.seemmo.TrailRequest.param)
 }
 #if LANG_CXX11
 void TrailRequest::set_param(::std::string&& value) {
   
   param_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:algo.seemmo.TrailRequest.param)
+  // @@protoc_insertion_point(field_set_rvalue:video.algo.seemmo.TrailRequest.param)
 }
 #endif
 void TrailRequest::set_param(const char* value) {
   
   param_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:algo.seemmo.TrailRequest.param)
+  // @@protoc_insertion_point(field_set_char:video.algo.seemmo.TrailRequest.param)
 }
 void TrailRequest::set_param(const char* value, size_t size) {
   
   param_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:algo.seemmo.TrailRequest.param)
+  // @@protoc_insertion_point(field_set_pointer:video.algo.seemmo.TrailRequest.param)
 }
 ::std::string* TrailRequest::mutable_param() {
   
-  // @@protoc_insertion_point(field_mutable:algo.seemmo.TrailRequest.param)
+  // @@protoc_insertion_point(field_mutable:video.algo.seemmo.TrailRequest.param)
   return param_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 ::std::string* TrailRequest::release_param() {
-  // @@protoc_insertion_point(field_release:algo.seemmo.TrailRequest.param)
+  // @@protoc_insertion_point(field_release:video.algo.seemmo.TrailRequest.param)
   
   return param_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -803,7 +805,7 @@ void TrailRequest::set_allocated_param(::std::string* param) {
     
   }
   param_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), param);
-  // @@protoc_insertion_point(field_set_allocated:algo.seemmo.TrailRequest.param)
+  // @@protoc_insertion_point(field_set_allocated:video.algo.seemmo.TrailRequest.param)
 }
 
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
@@ -820,7 +822,7 @@ TrailReply::TrailReply()
     protobuf_service_2eproto::InitDefaults();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:algo.seemmo.TrailReply)
+  // @@protoc_insertion_point(constructor:video.algo.seemmo.TrailReply)
 }
 TrailReply::TrailReply(const TrailReply& from)
   : ::google::protobuf::Message(),
@@ -831,7 +833,7 @@ TrailReply::TrailReply(const TrailReply& from)
   if (from.data().size() > 0) {
     data_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.data_);
   }
-  // @@protoc_insertion_point(copy_constructor:algo.seemmo.TrailReply)
+  // @@protoc_insertion_point(copy_constructor:video.algo.seemmo.TrailReply)
 }
 
 void TrailReply::SharedCtor() {
@@ -840,7 +842,7 @@ void TrailReply::SharedCtor() {
 }
 
 TrailReply::~TrailReply() {
-  // @@protoc_insertion_point(destructor:algo.seemmo.TrailReply)
+  // @@protoc_insertion_point(destructor:video.algo.seemmo.TrailReply)
   SharedDtor();
 }
 
@@ -872,7 +874,7 @@ TrailReply* TrailReply::New(::google::protobuf::Arena* arena) const {
 }
 
 void TrailReply::Clear() {
-// @@protoc_insertion_point(message_clear_start:algo.seemmo.TrailReply)
+// @@protoc_insertion_point(message_clear_start:video.algo.seemmo.TrailReply)
   data_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
@@ -880,7 +882,7 @@ bool TrailReply::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:algo.seemmo.TrailReply)
+  // @@protoc_insertion_point(parse_start:video.algo.seemmo.TrailReply)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -894,7 +896,7 @@ bool TrailReply::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->data().data(), this->data().length(),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "algo.seemmo.TrailReply.data"));
+            "video.algo.seemmo.TrailReply.data"));
         } else {
           goto handle_unusual;
         }
@@ -914,51 +916,51 @@ bool TrailReply::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:algo.seemmo.TrailReply)
+  // @@protoc_insertion_point(parse_success:video.algo.seemmo.TrailReply)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:algo.seemmo.TrailReply)
+  // @@protoc_insertion_point(parse_failure:video.algo.seemmo.TrailReply)
   return false;
 #undef DO_
 }
 
 void TrailReply::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:algo.seemmo.TrailReply)
+  // @@protoc_insertion_point(serialize_start:video.algo.seemmo.TrailReply)
   // string data = 1;
   if (this->data().size() > 0) {
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->data().data(), this->data().length(),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "algo.seemmo.TrailReply.data");
+      "video.algo.seemmo.TrailReply.data");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       1, this->data(), output);
   }
 
-  // @@protoc_insertion_point(serialize_end:algo.seemmo.TrailReply)
+  // @@protoc_insertion_point(serialize_end:video.algo.seemmo.TrailReply)
 }
 
 ::google::protobuf::uint8* TrailReply::InternalSerializeWithCachedSizesToArray(
     bool deterministic, ::google::protobuf::uint8* target) const {
   (void)deterministic;  // Unused
-  // @@protoc_insertion_point(serialize_to_array_start:algo.seemmo.TrailReply)
+  // @@protoc_insertion_point(serialize_to_array_start:video.algo.seemmo.TrailReply)
   // string data = 1;
   if (this->data().size() > 0) {
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->data().data(), this->data().length(),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "algo.seemmo.TrailReply.data");
+      "video.algo.seemmo.TrailReply.data");
     target =
       ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
         1, this->data(), target);
   }
 
-  // @@protoc_insertion_point(serialize_to_array_end:algo.seemmo.TrailReply)
+  // @@protoc_insertion_point(serialize_to_array_end:video.algo.seemmo.TrailReply)
   return target;
 }
 
 size_t TrailReply::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:algo.seemmo.TrailReply)
+// @@protoc_insertion_point(message_byte_size_start:video.algo.seemmo.TrailReply)
   size_t total_size = 0;
 
   // string data = 1;
@@ -976,22 +978,22 @@ size_t TrailReply::ByteSizeLong() const {
 }
 
 void TrailReply::MergeFrom(const ::google::protobuf::Message& from) {
-// @@protoc_insertion_point(generalized_merge_from_start:algo.seemmo.TrailReply)
+// @@protoc_insertion_point(generalized_merge_from_start:video.algo.seemmo.TrailReply)
   GOOGLE_DCHECK_NE(&from, this);
   const TrailReply* source =
       ::google::protobuf::internal::DynamicCastToGenerated<const TrailReply>(
           &from);
   if (source == NULL) {
-  // @@protoc_insertion_point(generalized_merge_from_cast_fail:algo.seemmo.TrailReply)
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:video.algo.seemmo.TrailReply)
     ::google::protobuf::internal::ReflectionOps::Merge(from, this);
   } else {
-  // @@protoc_insertion_point(generalized_merge_from_cast_success:algo.seemmo.TrailReply)
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:video.algo.seemmo.TrailReply)
     MergeFrom(*source);
   }
 }
 
 void TrailReply::MergeFrom(const TrailReply& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:algo.seemmo.TrailReply)
+// @@protoc_insertion_point(class_specific_merge_from_start:video.algo.seemmo.TrailReply)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   if (from.data().size() > 0) {
@@ -1001,14 +1003,14 @@ void TrailReply::MergeFrom(const TrailReply& from) {
 }
 
 void TrailReply::CopyFrom(const ::google::protobuf::Message& from) {
-// @@protoc_insertion_point(generalized_copy_from_start:algo.seemmo.TrailReply)
+// @@protoc_insertion_point(generalized_copy_from_start:video.algo.seemmo.TrailReply)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
 void TrailReply::CopyFrom(const TrailReply& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:algo.seemmo.TrailReply)
+// @@protoc_insertion_point(class_specific_copy_from_start:video.algo.seemmo.TrailReply)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -1040,40 +1042,40 @@ void TrailReply::clear_data() {
   data_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 const ::std::string& TrailReply::data() const {
-  // @@protoc_insertion_point(field_get:algo.seemmo.TrailReply.data)
+  // @@protoc_insertion_point(field_get:video.algo.seemmo.TrailReply.data)
   return data_.GetNoArena();
 }
 void TrailReply::set_data(const ::std::string& value) {
   
   data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:algo.seemmo.TrailReply.data)
+  // @@protoc_insertion_point(field_set:video.algo.seemmo.TrailReply.data)
 }
 #if LANG_CXX11
 void TrailReply::set_data(::std::string&& value) {
   
   data_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:algo.seemmo.TrailReply.data)
+  // @@protoc_insertion_point(field_set_rvalue:video.algo.seemmo.TrailReply.data)
 }
 #endif
 void TrailReply::set_data(const char* value) {
   
   data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:algo.seemmo.TrailReply.data)
+  // @@protoc_insertion_point(field_set_char:video.algo.seemmo.TrailReply.data)
 }
 void TrailReply::set_data(const char* value, size_t size) {
   
   data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:algo.seemmo.TrailReply.data)
+  // @@protoc_insertion_point(field_set_pointer:video.algo.seemmo.TrailReply.data)
 }
 ::std::string* TrailReply::mutable_data() {
   
-  // @@protoc_insertion_point(field_mutable:algo.seemmo.TrailReply.data)
+  // @@protoc_insertion_point(field_mutable:video.algo.seemmo.TrailReply.data)
   return data_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 ::std::string* TrailReply::release_data() {
-  // @@protoc_insertion_point(field_release:algo.seemmo.TrailReply.data)
+  // @@protoc_insertion_point(field_release:video.algo.seemmo.TrailReply.data)
   
   return data_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -1084,7 +1086,7 @@ void TrailReply::set_allocated_data(::std::string* data) {
     
   }
   data_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), data);
-  // @@protoc_insertion_point(field_set_allocated:algo.seemmo.TrailReply.data)
+  // @@protoc_insertion_point(field_set_allocated:video.algo.seemmo.TrailReply.data)
 }
 
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
@@ -1102,7 +1104,7 @@ TrailEndRequest::TrailEndRequest()
     protobuf_service_2eproto::InitDefaults();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:algo.seemmo.TrailEndRequest)
+  // @@protoc_insertion_point(constructor:video.algo.seemmo.TrailEndRequest)
 }
 TrailEndRequest::TrailEndRequest(const TrailEndRequest& from)
   : ::google::protobuf::Message(),
@@ -1114,7 +1116,7 @@ TrailEndRequest::TrailEndRequest(const TrailEndRequest& from)
     param_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.param_);
   }
   videochl_ = from.videochl_;
-  // @@protoc_insertion_point(copy_constructor:algo.seemmo.TrailEndRequest)
+  // @@protoc_insertion_point(copy_constructor:video.algo.seemmo.TrailEndRequest)
 }
 
 void TrailEndRequest::SharedCtor() {
@@ -1124,7 +1126,7 @@ void TrailEndRequest::SharedCtor() {
 }
 
 TrailEndRequest::~TrailEndRequest() {
-  // @@protoc_insertion_point(destructor:algo.seemmo.TrailEndRequest)
+  // @@protoc_insertion_point(destructor:video.algo.seemmo.TrailEndRequest)
   SharedDtor();
 }
 
@@ -1156,7 +1158,7 @@ TrailEndRequest* TrailEndRequest::New(::google::protobuf::Arena* arena) const {
 }
 
 void TrailEndRequest::Clear() {
-// @@protoc_insertion_point(message_clear_start:algo.seemmo.TrailEndRequest)
+// @@protoc_insertion_point(message_clear_start:video.algo.seemmo.TrailEndRequest)
   param_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   videochl_ = 0u;
 }
@@ -1165,7 +1167,7 @@ bool TrailEndRequest::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:algo.seemmo.TrailEndRequest)
+  // @@protoc_insertion_point(parse_start:video.algo.seemmo.TrailEndRequest)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -1192,7 +1194,7 @@ bool TrailEndRequest::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->param().data(), this->param().length(),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "algo.seemmo.TrailEndRequest.param"));
+            "video.algo.seemmo.TrailEndRequest.param"));
         } else {
           goto handle_unusual;
         }
@@ -1212,17 +1214,17 @@ bool TrailEndRequest::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:algo.seemmo.TrailEndRequest)
+  // @@protoc_insertion_point(parse_success:video.algo.seemmo.TrailEndRequest)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:algo.seemmo.TrailEndRequest)
+  // @@protoc_insertion_point(parse_failure:video.algo.seemmo.TrailEndRequest)
   return false;
 #undef DO_
 }
 
 void TrailEndRequest::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:algo.seemmo.TrailEndRequest)
+  // @@protoc_insertion_point(serialize_start:video.algo.seemmo.TrailEndRequest)
   // uint32 videoChl = 1;
   if (this->videochl() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->videochl(), output);
@@ -1233,18 +1235,18 @@ void TrailEndRequest::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->param().data(), this->param().length(),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "algo.seemmo.TrailEndRequest.param");
+      "video.algo.seemmo.TrailEndRequest.param");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       2, this->param(), output);
   }
 
-  // @@protoc_insertion_point(serialize_end:algo.seemmo.TrailEndRequest)
+  // @@protoc_insertion_point(serialize_end:video.algo.seemmo.TrailEndRequest)
 }
 
 ::google::protobuf::uint8* TrailEndRequest::InternalSerializeWithCachedSizesToArray(
     bool deterministic, ::google::protobuf::uint8* target) const {
   (void)deterministic;  // Unused
-  // @@protoc_insertion_point(serialize_to_array_start:algo.seemmo.TrailEndRequest)
+  // @@protoc_insertion_point(serialize_to_array_start:video.algo.seemmo.TrailEndRequest)
   // uint32 videoChl = 1;
   if (this->videochl() != 0) {
     target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->videochl(), target);
@@ -1255,18 +1257,18 @@ void TrailEndRequest::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->param().data(), this->param().length(),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "algo.seemmo.TrailEndRequest.param");
+      "video.algo.seemmo.TrailEndRequest.param");
     target =
       ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
         2, this->param(), target);
   }
 
-  // @@protoc_insertion_point(serialize_to_array_end:algo.seemmo.TrailEndRequest)
+  // @@protoc_insertion_point(serialize_to_array_end:video.algo.seemmo.TrailEndRequest)
   return target;
 }
 
 size_t TrailEndRequest::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:algo.seemmo.TrailEndRequest)
+// @@protoc_insertion_point(message_byte_size_start:video.algo.seemmo.TrailEndRequest)
   size_t total_size = 0;
 
   // string param = 2;
@@ -1291,22 +1293,22 @@ size_t TrailEndRequest::ByteSizeLong() const {
 }
 
 void TrailEndRequest::MergeFrom(const ::google::protobuf::Message& from) {
-// @@protoc_insertion_point(generalized_merge_from_start:algo.seemmo.TrailEndRequest)
+// @@protoc_insertion_point(generalized_merge_from_start:video.algo.seemmo.TrailEndRequest)
   GOOGLE_DCHECK_NE(&from, this);
   const TrailEndRequest* source =
       ::google::protobuf::internal::DynamicCastToGenerated<const TrailEndRequest>(
           &from);
   if (source == NULL) {
-  // @@protoc_insertion_point(generalized_merge_from_cast_fail:algo.seemmo.TrailEndRequest)
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:video.algo.seemmo.TrailEndRequest)
     ::google::protobuf::internal::ReflectionOps::Merge(from, this);
   } else {
-  // @@protoc_insertion_point(generalized_merge_from_cast_success:algo.seemmo.TrailEndRequest)
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:video.algo.seemmo.TrailEndRequest)
     MergeFrom(*source);
   }
 }
 
 void TrailEndRequest::MergeFrom(const TrailEndRequest& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:algo.seemmo.TrailEndRequest)
+// @@protoc_insertion_point(class_specific_merge_from_start:video.algo.seemmo.TrailEndRequest)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   if (from.param().size() > 0) {
@@ -1319,14 +1321,14 @@ void TrailEndRequest::MergeFrom(const TrailEndRequest& from) {
 }
 
 void TrailEndRequest::CopyFrom(const ::google::protobuf::Message& from) {
-// @@protoc_insertion_point(generalized_copy_from_start:algo.seemmo.TrailEndRequest)
+// @@protoc_insertion_point(generalized_copy_from_start:video.algo.seemmo.TrailEndRequest)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
 void TrailEndRequest::CopyFrom(const TrailEndRequest& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:algo.seemmo.TrailEndRequest)
+// @@protoc_insertion_point(class_specific_copy_from_start:video.algo.seemmo.TrailEndRequest)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -1359,13 +1361,13 @@ void TrailEndRequest::clear_videochl() {
   videochl_ = 0u;
 }
 ::google::protobuf::uint32 TrailEndRequest::videochl() const {
-  // @@protoc_insertion_point(field_get:algo.seemmo.TrailEndRequest.videoChl)
+  // @@protoc_insertion_point(field_get:video.algo.seemmo.TrailEndRequest.videoChl)
   return videochl_;
 }
 void TrailEndRequest::set_videochl(::google::protobuf::uint32 value) {
   
   videochl_ = value;
-  // @@protoc_insertion_point(field_set:algo.seemmo.TrailEndRequest.videoChl)
+  // @@protoc_insertion_point(field_set:video.algo.seemmo.TrailEndRequest.videoChl)
 }
 
 // string param = 2;
@@ -1373,40 +1375,40 @@ void TrailEndRequest::clear_param() {
   param_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 const ::std::string& TrailEndRequest::param() const {
-  // @@protoc_insertion_point(field_get:algo.seemmo.TrailEndRequest.param)
+  // @@protoc_insertion_point(field_get:video.algo.seemmo.TrailEndRequest.param)
   return param_.GetNoArena();
 }
 void TrailEndRequest::set_param(const ::std::string& value) {
   
   param_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:algo.seemmo.TrailEndRequest.param)
+  // @@protoc_insertion_point(field_set:video.algo.seemmo.TrailEndRequest.param)
 }
 #if LANG_CXX11
 void TrailEndRequest::set_param(::std::string&& value) {
   
   param_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:algo.seemmo.TrailEndRequest.param)
+  // @@protoc_insertion_point(field_set_rvalue:video.algo.seemmo.TrailEndRequest.param)
 }
 #endif
 void TrailEndRequest::set_param(const char* value) {
   
   param_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:algo.seemmo.TrailEndRequest.param)
+  // @@protoc_insertion_point(field_set_char:video.algo.seemmo.TrailEndRequest.param)
 }
 void TrailEndRequest::set_param(const char* value, size_t size) {
   
   param_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:algo.seemmo.TrailEndRequest.param)
+  // @@protoc_insertion_point(field_set_pointer:video.algo.seemmo.TrailEndRequest.param)
 }
 ::std::string* TrailEndRequest::mutable_param() {
   
-  // @@protoc_insertion_point(field_mutable:algo.seemmo.TrailEndRequest.param)
+  // @@protoc_insertion_point(field_mutable:video.algo.seemmo.TrailEndRequest.param)
   return param_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 ::std::string* TrailEndRequest::release_param() {
-  // @@protoc_insertion_point(field_release:algo.seemmo.TrailEndRequest.param)
+  // @@protoc_insertion_point(field_release:video.algo.seemmo.TrailEndRequest.param)
   
   return param_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -1417,7 +1419,7 @@ void TrailEndRequest::set_allocated_param(::std::string* param) {
     
   }
   param_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), param);
-  // @@protoc_insertion_point(field_set_allocated:algo.seemmo.TrailEndRequest.param)
+  // @@protoc_insertion_point(field_set_allocated:video.algo.seemmo.TrailEndRequest.param)
 }
 
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
@@ -1434,7 +1436,7 @@ TrailEndReply::TrailEndReply()
     protobuf_service_2eproto::InitDefaults();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:algo.seemmo.TrailEndReply)
+  // @@protoc_insertion_point(constructor:video.algo.seemmo.TrailEndReply)
 }
 TrailEndReply::TrailEndReply(const TrailEndReply& from)
   : ::google::protobuf::Message(),
@@ -1445,7 +1447,7 @@ TrailEndReply::TrailEndReply(const TrailEndReply& from)
   if (from.data().size() > 0) {
     data_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.data_);
   }
-  // @@protoc_insertion_point(copy_constructor:algo.seemmo.TrailEndReply)
+  // @@protoc_insertion_point(copy_constructor:video.algo.seemmo.TrailEndReply)
 }
 
 void TrailEndReply::SharedCtor() {
@@ -1454,7 +1456,7 @@ void TrailEndReply::SharedCtor() {
 }
 
 TrailEndReply::~TrailEndReply() {
-  // @@protoc_insertion_point(destructor:algo.seemmo.TrailEndReply)
+  // @@protoc_insertion_point(destructor:video.algo.seemmo.TrailEndReply)
   SharedDtor();
 }
 
@@ -1486,7 +1488,7 @@ TrailEndReply* TrailEndReply::New(::google::protobuf::Arena* arena) const {
 }
 
 void TrailEndReply::Clear() {
-// @@protoc_insertion_point(message_clear_start:algo.seemmo.TrailEndReply)
+// @@protoc_insertion_point(message_clear_start:video.algo.seemmo.TrailEndReply)
   data_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
@@ -1494,7 +1496,7 @@ bool TrailEndReply::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:algo.seemmo.TrailEndReply)
+  // @@protoc_insertion_point(parse_start:video.algo.seemmo.TrailEndReply)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -1508,7 +1510,7 @@ bool TrailEndReply::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->data().data(), this->data().length(),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "algo.seemmo.TrailEndReply.data"));
+            "video.algo.seemmo.TrailEndReply.data"));
         } else {
           goto handle_unusual;
         }
@@ -1528,51 +1530,51 @@ bool TrailEndReply::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:algo.seemmo.TrailEndReply)
+  // @@protoc_insertion_point(parse_success:video.algo.seemmo.TrailEndReply)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:algo.seemmo.TrailEndReply)
+  // @@protoc_insertion_point(parse_failure:video.algo.seemmo.TrailEndReply)
   return false;
 #undef DO_
 }
 
 void TrailEndReply::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:algo.seemmo.TrailEndReply)
+  // @@protoc_insertion_point(serialize_start:video.algo.seemmo.TrailEndReply)
   // string data = 1;
   if (this->data().size() > 0) {
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->data().data(), this->data().length(),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "algo.seemmo.TrailEndReply.data");
+      "video.algo.seemmo.TrailEndReply.data");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       1, this->data(), output);
   }
 
-  // @@protoc_insertion_point(serialize_end:algo.seemmo.TrailEndReply)
+  // @@protoc_insertion_point(serialize_end:video.algo.seemmo.TrailEndReply)
 }
 
 ::google::protobuf::uint8* TrailEndReply::InternalSerializeWithCachedSizesToArray(
     bool deterministic, ::google::protobuf::uint8* target) const {
   (void)deterministic;  // Unused
-  // @@protoc_insertion_point(serialize_to_array_start:algo.seemmo.TrailEndReply)
+  // @@protoc_insertion_point(serialize_to_array_start:video.algo.seemmo.TrailEndReply)
   // string data = 1;
   if (this->data().size() > 0) {
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->data().data(), this->data().length(),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "algo.seemmo.TrailEndReply.data");
+      "video.algo.seemmo.TrailEndReply.data");
     target =
       ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
         1, this->data(), target);
   }
 
-  // @@protoc_insertion_point(serialize_to_array_end:algo.seemmo.TrailEndReply)
+  // @@protoc_insertion_point(serialize_to_array_end:video.algo.seemmo.TrailEndReply)
   return target;
 }
 
 size_t TrailEndReply::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:algo.seemmo.TrailEndReply)
+// @@protoc_insertion_point(message_byte_size_start:video.algo.seemmo.TrailEndReply)
   size_t total_size = 0;
 
   // string data = 1;
@@ -1590,22 +1592,22 @@ size_t TrailEndReply::ByteSizeLong() const {
 }
 
 void TrailEndReply::MergeFrom(const ::google::protobuf::Message& from) {
-// @@protoc_insertion_point(generalized_merge_from_start:algo.seemmo.TrailEndReply)
+// @@protoc_insertion_point(generalized_merge_from_start:video.algo.seemmo.TrailEndReply)
   GOOGLE_DCHECK_NE(&from, this);
   const TrailEndReply* source =
       ::google::protobuf::internal::DynamicCastToGenerated<const TrailEndReply>(
           &from);
   if (source == NULL) {
-  // @@protoc_insertion_point(generalized_merge_from_cast_fail:algo.seemmo.TrailEndReply)
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:video.algo.seemmo.TrailEndReply)
     ::google::protobuf::internal::ReflectionOps::Merge(from, this);
   } else {
-  // @@protoc_insertion_point(generalized_merge_from_cast_success:algo.seemmo.TrailEndReply)
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:video.algo.seemmo.TrailEndReply)
     MergeFrom(*source);
   }
 }
 
 void TrailEndReply::MergeFrom(const TrailEndReply& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:algo.seemmo.TrailEndReply)
+// @@protoc_insertion_point(class_specific_merge_from_start:video.algo.seemmo.TrailEndReply)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   if (from.data().size() > 0) {
@@ -1615,14 +1617,14 @@ void TrailEndReply::MergeFrom(const TrailEndReply& from) {
 }
 
 void TrailEndReply::CopyFrom(const ::google::protobuf::Message& from) {
-// @@protoc_insertion_point(generalized_copy_from_start:algo.seemmo.TrailEndReply)
+// @@protoc_insertion_point(generalized_copy_from_start:video.algo.seemmo.TrailEndReply)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
 void TrailEndReply::CopyFrom(const TrailEndReply& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:algo.seemmo.TrailEndReply)
+// @@protoc_insertion_point(class_specific_copy_from_start:video.algo.seemmo.TrailEndReply)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -1654,40 +1656,40 @@ void TrailEndReply::clear_data() {
   data_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 const ::std::string& TrailEndReply::data() const {
-  // @@protoc_insertion_point(field_get:algo.seemmo.TrailEndReply.data)
+  // @@protoc_insertion_point(field_get:video.algo.seemmo.TrailEndReply.data)
   return data_.GetNoArena();
 }
 void TrailEndReply::set_data(const ::std::string& value) {
   
   data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:algo.seemmo.TrailEndReply.data)
+  // @@protoc_insertion_point(field_set:video.algo.seemmo.TrailEndReply.data)
 }
 #if LANG_CXX11
 void TrailEndReply::set_data(::std::string&& value) {
   
   data_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:algo.seemmo.TrailEndReply.data)
+  // @@protoc_insertion_point(field_set_rvalue:video.algo.seemmo.TrailEndReply.data)
 }
 #endif
 void TrailEndReply::set_data(const char* value) {
   
   data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:algo.seemmo.TrailEndReply.data)
+  // @@protoc_insertion_point(field_set_char:video.algo.seemmo.TrailEndReply.data)
 }
 void TrailEndReply::set_data(const char* value, size_t size) {
   
   data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:algo.seemmo.TrailEndReply.data)
+  // @@protoc_insertion_point(field_set_pointer:video.algo.seemmo.TrailEndReply.data)
 }
 ::std::string* TrailEndReply::mutable_data() {
   
-  // @@protoc_insertion_point(field_mutable:algo.seemmo.TrailEndReply.data)
+  // @@protoc_insertion_point(field_mutable:video.algo.seemmo.TrailEndReply.data)
   return data_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 ::std::string* TrailEndReply::release_data() {
-  // @@protoc_insertion_point(field_release:algo.seemmo.TrailEndReply.data)
+  // @@protoc_insertion_point(field_release:video.algo.seemmo.TrailEndReply.data)
   
   return data_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -1698,7 +1700,7 @@ void TrailEndReply::set_allocated_data(::std::string* data) {
     
   }
   data_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), data);
-  // @@protoc_insertion_point(field_set_allocated:algo.seemmo.TrailEndReply.data)
+  // @@protoc_insertion_point(field_set_allocated:video.algo.seemmo.TrailEndReply.data)
 }
 
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
@@ -1719,7 +1721,7 @@ RecognizeRequest::RecognizeRequest()
     protobuf_service_2eproto::InitDefaults();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:algo.seemmo.RecognizeRequest)
+  // @@protoc_insertion_point(constructor:video.algo.seemmo.RecognizeRequest)
 }
 RecognizeRequest::RecognizeRequest(const RecognizeRequest& from)
   : ::google::protobuf::Message(),
@@ -1737,7 +1739,7 @@ RecognizeRequest::RecognizeRequest(const RecognizeRequest& from)
   ::memcpy(&videochl_, &from.videochl_,
     reinterpret_cast<char*>(&width_) -
     reinterpret_cast<char*>(&videochl_) + sizeof(width_));
-  // @@protoc_insertion_point(copy_constructor:algo.seemmo.RecognizeRequest)
+  // @@protoc_insertion_point(copy_constructor:video.algo.seemmo.RecognizeRequest)
 }
 
 void RecognizeRequest::SharedCtor() {
@@ -1749,7 +1751,7 @@ void RecognizeRequest::SharedCtor() {
 }
 
 RecognizeRequest::~RecognizeRequest() {
-  // @@protoc_insertion_point(destructor:algo.seemmo.RecognizeRequest)
+  // @@protoc_insertion_point(destructor:video.algo.seemmo.RecognizeRequest)
   SharedDtor();
 }
 
@@ -1782,7 +1784,7 @@ RecognizeRequest* RecognizeRequest::New(::google::protobuf::Arena* arena) const 
 }
 
 void RecognizeRequest::Clear() {
-// @@protoc_insertion_point(message_clear_start:algo.seemmo.RecognizeRequest)
+// @@protoc_insertion_point(message_clear_start:video.algo.seemmo.RecognizeRequest)
   bgr24_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   param_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   ::memset(&videochl_, 0, reinterpret_cast<char*>(&width_) -
@@ -1793,7 +1795,7 @@ bool RecognizeRequest::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:algo.seemmo.RecognizeRequest)
+  // @@protoc_insertion_point(parse_start:video.algo.seemmo.RecognizeRequest)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -1857,7 +1859,7 @@ bool RecognizeRequest::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->param().data(), this->param().length(),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "algo.seemmo.RecognizeRequest.param"));
+            "video.algo.seemmo.RecognizeRequest.param"));
         } else {
           goto handle_unusual;
         }
@@ -1877,17 +1879,17 @@ bool RecognizeRequest::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:algo.seemmo.RecognizeRequest)
+  // @@protoc_insertion_point(parse_success:video.algo.seemmo.RecognizeRequest)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:algo.seemmo.RecognizeRequest)
+  // @@protoc_insertion_point(parse_failure:video.algo.seemmo.RecognizeRequest)
   return false;
 #undef DO_
 }
 
 void RecognizeRequest::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:algo.seemmo.RecognizeRequest)
+  // @@protoc_insertion_point(serialize_start:video.algo.seemmo.RecognizeRequest)
   // uint32 videoChl = 1;
   if (this->videochl() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->videochl(), output);
@@ -1914,18 +1916,18 @@ void RecognizeRequest::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->param().data(), this->param().length(),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "algo.seemmo.RecognizeRequest.param");
+      "video.algo.seemmo.RecognizeRequest.param");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       5, this->param(), output);
   }
 
-  // @@protoc_insertion_point(serialize_end:algo.seemmo.RecognizeRequest)
+  // @@protoc_insertion_point(serialize_end:video.algo.seemmo.RecognizeRequest)
 }
 
 ::google::protobuf::uint8* RecognizeRequest::InternalSerializeWithCachedSizesToArray(
     bool deterministic, ::google::protobuf::uint8* target) const {
   (void)deterministic;  // Unused
-  // @@protoc_insertion_point(serialize_to_array_start:algo.seemmo.RecognizeRequest)
+  // @@protoc_insertion_point(serialize_to_array_start:video.algo.seemmo.RecognizeRequest)
   // uint32 videoChl = 1;
   if (this->videochl() != 0) {
     target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->videochl(), target);
@@ -1953,18 +1955,18 @@ void RecognizeRequest::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->param().data(), this->param().length(),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "algo.seemmo.RecognizeRequest.param");
+      "video.algo.seemmo.RecognizeRequest.param");
     target =
       ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
         5, this->param(), target);
   }
 
-  // @@protoc_insertion_point(serialize_to_array_end:algo.seemmo.RecognizeRequest)
+  // @@protoc_insertion_point(serialize_to_array_end:video.algo.seemmo.RecognizeRequest)
   return target;
 }
 
 size_t RecognizeRequest::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:algo.seemmo.RecognizeRequest)
+// @@protoc_insertion_point(message_byte_size_start:video.algo.seemmo.RecognizeRequest)
   size_t total_size = 0;
 
   // bytes bgr24 = 2;
@@ -2010,22 +2012,22 @@ size_t RecognizeRequest::ByteSizeLong() const {
 }
 
 void RecognizeRequest::MergeFrom(const ::google::protobuf::Message& from) {
-// @@protoc_insertion_point(generalized_merge_from_start:algo.seemmo.RecognizeRequest)
+// @@protoc_insertion_point(generalized_merge_from_start:video.algo.seemmo.RecognizeRequest)
   GOOGLE_DCHECK_NE(&from, this);
   const RecognizeRequest* source =
       ::google::protobuf::internal::DynamicCastToGenerated<const RecognizeRequest>(
           &from);
   if (source == NULL) {
-  // @@protoc_insertion_point(generalized_merge_from_cast_fail:algo.seemmo.RecognizeRequest)
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:video.algo.seemmo.RecognizeRequest)
     ::google::protobuf::internal::ReflectionOps::Merge(from, this);
   } else {
-  // @@protoc_insertion_point(generalized_merge_from_cast_success:algo.seemmo.RecognizeRequest)
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:video.algo.seemmo.RecognizeRequest)
     MergeFrom(*source);
   }
 }
 
 void RecognizeRequest::MergeFrom(const RecognizeRequest& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:algo.seemmo.RecognizeRequest)
+// @@protoc_insertion_point(class_specific_merge_from_start:video.algo.seemmo.RecognizeRequest)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   if (from.bgr24().size() > 0) {
@@ -2048,14 +2050,14 @@ void RecognizeRequest::MergeFrom(const RecognizeRequest& from) {
 }
 
 void RecognizeRequest::CopyFrom(const ::google::protobuf::Message& from) {
-// @@protoc_insertion_point(generalized_copy_from_start:algo.seemmo.RecognizeRequest)
+// @@protoc_insertion_point(generalized_copy_from_start:video.algo.seemmo.RecognizeRequest)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
 void RecognizeRequest::CopyFrom(const RecognizeRequest& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:algo.seemmo.RecognizeRequest)
+// @@protoc_insertion_point(class_specific_copy_from_start:video.algo.seemmo.RecognizeRequest)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -2091,13 +2093,13 @@ void RecognizeRequest::clear_videochl() {
   videochl_ = 0u;
 }
 ::google::protobuf::uint32 RecognizeRequest::videochl() const {
-  // @@protoc_insertion_point(field_get:algo.seemmo.RecognizeRequest.videoChl)
+  // @@protoc_insertion_point(field_get:video.algo.seemmo.RecognizeRequest.videoChl)
   return videochl_;
 }
 void RecognizeRequest::set_videochl(::google::protobuf::uint32 value) {
   
   videochl_ = value;
-  // @@protoc_insertion_point(field_set:algo.seemmo.RecognizeRequest.videoChl)
+  // @@protoc_insertion_point(field_set:video.algo.seemmo.RecognizeRequest.videoChl)
 }
 
 // bytes bgr24 = 2;
@@ -2105,40 +2107,40 @@ void RecognizeRequest::clear_bgr24() {
   bgr24_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 const ::std::string& RecognizeRequest::bgr24() const {
-  // @@protoc_insertion_point(field_get:algo.seemmo.RecognizeRequest.bgr24)
+  // @@protoc_insertion_point(field_get:video.algo.seemmo.RecognizeRequest.bgr24)
   return bgr24_.GetNoArena();
 }
 void RecognizeRequest::set_bgr24(const ::std::string& value) {
   
   bgr24_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:algo.seemmo.RecognizeRequest.bgr24)
+  // @@protoc_insertion_point(field_set:video.algo.seemmo.RecognizeRequest.bgr24)
 }
 #if LANG_CXX11
 void RecognizeRequest::set_bgr24(::std::string&& value) {
   
   bgr24_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:algo.seemmo.RecognizeRequest.bgr24)
+  // @@protoc_insertion_point(field_set_rvalue:video.algo.seemmo.RecognizeRequest.bgr24)
 }
 #endif
 void RecognizeRequest::set_bgr24(const char* value) {
   
   bgr24_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:algo.seemmo.RecognizeRequest.bgr24)
+  // @@protoc_insertion_point(field_set_char:video.algo.seemmo.RecognizeRequest.bgr24)
 }
 void RecognizeRequest::set_bgr24(const void* value, size_t size) {
   
   bgr24_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:algo.seemmo.RecognizeRequest.bgr24)
+  // @@protoc_insertion_point(field_set_pointer:video.algo.seemmo.RecognizeRequest.bgr24)
 }
 ::std::string* RecognizeRequest::mutable_bgr24() {
   
-  // @@protoc_insertion_point(field_mutable:algo.seemmo.RecognizeRequest.bgr24)
+  // @@protoc_insertion_point(field_mutable:video.algo.seemmo.RecognizeRequest.bgr24)
   return bgr24_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 ::std::string* RecognizeRequest::release_bgr24() {
-  // @@protoc_insertion_point(field_release:algo.seemmo.RecognizeRequest.bgr24)
+  // @@protoc_insertion_point(field_release:video.algo.seemmo.RecognizeRequest.bgr24)
   
   return bgr24_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -2149,7 +2151,7 @@ void RecognizeRequest::set_allocated_bgr24(::std::string* bgr24) {
     
   }
   bgr24_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), bgr24);
-  // @@protoc_insertion_point(field_set_allocated:algo.seemmo.RecognizeRequest.bgr24)
+  // @@protoc_insertion_point(field_set_allocated:video.algo.seemmo.RecognizeRequest.bgr24)
 }
 
 // uint32 height = 3;
@@ -2157,13 +2159,13 @@ void RecognizeRequest::clear_height() {
   height_ = 0u;
 }
 ::google::protobuf::uint32 RecognizeRequest::height() const {
-  // @@protoc_insertion_point(field_get:algo.seemmo.RecognizeRequest.height)
+  // @@protoc_insertion_point(field_get:video.algo.seemmo.RecognizeRequest.height)
   return height_;
 }
 void RecognizeRequest::set_height(::google::protobuf::uint32 value) {
   
   height_ = value;
-  // @@protoc_insertion_point(field_set:algo.seemmo.RecognizeRequest.height)
+  // @@protoc_insertion_point(field_set:video.algo.seemmo.RecognizeRequest.height)
 }
 
 // uint32 width = 4;
@@ -2171,13 +2173,13 @@ void RecognizeRequest::clear_width() {
   width_ = 0u;
 }
 ::google::protobuf::uint32 RecognizeRequest::width() const {
-  // @@protoc_insertion_point(field_get:algo.seemmo.RecognizeRequest.width)
+  // @@protoc_insertion_point(field_get:video.algo.seemmo.RecognizeRequest.width)
   return width_;
 }
 void RecognizeRequest::set_width(::google::protobuf::uint32 value) {
   
   width_ = value;
-  // @@protoc_insertion_point(field_set:algo.seemmo.RecognizeRequest.width)
+  // @@protoc_insertion_point(field_set:video.algo.seemmo.RecognizeRequest.width)
 }
 
 // string param = 5;
@@ -2185,40 +2187,40 @@ void RecognizeRequest::clear_param() {
   param_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 const ::std::string& RecognizeRequest::param() const {
-  // @@protoc_insertion_point(field_get:algo.seemmo.RecognizeRequest.param)
+  // @@protoc_insertion_point(field_get:video.algo.seemmo.RecognizeRequest.param)
   return param_.GetNoArena();
 }
 void RecognizeRequest::set_param(const ::std::string& value) {
   
   param_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:algo.seemmo.RecognizeRequest.param)
+  // @@protoc_insertion_point(field_set:video.algo.seemmo.RecognizeRequest.param)
 }
 #if LANG_CXX11
 void RecognizeRequest::set_param(::std::string&& value) {
   
   param_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:algo.seemmo.RecognizeRequest.param)
+  // @@protoc_insertion_point(field_set_rvalue:video.algo.seemmo.RecognizeRequest.param)
 }
 #endif
 void RecognizeRequest::set_param(const char* value) {
   
   param_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:algo.seemmo.RecognizeRequest.param)
+  // @@protoc_insertion_point(field_set_char:video.algo.seemmo.RecognizeRequest.param)
 }
 void RecognizeRequest::set_param(const char* value, size_t size) {
   
   param_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:algo.seemmo.RecognizeRequest.param)
+  // @@protoc_insertion_point(field_set_pointer:video.algo.seemmo.RecognizeRequest.param)
 }
 ::std::string* RecognizeRequest::mutable_param() {
   
-  // @@protoc_insertion_point(field_mutable:algo.seemmo.RecognizeRequest.param)
+  // @@protoc_insertion_point(field_mutable:video.algo.seemmo.RecognizeRequest.param)
   return param_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 ::std::string* RecognizeRequest::release_param() {
-  // @@protoc_insertion_point(field_release:algo.seemmo.RecognizeRequest.param)
+  // @@protoc_insertion_point(field_release:video.algo.seemmo.RecognizeRequest.param)
   
   return param_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -2229,7 +2231,7 @@ void RecognizeRequest::set_allocated_param(::std::string* param) {
     
   }
   param_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), param);
-  // @@protoc_insertion_point(field_set_allocated:algo.seemmo.RecognizeRequest.param)
+  // @@protoc_insertion_point(field_set_allocated:video.algo.seemmo.RecognizeRequest.param)
 }
 
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
@@ -2246,7 +2248,7 @@ RecognizeReply::RecognizeReply()
     protobuf_service_2eproto::InitDefaults();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:algo.seemmo.RecognizeReply)
+  // @@protoc_insertion_point(constructor:video.algo.seemmo.RecognizeReply)
 }
 RecognizeReply::RecognizeReply(const RecognizeReply& from)
   : ::google::protobuf::Message(),
@@ -2257,7 +2259,7 @@ RecognizeReply::RecognizeReply(const RecognizeReply& from)
   if (from.data().size() > 0) {
     data_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.data_);
   }
-  // @@protoc_insertion_point(copy_constructor:algo.seemmo.RecognizeReply)
+  // @@protoc_insertion_point(copy_constructor:video.algo.seemmo.RecognizeReply)
 }
 
 void RecognizeReply::SharedCtor() {
@@ -2266,7 +2268,7 @@ void RecognizeReply::SharedCtor() {
 }
 
 RecognizeReply::~RecognizeReply() {
-  // @@protoc_insertion_point(destructor:algo.seemmo.RecognizeReply)
+  // @@protoc_insertion_point(destructor:video.algo.seemmo.RecognizeReply)
   SharedDtor();
 }
 
@@ -2298,7 +2300,7 @@ RecognizeReply* RecognizeReply::New(::google::protobuf::Arena* arena) const {
 }
 
 void RecognizeReply::Clear() {
-// @@protoc_insertion_point(message_clear_start:algo.seemmo.RecognizeReply)
+// @@protoc_insertion_point(message_clear_start:video.algo.seemmo.RecognizeReply)
   data_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
@@ -2306,7 +2308,7 @@ bool RecognizeReply::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:algo.seemmo.RecognizeReply)
+  // @@protoc_insertion_point(parse_start:video.algo.seemmo.RecognizeReply)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -2320,7 +2322,7 @@ bool RecognizeReply::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->data().data(), this->data().length(),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "algo.seemmo.RecognizeReply.data"));
+            "video.algo.seemmo.RecognizeReply.data"));
         } else {
           goto handle_unusual;
         }
@@ -2340,51 +2342,51 @@ bool RecognizeReply::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:algo.seemmo.RecognizeReply)
+  // @@protoc_insertion_point(parse_success:video.algo.seemmo.RecognizeReply)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:algo.seemmo.RecognizeReply)
+  // @@protoc_insertion_point(parse_failure:video.algo.seemmo.RecognizeReply)
   return false;
 #undef DO_
 }
 
 void RecognizeReply::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:algo.seemmo.RecognizeReply)
+  // @@protoc_insertion_point(serialize_start:video.algo.seemmo.RecognizeReply)
   // string data = 1;
   if (this->data().size() > 0) {
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->data().data(), this->data().length(),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "algo.seemmo.RecognizeReply.data");
+      "video.algo.seemmo.RecognizeReply.data");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       1, this->data(), output);
   }
 
-  // @@protoc_insertion_point(serialize_end:algo.seemmo.RecognizeReply)
+  // @@protoc_insertion_point(serialize_end:video.algo.seemmo.RecognizeReply)
 }
 
 ::google::protobuf::uint8* RecognizeReply::InternalSerializeWithCachedSizesToArray(
     bool deterministic, ::google::protobuf::uint8* target) const {
   (void)deterministic;  // Unused
-  // @@protoc_insertion_point(serialize_to_array_start:algo.seemmo.RecognizeReply)
+  // @@protoc_insertion_point(serialize_to_array_start:video.algo.seemmo.RecognizeReply)
   // string data = 1;
   if (this->data().size() > 0) {
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->data().data(), this->data().length(),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "algo.seemmo.RecognizeReply.data");
+      "video.algo.seemmo.RecognizeReply.data");
     target =
       ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
         1, this->data(), target);
   }
 
-  // @@protoc_insertion_point(serialize_to_array_end:algo.seemmo.RecognizeReply)
+  // @@protoc_insertion_point(serialize_to_array_end:video.algo.seemmo.RecognizeReply)
   return target;
 }
 
 size_t RecognizeReply::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:algo.seemmo.RecognizeReply)
+// @@protoc_insertion_point(message_byte_size_start:video.algo.seemmo.RecognizeReply)
   size_t total_size = 0;
 
   // string data = 1;
@@ -2402,22 +2404,22 @@ size_t RecognizeReply::ByteSizeLong() const {
 }
 
 void RecognizeReply::MergeFrom(const ::google::protobuf::Message& from) {
-// @@protoc_insertion_point(generalized_merge_from_start:algo.seemmo.RecognizeReply)
+// @@protoc_insertion_point(generalized_merge_from_start:video.algo.seemmo.RecognizeReply)
   GOOGLE_DCHECK_NE(&from, this);
   const RecognizeReply* source =
       ::google::protobuf::internal::DynamicCastToGenerated<const RecognizeReply>(
           &from);
   if (source == NULL) {
-  // @@protoc_insertion_point(generalized_merge_from_cast_fail:algo.seemmo.RecognizeReply)
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:video.algo.seemmo.RecognizeReply)
     ::google::protobuf::internal::ReflectionOps::Merge(from, this);
   } else {
-  // @@protoc_insertion_point(generalized_merge_from_cast_success:algo.seemmo.RecognizeReply)
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:video.algo.seemmo.RecognizeReply)
     MergeFrom(*source);
   }
 }
 
 void RecognizeReply::MergeFrom(const RecognizeReply& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:algo.seemmo.RecognizeReply)
+// @@protoc_insertion_point(class_specific_merge_from_start:video.algo.seemmo.RecognizeReply)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   if (from.data().size() > 0) {
@@ -2427,14 +2429,14 @@ void RecognizeReply::MergeFrom(const RecognizeReply& from) {
 }
 
 void RecognizeReply::CopyFrom(const ::google::protobuf::Message& from) {
-// @@protoc_insertion_point(generalized_copy_from_start:algo.seemmo.RecognizeReply)
+// @@protoc_insertion_point(generalized_copy_from_start:video.algo.seemmo.RecognizeReply)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
 void RecognizeReply::CopyFrom(const RecognizeReply& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:algo.seemmo.RecognizeReply)
+// @@protoc_insertion_point(class_specific_copy_from_start:video.algo.seemmo.RecognizeReply)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -2466,40 +2468,40 @@ void RecognizeReply::clear_data() {
   data_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 const ::std::string& RecognizeReply::data() const {
-  // @@protoc_insertion_point(field_get:algo.seemmo.RecognizeReply.data)
+  // @@protoc_insertion_point(field_get:video.algo.seemmo.RecognizeReply.data)
   return data_.GetNoArena();
 }
 void RecognizeReply::set_data(const ::std::string& value) {
   
   data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:algo.seemmo.RecognizeReply.data)
+  // @@protoc_insertion_point(field_set:video.algo.seemmo.RecognizeReply.data)
 }
 #if LANG_CXX11
 void RecognizeReply::set_data(::std::string&& value) {
   
   data_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:algo.seemmo.RecognizeReply.data)
+  // @@protoc_insertion_point(field_set_rvalue:video.algo.seemmo.RecognizeReply.data)
 }
 #endif
 void RecognizeReply::set_data(const char* value) {
   
   data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:algo.seemmo.RecognizeReply.data)
+  // @@protoc_insertion_point(field_set_char:video.algo.seemmo.RecognizeReply.data)
 }
 void RecognizeReply::set_data(const char* value, size_t size) {
   
   data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:algo.seemmo.RecognizeReply.data)
+  // @@protoc_insertion_point(field_set_pointer:video.algo.seemmo.RecognizeReply.data)
 }
 ::std::string* RecognizeReply::mutable_data() {
   
-  // @@protoc_insertion_point(field_mutable:algo.seemmo.RecognizeReply.data)
+  // @@protoc_insertion_point(field_mutable:video.algo.seemmo.RecognizeReply.data)
   return data_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 ::std::string* RecognizeReply::release_data() {
-  // @@protoc_insertion_point(field_release:algo.seemmo.RecognizeReply.data)
+  // @@protoc_insertion_point(field_release:video.algo.seemmo.RecognizeReply.data)
   
   return data_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -2510,7 +2512,7 @@ void RecognizeReply::set_allocated_data(::std::string* data) {
     
   }
   data_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), data);
-  // @@protoc_insertion_point(field_set_allocated:algo.seemmo.RecognizeReply.data)
+  // @@protoc_insertion_point(field_set_allocated:video.algo.seemmo.RecognizeReply.data)
 }
 
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
@@ -2528,7 +2530,7 @@ ImgRecognizeRequest::ImgRecognizeRequest()
     protobuf_service_2eproto::InitDefaults();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:algo.seemmo.ImgRecognizeRequest)
+  // @@protoc_insertion_point(constructor:video.algo.seemmo.ImgRecognizeRequest)
 }
 ImgRecognizeRequest::ImgRecognizeRequest(const ImgRecognizeRequest& from)
   : ::google::protobuf::Message(),
@@ -2540,7 +2542,7 @@ ImgRecognizeRequest::ImgRecognizeRequest(const ImgRecognizeRequest& from)
     jpeg_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.jpeg_);
   }
   imageid_ = from.imageid_;
-  // @@protoc_insertion_point(copy_constructor:algo.seemmo.ImgRecognizeRequest)
+  // @@protoc_insertion_point(copy_constructor:video.algo.seemmo.ImgRecognizeRequest)
 }
 
 void ImgRecognizeRequest::SharedCtor() {
@@ -2550,7 +2552,7 @@ void ImgRecognizeRequest::SharedCtor() {
 }
 
 ImgRecognizeRequest::~ImgRecognizeRequest() {
-  // @@protoc_insertion_point(destructor:algo.seemmo.ImgRecognizeRequest)
+  // @@protoc_insertion_point(destructor:video.algo.seemmo.ImgRecognizeRequest)
   SharedDtor();
 }
 
@@ -2582,7 +2584,7 @@ ImgRecognizeRequest* ImgRecognizeRequest::New(::google::protobuf::Arena* arena) 
 }
 
 void ImgRecognizeRequest::Clear() {
-// @@protoc_insertion_point(message_clear_start:algo.seemmo.ImgRecognizeRequest)
+// @@protoc_insertion_point(message_clear_start:video.algo.seemmo.ImgRecognizeRequest)
   jpeg_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   imageid_ = 0u;
 }
@@ -2591,7 +2593,7 @@ bool ImgRecognizeRequest::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:algo.seemmo.ImgRecognizeRequest)
+  // @@protoc_insertion_point(parse_start:video.algo.seemmo.ImgRecognizeRequest)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -2634,17 +2636,17 @@ bool ImgRecognizeRequest::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:algo.seemmo.ImgRecognizeRequest)
+  // @@protoc_insertion_point(parse_success:video.algo.seemmo.ImgRecognizeRequest)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:algo.seemmo.ImgRecognizeRequest)
+  // @@protoc_insertion_point(parse_failure:video.algo.seemmo.ImgRecognizeRequest)
   return false;
 #undef DO_
 }
 
 void ImgRecognizeRequest::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:algo.seemmo.ImgRecognizeRequest)
+  // @@protoc_insertion_point(serialize_start:video.algo.seemmo.ImgRecognizeRequest)
   // uint32 imageId = 1;
   if (this->imageid() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->imageid(), output);
@@ -2656,13 +2658,13 @@ void ImgRecognizeRequest::SerializeWithCachedSizes(
       2, this->jpeg(), output);
   }
 
-  // @@protoc_insertion_point(serialize_end:algo.seemmo.ImgRecognizeRequest)
+  // @@protoc_insertion_point(serialize_end:video.algo.seemmo.ImgRecognizeRequest)
 }
 
 ::google::protobuf::uint8* ImgRecognizeRequest::InternalSerializeWithCachedSizesToArray(
     bool deterministic, ::google::protobuf::uint8* target) const {
   (void)deterministic;  // Unused
-  // @@protoc_insertion_point(serialize_to_array_start:algo.seemmo.ImgRecognizeRequest)
+  // @@protoc_insertion_point(serialize_to_array_start:video.algo.seemmo.ImgRecognizeRequest)
   // uint32 imageId = 1;
   if (this->imageid() != 0) {
     target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->imageid(), target);
@@ -2675,12 +2677,12 @@ void ImgRecognizeRequest::SerializeWithCachedSizes(
         2, this->jpeg(), target);
   }
 
-  // @@protoc_insertion_point(serialize_to_array_end:algo.seemmo.ImgRecognizeRequest)
+  // @@protoc_insertion_point(serialize_to_array_end:video.algo.seemmo.ImgRecognizeRequest)
   return target;
 }
 
 size_t ImgRecognizeRequest::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:algo.seemmo.ImgRecognizeRequest)
+// @@protoc_insertion_point(message_byte_size_start:video.algo.seemmo.ImgRecognizeRequest)
   size_t total_size = 0;
 
   // bytes jpeg = 2;
@@ -2705,22 +2707,22 @@ size_t ImgRecognizeRequest::ByteSizeLong() const {
 }
 
 void ImgRecognizeRequest::MergeFrom(const ::google::protobuf::Message& from) {
-// @@protoc_insertion_point(generalized_merge_from_start:algo.seemmo.ImgRecognizeRequest)
+// @@protoc_insertion_point(generalized_merge_from_start:video.algo.seemmo.ImgRecognizeRequest)
   GOOGLE_DCHECK_NE(&from, this);
   const ImgRecognizeRequest* source =
       ::google::protobuf::internal::DynamicCastToGenerated<const ImgRecognizeRequest>(
           &from);
   if (source == NULL) {
-  // @@protoc_insertion_point(generalized_merge_from_cast_fail:algo.seemmo.ImgRecognizeRequest)
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:video.algo.seemmo.ImgRecognizeRequest)
     ::google::protobuf::internal::ReflectionOps::Merge(from, this);
   } else {
-  // @@protoc_insertion_point(generalized_merge_from_cast_success:algo.seemmo.ImgRecognizeRequest)
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:video.algo.seemmo.ImgRecognizeRequest)
     MergeFrom(*source);
   }
 }
 
 void ImgRecognizeRequest::MergeFrom(const ImgRecognizeRequest& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:algo.seemmo.ImgRecognizeRequest)
+// @@protoc_insertion_point(class_specific_merge_from_start:video.algo.seemmo.ImgRecognizeRequest)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   if (from.jpeg().size() > 0) {
@@ -2733,14 +2735,14 @@ void ImgRecognizeRequest::MergeFrom(const ImgRecognizeRequest& from) {
 }
 
 void ImgRecognizeRequest::CopyFrom(const ::google::protobuf::Message& from) {
-// @@protoc_insertion_point(generalized_copy_from_start:algo.seemmo.ImgRecognizeRequest)
+// @@protoc_insertion_point(generalized_copy_from_start:video.algo.seemmo.ImgRecognizeRequest)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
 void ImgRecognizeRequest::CopyFrom(const ImgRecognizeRequest& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:algo.seemmo.ImgRecognizeRequest)
+// @@protoc_insertion_point(class_specific_copy_from_start:video.algo.seemmo.ImgRecognizeRequest)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -2773,13 +2775,13 @@ void ImgRecognizeRequest::clear_imageid() {
   imageid_ = 0u;
 }
 ::google::protobuf::uint32 ImgRecognizeRequest::imageid() const {
-  // @@protoc_insertion_point(field_get:algo.seemmo.ImgRecognizeRequest.imageId)
+  // @@protoc_insertion_point(field_get:video.algo.seemmo.ImgRecognizeRequest.imageId)
   return imageid_;
 }
 void ImgRecognizeRequest::set_imageid(::google::protobuf::uint32 value) {
   
   imageid_ = value;
-  // @@protoc_insertion_point(field_set:algo.seemmo.ImgRecognizeRequest.imageId)
+  // @@protoc_insertion_point(field_set:video.algo.seemmo.ImgRecognizeRequest.imageId)
 }
 
 // bytes jpeg = 2;
@@ -2787,40 +2789,40 @@ void ImgRecognizeRequest::clear_jpeg() {
   jpeg_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 const ::std::string& ImgRecognizeRequest::jpeg() const {
-  // @@protoc_insertion_point(field_get:algo.seemmo.ImgRecognizeRequest.jpeg)
+  // @@protoc_insertion_point(field_get:video.algo.seemmo.ImgRecognizeRequest.jpeg)
   return jpeg_.GetNoArena();
 }
 void ImgRecognizeRequest::set_jpeg(const ::std::string& value) {
   
   jpeg_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:algo.seemmo.ImgRecognizeRequest.jpeg)
+  // @@protoc_insertion_point(field_set:video.algo.seemmo.ImgRecognizeRequest.jpeg)
 }
 #if LANG_CXX11
 void ImgRecognizeRequest::set_jpeg(::std::string&& value) {
   
   jpeg_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:algo.seemmo.ImgRecognizeRequest.jpeg)
+  // @@protoc_insertion_point(field_set_rvalue:video.algo.seemmo.ImgRecognizeRequest.jpeg)
 }
 #endif
 void ImgRecognizeRequest::set_jpeg(const char* value) {
   
   jpeg_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:algo.seemmo.ImgRecognizeRequest.jpeg)
+  // @@protoc_insertion_point(field_set_char:video.algo.seemmo.ImgRecognizeRequest.jpeg)
 }
 void ImgRecognizeRequest::set_jpeg(const void* value, size_t size) {
   
   jpeg_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:algo.seemmo.ImgRecognizeRequest.jpeg)
+  // @@protoc_insertion_point(field_set_pointer:video.algo.seemmo.ImgRecognizeRequest.jpeg)
 }
 ::std::string* ImgRecognizeRequest::mutable_jpeg() {
   
-  // @@protoc_insertion_point(field_mutable:algo.seemmo.ImgRecognizeRequest.jpeg)
+  // @@protoc_insertion_point(field_mutable:video.algo.seemmo.ImgRecognizeRequest.jpeg)
   return jpeg_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 ::std::string* ImgRecognizeRequest::release_jpeg() {
-  // @@protoc_insertion_point(field_release:algo.seemmo.ImgRecognizeRequest.jpeg)
+  // @@protoc_insertion_point(field_release:video.algo.seemmo.ImgRecognizeRequest.jpeg)
   
   return jpeg_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -2831,7 +2833,7 @@ void ImgRecognizeRequest::set_allocated_jpeg(::std::string* jpeg) {
     
   }
   jpeg_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), jpeg);
-  // @@protoc_insertion_point(field_set_allocated:algo.seemmo.ImgRecognizeRequest.jpeg)
+  // @@protoc_insertion_point(field_set_allocated:video.algo.seemmo.ImgRecognizeRequest.jpeg)
 }
 
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
@@ -2848,7 +2850,7 @@ ImgRecognizeReply::ImgRecognizeReply()
     protobuf_service_2eproto::InitDefaults();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:algo.seemmo.ImgRecognizeReply)
+  // @@protoc_insertion_point(constructor:video.algo.seemmo.ImgRecognizeReply)
 }
 ImgRecognizeReply::ImgRecognizeReply(const ImgRecognizeReply& from)
   : ::google::protobuf::Message(),
@@ -2859,7 +2861,7 @@ ImgRecognizeReply::ImgRecognizeReply(const ImgRecognizeReply& from)
   if (from.data().size() > 0) {
     data_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.data_);
   }
-  // @@protoc_insertion_point(copy_constructor:algo.seemmo.ImgRecognizeReply)
+  // @@protoc_insertion_point(copy_constructor:video.algo.seemmo.ImgRecognizeReply)
 }
 
 void ImgRecognizeReply::SharedCtor() {
@@ -2868,7 +2870,7 @@ void ImgRecognizeReply::SharedCtor() {
 }
 
 ImgRecognizeReply::~ImgRecognizeReply() {
-  // @@protoc_insertion_point(destructor:algo.seemmo.ImgRecognizeReply)
+  // @@protoc_insertion_point(destructor:video.algo.seemmo.ImgRecognizeReply)
   SharedDtor();
 }
 
@@ -2900,7 +2902,7 @@ ImgRecognizeReply* ImgRecognizeReply::New(::google::protobuf::Arena* arena) cons
 }
 
 void ImgRecognizeReply::Clear() {
-// @@protoc_insertion_point(message_clear_start:algo.seemmo.ImgRecognizeReply)
+// @@protoc_insertion_point(message_clear_start:video.algo.seemmo.ImgRecognizeReply)
   data_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
@@ -2908,7 +2910,7 @@ bool ImgRecognizeReply::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:algo.seemmo.ImgRecognizeReply)
+  // @@protoc_insertion_point(parse_start:video.algo.seemmo.ImgRecognizeReply)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -2922,7 +2924,7 @@ bool ImgRecognizeReply::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->data().data(), this->data().length(),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "algo.seemmo.ImgRecognizeReply.data"));
+            "video.algo.seemmo.ImgRecognizeReply.data"));
         } else {
           goto handle_unusual;
         }
@@ -2942,51 +2944,51 @@ bool ImgRecognizeReply::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:algo.seemmo.ImgRecognizeReply)
+  // @@protoc_insertion_point(parse_success:video.algo.seemmo.ImgRecognizeReply)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:algo.seemmo.ImgRecognizeReply)
+  // @@protoc_insertion_point(parse_failure:video.algo.seemmo.ImgRecognizeReply)
   return false;
 #undef DO_
 }
 
 void ImgRecognizeReply::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:algo.seemmo.ImgRecognizeReply)
+  // @@protoc_insertion_point(serialize_start:video.algo.seemmo.ImgRecognizeReply)
   // string data = 1;
   if (this->data().size() > 0) {
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->data().data(), this->data().length(),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "algo.seemmo.ImgRecognizeReply.data");
+      "video.algo.seemmo.ImgRecognizeReply.data");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       1, this->data(), output);
   }
 
-  // @@protoc_insertion_point(serialize_end:algo.seemmo.ImgRecognizeReply)
+  // @@protoc_insertion_point(serialize_end:video.algo.seemmo.ImgRecognizeReply)
 }
 
 ::google::protobuf::uint8* ImgRecognizeReply::InternalSerializeWithCachedSizesToArray(
     bool deterministic, ::google::protobuf::uint8* target) const {
   (void)deterministic;  // Unused
-  // @@protoc_insertion_point(serialize_to_array_start:algo.seemmo.ImgRecognizeReply)
+  // @@protoc_insertion_point(serialize_to_array_start:video.algo.seemmo.ImgRecognizeReply)
   // string data = 1;
   if (this->data().size() > 0) {
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->data().data(), this->data().length(),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "algo.seemmo.ImgRecognizeReply.data");
+      "video.algo.seemmo.ImgRecognizeReply.data");
     target =
       ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
         1, this->data(), target);
   }
 
-  // @@protoc_insertion_point(serialize_to_array_end:algo.seemmo.ImgRecognizeReply)
+  // @@protoc_insertion_point(serialize_to_array_end:video.algo.seemmo.ImgRecognizeReply)
   return target;
 }
 
 size_t ImgRecognizeReply::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:algo.seemmo.ImgRecognizeReply)
+// @@protoc_insertion_point(message_byte_size_start:video.algo.seemmo.ImgRecognizeReply)
   size_t total_size = 0;
 
   // string data = 1;
@@ -3004,22 +3006,22 @@ size_t ImgRecognizeReply::ByteSizeLong() const {
 }
 
 void ImgRecognizeReply::MergeFrom(const ::google::protobuf::Message& from) {
-// @@protoc_insertion_point(generalized_merge_from_start:algo.seemmo.ImgRecognizeReply)
+// @@protoc_insertion_point(generalized_merge_from_start:video.algo.seemmo.ImgRecognizeReply)
   GOOGLE_DCHECK_NE(&from, this);
   const ImgRecognizeReply* source =
       ::google::protobuf::internal::DynamicCastToGenerated<const ImgRecognizeReply>(
           &from);
   if (source == NULL) {
-  // @@protoc_insertion_point(generalized_merge_from_cast_fail:algo.seemmo.ImgRecognizeReply)
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:video.algo.seemmo.ImgRecognizeReply)
     ::google::protobuf::internal::ReflectionOps::Merge(from, this);
   } else {
-  // @@protoc_insertion_point(generalized_merge_from_cast_success:algo.seemmo.ImgRecognizeReply)
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:video.algo.seemmo.ImgRecognizeReply)
     MergeFrom(*source);
   }
 }
 
 void ImgRecognizeReply::MergeFrom(const ImgRecognizeReply& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:algo.seemmo.ImgRecognizeReply)
+// @@protoc_insertion_point(class_specific_merge_from_start:video.algo.seemmo.ImgRecognizeReply)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   if (from.data().size() > 0) {
@@ -3029,14 +3031,14 @@ void ImgRecognizeReply::MergeFrom(const ImgRecognizeReply& from) {
 }
 
 void ImgRecognizeReply::CopyFrom(const ::google::protobuf::Message& from) {
-// @@protoc_insertion_point(generalized_copy_from_start:algo.seemmo.ImgRecognizeReply)
+// @@protoc_insertion_point(generalized_copy_from_start:video.algo.seemmo.ImgRecognizeReply)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
 void ImgRecognizeReply::CopyFrom(const ImgRecognizeReply& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:algo.seemmo.ImgRecognizeReply)
+// @@protoc_insertion_point(class_specific_copy_from_start:video.algo.seemmo.ImgRecognizeReply)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -3068,40 +3070,40 @@ void ImgRecognizeReply::clear_data() {
   data_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 const ::std::string& ImgRecognizeReply::data() const {
-  // @@protoc_insertion_point(field_get:algo.seemmo.ImgRecognizeReply.data)
+  // @@protoc_insertion_point(field_get:video.algo.seemmo.ImgRecognizeReply.data)
   return data_.GetNoArena();
 }
 void ImgRecognizeReply::set_data(const ::std::string& value) {
   
   data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:algo.seemmo.ImgRecognizeReply.data)
+  // @@protoc_insertion_point(field_set:video.algo.seemmo.ImgRecognizeReply.data)
 }
 #if LANG_CXX11
 void ImgRecognizeReply::set_data(::std::string&& value) {
   
   data_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:algo.seemmo.ImgRecognizeReply.data)
+  // @@protoc_insertion_point(field_set_rvalue:video.algo.seemmo.ImgRecognizeReply.data)
 }
 #endif
 void ImgRecognizeReply::set_data(const char* value) {
   
   data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:algo.seemmo.ImgRecognizeReply.data)
+  // @@protoc_insertion_point(field_set_char:video.algo.seemmo.ImgRecognizeReply.data)
 }
 void ImgRecognizeReply::set_data(const char* value, size_t size) {
   
   data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:algo.seemmo.ImgRecognizeReply.data)
+  // @@protoc_insertion_point(field_set_pointer:video.algo.seemmo.ImgRecognizeReply.data)
 }
 ::std::string* ImgRecognizeReply::mutable_data() {
   
-  // @@protoc_insertion_point(field_mutable:algo.seemmo.ImgRecognizeReply.data)
+  // @@protoc_insertion_point(field_mutable:video.algo.seemmo.ImgRecognizeReply.data)
   return data_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 ::std::string* ImgRecognizeReply::release_data() {
-  // @@protoc_insertion_point(field_release:algo.seemmo.ImgRecognizeReply.data)
+  // @@protoc_insertion_point(field_release:video.algo.seemmo.ImgRecognizeReply.data)
   
   return data_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -3112,7 +3114,7 @@ void ImgRecognizeReply::set_allocated_data(::std::string* data) {
     
   }
   data_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), data);
-  // @@protoc_insertion_point(field_set_allocated:algo.seemmo.ImgRecognizeReply.data)
+  // @@protoc_insertion_point(field_set_allocated:video.algo.seemmo.ImgRecognizeReply.data)
 }
 
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
@@ -3131,24 +3133,24 @@ const ::google::protobuf::ServiceDescriptor* VideoProcService::GetDescriptor() {
 }
 
 void VideoProcService::Trail(::google::protobuf::RpcController* controller,
-                         const ::algo::seemmo::TrailRequest*,
-                         ::algo::seemmo::TrailReply*,
+                         const ::video::algo::seemmo::TrailRequest*,
+                         ::video::algo::seemmo::TrailReply*,
                          ::google::protobuf::Closure* done) {
   controller->SetFailed("Method Trail() not implemented.");
   done->Run();
 }
 
 void VideoProcService::TrailEnd(::google::protobuf::RpcController* controller,
-                         const ::algo::seemmo::TrailEndRequest*,
-                         ::algo::seemmo::TrailEndReply*,
+                         const ::video::algo::seemmo::TrailEndRequest*,
+                         ::video::algo::seemmo::TrailEndReply*,
                          ::google::protobuf::Closure* done) {
   controller->SetFailed("Method TrailEnd() not implemented.");
   done->Run();
 }
 
 void VideoProcService::Recognize(::google::protobuf::RpcController* controller,
-                         const ::algo::seemmo::RecognizeRequest*,
-                         ::algo::seemmo::RecognizeReply*,
+                         const ::video::algo::seemmo::RecognizeRequest*,
+                         ::video::algo::seemmo::RecognizeReply*,
                          ::google::protobuf::Closure* done) {
   controller->SetFailed("Method Recognize() not implemented.");
   done->Run();
@@ -3163,20 +3165,20 @@ void VideoProcService::CallMethod(const ::google::protobuf::MethodDescriptor* me
   switch(method->index()) {
     case 0:
       Trail(controller,
-             ::google::protobuf::down_cast<const ::algo::seemmo::TrailRequest*>(request),
-             ::google::protobuf::down_cast< ::algo::seemmo::TrailReply*>(response),
+             ::google::protobuf::down_cast<const ::video::algo::seemmo::TrailRequest*>(request),
+             ::google::protobuf::down_cast< ::video::algo::seemmo::TrailReply*>(response),
              done);
       break;
     case 1:
       TrailEnd(controller,
-             ::google::protobuf::down_cast<const ::algo::seemmo::TrailEndRequest*>(request),
-             ::google::protobuf::down_cast< ::algo::seemmo::TrailEndReply*>(response),
+             ::google::protobuf::down_cast<const ::video::algo::seemmo::TrailEndRequest*>(request),
+             ::google::protobuf::down_cast< ::video::algo::seemmo::TrailEndReply*>(response),
              done);
       break;
     case 2:
       Recognize(controller,
-             ::google::protobuf::down_cast<const ::algo::seemmo::RecognizeRequest*>(request),
-             ::google::protobuf::down_cast< ::algo::seemmo::RecognizeReply*>(response),
+             ::google::protobuf::down_cast<const ::video::algo::seemmo::RecognizeRequest*>(request),
+             ::google::protobuf::down_cast< ::video::algo::seemmo::RecognizeReply*>(response),
              done);
       break;
     default:
@@ -3190,11 +3192,11 @@ const ::google::protobuf::Message& VideoProcService::GetRequestPrototype(
   GOOGLE_DCHECK_EQ(method->service(), descriptor());
   switch(method->index()) {
     case 0:
-      return ::algo::seemmo::TrailRequest::default_instance();
+      return ::video::algo::seemmo::TrailRequest::default_instance();
     case 1:
-      return ::algo::seemmo::TrailEndRequest::default_instance();
+      return ::video::algo::seemmo::TrailEndRequest::default_instance();
     case 2:
-      return ::algo::seemmo::RecognizeRequest::default_instance();
+      return ::video::algo::seemmo::RecognizeRequest::default_instance();
     default:
       GOOGLE_LOG(FATAL) << "Bad method index; this should never happen.";
       return *::google::protobuf::MessageFactory::generated_factory()
@@ -3207,11 +3209,11 @@ const ::google::protobuf::Message& VideoProcService::GetResponsePrototype(
   GOOGLE_DCHECK_EQ(method->service(), descriptor());
   switch(method->index()) {
     case 0:
-      return ::algo::seemmo::TrailReply::default_instance();
+      return ::video::algo::seemmo::TrailReply::default_instance();
     case 1:
-      return ::algo::seemmo::TrailEndReply::default_instance();
+      return ::video::algo::seemmo::TrailEndReply::default_instance();
     case 2:
-      return ::algo::seemmo::RecognizeReply::default_instance();
+      return ::video::algo::seemmo::RecognizeReply::default_instance();
     default:
       GOOGLE_LOG(FATAL) << "Bad method index; this should never happen.";
       return *::google::protobuf::MessageFactory::generated_factory()
@@ -3231,22 +3233,22 @@ VideoProcService_Stub::~VideoProcService_Stub() {
 }
 
 void VideoProcService_Stub::Trail(::google::protobuf::RpcController* controller,
-                              const ::algo::seemmo::TrailRequest* request,
-                              ::algo::seemmo::TrailReply* response,
+                              const ::video::algo::seemmo::TrailRequest* request,
+                              ::video::algo::seemmo::TrailReply* response,
                               ::google::protobuf::Closure* done) {
   channel_->CallMethod(descriptor()->method(0),
                        controller, request, response, done);
 }
 void VideoProcService_Stub::TrailEnd(::google::protobuf::RpcController* controller,
-                              const ::algo::seemmo::TrailEndRequest* request,
-                              ::algo::seemmo::TrailEndReply* response,
+                              const ::video::algo::seemmo::TrailEndRequest* request,
+                              ::video::algo::seemmo::TrailEndReply* response,
                               ::google::protobuf::Closure* done) {
   channel_->CallMethod(descriptor()->method(1),
                        controller, request, response, done);
 }
 void VideoProcService_Stub::Recognize(::google::protobuf::RpcController* controller,
-                              const ::algo::seemmo::RecognizeRequest* request,
-                              ::algo::seemmo::RecognizeReply* response,
+                              const ::video::algo::seemmo::RecognizeRequest* request,
+                              ::video::algo::seemmo::RecognizeReply* response,
                               ::google::protobuf::Closure* done) {
   channel_->CallMethod(descriptor()->method(2),
                        controller, request, response, done);
@@ -3265,8 +3267,8 @@ const ::google::protobuf::ServiceDescriptor* ImgProcService::GetDescriptor() {
 }
 
 void ImgProcService::Recognize(::google::protobuf::RpcController* controller,
-                         const ::algo::seemmo::ImgRecognizeRequest*,
-                         ::algo::seemmo::ImgRecognizeReply*,
+                         const ::video::algo::seemmo::ImgRecognizeRequest*,
+                         ::video::algo::seemmo::ImgRecognizeReply*,
                          ::google::protobuf::Closure* done) {
   controller->SetFailed("Method Recognize() not implemented.");
   done->Run();
@@ -3281,8 +3283,8 @@ void ImgProcService::CallMethod(const ::google::protobuf::MethodDescriptor* meth
   switch(method->index()) {
     case 0:
       Recognize(controller,
-             ::google::protobuf::down_cast<const ::algo::seemmo::ImgRecognizeRequest*>(request),
-             ::google::protobuf::down_cast< ::algo::seemmo::ImgRecognizeReply*>(response),
+             ::google::protobuf::down_cast<const ::video::algo::seemmo::ImgRecognizeRequest*>(request),
+             ::google::protobuf::down_cast< ::video::algo::seemmo::ImgRecognizeReply*>(response),
              done);
       break;
     default:
@@ -3296,7 +3298,7 @@ const ::google::protobuf::Message& ImgProcService::GetRequestPrototype(
   GOOGLE_DCHECK_EQ(method->service(), descriptor());
   switch(method->index()) {
     case 0:
-      return ::algo::seemmo::ImgRecognizeRequest::default_instance();
+      return ::video::algo::seemmo::ImgRecognizeRequest::default_instance();
     default:
       GOOGLE_LOG(FATAL) << "Bad method index; this should never happen.";
       return *::google::protobuf::MessageFactory::generated_factory()
@@ -3309,7 +3311,7 @@ const ::google::protobuf::Message& ImgProcService::GetResponsePrototype(
   GOOGLE_DCHECK_EQ(method->service(), descriptor());
   switch(method->index()) {
     case 0:
-      return ::algo::seemmo::ImgRecognizeReply::default_instance();
+      return ::video::algo::seemmo::ImgRecognizeReply::default_instance();
     default:
       GOOGLE_LOG(FATAL) << "Bad method index; this should never happen.";
       return *::google::protobuf::MessageFactory::generated_factory()
@@ -3329,8 +3331,8 @@ ImgProcService_Stub::~ImgProcService_Stub() {
 }
 
 void ImgProcService_Stub::Recognize(::google::protobuf::RpcController* controller,
-                              const ::algo::seemmo::ImgRecognizeRequest* request,
-                              ::algo::seemmo::ImgRecognizeReply* response,
+                              const ::video::algo::seemmo::ImgRecognizeRequest* request,
+                              ::video::algo::seemmo::ImgRecognizeReply* response,
                               ::google::protobuf::Closure* done) {
   channel_->CallMethod(descriptor()->method(0),
                        controller, request, response, done);
@@ -3340,5 +3342,6 @@ void ImgProcService_Stub::Recognize(::google::protobuf::RpcController* controlle
 
 }  // namespace seemmo
 }  // namespace algo
+}  // namespace video
 
 // @@protoc_insertion_point(global_scope)

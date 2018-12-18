@@ -97,7 +97,7 @@ public:
         return 0;
     }
 
-    int ReadJpeg(const string &file_name) {
+    int ReadJpeg(const std::string &file_name) {
 
         struct jpeg_decompress_struct cinfo;
         struct my_error_mgr jerr;

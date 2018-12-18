@@ -17,6 +17,7 @@
 #include <google/protobuf/wire_format.h>
 // @@protoc_insertion_point(includes)
 
+namespace video {
 namespace algo {
 namespace gosun_ext {
 class ImgRecognizeRequestDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<ImgRecognizeRequest> {
@@ -105,17 +106,17 @@ void InitDefaults() {
 void AddDescriptorsImpl() {
   InitDefaults();
   static const char descriptor[] = {
-      "\n\rservice.proto\022\016algo.gosun_ext\"c\n\023ImgRe"
-      "cognizeRequest\022\017\n\007imageId\030\001 \001(\r\022\021\n\timage"
-      "Data\030\002 \001(\014\022\025\n\rpictureFormat\030\003 \001(\t\022\021\n\tcal"
-      "cParam\030\004 \001(\t\"!\n\021ImgRecognizeReply\022\014\n\004dat"
-      "a\030\001 \001(\t2g\n\016ImgProcService\022U\n\tRecognize\022#"
-      ".algo.gosun_ext.ImgRecognizeRequest\032!.al"
-      "go.gosun_ext.ImgRecognizeReply\"\000B\003\200\001\001b\006p"
-      "roto3"
+      "\n\rservice.proto\022\024video.algo.gosun_ext\"c\n"
+      "\023ImgRecognizeRequest\022\017\n\007imageId\030\001 \001(\r\022\021\n"
+      "\timageData\030\002 \001(\014\022\025\n\rpictureFormat\030\003 \001(\t\022"
+      "\021\n\tcalcParam\030\004 \001(\t\"!\n\021ImgRecognizeReply\022"
+      "\014\n\004data\030\001 \001(\t2s\n\016ImgProcService\022a\n\tRecog"
+      "nize\022).video.algo.gosun_ext.ImgRecognize"
+      "Request\032\'.video.algo.gosun_ext.ImgRecogn"
+      "izeReply\"\000B\003\200\001\001b\006proto3"
   };
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-      descriptor, 285);
+      descriptor, 303);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "service.proto", &protobuf_RegisterTypes);
   ::google::protobuf::internal::OnShutdown(&TableStruct::Shutdown);
@@ -150,7 +151,7 @@ ImgRecognizeRequest::ImgRecognizeRequest()
     protobuf_service_2eproto::InitDefaults();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:algo.gosun_ext.ImgRecognizeRequest)
+  // @@protoc_insertion_point(constructor:video.algo.gosun_ext.ImgRecognizeRequest)
 }
 ImgRecognizeRequest::ImgRecognizeRequest(const ImgRecognizeRequest& from)
   : ::google::protobuf::Message(),
@@ -170,7 +171,7 @@ ImgRecognizeRequest::ImgRecognizeRequest(const ImgRecognizeRequest& from)
     calcparam_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.calcparam_);
   }
   imageid_ = from.imageid_;
-  // @@protoc_insertion_point(copy_constructor:algo.gosun_ext.ImgRecognizeRequest)
+  // @@protoc_insertion_point(copy_constructor:video.algo.gosun_ext.ImgRecognizeRequest)
 }
 
 void ImgRecognizeRequest::SharedCtor() {
@@ -182,7 +183,7 @@ void ImgRecognizeRequest::SharedCtor() {
 }
 
 ImgRecognizeRequest::~ImgRecognizeRequest() {
-  // @@protoc_insertion_point(destructor:algo.gosun_ext.ImgRecognizeRequest)
+  // @@protoc_insertion_point(destructor:video.algo.gosun_ext.ImgRecognizeRequest)
   SharedDtor();
 }
 
@@ -216,7 +217,7 @@ ImgRecognizeRequest* ImgRecognizeRequest::New(::google::protobuf::Arena* arena) 
 }
 
 void ImgRecognizeRequest::Clear() {
-// @@protoc_insertion_point(message_clear_start:algo.gosun_ext.ImgRecognizeRequest)
+// @@protoc_insertion_point(message_clear_start:video.algo.gosun_ext.ImgRecognizeRequest)
   imagedata_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   pictureformat_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   calcparam_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
@@ -227,7 +228,7 @@ bool ImgRecognizeRequest::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:algo.gosun_ext.ImgRecognizeRequest)
+  // @@protoc_insertion_point(parse_start:video.algo.gosun_ext.ImgRecognizeRequest)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -265,7 +266,7 @@ bool ImgRecognizeRequest::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->pictureformat().data(), this->pictureformat().length(),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "algo.gosun_ext.ImgRecognizeRequest.pictureFormat"));
+            "video.algo.gosun_ext.ImgRecognizeRequest.pictureFormat"));
         } else {
           goto handle_unusual;
         }
@@ -280,7 +281,7 @@ bool ImgRecognizeRequest::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->calcparam().data(), this->calcparam().length(),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "algo.gosun_ext.ImgRecognizeRequest.calcParam"));
+            "video.algo.gosun_ext.ImgRecognizeRequest.calcParam"));
         } else {
           goto handle_unusual;
         }
@@ -300,17 +301,17 @@ bool ImgRecognizeRequest::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:algo.gosun_ext.ImgRecognizeRequest)
+  // @@protoc_insertion_point(parse_success:video.algo.gosun_ext.ImgRecognizeRequest)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:algo.gosun_ext.ImgRecognizeRequest)
+  // @@protoc_insertion_point(parse_failure:video.algo.gosun_ext.ImgRecognizeRequest)
   return false;
 #undef DO_
 }
 
 void ImgRecognizeRequest::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:algo.gosun_ext.ImgRecognizeRequest)
+  // @@protoc_insertion_point(serialize_start:video.algo.gosun_ext.ImgRecognizeRequest)
   // uint32 imageId = 1;
   if (this->imageid() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->imageid(), output);
@@ -327,7 +328,7 @@ void ImgRecognizeRequest::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->pictureformat().data(), this->pictureformat().length(),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "algo.gosun_ext.ImgRecognizeRequest.pictureFormat");
+      "video.algo.gosun_ext.ImgRecognizeRequest.pictureFormat");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       3, this->pictureformat(), output);
   }
@@ -337,18 +338,18 @@ void ImgRecognizeRequest::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->calcparam().data(), this->calcparam().length(),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "algo.gosun_ext.ImgRecognizeRequest.calcParam");
+      "video.algo.gosun_ext.ImgRecognizeRequest.calcParam");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       4, this->calcparam(), output);
   }
 
-  // @@protoc_insertion_point(serialize_end:algo.gosun_ext.ImgRecognizeRequest)
+  // @@protoc_insertion_point(serialize_end:video.algo.gosun_ext.ImgRecognizeRequest)
 }
 
 ::google::protobuf::uint8* ImgRecognizeRequest::InternalSerializeWithCachedSizesToArray(
     bool deterministic, ::google::protobuf::uint8* target) const {
   (void)deterministic;  // Unused
-  // @@protoc_insertion_point(serialize_to_array_start:algo.gosun_ext.ImgRecognizeRequest)
+  // @@protoc_insertion_point(serialize_to_array_start:video.algo.gosun_ext.ImgRecognizeRequest)
   // uint32 imageId = 1;
   if (this->imageid() != 0) {
     target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->imageid(), target);
@@ -366,7 +367,7 @@ void ImgRecognizeRequest::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->pictureformat().data(), this->pictureformat().length(),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "algo.gosun_ext.ImgRecognizeRequest.pictureFormat");
+      "video.algo.gosun_ext.ImgRecognizeRequest.pictureFormat");
     target =
       ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
         3, this->pictureformat(), target);
@@ -377,18 +378,18 @@ void ImgRecognizeRequest::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->calcparam().data(), this->calcparam().length(),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "algo.gosun_ext.ImgRecognizeRequest.calcParam");
+      "video.algo.gosun_ext.ImgRecognizeRequest.calcParam");
     target =
       ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
         4, this->calcparam(), target);
   }
 
-  // @@protoc_insertion_point(serialize_to_array_end:algo.gosun_ext.ImgRecognizeRequest)
+  // @@protoc_insertion_point(serialize_to_array_end:video.algo.gosun_ext.ImgRecognizeRequest)
   return target;
 }
 
 size_t ImgRecognizeRequest::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:algo.gosun_ext.ImgRecognizeRequest)
+// @@protoc_insertion_point(message_byte_size_start:video.algo.gosun_ext.ImgRecognizeRequest)
   size_t total_size = 0;
 
   // bytes imageData = 2;
@@ -427,22 +428,22 @@ size_t ImgRecognizeRequest::ByteSizeLong() const {
 }
 
 void ImgRecognizeRequest::MergeFrom(const ::google::protobuf::Message& from) {
-// @@protoc_insertion_point(generalized_merge_from_start:algo.gosun_ext.ImgRecognizeRequest)
+// @@protoc_insertion_point(generalized_merge_from_start:video.algo.gosun_ext.ImgRecognizeRequest)
   GOOGLE_DCHECK_NE(&from, this);
   const ImgRecognizeRequest* source =
       ::google::protobuf::internal::DynamicCastToGenerated<const ImgRecognizeRequest>(
           &from);
   if (source == NULL) {
-  // @@protoc_insertion_point(generalized_merge_from_cast_fail:algo.gosun_ext.ImgRecognizeRequest)
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:video.algo.gosun_ext.ImgRecognizeRequest)
     ::google::protobuf::internal::ReflectionOps::Merge(from, this);
   } else {
-  // @@protoc_insertion_point(generalized_merge_from_cast_success:algo.gosun_ext.ImgRecognizeRequest)
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:video.algo.gosun_ext.ImgRecognizeRequest)
     MergeFrom(*source);
   }
 }
 
 void ImgRecognizeRequest::MergeFrom(const ImgRecognizeRequest& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:algo.gosun_ext.ImgRecognizeRequest)
+// @@protoc_insertion_point(class_specific_merge_from_start:video.algo.gosun_ext.ImgRecognizeRequest)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   if (from.imagedata().size() > 0) {
@@ -463,14 +464,14 @@ void ImgRecognizeRequest::MergeFrom(const ImgRecognizeRequest& from) {
 }
 
 void ImgRecognizeRequest::CopyFrom(const ::google::protobuf::Message& from) {
-// @@protoc_insertion_point(generalized_copy_from_start:algo.gosun_ext.ImgRecognizeRequest)
+// @@protoc_insertion_point(generalized_copy_from_start:video.algo.gosun_ext.ImgRecognizeRequest)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
 void ImgRecognizeRequest::CopyFrom(const ImgRecognizeRequest& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:algo.gosun_ext.ImgRecognizeRequest)
+// @@protoc_insertion_point(class_specific_copy_from_start:video.algo.gosun_ext.ImgRecognizeRequest)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -505,13 +506,13 @@ void ImgRecognizeRequest::clear_imageid() {
   imageid_ = 0u;
 }
 ::google::protobuf::uint32 ImgRecognizeRequest::imageid() const {
-  // @@protoc_insertion_point(field_get:algo.gosun_ext.ImgRecognizeRequest.imageId)
+  // @@protoc_insertion_point(field_get:video.algo.gosun_ext.ImgRecognizeRequest.imageId)
   return imageid_;
 }
 void ImgRecognizeRequest::set_imageid(::google::protobuf::uint32 value) {
   
   imageid_ = value;
-  // @@protoc_insertion_point(field_set:algo.gosun_ext.ImgRecognizeRequest.imageId)
+  // @@protoc_insertion_point(field_set:video.algo.gosun_ext.ImgRecognizeRequest.imageId)
 }
 
 // bytes imageData = 2;
@@ -519,40 +520,40 @@ void ImgRecognizeRequest::clear_imagedata() {
   imagedata_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 const ::std::string& ImgRecognizeRequest::imagedata() const {
-  // @@protoc_insertion_point(field_get:algo.gosun_ext.ImgRecognizeRequest.imageData)
+  // @@protoc_insertion_point(field_get:video.algo.gosun_ext.ImgRecognizeRequest.imageData)
   return imagedata_.GetNoArena();
 }
 void ImgRecognizeRequest::set_imagedata(const ::std::string& value) {
   
   imagedata_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:algo.gosun_ext.ImgRecognizeRequest.imageData)
+  // @@protoc_insertion_point(field_set:video.algo.gosun_ext.ImgRecognizeRequest.imageData)
 }
 #if LANG_CXX11
 void ImgRecognizeRequest::set_imagedata(::std::string&& value) {
   
   imagedata_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:algo.gosun_ext.ImgRecognizeRequest.imageData)
+  // @@protoc_insertion_point(field_set_rvalue:video.algo.gosun_ext.ImgRecognizeRequest.imageData)
 }
 #endif
 void ImgRecognizeRequest::set_imagedata(const char* value) {
   
   imagedata_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:algo.gosun_ext.ImgRecognizeRequest.imageData)
+  // @@protoc_insertion_point(field_set_char:video.algo.gosun_ext.ImgRecognizeRequest.imageData)
 }
 void ImgRecognizeRequest::set_imagedata(const void* value, size_t size) {
   
   imagedata_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:algo.gosun_ext.ImgRecognizeRequest.imageData)
+  // @@protoc_insertion_point(field_set_pointer:video.algo.gosun_ext.ImgRecognizeRequest.imageData)
 }
 ::std::string* ImgRecognizeRequest::mutable_imagedata() {
   
-  // @@protoc_insertion_point(field_mutable:algo.gosun_ext.ImgRecognizeRequest.imageData)
+  // @@protoc_insertion_point(field_mutable:video.algo.gosun_ext.ImgRecognizeRequest.imageData)
   return imagedata_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 ::std::string* ImgRecognizeRequest::release_imagedata() {
-  // @@protoc_insertion_point(field_release:algo.gosun_ext.ImgRecognizeRequest.imageData)
+  // @@protoc_insertion_point(field_release:video.algo.gosun_ext.ImgRecognizeRequest.imageData)
   
   return imagedata_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -563,7 +564,7 @@ void ImgRecognizeRequest::set_allocated_imagedata(::std::string* imagedata) {
     
   }
   imagedata_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), imagedata);
-  // @@protoc_insertion_point(field_set_allocated:algo.gosun_ext.ImgRecognizeRequest.imageData)
+  // @@protoc_insertion_point(field_set_allocated:video.algo.gosun_ext.ImgRecognizeRequest.imageData)
 }
 
 // string pictureFormat = 3;
@@ -571,40 +572,40 @@ void ImgRecognizeRequest::clear_pictureformat() {
   pictureformat_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 const ::std::string& ImgRecognizeRequest::pictureformat() const {
-  // @@protoc_insertion_point(field_get:algo.gosun_ext.ImgRecognizeRequest.pictureFormat)
+  // @@protoc_insertion_point(field_get:video.algo.gosun_ext.ImgRecognizeRequest.pictureFormat)
   return pictureformat_.GetNoArena();
 }
 void ImgRecognizeRequest::set_pictureformat(const ::std::string& value) {
   
   pictureformat_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:algo.gosun_ext.ImgRecognizeRequest.pictureFormat)
+  // @@protoc_insertion_point(field_set:video.algo.gosun_ext.ImgRecognizeRequest.pictureFormat)
 }
 #if LANG_CXX11
 void ImgRecognizeRequest::set_pictureformat(::std::string&& value) {
   
   pictureformat_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:algo.gosun_ext.ImgRecognizeRequest.pictureFormat)
+  // @@protoc_insertion_point(field_set_rvalue:video.algo.gosun_ext.ImgRecognizeRequest.pictureFormat)
 }
 #endif
 void ImgRecognizeRequest::set_pictureformat(const char* value) {
   
   pictureformat_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:algo.gosun_ext.ImgRecognizeRequest.pictureFormat)
+  // @@protoc_insertion_point(field_set_char:video.algo.gosun_ext.ImgRecognizeRequest.pictureFormat)
 }
 void ImgRecognizeRequest::set_pictureformat(const char* value, size_t size) {
   
   pictureformat_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:algo.gosun_ext.ImgRecognizeRequest.pictureFormat)
+  // @@protoc_insertion_point(field_set_pointer:video.algo.gosun_ext.ImgRecognizeRequest.pictureFormat)
 }
 ::std::string* ImgRecognizeRequest::mutable_pictureformat() {
   
-  // @@protoc_insertion_point(field_mutable:algo.gosun_ext.ImgRecognizeRequest.pictureFormat)
+  // @@protoc_insertion_point(field_mutable:video.algo.gosun_ext.ImgRecognizeRequest.pictureFormat)
   return pictureformat_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 ::std::string* ImgRecognizeRequest::release_pictureformat() {
-  // @@protoc_insertion_point(field_release:algo.gosun_ext.ImgRecognizeRequest.pictureFormat)
+  // @@protoc_insertion_point(field_release:video.algo.gosun_ext.ImgRecognizeRequest.pictureFormat)
   
   return pictureformat_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -615,7 +616,7 @@ void ImgRecognizeRequest::set_allocated_pictureformat(::std::string* pictureform
     
   }
   pictureformat_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), pictureformat);
-  // @@protoc_insertion_point(field_set_allocated:algo.gosun_ext.ImgRecognizeRequest.pictureFormat)
+  // @@protoc_insertion_point(field_set_allocated:video.algo.gosun_ext.ImgRecognizeRequest.pictureFormat)
 }
 
 // string calcParam = 4;
@@ -623,40 +624,40 @@ void ImgRecognizeRequest::clear_calcparam() {
   calcparam_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 const ::std::string& ImgRecognizeRequest::calcparam() const {
-  // @@protoc_insertion_point(field_get:algo.gosun_ext.ImgRecognizeRequest.calcParam)
+  // @@protoc_insertion_point(field_get:video.algo.gosun_ext.ImgRecognizeRequest.calcParam)
   return calcparam_.GetNoArena();
 }
 void ImgRecognizeRequest::set_calcparam(const ::std::string& value) {
   
   calcparam_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:algo.gosun_ext.ImgRecognizeRequest.calcParam)
+  // @@protoc_insertion_point(field_set:video.algo.gosun_ext.ImgRecognizeRequest.calcParam)
 }
 #if LANG_CXX11
 void ImgRecognizeRequest::set_calcparam(::std::string&& value) {
   
   calcparam_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:algo.gosun_ext.ImgRecognizeRequest.calcParam)
+  // @@protoc_insertion_point(field_set_rvalue:video.algo.gosun_ext.ImgRecognizeRequest.calcParam)
 }
 #endif
 void ImgRecognizeRequest::set_calcparam(const char* value) {
   
   calcparam_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:algo.gosun_ext.ImgRecognizeRequest.calcParam)
+  // @@protoc_insertion_point(field_set_char:video.algo.gosun_ext.ImgRecognizeRequest.calcParam)
 }
 void ImgRecognizeRequest::set_calcparam(const char* value, size_t size) {
   
   calcparam_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:algo.gosun_ext.ImgRecognizeRequest.calcParam)
+  // @@protoc_insertion_point(field_set_pointer:video.algo.gosun_ext.ImgRecognizeRequest.calcParam)
 }
 ::std::string* ImgRecognizeRequest::mutable_calcparam() {
   
-  // @@protoc_insertion_point(field_mutable:algo.gosun_ext.ImgRecognizeRequest.calcParam)
+  // @@protoc_insertion_point(field_mutable:video.algo.gosun_ext.ImgRecognizeRequest.calcParam)
   return calcparam_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 ::std::string* ImgRecognizeRequest::release_calcparam() {
-  // @@protoc_insertion_point(field_release:algo.gosun_ext.ImgRecognizeRequest.calcParam)
+  // @@protoc_insertion_point(field_release:video.algo.gosun_ext.ImgRecognizeRequest.calcParam)
   
   return calcparam_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -667,7 +668,7 @@ void ImgRecognizeRequest::set_allocated_calcparam(::std::string* calcparam) {
     
   }
   calcparam_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), calcparam);
-  // @@protoc_insertion_point(field_set_allocated:algo.gosun_ext.ImgRecognizeRequest.calcParam)
+  // @@protoc_insertion_point(field_set_allocated:video.algo.gosun_ext.ImgRecognizeRequest.calcParam)
 }
 
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
@@ -684,7 +685,7 @@ ImgRecognizeReply::ImgRecognizeReply()
     protobuf_service_2eproto::InitDefaults();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:algo.gosun_ext.ImgRecognizeReply)
+  // @@protoc_insertion_point(constructor:video.algo.gosun_ext.ImgRecognizeReply)
 }
 ImgRecognizeReply::ImgRecognizeReply(const ImgRecognizeReply& from)
   : ::google::protobuf::Message(),
@@ -695,7 +696,7 @@ ImgRecognizeReply::ImgRecognizeReply(const ImgRecognizeReply& from)
   if (from.data().size() > 0) {
     data_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.data_);
   }
-  // @@protoc_insertion_point(copy_constructor:algo.gosun_ext.ImgRecognizeReply)
+  // @@protoc_insertion_point(copy_constructor:video.algo.gosun_ext.ImgRecognizeReply)
 }
 
 void ImgRecognizeReply::SharedCtor() {
@@ -704,7 +705,7 @@ void ImgRecognizeReply::SharedCtor() {
 }
 
 ImgRecognizeReply::~ImgRecognizeReply() {
-  // @@protoc_insertion_point(destructor:algo.gosun_ext.ImgRecognizeReply)
+  // @@protoc_insertion_point(destructor:video.algo.gosun_ext.ImgRecognizeReply)
   SharedDtor();
 }
 
@@ -736,7 +737,7 @@ ImgRecognizeReply* ImgRecognizeReply::New(::google::protobuf::Arena* arena) cons
 }
 
 void ImgRecognizeReply::Clear() {
-// @@protoc_insertion_point(message_clear_start:algo.gosun_ext.ImgRecognizeReply)
+// @@protoc_insertion_point(message_clear_start:video.algo.gosun_ext.ImgRecognizeReply)
   data_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
@@ -744,7 +745,7 @@ bool ImgRecognizeReply::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:algo.gosun_ext.ImgRecognizeReply)
+  // @@protoc_insertion_point(parse_start:video.algo.gosun_ext.ImgRecognizeReply)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -758,7 +759,7 @@ bool ImgRecognizeReply::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->data().data(), this->data().length(),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "algo.gosun_ext.ImgRecognizeReply.data"));
+            "video.algo.gosun_ext.ImgRecognizeReply.data"));
         } else {
           goto handle_unusual;
         }
@@ -778,51 +779,51 @@ bool ImgRecognizeReply::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:algo.gosun_ext.ImgRecognizeReply)
+  // @@protoc_insertion_point(parse_success:video.algo.gosun_ext.ImgRecognizeReply)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:algo.gosun_ext.ImgRecognizeReply)
+  // @@protoc_insertion_point(parse_failure:video.algo.gosun_ext.ImgRecognizeReply)
   return false;
 #undef DO_
 }
 
 void ImgRecognizeReply::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:algo.gosun_ext.ImgRecognizeReply)
+  // @@protoc_insertion_point(serialize_start:video.algo.gosun_ext.ImgRecognizeReply)
   // string data = 1;
   if (this->data().size() > 0) {
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->data().data(), this->data().length(),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "algo.gosun_ext.ImgRecognizeReply.data");
+      "video.algo.gosun_ext.ImgRecognizeReply.data");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       1, this->data(), output);
   }
 
-  // @@protoc_insertion_point(serialize_end:algo.gosun_ext.ImgRecognizeReply)
+  // @@protoc_insertion_point(serialize_end:video.algo.gosun_ext.ImgRecognizeReply)
 }
 
 ::google::protobuf::uint8* ImgRecognizeReply::InternalSerializeWithCachedSizesToArray(
     bool deterministic, ::google::protobuf::uint8* target) const {
   (void)deterministic;  // Unused
-  // @@protoc_insertion_point(serialize_to_array_start:algo.gosun_ext.ImgRecognizeReply)
+  // @@protoc_insertion_point(serialize_to_array_start:video.algo.gosun_ext.ImgRecognizeReply)
   // string data = 1;
   if (this->data().size() > 0) {
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->data().data(), this->data().length(),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "algo.gosun_ext.ImgRecognizeReply.data");
+      "video.algo.gosun_ext.ImgRecognizeReply.data");
     target =
       ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
         1, this->data(), target);
   }
 
-  // @@protoc_insertion_point(serialize_to_array_end:algo.gosun_ext.ImgRecognizeReply)
+  // @@protoc_insertion_point(serialize_to_array_end:video.algo.gosun_ext.ImgRecognizeReply)
   return target;
 }
 
 size_t ImgRecognizeReply::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:algo.gosun_ext.ImgRecognizeReply)
+// @@protoc_insertion_point(message_byte_size_start:video.algo.gosun_ext.ImgRecognizeReply)
   size_t total_size = 0;
 
   // string data = 1;
@@ -840,22 +841,22 @@ size_t ImgRecognizeReply::ByteSizeLong() const {
 }
 
 void ImgRecognizeReply::MergeFrom(const ::google::protobuf::Message& from) {
-// @@protoc_insertion_point(generalized_merge_from_start:algo.gosun_ext.ImgRecognizeReply)
+// @@protoc_insertion_point(generalized_merge_from_start:video.algo.gosun_ext.ImgRecognizeReply)
   GOOGLE_DCHECK_NE(&from, this);
   const ImgRecognizeReply* source =
       ::google::protobuf::internal::DynamicCastToGenerated<const ImgRecognizeReply>(
           &from);
   if (source == NULL) {
-  // @@protoc_insertion_point(generalized_merge_from_cast_fail:algo.gosun_ext.ImgRecognizeReply)
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:video.algo.gosun_ext.ImgRecognizeReply)
     ::google::protobuf::internal::ReflectionOps::Merge(from, this);
   } else {
-  // @@protoc_insertion_point(generalized_merge_from_cast_success:algo.gosun_ext.ImgRecognizeReply)
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:video.algo.gosun_ext.ImgRecognizeReply)
     MergeFrom(*source);
   }
 }
 
 void ImgRecognizeReply::MergeFrom(const ImgRecognizeReply& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:algo.gosun_ext.ImgRecognizeReply)
+// @@protoc_insertion_point(class_specific_merge_from_start:video.algo.gosun_ext.ImgRecognizeReply)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   if (from.data().size() > 0) {
@@ -865,14 +866,14 @@ void ImgRecognizeReply::MergeFrom(const ImgRecognizeReply& from) {
 }
 
 void ImgRecognizeReply::CopyFrom(const ::google::protobuf::Message& from) {
-// @@protoc_insertion_point(generalized_copy_from_start:algo.gosun_ext.ImgRecognizeReply)
+// @@protoc_insertion_point(generalized_copy_from_start:video.algo.gosun_ext.ImgRecognizeReply)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
 void ImgRecognizeReply::CopyFrom(const ImgRecognizeReply& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:algo.gosun_ext.ImgRecognizeReply)
+// @@protoc_insertion_point(class_specific_copy_from_start:video.algo.gosun_ext.ImgRecognizeReply)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -904,40 +905,40 @@ void ImgRecognizeReply::clear_data() {
   data_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 const ::std::string& ImgRecognizeReply::data() const {
-  // @@protoc_insertion_point(field_get:algo.gosun_ext.ImgRecognizeReply.data)
+  // @@protoc_insertion_point(field_get:video.algo.gosun_ext.ImgRecognizeReply.data)
   return data_.GetNoArena();
 }
 void ImgRecognizeReply::set_data(const ::std::string& value) {
   
   data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:algo.gosun_ext.ImgRecognizeReply.data)
+  // @@protoc_insertion_point(field_set:video.algo.gosun_ext.ImgRecognizeReply.data)
 }
 #if LANG_CXX11
 void ImgRecognizeReply::set_data(::std::string&& value) {
   
   data_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:algo.gosun_ext.ImgRecognizeReply.data)
+  // @@protoc_insertion_point(field_set_rvalue:video.algo.gosun_ext.ImgRecognizeReply.data)
 }
 #endif
 void ImgRecognizeReply::set_data(const char* value) {
   
   data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:algo.gosun_ext.ImgRecognizeReply.data)
+  // @@protoc_insertion_point(field_set_char:video.algo.gosun_ext.ImgRecognizeReply.data)
 }
 void ImgRecognizeReply::set_data(const char* value, size_t size) {
   
   data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:algo.gosun_ext.ImgRecognizeReply.data)
+  // @@protoc_insertion_point(field_set_pointer:video.algo.gosun_ext.ImgRecognizeReply.data)
 }
 ::std::string* ImgRecognizeReply::mutable_data() {
   
-  // @@protoc_insertion_point(field_mutable:algo.gosun_ext.ImgRecognizeReply.data)
+  // @@protoc_insertion_point(field_mutable:video.algo.gosun_ext.ImgRecognizeReply.data)
   return data_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 ::std::string* ImgRecognizeReply::release_data() {
-  // @@protoc_insertion_point(field_release:algo.gosun_ext.ImgRecognizeReply.data)
+  // @@protoc_insertion_point(field_release:video.algo.gosun_ext.ImgRecognizeReply.data)
   
   return data_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -948,7 +949,7 @@ void ImgRecognizeReply::set_allocated_data(::std::string* data) {
     
   }
   data_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), data);
-  // @@protoc_insertion_point(field_set_allocated:algo.gosun_ext.ImgRecognizeReply.data)
+  // @@protoc_insertion_point(field_set_allocated:video.algo.gosun_ext.ImgRecognizeReply.data)
 }
 
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
@@ -967,8 +968,8 @@ const ::google::protobuf::ServiceDescriptor* ImgProcService::GetDescriptor() {
 }
 
 void ImgProcService::Recognize(::google::protobuf::RpcController* controller,
-                         const ::algo::gosun_ext::ImgRecognizeRequest*,
-                         ::algo::gosun_ext::ImgRecognizeReply*,
+                         const ::video::algo::gosun_ext::ImgRecognizeRequest*,
+                         ::video::algo::gosun_ext::ImgRecognizeReply*,
                          ::google::protobuf::Closure* done) {
   controller->SetFailed("Method Recognize() not implemented.");
   done->Run();
@@ -983,8 +984,8 @@ void ImgProcService::CallMethod(const ::google::protobuf::MethodDescriptor* meth
   switch(method->index()) {
     case 0:
       Recognize(controller,
-             ::google::protobuf::down_cast<const ::algo::gosun_ext::ImgRecognizeRequest*>(request),
-             ::google::protobuf::down_cast< ::algo::gosun_ext::ImgRecognizeReply*>(response),
+             ::google::protobuf::down_cast<const ::video::algo::gosun_ext::ImgRecognizeRequest*>(request),
+             ::google::protobuf::down_cast< ::video::algo::gosun_ext::ImgRecognizeReply*>(response),
              done);
       break;
     default:
@@ -998,7 +999,7 @@ const ::google::protobuf::Message& ImgProcService::GetRequestPrototype(
   GOOGLE_DCHECK_EQ(method->service(), descriptor());
   switch(method->index()) {
     case 0:
-      return ::algo::gosun_ext::ImgRecognizeRequest::default_instance();
+      return ::video::algo::gosun_ext::ImgRecognizeRequest::default_instance();
     default:
       GOOGLE_LOG(FATAL) << "Bad method index; this should never happen.";
       return *::google::protobuf::MessageFactory::generated_factory()
@@ -1011,7 +1012,7 @@ const ::google::protobuf::Message& ImgProcService::GetResponsePrototype(
   GOOGLE_DCHECK_EQ(method->service(), descriptor());
   switch(method->index()) {
     case 0:
-      return ::algo::gosun_ext::ImgRecognizeReply::default_instance();
+      return ::video::algo::gosun_ext::ImgRecognizeReply::default_instance();
     default:
       GOOGLE_LOG(FATAL) << "Bad method index; this should never happen.";
       return *::google::protobuf::MessageFactory::generated_factory()
@@ -1031,8 +1032,8 @@ ImgProcService_Stub::~ImgProcService_Stub() {
 }
 
 void ImgProcService_Stub::Recognize(::google::protobuf::RpcController* controller,
-                              const ::algo::gosun_ext::ImgRecognizeRequest* request,
-                              ::algo::gosun_ext::ImgRecognizeReply* response,
+                              const ::video::algo::gosun_ext::ImgRecognizeRequest* request,
+                              ::video::algo::gosun_ext::ImgRecognizeReply* response,
                               ::google::protobuf::Closure* done) {
   channel_->CallMethod(descriptor()->method(0),
                        controller, request, response, done);
@@ -1042,5 +1043,6 @@ void ImgProcService_Stub::Recognize(::google::protobuf::RpcController* controlle
 
 }  // namespace gosun_ext
 }  // namespace algo
+}  // namespace video
 
 // @@protoc_insertion_point(global_scope)

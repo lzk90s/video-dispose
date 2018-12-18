@@ -3,8 +3,6 @@
 #include <mutex>
 #include <condition_variable>
 
-using namespace std;
-
 class CountDownLatch {
 public:
     explicit  CountDownLatch(int count)
@@ -16,14 +14,14 @@ public:
     }
 
     void wait() {
-        unique_lock<mutex> lock(mutex_);
-        while (count_ > 0) {  //Ö»Òª¼ÆÊıÖµ´óÓÚ0£¬CountDownLatchÀà¾Í²»¹¤×÷£¬ÖªµÀµÈ´ı¼ÆÊıÖµÎª0
+        std::unique_lock<std::mutex> lock(mutex_);
+        while (count_ > 0) {  //åªè¦è®¡æ•°å€¼å¤§äº0ï¼ŒCountDownLatchç±»å°±ä¸å·¥ä½œï¼ŒçŸ¥é“ç­‰å¾…è®¡æ•°å€¼ä¸º0
             condition_.wait(lock);
         }
     }
 
     void countDown() {
-        unique_lock<mutex> lock(mutex_);
+        std::unique_lock<std::mutex> lock(mutex_);
         --count_;
         if (count_ == 0) {
             condition_.notify_all();
@@ -31,13 +29,13 @@ public:
     }
 
     int getCount() const {
-        unique_lock<mutex> lock(mutex_);
+        std::unique_lock<std::mutex> lock(mutex_);
         return count_;
     }
 
 
 private:
-    mutable mutex mutex_;
-    condition_variable condition_;
+    mutable std::mutex mutex_;
+    std::condition_variable condition_;
     int count_;
 };

@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package algo.seemmo;
+package video.algo.seemmo;
 
 option cc_generic_services = true;
 

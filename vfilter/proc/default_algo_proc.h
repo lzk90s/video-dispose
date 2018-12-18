@@ -1,11 +1,12 @@
 #pragma once
 
+#include "common/helper/threadpool.h"
+
 #include "algo/stub/algo_stub_factory.h"
 #include "vfilter/proc/abstract_algo_proc.h"
 
-using namespace std;
-
-namespace vf {
+namespace video {
+namespace filter {
 
 class DefaultAlgoProcessor : public AbstractAlgoProcessor {
 public:
@@ -20,12 +21,12 @@ public:
         waitForComplete();
     }
 
-    void OnFrame(shared_ptr<ChannelSink> chl, cv::Mat &frame) override {
+    void OnFrame(std::shared_ptr<ChannelSink> chl, cv::Mat &frame) override {
         uint64_t frameId = chl->frameCache.AllocateEmptyFrame();
-        worker_.commit(std::bind(&DefaultAlgoProcessor::algoRoutine, this, chl, frameId,frame));
+        worker_.commit(std::bind(&DefaultAlgoProcessor::algoRoutine, this, chl, frameId, frame));
     }
 
-    void OnFrameEnd(shared_ptr<ChannelSink> chl) override {
+    void OnFrameEnd(std::shared_ptr<ChannelSink> chl) override {
         waitForComplete();
         algo_->TrailEnd(chl->GetChannelId());
     }
@@ -41,27 +42,27 @@ private:
         }
     }
 
-    int32_t algoRoutine(shared_ptr<ChannelSink> chl, uint64_t frameId, cv::Mat &frame) {
+    int32_t algoRoutine(std::shared_ptr<ChannelSink> chl, uint64_t frameId, cv::Mat &frame) {
         chl->watchdog.Feed();
         return trailAndRecognize(chl, frameId, frame);
     }
 
     //跟踪+识别
-    int32_t trailAndRecognize(shared_ptr<ChannelSink> chl, uint64_t frameId, cv::Mat &frame) {
+    int32_t trailAndRecognize(std::shared_ptr<ChannelSink> chl, uint64_t frameId, cv::Mat &frame) {
         int32_t ret = 0;
         uint32_t width = frame.cols;
         uint32_t height = frame.rows;
 
-        TrailParam trailParam;
+        algo::TrailParam trailParam;
         // roi区域设置为全图
-        trailParam.roi.push_back(Point{ 0, 0 });
-        trailParam.roi.push_back(Point{ 0, (int32_t)height });
-        trailParam.roi.push_back(Point{ (int32_t)width, (int32_t)height });
-        trailParam.roi.push_back(Point{ (int32_t)width, 0 });
+        trailParam.roi.push_back(algo::Point{ 0, 0 });
+        trailParam.roi.push_back(algo::Point{ 0, (int32_t)height });
+        trailParam.roi.push_back(algo::Point{ (int32_t)width, (int32_t)height });
+        trailParam.roi.push_back(algo::Point{ (int32_t)width, 0 });
 
         //检测
-        ImageResult imageResult;
-        FilterResult filterResult;
+        algo::ImageResult imageResult;
+        algo::FilterResult filterResult;
         ret = algo_->Trail(chl->GetChannelId(), frameId, frame.data, width, height, trailParam, imageResult, filterResult);
         if (0 != ret) {
             LOG_ERROR("Trail error, ret {}", ret);
@@ -80,7 +81,7 @@ private:
         return 0;
     }
 
-    void saveImage(shared_ptr<ChannelSink> chl, uint64_t frameId, cv::Mat &frame, ImageResult &imageResult) {
+    void saveImage(std::shared_ptr<ChannelSink> chl, uint64_t frameId, cv::Mat &frame, algo::ImageResult &imageResult) {
         //根据检测结果抠图
         FrameCache::ObjectImageMap objectImages;
         for (auto &p : imageResult.bikes) {
@@ -119,14 +120,15 @@ private:
     }
 
     //检测到目标
-    void asyncRecognizeObject(shared_ptr<ChannelSink> chl, uint64_t frameId, cv::Mat &frame, ImageResult &imageResult) {
+    void asyncRecognizeObject(std::shared_ptr<ChannelSink> chl, uint64_t frameId, cv::Mat &frame,
+                              algo::ImageResult &imageResult) {
         recogWorker_.commit([=]() {
             cv::Mat f = frame;
             algo::RecogParam recParam;
 
             auto bikeObjs = chl->bikeObjectSink.OnDetectedObjects(imageResult.bikes);
             for (auto &p : bikeObjs) {
-                RecogParam::ObjLocation loc;
+                algo::RecogParam::ObjLocation loc;
                 loc.type = p.type;
                 loc.trail = p.trail;
                 loc.detect = p.detect;
@@ -135,7 +137,7 @@ private:
             }
             auto vehicleObjs = chl->vehicleObjectSink.OnDetectedObjects(imageResult.vehicles);
             for (auto &p : vehicleObjs) {
-                RecogParam::ObjLocation loc;
+                algo::RecogParam::ObjLocation loc;
                 loc.type = p.type;
                 loc.trail = p.trail;
                 loc.detect = p.detect;
@@ -144,7 +146,7 @@ private:
             }
             auto personObjs = chl->personObjectSink.OnDetectedObjects(imageResult.pedestrains);
             for (auto &p : personObjs) {
-                RecogParam::ObjLocation loc;
+                algo::RecogParam::ObjLocation loc;
                 loc.type = p.type;
                 loc.trail = p.trail;
                 loc.detect = p.detect;
@@ -156,7 +158,7 @@ private:
                 return;
             }
 
-            ImageResult recImageResult;
+            algo::ImageResult recImageResult;
             int32_t ret = algo_->Recognize(chl->GetChannelId(), frame.data, frame.cols, frame.rows, recParam, recImageResult);
             if (0 != ret) {
                 LOG_ERROR("Recognize error, ret {}", ret);
@@ -164,7 +166,7 @@ private:
             }
 
             size_t sz = recImageResult.bikes.size() + recImageResult.vehicles.size() + recImageResult.pedestrains.size();
-            if ( sz != recParam.locations.size()) {
+            if (sz != recParam.locations.size()) {
                 LOG_WARN("The recognize result size is error, request num {}, rsp num {}", recParam.locations.size(), sz);
                 return;
             }
@@ -188,7 +190,7 @@ private:
         });
     }
 
-    void asyncRecognizeFilterObject(shared_ptr<ChannelSink> chl, uint64_t frameId, FilterResult &filterResult) {
+    void asyncRecognizeFilterObject(std::shared_ptr<ChannelSink> chl, uint64_t frameId, algo::FilterResult &filterResult) {
 
         recogWorker_.commit([=]() {
             for (auto &p : filterResult.bikes) {
@@ -199,8 +201,8 @@ private:
                     continue;
                 }
 
-                RecogParam recParam;
-                RecogParam::ObjLocation loc;
+                algo::RecogParam recParam;
+                algo::RecogParam::ObjLocation loc;
                 loc.type = p.type;
                 loc.ContextCode = p.contextCode;
                 loc.trail = p.trail;
@@ -217,8 +219,8 @@ private:
                     continue;
                 }
 
-                RecogParam recParam;
-                RecogParam::ObjLocation loc;
+                algo::RecogParam recParam;
+                algo::RecogParam::ObjLocation loc;
                 loc.type = p.type;
                 loc.ContextCode = p.contextCode;
                 loc.trail = p.trail;
@@ -235,8 +237,8 @@ private:
                     continue;
                 }
 
-                RecogParam recParam;
-                RecogParam::ObjLocation loc;
+                algo::RecogParam recParam;
+                algo::RecogParam::ObjLocation loc;
                 loc.type = p.type;
                 loc.ContextCode = p.contextCode;
                 loc.trail = p.trail;
@@ -252,12 +254,12 @@ private:
         });
     }
 
-    int32_t recognizeFilterObjectInner(shared_ptr<ChannelSink> chl, cv::Mat &frame, RecogParam &recParam) {
+    int32_t recognizeFilterObjectInner(std::shared_ptr<ChannelSink> chl, cv::Mat &frame, algo::RecogParam &recParam) {
         if (recParam.locations.empty()) {
             return 0;
         }
 
-        ImageResult imageResult;
+        algo::ImageResult imageResult;
         int32_t ret = algo_->Recognize(chl->GetChannelId(), frame.data, frame.cols, frame.rows, recParam, imageResult);
         if (0 != ret) {
             LOG_ERROR("Recognize error, ret {}", ret);
@@ -278,9 +280,10 @@ private:
     }
 
 private:
-    shared_ptr<algo::AlgoStub> algo_;
-    threadpool worker_;
-    threadpool recogWorker_;
+    std::shared_ptr<algo::AlgoStub> algo_;
+    std::threadpool worker_;
+    std::threadpool recogWorker_;
 };
 
+}
 }

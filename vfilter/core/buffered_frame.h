@@ -1,11 +1,14 @@
 #pragma once
 
+#include <cstdint>
+
 #include "opencv/cv.h"
 
 #include "common/helper/jpeg_helper.h"
 #include "common/helper/color_conv_util.h"
 
-namespace vf {
+namespace video {
+namespace filter {
 
 class BufferedFrame {
 public:
@@ -56,8 +59,9 @@ public:
         uint8_t* src_rgb24 = frame.data;
         uint8_t* dst_y = yuv_.get();
         uint8_t* dst_u = dst_y + height * width;
-        uint8_t* dst_v = dst_u + (height * width/4);
-        I420ToBGR24Converter::Convert(dst_y, dst_u, dst_v, src_rgb24, width, height);
+        uint8_t* dst_v = dst_u + (height * width / 4);
+        I420ToBGR24Converter::Convert(dst_y, width, dst_u, width / 2, dst_v, width / 2, src_rgb24, width*height * 3, width,
+                                      height);
     }
 
     cv::Mat Get() override {
@@ -66,16 +70,17 @@ public:
         int height = height_;
         uint8_t* src_y = yuv_.get();
         uint8_t* src_u = src_y + width * height;
-        uint8_t* src_v = src_u + (width * height/4);
+        uint8_t* src_v = src_u + (width * height / 4);
         uint8_t* dst_rgb24 = mat.data;
-        BGR24ToI420Converter::Convert(src_y, src_u, src_v, dst_rgb24, width, height);
+        BGR24ToI420Converter::Convert(dst_rgb24, width*height * 3, src_y, width, src_u, width / 2, src_v, width / 2, width,
+                                      height);
         return mat;
     }
 
 private:
     uint32_t width_;
     uint32_t height_;
-    unique_ptr<uint8_t[]> yuv_;
+    std::unique_ptr<uint8_t[]> yuv_;
 };
 
 
@@ -117,9 +122,9 @@ public:
 
 private:
     cv::Mat mat_;
-    shared_ptr<uint8_t> jpg_;
+    std::shared_ptr<uint8_t> jpg_;
     uint32_t jpgSize_;
-    shared_ptr<uint8_t> decompressedImg_;
+    std::shared_ptr<uint8_t> decompressedImg_;
     bool compressed_;
 };
 
@@ -148,4 +153,5 @@ public:
     }
 };
 
+}
 }

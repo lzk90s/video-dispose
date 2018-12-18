@@ -19,9 +19,8 @@
 #include "vfilter/notifier/vehicle_notifier.h"
 #include "vfilter/notifier/face_notifier.h"
 
-using namespace std;
-
-namespace vf {
+namespace video {
+namespace filter {
 
 //通道池（1个通道一个对象）
 class ChannelSink {
@@ -55,7 +54,7 @@ public:
     ChannelSink(uint32_t channelId) {
         this->channelId_ = channelId;
         watchdog.Watch([=]() {
-            cout << "** OOPS! " << channelId_ << " die abnormally **" << endl;
+            std::cout << "** OOPS! " << channelId_ << " die abnormally **" << std::endl;
             _exit(5);
         });
     }
@@ -84,5 +83,7 @@ private:
     uint32_t channelId_;
 };
 
+
+}
 
 }

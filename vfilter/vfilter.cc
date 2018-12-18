@@ -13,10 +13,10 @@
 #include "vfilter/proc/default_algo_proc.h"
 #include "vfilter/proc/face_algo_proc.h"
 
-using namespace std;
+namespace vf = video::filter;
 
-static shared_ptr<vf::AbstractAlgoProcessor> defaultProcessor;
-static shared_ptr<vf::AbstractAlgoProcessor> faceProcessor;
+static std::shared_ptr<vf::AbstractAlgoProcessor> defaultProcessor;
+static std::shared_ptr<vf::AbstractAlgoProcessor> faceProcessor;
 
 int32_t VFilter_Init() {
     vf::ThisApp::getInstance();
@@ -55,7 +55,7 @@ int32_t VFilter_Routine(uint32_t channelId,
                         uint8_t *v, uint32_t stride_v,
                         uint32_t width, uint32_t height) {
     if (vf::CSMS().sinks.find(channelId) == vf::CSMS().sinks.end()) {
-        auto chl = make_shared<vf::ChannelSink>(channelId);
+        auto chl = std::make_shared<vf::ChannelSink>(channelId);
         vf::CSMS().sinks[channelId] = chl;
         LOG_INFO("New channel {}, {}*{}", channelId, width, height);
     }

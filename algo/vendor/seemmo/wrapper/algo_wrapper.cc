@@ -8,8 +8,7 @@
 #include "algo/vendor/seemmo/wrapper/algo_wrapper.h"
 #include "algo/vendor/seemmo/wrapper/workers.h"
 
-using namespace std;
-
+namespace video {
 namespace algo {
 namespace seemmo {
 
@@ -21,12 +20,12 @@ public:
     }
 
     void Init(
-        const string &basedir,
+        const std::string &basedir,
         uint32_t imgThrNum,
         uint32_t videoThrNum,
         uint32_t imgCoreNum,
         uint32_t videoCoreNum,
-        const string &authServer,
+        const std::string &authServer,
         uint32_t authType,
         uint32_t hwDevId
     ) {
@@ -36,7 +35,7 @@ public:
         // 深瞐sdk进程初始化
         int ret = seemmo_process_init(basedir.c_str(), imgCoreNum, videoCoreNum, authServer.c_str(), authType, true);
         if (0 != ret) {
-            throw runtime_error("Init seemmo sdk error, ret " + std::to_string(ret));
+            throw std::runtime_error("Init seemmo sdk error, ret " + std::to_string(ret));
         }
 
         const char *version = seemmo_version();
@@ -76,7 +75,7 @@ public:
         const uint8_t *bgr24,
         uint32_t width,
         uint32_t height,
-        const string &param,
+        const std::string &param,
         char *jsonRsp,
         uint32_t *rspLen
     ) {
@@ -86,7 +85,7 @@ public:
 
     uint32_t TrailEnd(
         int32_t videoChl,
-        const string &param,
+        const std::string &param,
         char *jsonRsp,
         uint32_t *rspLen
     ) {
@@ -98,7 +97,7 @@ public:
         const uint8_t *bgr24,
         uint32_t width,
         uint32_t height,
-        const string &param,
+        const std::string &param,
         char *jsonRsp,
         uint32_t *rspLen
     ) {
@@ -120,18 +119,18 @@ public:
     }
 
 private:
-    shared_ptr<TrailWorker> trailWorker;
-    shared_ptr<RecognizeWorker> recWorker;
-    shared_ptr<DetectRecognizeWorker> decRecWorker;
+    std::shared_ptr<TrailWorker> trailWorker;
+    std::shared_ptr<RecognizeWorker> recWorker;
+    std::shared_ptr<DetectRecognizeWorker> decRecWorker;
 };
 
 typedef Singleton<AlgoController> AlgoSingleton;
 
 }
 }
+}
 
-
-using algo::seemmo::AlgoSingleton;
+using video::algo::seemmo::AlgoSingleton;
 
 int32_t SeemmoAlgo_Init(
     const char *basedir,
@@ -145,12 +144,12 @@ int32_t SeemmoAlgo_Init(
 ) {
     AlgoSingleton::getInstance().Init(basedir, imgThrNum, videoThrNum, imgCoreNum, videoCoreNum, authServer, authType,
                                       hwDevId);
-    return ERR_OK;
+    return 0;
 }
 
 int32_t SeemmoAlgo_Destroy(void) {
     AlgoSingleton::getInstance().Destroy();
-    return ERR_OK;
+    return 0;
 }
 
 int32_t SeemmoAlgo_Trail(

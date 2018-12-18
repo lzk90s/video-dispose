@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package algo.gosun_ext;
+package video.algo.gosun_ext;
 
 option cc_generic_services = true;
 

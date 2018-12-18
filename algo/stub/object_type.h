@@ -5,8 +5,7 @@
 #include <map>
 #include <string>
 
-using namespace std;
-
+namespace video {
 namespace algo {
 
 enum ObjectType {
@@ -27,7 +26,7 @@ enum ObjectType {
 //目标属性
 class Attribute {
 public:
-    string name;	// 属性值
+    std::string name;	// 属性值
     bool visable;	// 是否在流中可见（流叠加）
     uint32_t score;	// 评分
 
@@ -36,12 +35,12 @@ public:
         score = 0;
     }
 
-    Attribute(const string &name, uint32_t score) {
+    Attribute(const std::string &name, uint32_t score) {
         this->name = name;
         this->score = score;
     }
 
-    Attribute &WithName(const string &name) {
+    Attribute &WithName(const std::string &name) {
         this->name = name;
         return *this;
     }
@@ -52,16 +51,16 @@ public:
     }
 };
 
-typedef vector<int32_t> Rect;		//矩形[x,y,w,h]
-typedef vector<int32_t> Shift;		//位移[x,y]
-typedef vector<int32_t> Point;		//点[x,y]
-typedef map<uint32_t, Attribute> Attributes;
+typedef std::vector<int32_t> Rect;		//矩形[x,y,w,h]
+typedef std::vector<int32_t> Shift;		//位移[x,y]
+typedef std::vector<int32_t> Point;		//点[x,y]
+typedef std::map<uint32_t, Attribute> Attributes;
 
 
 // 目标基础类型
 class BaseObject {
 public:
-    string guid;				// 目标guid
+    std::string guid;				// 目标guid
     ObjectType type;			// 目标类型
     Rect detect;				// 目标所在区域
     Shift trail;				// 目标跟踪变化
@@ -84,13 +83,13 @@ public:
         TYPE,
         BRAND,
         PLATE,
-    } ;
+    };
 };
 
 // 机动车择优
 class VehicleFilter : public BaseObject {
 public:
-    string contextCode;			// 上下文code
+    std::string contextCode;			// 上下文code
     int32_t frameId;		// 最优帧的图像id
 
     VehicleFilter() {
@@ -129,7 +128,7 @@ public:
 // 人择优
 class PersonFilter : public BaseObject {
 public:
-    string contextCode;			// 上下文code
+    std::string contextCode;			// 上下文code
     int32_t frameId;		// 最优帧的图像id
 
     PersonFilter() {
@@ -141,13 +140,13 @@ public:
 // 非机动车
 class BikeObject : public BaseObject {
 public:
-    vector<PersonObject> persons;		// 自行车上的人
+    std::vector<PersonObject> persons;		// 自行车上的人
 };
 
 // 非机动车择优
 class BikeFilter : public BaseObject {
 public:
-    string contextCode;			// 上下文code
+    std::string contextCode;			// 上下文code
     int32_t frameId;		// 最优帧的图像id
 
     BikeFilter() {
@@ -163,7 +162,7 @@ class FaceObject : public BaseObject {
 // 人脸择优
 class FaceFilter : public BaseObject {
 public:
-    string contextCode;			// 上下文code
+    std::string contextCode;			// 上下文code
     int32_t frameId;		// 最优帧的图像id
 
     FaceFilter() {
@@ -171,4 +170,5 @@ public:
     }
 };
 
+}
 }

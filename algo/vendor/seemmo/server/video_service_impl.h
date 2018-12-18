@@ -12,20 +12,19 @@
 #include "algo/vendor/seemmo/server/algo_loader.h"
 #include "algo/vendor/seemmo/shm/shmdata.h"
 
-using namespace std;
-
+namespace video {
 namespace algo {
 namespace seemmo {
 
 class VideoProcServiceImpl : public VideoProcService {
 public:
-    VideoProcServiceImpl(algo::seemmo::AlgoLoader &algo) : algo_(algo) {
+    VideoProcServiceImpl(AlgoLoader &algo) : algo_(algo) {
     };
 
     virtual ~VideoProcServiceImpl() {};
 
-    virtual void Trail(::google::protobuf::RpcController* controller, const ::algo::seemmo::TrailRequest* request,
-                       ::algo::seemmo::TrailReply* response, ::google::protobuf::Closure* done) {
+    virtual void Trail(::google::protobuf::RpcController* controller, const TrailRequest* request, TrailReply* response,
+                       ::google::protobuf::Closure* done) {
 
         brpc::ClosureGuard done_guard(done);
 
@@ -41,7 +40,7 @@ public:
         }
 
         uint32_t bufLen = 1024 * 1024 * 5;
-        unique_ptr<char[]> buf(new char[bufLen]);
+        std::unique_ptr<char[]> buf(new char[bufLen]);
         int ret = algo_.Trail(
                       request->videochl(),
                       request->timestamp(),
@@ -59,8 +58,8 @@ public:
         response->set_data(buf.get(), bufLen);
     }
 
-    virtual void TrailEnd(::google::protobuf::RpcController* controller, const ::algo::seemmo::TrailEndRequest* request,
-                          ::algo::seemmo::TrailEndReply* response, ::google::protobuf::Closure* done) {
+    virtual void TrailEnd(::google::protobuf::RpcController* controller, const TrailEndRequest* request,
+                          TrailEndReply* response, ::google::protobuf::Closure* done) {
         brpc::ClosureGuard done_guard(done);
 
         SIMMNG::getInstance().Delete(request->videochl());
@@ -69,8 +68,8 @@ public:
         response->set_data("ok");
     }
 
-    virtual void Recognize(::google::protobuf::RpcController* controller, const ::algo::seemmo::RecognizeRequest* request,
-                           ::algo::seemmo::RecognizeReply* response, ::google::protobuf::Closure* done) {
+    virtual void Recognize(::google::protobuf::RpcController* controller,const RecognizeRequest* request,
+                           RecognizeReply* response,::google::protobuf::Closure* done) {
         brpc::ClosureGuard done_guard(done);
 
         brpc::Controller* cntl =
@@ -85,7 +84,7 @@ public:
         }
 
         uint32_t bufLen = 1024 * 1024 * 5;
-        unique_ptr<char[]> buf(new char[bufLen]);
+        std::unique_ptr<char[]> buf(new char[bufLen]);
         int ret = algo_.Recognize(
                       bgr24,
                       request->width(),
@@ -104,5 +103,6 @@ public:
 private:
     AlgoLoader & algo_;
 };
+}
 }
 }

@@ -26,13 +26,11 @@ DEFINE_int32(gpu_dev, 0, "the gpu device");
 DEFINE_int32(auth_type, 1, "the auth_type");
 
 
-using namespace std;
-
 int main(int argc, char* argv[]) {
     GFLAGS_NAMESPACE::ParseCommandLineFlags(&argc, &argv, true);
 
     // load algorithm
-    algo::seemmo::AlgoLoader algo;
+    video::algo::seemmo::AlgoLoader algo;
     algo.Load(FLAGS_base_dir, FLAGS_img_thr_num, FLAGS_video_thr_num,FLAGS_img_core_num, FLAGS_video_core_num,
               FLAGS_auth_type, FLAGS_auth_server, FLAGS_gpu_dev);
 
@@ -40,20 +38,20 @@ int main(int argc, char* argv[]) {
     brpc::Server server;
 
     // Instance of your service.
-    algo::seemmo::VideoProcServiceImpl videoProcServiceImpl(algo);
-    algo::seemmo::ImgProcServiceImpl imgProcServiceImpl(algo);
+    video::algo::seemmo::VideoProcServiceImpl videoProcServiceImpl(algo);
+    video::algo::seemmo::ImgProcServiceImpl imgProcServiceImpl(algo);
 
     // Add the service into server. Notice the second parameter, because the
     // service is put on stack, we don't want server to delete it, otherwise
     // use brpc::SERVER_OWNS_SERVICE.
     if (server.AddService(&videoProcServiceImpl,
                           brpc::SERVER_DOESNT_OWN_SERVICE) != 0) {
-        cout << "Fail to add service";
+        std::cout << "Fail to add service";
         return -1;
     }
     if (server.AddService(&imgProcServiceImpl,
                           brpc::SERVER_DOESNT_OWN_SERVICE) != 0) {
-        cout << "Fail to add service";
+        std::cout << "Fail to add service";
         return -1;
     }
 
@@ -61,13 +59,13 @@ int main(int argc, char* argv[]) {
     brpc::ServerOptions options;
     options.idle_timeout_sec = FLAGS_idle_timeout_s;
     if (server.Start(FLAGS_port, &options) != 0) {
-        cout << "Fail to start EchoServer";
+        std::cout << "Fail to start EchoServer";
         return -1;
     }
 
     // Wait until Ctrl-C is pressed, then Stop() and Join() the server.
     server.RunUntilAskedToQuit();
-    cout << "Quit";
+    std::cout << "Quit";
 
     return 0;
 }

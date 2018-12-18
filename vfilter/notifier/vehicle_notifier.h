@@ -6,35 +6,35 @@
 
 #include "json/json.hpp"
 
-using namespace  std;
 using json = nlohmann::json;
 
-namespace vf {
+namespace video {
+namespace filter {
 
 typedef struct tagVehicleNotifyMsg {
     uint8_t *image;
     uint64_t imageSize;
-    string flag;
+    std::string flag;
     int32_t channelId;
     int32_t type;
 
-    string plateLicence;
-    string carPatternName;
-    string plateTypeCodeName;
-    string colorCodeName;
-    string coDriverPersonCodeName;
-    string callCodeName;
-    string rackCodeName;
-    string spareTireCodeName;
-    string sunroofCodeName;
-    string dangerCodeName;
-    string mainDriverBeltCodeName;
-    string coDriverBeltCodeName;
+    std::string plateLicence;
+    std::string carPatternName;
+    std::string plateTypeCodeName;
+    std::string colorCodeName;
+    std::string coDriverPersonCodeName;
+    std::string callCodeName;
+    std::string rackCodeName;
+    std::string spareTireCodeName;
+    std::string sunroofCodeName;
+    std::string dangerCodeName;
+    std::string mainDriverBeltCodeName;
+    std::string coDriverBeltCodeName;
 } VehicleNotifyMsg;
 
 void to_json(json& j, const VehicleNotifyMsg& p) {
-    string img((char*)p.image, p.imageSize);
-    string base64Img;
+    std::string img((char*)p.image, p.imageSize);
+    std::string base64Img;
     Base64::Encode(img, &base64Img);
 
     j["image"] = base64Img;
@@ -63,7 +63,7 @@ public:
     }
 
 protected:
-    string buildNotifyMsg(uint32_t channelId, cv::Mat &img, algo::VehicleObject &obj) override {
+    std::string buildNotifyMsg(uint32_t channelId, cv::Mat &img, algo::VehicleObject &obj) override {
         VehicleNotifyMsg msg;
 
         Bgr2JpegConverter converter;
@@ -93,7 +93,7 @@ protected:
         return j.dump();
     }
 
-    string getAttrName(algo::Attributes &attrs, algo::VehicleObject::AttrType type) {
+    std::string getAttrName(algo::Attributes &attrs, algo::VehicleObject::AttrType type) {
         if (attrs.find(type) != attrs.end()) {
             return attrs[type].name;
         } else {
@@ -101,7 +101,7 @@ protected:
         }
     }
 
-    string getRequestURL() override {
+    std::string getRequestURL() override {
         return "/internal/snap/car";
     }
 
@@ -110,4 +110,5 @@ protected:
     }
 };
 
+}
 }

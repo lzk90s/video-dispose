@@ -6,10 +6,8 @@
 #include "algo/stub/object_type.h"
 #include "vfilter/mixer/vmixer.h"
 
-using namespace std;
-using namespace algo;
-
-namespace vf {
+namespace video {
+namespace filter {
 
 class BikeMixer : public VMixer<algo::BikeObject> {
 public:
@@ -17,7 +15,7 @@ public:
 
 protected:
 
-    void doMixFrame(cv::Mat &frame, vector<algo::BikeObject> &objs1, vector<algo::BikeObject> &objs2) override {
+    void doMixFrame(cv::Mat &frame, std::vector<algo::BikeObject> &objs1, std::vector<algo::BikeObject> &objs2) override {
         for (uint32_t idx = 0; idx < objs1.size() && idx < objs2.size(); idx++) {
             algo::Rect &rect = objs1[idx].detect;
             int32_t x = rect[0], y = rect[1], w = rect[2], h = rect[3];
@@ -28,7 +26,7 @@ protected:
                 // 只输出一个人
                 for (auto &p : objs2[idx].persons) {
                     // 需要混到流中的属性
-                    vector<algo::Attribute> mixableAttrs;
+                    std::vector<algo::Attribute> mixableAttrs;
 
                     algo::Attributes &attrs = p.attrs;
                     mixableAttrs.push_back(algo::Attribute().WithName(getTypeString(objs1[idx].type)));
@@ -45,15 +43,15 @@ protected:
         }
     }
 
-    string getTypeString(algo::ObjectType type) {
+    std::string getTypeString(algo::ObjectType type) {
         switch (type) {
-        case BIKE:
+        case algo::BIKE:
             return "自行车";
             break;
-        case MOTOBIKE:
+        case algo::MOTOBIKE:
             return "摩托车";
             break;
-        case TRICYCLE:
+        case algo::TRICYCLE:
             return "三轮车";
             break;
         default:
@@ -63,4 +61,5 @@ protected:
 
 };
 
+}
 }

@@ -3,9 +3,8 @@
 #include <cstdint>
 #include "common/helper/timer.h"
 
-using namespace std;
-
-namespace vf {
+namespace video {
+namespace filter {
 
 //看门狗
 class Watchdog {
@@ -41,4 +40,5 @@ private:
     int32_t dogCount_;
 };
 
+}
 }

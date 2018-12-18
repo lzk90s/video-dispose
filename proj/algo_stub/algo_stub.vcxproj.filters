@@ -25,9 +25,4 @@
       <Filter>源文件</Filter>
     </ClInclude>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\algo\stub\Makefile">
-      <Filter>源文件</Filter>
-    </None>
-  </ItemGroup>
 </Project>

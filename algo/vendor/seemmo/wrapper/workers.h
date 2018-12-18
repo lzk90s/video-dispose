@@ -12,8 +12,7 @@
 
 #include "sdk_export.h"
 
-using namespace std;
-
+namespace video {
 namespace algo {
 namespace seemmo {
 
@@ -28,10 +27,9 @@ public:
           gpuDevId_(gpuDevId),
           algoThrType_(algoThrType) {
         for (uint32_t i = 0; i < thrGroupNum; i++) {
-            shared_ptr<threadpool> w(
-                new threadpool(thrNumEachGroup, std::bind(&BusinessWorker::threadInitProc, this),
-                               std::bind(&BusinessWorker::threadFiniProc, this))
-            );
+            std::shared_ptr<std::threadpool> w(new std::threadpool(thrNumEachGroup,
+                                               std::bind(&BusinessWorker::threadInitProc, this),
+                                               std::bind(&BusinessWorker::threadFiniProc, this)));
             executors_.push_back(w);
         }
     }
@@ -53,7 +51,7 @@ public:
     }
 
     //选取一个执行组
-    shared_ptr<threadpool> SelectExecutorGroup(int32_t seed) {
+    std::shared_ptr<std::threadpool> SelectExecutorGroup(int32_t seed) {
         uint32_t idx = 0;
         if (seed < 0) {
             //seed小于0时，随机选取一个
@@ -79,7 +77,7 @@ private:
 
         int ret = seemmo_thread_init(algoThrType_, gpuDevId_, 1);
         if (0 != ret) {
-            throw runtime_error("Init thread error");
+            throw std::runtime_error("Init thread error");
         }
         cwStart_.countDown();
         LOG_INFO("Init thread {} succeed", getCurrentThreadId());
@@ -94,7 +92,7 @@ private:
 
 protected:
     int32_t thrGroupNum_;
-    vector<shared_ptr<threadpool>> executors_;
+    std::vector<std::shared_ptr<std::threadpool>> executors_;
     CountDownLatch cwStart_;
     CountDownLatch cwStop_;
     uint32_t gpuDevId_;
@@ -109,13 +107,13 @@ public:
         : BusinessWorker(gpuDevId, SEEMMO_LOAD_TYPE_FILTER, thrNum, 1) {
     }
 
-    future<int32_t> commitAsyncTask(
+    std::future<int32_t> commitAsyncTask(
         int32_t videoChl,
         uint64_t timestamp,
         const uint8_t *bgr24,
         uint32_t width,
         uint32_t height,
-        const string &param,
+        const std::string &param,
         char *jsonRsp,
         uint32_t *rspLen
     ) {
@@ -123,9 +121,9 @@ public:
         return SelectExecutorGroup(videoChl)->commit(trail, videoChl, timestamp, bgr24, width, height, param, jsonRsp, rspLen);
     }
 
-    future<int32_t> commitAsyncEndTask(
+    std::future<int32_t> commitAsyncEndTask(
         int32_t videoChl,
-        const string &param,
+        const std::string &param,
         char *jsonRsp,
         uint32_t *rspLen
     ) {
@@ -140,7 +138,7 @@ private:
         const uint8_t *bgr24,
         uint32_t width,
         uint32_t height,
-        const string &param,
+        const std::string &param,
         char *jsonRsp,
         uint32_t *rspLen
     ) {
@@ -157,7 +155,7 @@ private:
 
     static int32_t trailEnd(
         int32_t videoChl,
-        const string &param,
+        const std::string &param,
         char *jsonRsp,
         uint32_t *rspLen
     ) {
@@ -180,11 +178,11 @@ public:
         : BusinessWorker(gpuDevId, SEEMMO_LOAD_TYPE_RECOG, 1, thrNum) {
     }
 
-    future<int32_t> CommitAsyncTask(
+    std::future<int32_t> CommitAsyncTask(
         const uint8_t *bgr24,
         uint32_t width,
         uint32_t height,
-        const string &param,
+        const std::string &param,
         char *jsonRsp,
         uint32_t *rspLen
     ) {
@@ -197,7 +195,7 @@ private:
         const uint8_t *bgr24,
         uint32_t width,
         uint32_t height,
-        const string &param,
+        const std::string &param,
         char *jsonRsp,
         uint32_t *rspLen
     ) {
@@ -220,11 +218,11 @@ public:
         : BusinessWorker(gpuDevId, SEEMMO_LOAD_TYPE_ALL, 1, thrNum) {
     }
 
-    future<int32_t> CommitAsyncTask(
+    std::future<int32_t> CommitAsyncTask(
         const uint8_t *bgr24,
         uint32_t width,
         uint32_t height,
-        const string &param,
+        const std::string &param,
         char *jsonRsp,
         uint32_t *rspLen
     ) {
@@ -237,7 +235,7 @@ private:
         const uint8_t *rgbImg,
         uint32_t width,
         uint32_t height,
-        const string &param,
+        const std::string &param,
         char *jsonRsp,
         uint32_t *rspLen
     ) {
@@ -252,5 +250,6 @@ private:
     }
 };
 
+}
 }
 }

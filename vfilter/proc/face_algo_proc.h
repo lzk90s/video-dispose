@@ -1,11 +1,12 @@
 #pragma once
 
+#include "common/helper/threadpool.h"
+
 #include "algo/stub/algo_stub_factory.h"
 #include "vfilter/proc/abstract_algo_proc.h"
 
-using namespace std;
-
-namespace vf {
+namespace video {
+namespace filter {
 
 //人脸的单独出来，是因为人脸的效果还需要优化，避免影响其他算法的效果
 class FaceAlgoProcessor : public AbstractAlgoProcessor {
@@ -20,12 +21,12 @@ public:
         waitForComplete();
     }
 
-    void OnFrame(shared_ptr<ChannelSink> chl, cv::Mat &frame) override {
+    void OnFrame(std::shared_ptr<ChannelSink> chl, cv::Mat &frame) override {
         uint64_t frameId = chl->frameCache.AllocateEmptyFrame();
         worker_.commit(std::bind(&FaceAlgoProcessor::algoRoutine, this, chl, frameId, frame));
     }
 
-    void OnFrameEnd(shared_ptr<ChannelSink> chl) override {
+    void OnFrameEnd(std::shared_ptr<ChannelSink> chl) override {
         waitForComplete();
     }
 
@@ -40,26 +41,25 @@ private:
         }
     }
 
-    int32_t algoRoutine(shared_ptr<ChannelSink> chl, uint64_t frameId, cv::Mat &frame) {
+    int32_t algoRoutine(std::shared_ptr<ChannelSink> chl, uint64_t frameId, cv::Mat &frame) {
         chl->watchdog.Feed();
         return trailAndRecognize(chl, frameId, frame);
     }
 
-    int32_t trailAndRecognize(shared_ptr<ChannelSink> chl, uint64_t frameId, cv::Mat &frame) {
+    int32_t trailAndRecognize(std::shared_ptr<ChannelSink> chl, uint64_t frameId, cv::Mat &frame) {
         int32_t ret = 0;
         const uint8_t *bgr24 = frame.data;
         uint32_t width = frame.cols;
         uint32_t height = frame.rows;
 
-        TrailParam trailParam;
-        // roi区域设置为全图
-        trailParam.roi.push_back(Point{ 0, 0 });
-        trailParam.roi.push_back(Point{ 0, (int32_t)height });
-        trailParam.roi.push_back(Point{ (int32_t)width, (int32_t)height });
-        trailParam.roi.push_back(Point{ (int32_t)width, 0 });
+        algo::TrailParam trailParam;
+        trailParam.roi.push_back(algo::Point{ 0, 0 });
+        trailParam.roi.push_back(algo::Point{ 0, (int32_t)height });
+        trailParam.roi.push_back(algo::Point{ (int32_t)width, (int32_t)height });
+        trailParam.roi.push_back(algo::Point{ (int32_t)width, 0 });
 
-        ImageResult imageResult;
-        FilterResult filterResult;
+        algo::ImageResult imageResult;
+        algo::FilterResult filterResult;
         ret = algo_->Trail(chl->GetChannelId(), frameId, bgr24, width, height, trailParam, imageResult, filterResult);
         if (0 != ret) {
             LOG_ERROR("Face trail error, ret {}", ret);
@@ -79,8 +79,9 @@ private:
     }
 
 private:
-    shared_ptr<algo::AlgoStub> algo_;
-    threadpool worker_;
+    std::shared_ptr<algo::AlgoStub> algo_;
+    std::threadpool worker_;
 };
 
+}
 }

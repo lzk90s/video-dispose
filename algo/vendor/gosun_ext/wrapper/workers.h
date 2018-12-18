@@ -12,8 +12,8 @@
 
 #include "gosun_face_api.h"
 
-using namespace std;
 
+namespace video {
 namespace algo {
 namespace gosun_ext {
 
@@ -28,10 +28,9 @@ public:
           gpuDevId_(gpuDevId),
           algoThrType_(algoThrType) {
         for (uint32_t i = 0; i < thrGroupNum; i++) {
-            shared_ptr<threadpool> w(
-                new threadpool(thrNumEachGroup,std::bind(&BusinessWorker::threadInitProc, this),
-                               std::bind(&BusinessWorker::threadFiniProc, this))
-            );
+            std::shared_ptr<std::threadpool> w( new std::threadpool(thrNumEachGroup,
+                                                std::bind(&BusinessWorker::threadInitProc, this),
+                                                std::bind(&BusinessWorker::threadFiniProc, this)));
             executors_.push_back(w);
         }
     }
@@ -52,7 +51,7 @@ public:
         cwStop_.wait();
     }
 
-    shared_ptr<threadpool> SelectExecutorGroup(int32_t seed) {
+    std::shared_ptr<std::threadpool> SelectExecutorGroup(int32_t seed) {
         uint32_t idx = 0;
         if (seed < 0) {
             //seed小于0时，随机选取一个
@@ -86,7 +85,7 @@ private:
 
 protected:
     uint32_t thrGroupNum_;
-    vector<shared_ptr<threadpool>> executors_;
+    std::vector<std::shared_ptr<std::threadpool>> executors_;
     CountDownLatch cwStart_;
     CountDownLatch cwStop_;
     uint32_t gpuDevId_;
@@ -100,11 +99,11 @@ public:
         : BusinessWorker(gpuDevId, 3, 1, thrNum) {
     }
 
-    future<int32_t> CommitAsyncTask(
+    std::future<int32_t> CommitAsyncTask(
         const uint8_t *bgr24,
         uint32_t width,
         uint32_t height,
-        const string &param,
+        const std::string &param,
         char *jsonRsp,
         uint32_t *rspLen
     ) {
@@ -117,7 +116,7 @@ private:
         const uint8_t *rgbImg,
         uint32_t width,
         uint32_t height,
-        const string &param,
+        const std::string &param,
         char *jsonRsp,
         uint32_t *rspLen
     ) {
@@ -133,5 +132,6 @@ private:
     }
 };
 
+}
 }
 }

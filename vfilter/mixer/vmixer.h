@@ -10,18 +10,18 @@
 #include "algo/stub/object_type.h"
 #include "vfilter/core/object_sink.h"
 
-using namespace std;
+namespace video {
+namespace filter {
 
-namespace vf {
 static const char *DEFAULT_FONT = "/usr/share/fonts/truetype/simsun.ttf";
-static const int FONT_MIN_SIZE = 16;	//字体最小号
-static const int FONT_MAX_SIZE = 40;	//字体最大号
+static const int FONT_MIN_SIZE = 16;    //字体最小号
+static const int FONT_MAX_SIZE = 40;    //字体最大号
 
 
 template<class T>
 class VMixer {
 public:
-    VMixer(const string &type)
+    VMixer(const std::string &type)
         : text_(DEFAULT_FONT),
           type_(type) {
         cv::Scalar size{ FONT_MIN_SIZE, 0.5, 0.1, 0 };
@@ -29,13 +29,13 @@ public:
     }
 
     virtual void MixFrame(cv::Mat &frame, ObjectSink<T> &objSink) {
-        vector<T> tmpObjs1, tmpObjs2;
+        std::vector<T> tmpObjs1, tmpObjs2;
         objSink.GetShowableObjects(tmpObjs1, tmpObjs2);
         doMixFrame(frame, tmpObjs1, tmpObjs2);
     }
 
 protected:
-    virtual void doMixFrame(cv::Mat &frame, vector<T> &objs1, vector<T> &objs2) {}
+    virtual void doMixFrame(cv::Mat &frame, std::vector<T> &objs1, std::vector<T> &objs2) {}
 
     //画目标的矩形框
     virtual void mixObjectRectangle(cv::Mat &frame, int32_t x, int32_t y, int32_t w, int32_t h,
@@ -49,8 +49,9 @@ protected:
         //计算矩形的4个转角坐标, a,b,c,d 表示矩形的4个顶点（顺时针）
         int32_t len = 8;
         cv::Point a(x, y), b(x + w, y), c(x + w, y + h), d(x, y + h);
-        cv::Point a1(a.x, a.y+ len), a2(a.x+ len, a.y), b1(b.x, b.y+len), b2(b.x-len, b.y), c1(c.x, c.y-len), c2(c.x-len, c.y),
-        d1(d.x, d.y-len), d2(d.x+len, d.y);
+        cv::Point a1(a.x, a.y + len), a2(a.x + len, a.y), b1(b.x, b.y + len), b2(b.x - len, b.y), c1(c.x, c.y - len),
+        c2(c.x - len, c.y),
+        d1(d.x, d.y - len), d2(d.x + len, d.y);
 
         //画矩形的4个转角
         int32_t thickness = 3;
@@ -70,7 +71,7 @@ protected:
 
     //画目标的属性文字
     virtual void mixObjectAttributeText(cv::Mat &frame, int32_t x, int32_t y, int32_t w, int32_t h,
-                                        vector<algo::Attribute> &attrs, CvScalar color = CV_RGB(255, 255, 255)) {
+                                        std::vector<algo::Attribute> &attrs, CvScalar color = CV_RGB(255, 255, 255)) {
         //check param
         if (x < 0 || y < 0 || w <= 0 || h <= 0) {
             LOG_WARN("Invalid param x={}, y={} w={} h={}", x, y, w, h);
@@ -108,8 +109,8 @@ protected:
 
         uint32_t maxTextPixNum = (maxWcharFontNum * fontSize) + (maxAsciiFontNum * fontSize / 2);
 
-        const int32_t MARGIN_LEFT = 6;	//字体与左边界的间隔
-        const int32_t MARGIN_TOP = 4;	//字体与上边界的间隔
+        const int32_t MARGIN_LEFT = 6;  //字体与左边界的间隔
+        const int32_t MARGIN_TOP = 4;   //字体与上边界的间隔
 
         int idx = 0;
         for (auto &a : attrs) {
@@ -178,8 +179,9 @@ protected:
 
 private:
     CvxText text_;
-    string type_;
+    std::string type_;
 };
 
 
+}
 }

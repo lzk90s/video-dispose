@@ -30,6 +30,7 @@
 #include <google/protobuf/service.h>
 #include <google/protobuf/unknown_field_set.h>
 // @@protoc_insertion_point(includes)
+namespace video {
 namespace algo {
 namespace gosun_ext {
 class ImgRecognizeReply;
@@ -40,7 +41,9 @@ class ImgRecognizeRequestDefaultTypeInternal;
 extern ImgRecognizeRequestDefaultTypeInternal _ImgRecognizeRequest_default_instance_;
 }  // namespace gosun_ext
 }  // namespace algo
+}  // namespace video
 
+namespace video {
 namespace algo {
 namespace gosun_ext {
 
@@ -57,7 +60,7 @@ void InitDefaults();
 
 // ===================================================================
 
-class ImgRecognizeRequest : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:algo.gosun_ext.ImgRecognizeRequest) */ {
+class ImgRecognizeRequest : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:video.algo.gosun_ext.ImgRecognizeRequest) */ {
  public:
   ImgRecognizeRequest();
   virtual ~ImgRecognizeRequest();
@@ -172,7 +175,7 @@ class ImgRecognizeRequest : public ::google::protobuf::Message /* @@protoc_inser
   ::google::protobuf::uint32 imageid() const;
   void set_imageid(::google::protobuf::uint32 value);
 
-  // @@protoc_insertion_point(class_scope:algo.gosun_ext.ImgRecognizeRequest)
+  // @@protoc_insertion_point(class_scope:video.algo.gosun_ext.ImgRecognizeRequest)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
@@ -185,7 +188,7 @@ class ImgRecognizeRequest : public ::google::protobuf::Message /* @@protoc_inser
 };
 // -------------------------------------------------------------------
 
-class ImgRecognizeReply : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:algo.gosun_ext.ImgRecognizeReply) */ {
+class ImgRecognizeReply : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:video.algo.gosun_ext.ImgRecognizeReply) */ {
  public:
   ImgRecognizeReply();
   virtual ~ImgRecognizeReply();
@@ -266,7 +269,7 @@ class ImgRecognizeReply : public ::google::protobuf::Message /* @@protoc_inserti
   ::std::string* release_data();
   void set_allocated_data(::std::string* data);
 
-  // @@protoc_insertion_point(class_scope:algo.gosun_ext.ImgRecognizeReply)
+  // @@protoc_insertion_point(class_scope:video.algo.gosun_ext.ImgRecognizeReply)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
@@ -290,8 +293,8 @@ class ImgProcService : public ::google::protobuf::Service {
   static const ::google::protobuf::ServiceDescriptor* descriptor();
 
   virtual void Recognize(::google::protobuf::RpcController* controller,
-                       const ::algo::gosun_ext::ImgRecognizeRequest* request,
-                       ::algo::gosun_ext::ImgRecognizeReply* response,
+                       const ::video::algo::gosun_ext::ImgRecognizeRequest* request,
+                       ::video::algo::gosun_ext::ImgRecognizeReply* response,
                        ::google::protobuf::Closure* done);
 
   // implements Service ----------------------------------------------
@@ -323,8 +326,8 @@ class ImgProcService_Stub : public ImgProcService {
   // implements ImgProcService ------------------------------------------
 
   void Recognize(::google::protobuf::RpcController* controller,
-                       const ::algo::gosun_ext::ImgRecognizeRequest* request,
-                       ::algo::gosun_ext::ImgRecognizeReply* response,
+                       const ::video::algo::gosun_ext::ImgRecognizeRequest* request,
+                       ::video::algo::gosun_ext::ImgRecognizeReply* response,
                        ::google::protobuf::Closure* done);
  private:
   ::google::protobuf::RpcChannel* channel_;
@@ -346,13 +349,13 @@ inline void ImgRecognizeRequest::clear_imageid() {
   imageid_ = 0u;
 }
 inline ::google::protobuf::uint32 ImgRecognizeRequest::imageid() const {
-  // @@protoc_insertion_point(field_get:algo.gosun_ext.ImgRecognizeRequest.imageId)
+  // @@protoc_insertion_point(field_get:video.algo.gosun_ext.ImgRecognizeRequest.imageId)
   return imageid_;
 }
 inline void ImgRecognizeRequest::set_imageid(::google::protobuf::uint32 value) {
   
   imageid_ = value;
-  // @@protoc_insertion_point(field_set:algo.gosun_ext.ImgRecognizeRequest.imageId)
+  // @@protoc_insertion_point(field_set:video.algo.gosun_ext.ImgRecognizeRequest.imageId)
 }
 
 // bytes imageData = 2;
@@ -360,40 +363,40 @@ inline void ImgRecognizeRequest::clear_imagedata() {
   imagedata_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& ImgRecognizeRequest::imagedata() const {
-  // @@protoc_insertion_point(field_get:algo.gosun_ext.ImgRecognizeRequest.imageData)
+  // @@protoc_insertion_point(field_get:video.algo.gosun_ext.ImgRecognizeRequest.imageData)
   return imagedata_.GetNoArena();
 }
 inline void ImgRecognizeRequest::set_imagedata(const ::std::string& value) {
   
   imagedata_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:algo.gosun_ext.ImgRecognizeRequest.imageData)
+  // @@protoc_insertion_point(field_set:video.algo.gosun_ext.ImgRecognizeRequest.imageData)
 }
 #if LANG_CXX11
 inline void ImgRecognizeRequest::set_imagedata(::std::string&& value) {
   
   imagedata_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:algo.gosun_ext.ImgRecognizeRequest.imageData)
+  // @@protoc_insertion_point(field_set_rvalue:video.algo.gosun_ext.ImgRecognizeRequest.imageData)
 }
 #endif
 inline void ImgRecognizeRequest::set_imagedata(const char* value) {
   
   imagedata_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:algo.gosun_ext.ImgRecognizeRequest.imageData)
+  // @@protoc_insertion_point(field_set_char:video.algo.gosun_ext.ImgRecognizeRequest.imageData)
 }
 inline void ImgRecognizeRequest::set_imagedata(const void* value, size_t size) {
   
   imagedata_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:algo.gosun_ext.ImgRecognizeRequest.imageData)
+  // @@protoc_insertion_point(field_set_pointer:video.algo.gosun_ext.ImgRecognizeRequest.imageData)
 }
 inline ::std::string* ImgRecognizeRequest::mutable_imagedata() {
   
-  // @@protoc_insertion_point(field_mutable:algo.gosun_ext.ImgRecognizeRequest.imageData)
+  // @@protoc_insertion_point(field_mutable:video.algo.gosun_ext.ImgRecognizeRequest.imageData)
   return imagedata_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* ImgRecognizeRequest::release_imagedata() {
-  // @@protoc_insertion_point(field_release:algo.gosun_ext.ImgRecognizeRequest.imageData)
+  // @@protoc_insertion_point(field_release:video.algo.gosun_ext.ImgRecognizeRequest.imageData)
   
   return imagedata_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -404,7 +407,7 @@ inline void ImgRecognizeRequest::set_allocated_imagedata(::std::string* imagedat
     
   }
   imagedata_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), imagedata);
-  // @@protoc_insertion_point(field_set_allocated:algo.gosun_ext.ImgRecognizeRequest.imageData)
+  // @@protoc_insertion_point(field_set_allocated:video.algo.gosun_ext.ImgRecognizeRequest.imageData)
 }
 
 // string pictureFormat = 3;
@@ -412,40 +415,40 @@ inline void ImgRecognizeRequest::clear_pictureformat() {
   pictureformat_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& ImgRecognizeRequest::pictureformat() const {
-  // @@protoc_insertion_point(field_get:algo.gosun_ext.ImgRecognizeRequest.pictureFormat)
+  // @@protoc_insertion_point(field_get:video.algo.gosun_ext.ImgRecognizeRequest.pictureFormat)
   return pictureformat_.GetNoArena();
 }
 inline void ImgRecognizeRequest::set_pictureformat(const ::std::string& value) {
   
   pictureformat_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:algo.gosun_ext.ImgRecognizeRequest.pictureFormat)
+  // @@protoc_insertion_point(field_set:video.algo.gosun_ext.ImgRecognizeRequest.pictureFormat)
 }
 #if LANG_CXX11
 inline void ImgRecognizeRequest::set_pictureformat(::std::string&& value) {
   
   pictureformat_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:algo.gosun_ext.ImgRecognizeRequest.pictureFormat)
+  // @@protoc_insertion_point(field_set_rvalue:video.algo.gosun_ext.ImgRecognizeRequest.pictureFormat)
 }
 #endif
 inline void ImgRecognizeRequest::set_pictureformat(const char* value) {
   
   pictureformat_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:algo.gosun_ext.ImgRecognizeRequest.pictureFormat)
+  // @@protoc_insertion_point(field_set_char:video.algo.gosun_ext.ImgRecognizeRequest.pictureFormat)
 }
 inline void ImgRecognizeRequest::set_pictureformat(const char* value, size_t size) {
   
   pictureformat_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:algo.gosun_ext.ImgRecognizeRequest.pictureFormat)
+  // @@protoc_insertion_point(field_set_pointer:video.algo.gosun_ext.ImgRecognizeRequest.pictureFormat)
 }
 inline ::std::string* ImgRecognizeRequest::mutable_pictureformat() {
   
-  // @@protoc_insertion_point(field_mutable:algo.gosun_ext.ImgRecognizeRequest.pictureFormat)
+  // @@protoc_insertion_point(field_mutable:video.algo.gosun_ext.ImgRecognizeRequest.pictureFormat)
   return pictureformat_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* ImgRecognizeRequest::release_pictureformat() {
-  // @@protoc_insertion_point(field_release:algo.gosun_ext.ImgRecognizeRequest.pictureFormat)
+  // @@protoc_insertion_point(field_release:video.algo.gosun_ext.ImgRecognizeRequest.pictureFormat)
   
   return pictureformat_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -456,7 +459,7 @@ inline void ImgRecognizeRequest::set_allocated_pictureformat(::std::string* pict
     
   }
   pictureformat_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), pictureformat);
-  // @@protoc_insertion_point(field_set_allocated:algo.gosun_ext.ImgRecognizeRequest.pictureFormat)
+  // @@protoc_insertion_point(field_set_allocated:video.algo.gosun_ext.ImgRecognizeRequest.pictureFormat)
 }
 
 // string calcParam = 4;
@@ -464,40 +467,40 @@ inline void ImgRecognizeRequest::clear_calcparam() {
   calcparam_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& ImgRecognizeRequest::calcparam() const {
-  // @@protoc_insertion_point(field_get:algo.gosun_ext.ImgRecognizeRequest.calcParam)
+  // @@protoc_insertion_point(field_get:video.algo.gosun_ext.ImgRecognizeRequest.calcParam)
   return calcparam_.GetNoArena();
 }
 inline void ImgRecognizeRequest::set_calcparam(const ::std::string& value) {
   
   calcparam_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:algo.gosun_ext.ImgRecognizeRequest.calcParam)
+  // @@protoc_insertion_point(field_set:video.algo.gosun_ext.ImgRecognizeRequest.calcParam)
 }
 #if LANG_CXX11
 inline void ImgRecognizeRequest::set_calcparam(::std::string&& value) {
   
   calcparam_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:algo.gosun_ext.ImgRecognizeRequest.calcParam)
+  // @@protoc_insertion_point(field_set_rvalue:video.algo.gosun_ext.ImgRecognizeRequest.calcParam)
 }
 #endif
 inline void ImgRecognizeRequest::set_calcparam(const char* value) {
   
   calcparam_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:algo.gosun_ext.ImgRecognizeRequest.calcParam)
+  // @@protoc_insertion_point(field_set_char:video.algo.gosun_ext.ImgRecognizeRequest.calcParam)
 }
 inline void ImgRecognizeRequest::set_calcparam(const char* value, size_t size) {
   
   calcparam_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:algo.gosun_ext.ImgRecognizeRequest.calcParam)
+  // @@protoc_insertion_point(field_set_pointer:video.algo.gosun_ext.ImgRecognizeRequest.calcParam)
 }
 inline ::std::string* ImgRecognizeRequest::mutable_calcparam() {
   
-  // @@protoc_insertion_point(field_mutable:algo.gosun_ext.ImgRecognizeRequest.calcParam)
+  // @@protoc_insertion_point(field_mutable:video.algo.gosun_ext.ImgRecognizeRequest.calcParam)
   return calcparam_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* ImgRecognizeRequest::release_calcparam() {
-  // @@protoc_insertion_point(field_release:algo.gosun_ext.ImgRecognizeRequest.calcParam)
+  // @@protoc_insertion_point(field_release:video.algo.gosun_ext.ImgRecognizeRequest.calcParam)
   
   return calcparam_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -508,7 +511,7 @@ inline void ImgRecognizeRequest::set_allocated_calcparam(::std::string* calcpara
     
   }
   calcparam_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), calcparam);
-  // @@protoc_insertion_point(field_set_allocated:algo.gosun_ext.ImgRecognizeRequest.calcParam)
+  // @@protoc_insertion_point(field_set_allocated:video.algo.gosun_ext.ImgRecognizeRequest.calcParam)
 }
 
 // -------------------------------------------------------------------
@@ -520,40 +523,40 @@ inline void ImgRecognizeReply::clear_data() {
   data_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& ImgRecognizeReply::data() const {
-  // @@protoc_insertion_point(field_get:algo.gosun_ext.ImgRecognizeReply.data)
+  // @@protoc_insertion_point(field_get:video.algo.gosun_ext.ImgRecognizeReply.data)
   return data_.GetNoArena();
 }
 inline void ImgRecognizeReply::set_data(const ::std::string& value) {
   
   data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:algo.gosun_ext.ImgRecognizeReply.data)
+  // @@protoc_insertion_point(field_set:video.algo.gosun_ext.ImgRecognizeReply.data)
 }
 #if LANG_CXX11
 inline void ImgRecognizeReply::set_data(::std::string&& value) {
   
   data_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:algo.gosun_ext.ImgRecognizeReply.data)
+  // @@protoc_insertion_point(field_set_rvalue:video.algo.gosun_ext.ImgRecognizeReply.data)
 }
 #endif
 inline void ImgRecognizeReply::set_data(const char* value) {
   
   data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:algo.gosun_ext.ImgRecognizeReply.data)
+  // @@protoc_insertion_point(field_set_char:video.algo.gosun_ext.ImgRecognizeReply.data)
 }
 inline void ImgRecognizeReply::set_data(const char* value, size_t size) {
   
   data_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:algo.gosun_ext.ImgRecognizeReply.data)
+  // @@protoc_insertion_point(field_set_pointer:video.algo.gosun_ext.ImgRecognizeReply.data)
 }
 inline ::std::string* ImgRecognizeReply::mutable_data() {
   
-  // @@protoc_insertion_point(field_mutable:algo.gosun_ext.ImgRecognizeReply.data)
+  // @@protoc_insertion_point(field_mutable:video.algo.gosun_ext.ImgRecognizeReply.data)
   return data_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* ImgRecognizeReply::release_data() {
-  // @@protoc_insertion_point(field_release:algo.gosun_ext.ImgRecognizeReply.data)
+  // @@protoc_insertion_point(field_release:video.algo.gosun_ext.ImgRecognizeReply.data)
   
   return data_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -564,7 +567,7 @@ inline void ImgRecognizeReply::set_allocated_data(::std::string* data) {
     
   }
   data_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), data);
-  // @@protoc_insertion_point(field_set_allocated:algo.gosun_ext.ImgRecognizeReply.data)
+  // @@protoc_insertion_point(field_set_allocated:video.algo.gosun_ext.ImgRecognizeReply.data)
 }
 
 #endif  // !PROTOBUF_INLINE_NOT_IN_HEADERS
@@ -576,6 +579,7 @@ inline void ImgRecognizeReply::set_allocated_data(::std::string* data) {
 
 }  // namespace gosun_ext
 }  // namespace algo
+}  // namespace video
 
 // @@protoc_insertion_point(global_scope)
 

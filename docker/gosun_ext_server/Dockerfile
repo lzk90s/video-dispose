@@ -46,7 +46,7 @@ RUN sed -i 's/archive.ubuntu.com/mirrors.aliyun.com/g' /etc/apt/sources.list && 
     echo "Asia/Shanghai" > /etc/timezone
 
 ENV GOSUN_EXT_SDK_HOME /opt/GsFaceLib
-ENV LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${GOSUN_EXT_SDK_HOME}/face_libs
+ENV LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${GOSUN_EXT_SDK_HOME}/face_libs:/usr/local/lib/
     
 COPY --from=base_builder ${GOSUN_EXT_SDK_HOME} ${GOSUN_EXT_SDK_HOME}
 COPY --from=base_builder /usr/local/bin/gosun_ext_algo_server /usr/local/bin/

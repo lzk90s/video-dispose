@@ -277,7 +277,7 @@ private:
     FT_Face      m_face;      // 字体
 
     //字体缓存
-    MyFaceRec	  m_myface;
+    MyFaceRec     m_myface;
     FTC_FaceID    m_myfaceId;
     FTC_Manager   m_cacheManager;
     FTC_CMapCache m_mapCache;
@@ -287,8 +287,8 @@ private:
     // 默认的字体输出参数
     int         m_fontType;
     cv::Scalar  m_fontSize;
-    bool		m_fontUnderline;
-    float		m_fontDiaphaneity;
+    bool        m_fontUnderline;
+    float       m_fontDiaphaneity;
 };
 
 #endif // OPENCV_CVX_TEXT_HPP_

@@ -9,8 +9,8 @@
 #include "algo/stub/object_type.h"
 #include "vfilter/config/setting.h"
 
-
-namespace vf {
+namespace video {
+namespace filter {
 
 //目标池
 template<class T>
@@ -22,25 +22,25 @@ public:
         gofSize_ = 0;
     }
 
-    vector<T> OnDetectedObjects(const vector<T> &objs) {
-        unique_lock<mutex> lck(mutex_);
-        vector<T> toRecObjs = calcNeedRecognizeObjects(objs);
+    std::vector<T> OnDetectedObjects(const std::vector<T> &objs) {
+        std::unique_lock<std::mutex> lck(mutex_);
+        std::vector<T> toRecObjs = calcNeedRecognizeObjects(objs);
         updateDetectedObjects(objs);
         return toRecObjs;
     }
 
-    void OnRecognizedObjects(const vector<T> &objs) {
-        unique_lock<mutex> lck(mutex_);
+    void OnRecognizedObjects(const std::vector<T> &objs) {
+        std::unique_lock<std::mutex> lck(mutex_);
         updateRecognizedObjects(objs);
     }
 
     void IncreaseGofIdx() {
-        unique_lock<mutex> lck(mutex_);
+        std::unique_lock<std::mutex> lck(mutex_);
         gofIdx_++;
     }
 
-    void GetShowableObjects(vector<T> &t1, vector<T> &t2) {
-        unique_lock<mutex> lck(mutex_);
+    void GetShowableObjects(std::vector<T> &t1, std::vector<T> &t2) {
+        std::unique_lock<std::mutex> lck(mutex_);
         for (auto &o : existObjs_) {
             if (o.second.Showable()) {
                 T tmp = o.second.obj1;
@@ -52,8 +52,8 @@ public:
         }
     }
 
-    bool ObjectExist(const string &objId) {
-        unique_lock<mutex> lck(mutex_);
+    bool ObjectExist(const std::string &objId) {
+        std::unique_lock<std::mutex> lck(mutex_);
         return existObjs_.find(objId) != existObjs_.end();
     }
 
@@ -79,8 +79,8 @@ private:
         return algo::Rect{ x,y,w,h };
     }
 
-    vector<T>  calcNeedRecognizeObjects(const vector<T> &objs) {
-        vector<T> toRecObjs;
+    std::vector<T>  calcNeedRecognizeObjects(const std::vector<T> &objs) {
+        std::vector<T> toRecObjs;
         //计算需要重新识别的目标，以下情况需要从新识别
         // 1. 目标第一次出现【目标第一次出现，进行识别】
         // 2. 目标最新的评分比历史最高评分高【目标的评分高，说明可能清晰度更好，识别结果可能更准确】
@@ -98,7 +98,7 @@ private:
         return toRecObjs;
     }
 
-    void updateDetectedObjects(const vector<T> &objs) {
+    void updateDetectedObjects(const std::vector<T> &objs) {
         for (auto &o : objs) {
             //如果没有找到，则添加到已存在目标容器中
             if (existObjs_.find(o.guid) == existObjs_.end()) {
@@ -112,7 +112,7 @@ private:
             }
         }
 
-        vector<string> disappearedObjs;
+        std::vector<std::string> disappearedObjs;
         for (auto &o : existObjs_) {
             bool exist = false;
             for (auto &i : objs) {
@@ -145,7 +145,7 @@ private:
         gofIdx_ = 0;
     }
 
-    void updateRecognizedObjects(const vector<T> &objs) {
+    void updateRecognizedObjects(const std::vector<T> &objs) {
         for (auto &o : objs) {
             if (existObjs_.find(o.guid) != existObjs_.end()) {
                 auto newObj = o;
@@ -188,9 +188,9 @@ private:
         }
     };
 
-    mutex mutex_;
+    std::mutex mutex_;
     //已经存在的目标<id, obj>
-    map<string, ObjectVO> existObjs_;
+    std::map<std::string, ObjectVO> existObjs_;
     //因为是抽帧检测，所以，把相邻两次检测之间的帧认作一个gof（group of frame）
     //gofSize表示一个gof中的帧数目，gofidx表示一帧在当前gof中的序号
     uint32_t gofSize_;
@@ -202,4 +202,5 @@ typedef ObjectSink<algo::VehicleObject> VehicleObjectSink;
 typedef ObjectSink<algo::PersonObject> PersonObjectSink;
 typedef ObjectSink<algo::FaceObject> FaceObjectSink;
 
+}
 }

@@ -6,13 +6,15 @@
 
 #include "vfilter/core/channel_sink.h"
 
-namespace vf {
+namespace video {
+namespace filter {
 
 class FrameHandler {
 public:
-    virtual void OnFrame(shared_ptr<ChannelSink> chl, cv::Mat &frame) = 0;
+    virtual void OnFrame(std::shared_ptr<ChannelSink> chl, cv::Mat &frame) = 0;
 
-    virtual void OnFrameEnd(shared_ptr<ChannelSink> chl) = 0;
+    virtual void OnFrameEnd(std::shared_ptr<ChannelSink> chl) = 0;
 };
 
+}
 }

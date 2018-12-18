@@ -10,8 +10,7 @@
 
 #include "gosun_face_api.h"
 
-using namespace std;
-
+namespace video {
 namespace algo {
 namespace gosun_ext {
 
@@ -23,12 +22,12 @@ public:
     }
 
     void Init(
-        const string &basedir,
+        const std::string &basedir,
         uint32_t imgThrNum,
         uint32_t videoThrNum,
         uint32_t imgCoreNum,
         uint32_t videoCoreNum,
-        const string &authServer,
+        const std::string &authServer,
         uint32_t authType,
         uint32_t hwDevId
     ) {
@@ -70,16 +69,16 @@ public:
     }
 
 private:
-    shared_ptr<DetectRecognizeWorker> decRecWorker;
+    std::shared_ptr<DetectRecognizeWorker> decRecWorker;
 };
 
 typedef Singleton<AlgoController> AlgoSingleton;
 
 }
 }
+}
 
-
-using algo::gosun_ext::AlgoSingleton;
+using video::algo::gosun_ext::AlgoSingleton;
 
 int32_t GosunAlgo_Init(
     const char *basedir,

@@ -7,18 +7,18 @@
 #include "common/helper/logger.h"
 #include "json/json.hpp"
 
-using namespace  std;
-using json = nlohmann::json;
-
+namespace video {
 namespace algo {
 namespace seemmo {
 namespace detect {
 
+using json = nlohmann::json;
+
 typedef struct tagDetectPO {
     int32_t Code;
-    string Message;
+    std::string Message;
     struct tagBody {
-        vector<int32_t> Rect;
+        std::vector<int32_t> Rect;
         int32_t Score;
     } Body;
 
@@ -29,10 +29,10 @@ typedef struct tagDetectPO {
 
 typedef struct tagObjectPO {
     int32_t Type;
-    string ContextCode;
+    std::string ContextCode;
     int64_t Timestamp;
-    string GUID;
-    vector<int32_t> Trail;
+    std::string GUID;
+    std::vector<int32_t> Trail;
     DetectPO Detect;
 
     tagObjectPO() {
@@ -43,10 +43,10 @@ typedef struct tagObjectPO {
 
 typedef struct tagImageResultPO {
     int32_t Code;
-    string Message;
-    vector<ObjectPO> Vehicles;
-    vector<ObjectPO> Pedestrains;
-    vector<ObjectPO> Bikes;
+    std::string Message;
+    std::vector<ObjectPO> Vehicles;
+    std::vector<ObjectPO> Pedestrains;
+    std::vector<ObjectPO> Bikes;
 
     tagImageResultPO() {
         Code = 0;
@@ -55,8 +55,8 @@ typedef struct tagImageResultPO {
 
 typedef struct tagDetectReplyPO {
     int32_t Code;
-    string Message;
-    vector<ImageResultPO> ImageResults;
+    std::string Message;
+    std::vector<ImageResultPO> ImageResults;
 
     tagDetectReplyPO() {
         Code = 0;
@@ -69,10 +69,10 @@ void from_json(const json& j, DetectPO& p) {
         p.Code = j.at("Code").get<int>();
         p.Message = j.at("Message").get<std::string>();
         if (0 == p.Code) {
-            p.Body.Rect = j.at("Body").at("Rect").get<vector<int>>();
+            p.Body.Rect = j.at("Body").at("Rect").get<std::vector<int>>();
             p.Body.Score = j.at("Body").at("Score").get<int>();
         }
-    } catch (exception &e) {
+    } catch (std::exception &e) {
         LOG_ERROR("Parse json error, {}, {}", j.dump(), e.what());
     }
 }
@@ -80,10 +80,10 @@ void from_json(const json& j, DetectPO& p) {
 void from_json(const json &j, ObjectPO &p) {
     try {
         p.Type = j.at("Type").get<int>();
-        p.GUID = j.at("GUID").get<string>();
-        p.Trail = j.at("Trail").get<vector<int>>();
+        p.GUID = j.at("GUID").get<std::string>();
+        p.Trail = j.at("Trail").get<std::vector<int>>();
         p.Detect = j.at("Detect").get<DetectPO>();
-    } catch (exception &e) {
+    } catch (std::exception &e) {
         LOG_ERROR("Parse json error, {}, {}", j.dump(), e.what());
     }
 }
@@ -91,13 +91,13 @@ void from_json(const json &j, ObjectPO &p) {
 void from_json(const json &j, ImageResultPO &p) {
     try {
         p.Code = j.at("Code").get<int32_t>();
-        p.Message = j.at("Message").get<string>();
+        p.Message = j.at("Message").get<std::string>();
         if (0 == p.Code) {
-            p.Vehicles = j.at("Vehicles").get<vector<ObjectPO>>();
-            p.Bikes = j.at("Bikes").get<vector<ObjectPO>>();
-            p.Pedestrains = j.at("Pedestrains").get<vector<ObjectPO>>();
+            p.Vehicles = j.at("Vehicles").get<std::vector<ObjectPO>>();
+            p.Bikes = j.at("Bikes").get<std::vector<ObjectPO>>();
+            p.Pedestrains = j.at("Pedestrains").get<std::vector<ObjectPO>>();
         }
-    } catch (exception &e) {
+    } catch (std::exception &e) {
         LOG_ERROR("Parse json error, {}, {}", j.dump(), e.what());
     }
 }
@@ -105,24 +105,25 @@ void from_json(const json &j, ImageResultPO &p) {
 void from_json(const json &j, DetectReplyPO &p) {
     try {
         p.Code = j.at("Code").get<int32_t>();
-        p.Message = j.at("Message").get<string>();
+        p.Message = j.at("Message").get<std::string>();
         if (0 == p.Code) {
-            p.ImageResults = j.at("ImageResults").get<vector<ImageResultPO>>();
+            p.ImageResults = j.at("ImageResults").get<std::vector<ImageResultPO>>();
         }
-    } catch (exception &e) {
+    } catch (std::exception &e) {
         LOG_ERROR("Parse json error, {}, {}", j.dump(), e.what());
     }
 }
 
 class DetectResponseParser {
 public:
-    void Parse(const string &response, DetectReplyPO &obj) {
+    void Parse(const std::string &response, DetectReplyPO &obj) {
         auto j = json::parse(response.c_str());
         obj = j.get<DetectReplyPO>();
     }
 private:
 
 };
+}
 }
 }
 }

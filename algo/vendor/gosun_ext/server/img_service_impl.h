@@ -14,20 +14,20 @@
 #include "algo/vendor/gosun_ext/server/algo_loader.h"
 
 
+namespace video {
 namespace algo {
 namespace gosun_ext {
 
 class ImgProcServiceImpl : public ImgProcService {
 public:
-    ImgProcServiceImpl(algo::gosun_ext::AlgoLoader &algo) : algo_(algo) {
+    ImgProcServiceImpl(AlgoLoader &algo) : algo_(algo) {
         timestamp_ = 0;
     };
 
     virtual ~ImgProcServiceImpl() {};
 
-    virtual void Recognize(::google::protobuf::RpcController* controller,
-                           const ::algo::gosun_ext::ImgRecognizeRequest* request, ::algo::gosun_ext::ImgRecognizeReply* response,
-                           ::google::protobuf::Closure* done) {
+    virtual void Recognize(::google::protobuf::RpcController* controller,const ImgRecognizeRequest* request,
+                           ImgRecognizeReply* response,::google::protobuf::Closure* done) {
         brpc::ClosureGuard done_guard(done);
 
         brpc::Controller* cntl =
@@ -42,7 +42,7 @@ public:
 
         //识别
         uint32_t bufLen2 = 1024 * 1024 * 5;
-        unique_ptr<char[]> buf2(new char[bufLen2]);
+        std::unique_ptr<char[]> buf2(new char[bufLen2]);
         int ret = algo_.DetectRecognize(
                       converter.GetImgBuffer(),
                       converter.GetWidth(),
@@ -60,21 +60,9 @@ public:
 
 private:
 
-    string buildEmptyResponse() {
-        string msg = "{\"Code\":0, \"Message\":\"ok\", \"ImageResults\":[]}";
+    std::string buildEmptyResponse() {
+        std::string msg = "{\"Code\":0, \"Message\":\"ok\", \"ImageResults\":[]}";
         return msg;
-    }
-
-    string& replaceAll(string& str, const string&   oldValue, const string& newValue) {
-        while (true) {
-            string::size_type pos(0);
-            if ((pos = str.find(oldValue)) != string::npos)
-                str.replace(pos, oldValue.length(), newValue);
-            else {
-                break;
-            }
-        }
-        return str;
     }
 
 private:
@@ -82,5 +70,6 @@ private:
     uint64_t timestamp_;
 };
 
+}
 }
 }

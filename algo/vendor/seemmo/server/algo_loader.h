@@ -6,12 +6,11 @@
 
 #include "common/helper/logger.h"
 
-using namespace std;
-
+namespace video {
 namespace algo {
 namespace seemmo {
 
-typedef int32_t (*PF_SeemmoAlgo_Init)(
+typedef int32_t(*PF_SeemmoAlgo_Init)(
     const char *basedir,
     uint32_t imgThrNum,
     uint32_t videoThrNum,
@@ -22,9 +21,9 @@ typedef int32_t (*PF_SeemmoAlgo_Init)(
     uint32_t hwDevId
 );
 
-typedef int32_t (*PF_SeemmoAlgo_Destroy)(void);
+typedef int32_t(*PF_SeemmoAlgo_Destroy)(void);
 
-typedef int32_t (*PF_SeemmoAlgo_Trail)(
+typedef int32_t(*PF_SeemmoAlgo_Trail)(
     int32_t videoChl,
     uint64_t timestamp,
     const uint8_t *bgr24,
@@ -42,7 +41,7 @@ typedef int32_t(*PF_SeemmoAlgo_TrailEnd)(
     uint32_t &rspLen
 );
 
-typedef int32_t (*PF_SeemmoAlgo_Recognize)(
+typedef int32_t(*PF_SeemmoAlgo_Recognize)(
     const uint8_t *bgr24,
     uint32_t width,
     uint32_t height,
@@ -51,7 +50,7 @@ typedef int32_t (*PF_SeemmoAlgo_Recognize)(
     uint32_t &rspLen
 );
 
-typedef int32_t (*PF_SeemmoAlgo_DetectRecognize)(
+typedef int32_t(*PF_SeemmoAlgo_DetectRecognize)(
     const uint8_t *bgr24,
     uint32_t width,
     uint32_t height,
@@ -61,8 +60,8 @@ typedef int32_t (*PF_SeemmoAlgo_DetectRecognize)(
 );
 
 
-//Éî²aËã·¨¿â¼ÓÔØÆ÷£¬ÓÃdlopen·½Ê½£¬ÊÇÒòÎªÉî²aÊ¹ÓÃµÄprotobuf°æ±¾±È½ÏµÍ£¬ºÍÎÒÃÇÊ¹ÓÃµÄprotobuf°æ±¾³åÍ»£¬
-//ÎªÁË±ÜÃâ³åÍ»£¬ÎÒÃÇµÄprotobufÊ¹ÓÃ¾²Ì¬Á´½Ó
+//æ·±çç®—æ³•åº“åŠ è½½å™¨ï¼Œç”¨dlopenæ–¹å¼ï¼Œæ˜¯å› ä¸ºæ·±çä½¿ç”¨çš„protobufç‰ˆæœ¬æ¯”è¾ƒä½ï¼Œå’Œæˆ‘ä»¬ä½¿ç”¨çš„protobufç‰ˆæœ¬å†²çªï¼Œ
+//ä¸ºäº†é¿å…å†²çªï¼Œæˆ‘ä»¬çš„protobufä½¿ç”¨é™æ€é“¾æ¥
 class AlgoLoader {
 public:
     const char* ALGO_DLL_NAME = "libseemmo_wrapper.so";
@@ -80,19 +79,19 @@ public:
         Unload();
     }
 
-    void Load(const string &baseDir,
+    void Load(const std::string &baseDir,
               uint32_t imgThrNum,
               uint32_t videoThrNum,
               uint32_t imgCoreNum,
               uint32_t videoCoreNum,
               uint32_t authType,
-              const string &authServer,
+              const std::string &authServer,
               uint32_t gpuDevId) {
         LOG_INFO("Load algo {}", ALGO_DLL_NAME);
 
         handle_ = dlopen(ALGO_DLL_NAME, RTLD_LAZY);
         if (nullptr == handle_) {
-            throw runtime_error("Load ALGO dll error, " + std::string(dlerror()));
+            throw std::runtime_error("Load ALGO dll error, " + std::string(dlerror()));
         }
 
         pf_SeemmoAlgo_Init_ = (PF_SeemmoAlgo_Init)dlsym(handle_, "SeemmoAlgo_Init");
@@ -104,17 +103,17 @@ public:
 
         if (nullptr == pf_SeemmoAlgo_Init_ ||
                 nullptr == pf_SeemmoAlgo_Destroy_ ||
-                nullptr == pf_SeemmoAlgo_Trail_   ||
+                nullptr == pf_SeemmoAlgo_Trail_ ||
                 nullptr == pf_SeemmoAlgo_TrailEnd_ ||
                 nullptr == pf_SeemmoAlgo_Recognize_ ||
                 nullptr == pf_SeemmoAlgo_DetectRecognize) {
-            throw runtime_error("invalid symbol in dll");
+            throw std::runtime_error("invalid symbol in dll");
         }
 
-        int ret = pf_SeemmoAlgo_Init_(baseDir.c_str(), imgThrNum, videoThrNum, imgCoreNum,videoCoreNum, authServer.c_str(),
+        int ret = pf_SeemmoAlgo_Init_(baseDir.c_str(), imgThrNum, videoThrNum, imgCoreNum, videoCoreNum, authServer.c_str(),
                                       authType, gpuDevId);
         if (0 != ret) {
-            throw runtime_error("init algorithm error, ret " + std::to_string(ret));
+            throw std::runtime_error("init algorithm error, ret " + std::to_string(ret));
         }
     }
 
@@ -135,32 +134,32 @@ public:
     }
 
     int32_t Trail(int32_t videoChl, uint64_t timestamp, const uint8_t *bgr24, uint32_t width, uint32_t height,
-                  const string &param, char *jsonRsp, uint32_t &rspLen) {
+                  const std::string &param, char *jsonRsp, uint32_t &rspLen) {
         if (nullptr == pf_SeemmoAlgo_Trail_) {
-            throw runtime_error("Nullpointer");
+            throw std::runtime_error("Nullpointer");
         }
         return pf_SeemmoAlgo_Trail_(videoChl, timestamp, bgr24, width, height, param.c_str(), jsonRsp, rspLen);
     }
 
-    int32_t TrailEnd(int32_t videoChl, const string &param, char *jsonRsp, uint32_t &rspLen) {
+    int32_t TrailEnd(int32_t videoChl, const std::string &param, char *jsonRsp, uint32_t &rspLen) {
         if (nullptr == pf_SeemmoAlgo_Trail_) {
-            throw runtime_error("Nullpointer");
+            throw std::runtime_error("Nullpointer");
         }
         return pf_SeemmoAlgo_TrailEnd_(videoChl, param.c_str(), jsonRsp, rspLen);
     }
 
-    int32_t Recognize(const uint8_t *bgr24, uint32_t width, uint32_t height, const string &param, char *jsonRsp,
+    int32_t Recognize(const uint8_t *bgr24, uint32_t width, uint32_t height, const std::string &param, char *jsonRsp,
                       uint32_t &rspLen) {
         if (nullptr == pf_SeemmoAlgo_Recognize_) {
-            throw runtime_error("Nullpointer");
+            throw std::runtime_error("Nullpointer");
         }
         return pf_SeemmoAlgo_Recognize_(bgr24, width, height, param.c_str(), jsonRsp, rspLen);
     }
 
-    int32_t DetectRecognize(const uint8_t *bgr24, uint32_t width, uint32_t height, const string &param, char *jsonRsp,
+    int32_t DetectRecognize(const uint8_t *bgr24, uint32_t width, uint32_t height, const std::string &param, char *jsonRsp,
                             uint32_t &rspLen) {
         if (nullptr == pf_SeemmoAlgo_Recognize_) {
-            throw runtime_error("Nullpointer");
+            throw std::runtime_error("Nullpointer");
         }
         return pf_SeemmoAlgo_DetectRecognize(bgr24, width, height, param.c_str(), jsonRsp, rspLen);
     }
@@ -174,5 +173,6 @@ private:
     PF_SeemmoAlgo_Recognize pf_SeemmoAlgo_Recognize_;
     PF_SeemmoAlgo_DetectRecognize pf_SeemmoAlgo_DetectRecognize;
 };
+}
 }
 }

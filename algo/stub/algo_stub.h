@@ -6,47 +6,46 @@
 
 #include "algo/stub/object_type.h"
 
-using namespace  std;
-
+namespace video {
 namespace algo {
 
 //检测跟踪参数
 class TrailParam {
 public:
-    vector<Point> roi;	//ROI区域，每一个point是ROI多边形区域的一个点
+    std::vector<Point> roi; //ROI区域，每一个point是ROI多边形区域的一个点
 };
 
 //识别参数
 class RecogParam {
 public:
     typedef struct tagObjLocation {
-        string ContextCode;
-        string guid;
-        ObjectType type;			// 目标类型
-        Rect detect;		// 目标所在区域(x,y,w,h)
-        Shift trail;		// 目标跟踪变化(x,y)
+        std::string ContextCode;
+        std::string guid;
+        ObjectType type;            // 目标类型
+        Rect detect;        // 目标所在区域(x,y,w,h)
+        Shift trail;        // 目标跟踪变化(x,y)
     } ObjLocation;
 
-    vector<ObjLocation> locations;
+    std::vector<ObjLocation> locations;
 };
 
 //检测结果
 class ImageResult {
 public:
-    vector<VehicleObject> vehicles;		// 机动车
-    vector<PersonObject> pedestrains;		// 行人
-    vector<BikeObject> bikes;			// 非机动车
-    vector<FaceObject> faces;			// 人脸
+    std::vector<VehicleObject> vehicles;        // 机动车
+    std::vector<PersonObject> pedestrains;      // 行人
+    std::vector<BikeObject> bikes;          // 非机动车
+    std::vector<FaceObject> faces;          // 人脸
 };
 
 //跟踪择优结果
 class FilterResult {
 public:
-    vector<VehicleFilter> vehicles;		// 机动车
-    vector<PersonFilter> pedestrains;		// 行人
-    vector<BikeFilter> bikes;			// 非机动车
-    vector<FaceFilter> faces;			// 人脸
-    vector<int32_t> releasedFrames;	// 可以释放的帧
+    std::vector<VehicleFilter> vehicles;        // 机动车
+    std::vector<PersonFilter> pedestrains;      // 行人
+    std::vector<BikeFilter> bikes;          // 非机动车
+    std::vector<FaceFilter> faces;          // 人脸
+    std::vector<int32_t> releasedFrames;    // 可以释放的帧
 };
 
 class AlgoStub {
@@ -87,4 +86,5 @@ public:
     };
 };
 
+}
 }

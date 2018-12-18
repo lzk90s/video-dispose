@@ -8,23 +8,24 @@
 #include "vfilter/notifier/httplib.h"
 
 
-namespace vf {
+namespace video {
+namespace filter {
 
 template<class T>
 class Notifier {
 public:
-    Notifier(const string &type) {
+    Notifier(const std::string &type) {
         this->type_ = type;
 
-        string host = G_CFG().notifyServerHost;
+        std::string host = G_CFG().notifyServerHost;
         if (host.empty()) {
-            throw runtime_error("The notify url is empty");
+            throw std::runtime_error("The notify url is empty");
         }
-        string addr, port;
+        std::string addr, port;
         addr = host.substr(0, host.find_last_of(":"));
         port = host.substr(host.find_last_of(":") + 1, host.length() - host.find_last_of(":"));
         if (addr.empty() || port.empty()) {
-            throw runtime_error("The notify address is invalid");
+            throw std::runtime_error("The notify address is invalid");
         }
 
         cli_.reset(new httplib::Client(addr.c_str(), atoi(port.c_str())));
@@ -53,7 +54,7 @@ public:
         cv::Mat img = roi.clone();
 
         //生成通知消息，并通过http发送通知消息
-        string msg = buildNotifyMsg(channelId, img, obj);
+        std::string msg = buildNotifyMsg(channelId, img, obj);
         if (!msg.empty()) {
             cli_->Post(getRequestURL().c_str(), msg, "application/json");
             LOG_DEBUG("Send {} notify msg {}", type_, msg);
@@ -62,18 +63,19 @@ public:
 
 protected:
     //生成通知消息
-    virtual string buildNotifyMsg(uint32_t channelId, cv::Mat &img, T &obj) = 0;
+    virtual std::string buildNotifyMsg(uint32_t channelId, cv::Mat &img, T &obj) = 0;
 
     //获取http请求url
-    virtual string getRequestURL() = 0;
+    virtual std::string getRequestURL() = 0;
 
     //判断是否是无效的图片
     virtual bool isInvalidPicture(uint32_t width, uint32_t height) = 0;
 
 private:
-    string type_;
-    unique_ptr<httplib::Client> cli_;
+    std::string type_;
+    std::unique_ptr<httplib::Client> cli_;
 };
 
 
+}
 }
