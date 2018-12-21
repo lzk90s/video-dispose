@@ -18,7 +18,7 @@ import (
 const (
 	MaxIdleConns int = 10
 	MaxIdleConnsPerHost int = 10
-	IdleConnTimeout time.Duration = 90
+	IdleConnTimeout time.Duration = 180
 )
 
 func createHTTPClient() *http.Client {
@@ -49,7 +49,7 @@ func trace(msg string) func() {
 	start := time.Now()
 	//fmt.Printf("enter %s\n", msg)
 	return func() {
-		fmt.Printf("%s 耗时 (%s)\n", msg, time.Since(start))
+		fmt.Printf("%-20s 耗时 (%s)\n", msg, time.Since(start))
 	}
 }
 
@@ -133,45 +133,42 @@ type AlgoCaller struct {
 
 
 func main() {
-	client := createHTTPClient()
-	jpgPath := "f:\\result.jpg"
-	times := []int {1, 10, 100,500}
 
-	for _, t := range times {
-		func (n int){
-			algos := []AlgoCaller{
-				AlgoCaller{name: "深瞐算法", fn: runSeemmoAlgo, url: "http://172.18.18.138:7000/ImgProcService/Recognize"},
-				AlgoCaller{name: "高创算法", fn: runGosunAlgo, url: "http://172.18.18.138:7100/ImgProcService/Recognize"},
-			}
+	algos := []AlgoCaller{
+		AlgoCaller{name: "深瞐算法", fn: runSeemmoAlgo, url: "http://172.18.18.138:7000/ImgProcService/Recognize"},
+		AlgoCaller{name: "高创算法", fn: runGosunAlgo, url: "http://172.18.18.138:7100/ImgProcService/Recognize"},
+	}
 
-			for _, algo := range algos{
-				fmt.Printf("------------------ %s ------------------\n", algo.name)
-				func (){
-					url := algo.url
-					fn  := algo.fn
+	for _, algo := range algos{
+		fmt.Printf("------------------ %s ------------------\n", algo.name)
 
-					func (){
-						defer trace("单线程循环" + strconv.Itoa(t) + "次")()
-						for i:=0; i<t; i++{
-							fn(client, url, jpgPath)
-						}
+		client := createHTTPClient()
+		jpgPath := "f:\\result.jpg"
+		times := []int {1, 50, 100, 200, 500, 800, 1000}
+		for _, t := range times {
+			url := algo.url
+			fn  := algo.fn
+
+			func (){
+				defer trace("单线程循环" + strconv.Itoa(t) + "次")()
+				for i:=0; i<t; i++{
+					fn(client, url, jpgPath)
+				}
+			}()
+
+			func (){
+				defer trace("并发循环" + strconv.Itoa(t) + "次")()
+				var wg sync.WaitGroup
+				for i:= 0; i<t; i++{
+					wg.Add(1)
+					go func(){
+						defer wg.Add(-1)
+						fn(client, url, jpgPath)
 					}()
-
-					func (){
-						defer trace("并发循环" + strconv.Itoa(t) + "次")()
-						var wg sync.WaitGroup
-						for i:= 0; i<t; i++{
-							wg.Add(1)
-							go func(){
-								defer wg.Add(-1)
-								fn(client, url, jpgPath)
-							}()
-						}
-						wg.Wait()
-					}()
-				}()
-			}
-		}(t)
+				}
+				wg.Wait()
+			}()
+		}
 	}
 
 }
