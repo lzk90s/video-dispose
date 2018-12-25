@@ -19,7 +19,7 @@ protected:
         for (uint32_t idx = 0; idx < objs1.size() && idx < objs2.size(); idx++) {
             algo::Rect &rect = objs1[idx].detect;
             int32_t x = rect[0], y = rect[1], w = rect[2], h = rect[3];
-            mixObjectRectangle(frame, x, y, w, h, CV_RGB(255, 0, 0));
+            mixObjectRectangle(frame, x, y, w, h, CV_RGB(255, 0, 255));
 
             // 需要混到流中的属性
             std::vector<algo::Attribute> mixableAttrs;

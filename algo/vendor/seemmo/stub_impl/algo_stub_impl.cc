@@ -8,6 +8,7 @@
 #include <brpc/channel.h>
 
 #include "common/helper/logger.h"
+#include "common/helper/counttimer.h"
 
 #include "algo/vendor/seemmo/stub_impl/algo_stub_impl.h"
 #include "algo/vendor/seemmo/rpc/service.pb.h"
@@ -377,10 +378,12 @@ int32_t AlgoStubImpl::Trail(
     ImageResult &imageResult,
     FilterResult &filterResult
 ) {
+    CountTimer t1("seemmo::AlgoStubImpl::Trail", 80 * 1000);
     return videoProcClient.Trail(channelId, frameId, bgr24, width, height, param, imageResult, filterResult);
 }
 
 int32_t AlgoStubImpl::TrailEnd(uint32_t channelId) {
+    CountTimer t1("seemmo::AlgoStubImpl::TrailEnd", 80 * 1000);
     return videoProcClient.TrailEnd(channelId);
 }
 
@@ -392,6 +395,7 @@ int32_t AlgoStubImpl::Recognize(
     const RecogParam &param,
     ImageResult &imageResult
 ) {
+    CountTimer t1("seemmo::AlgoStubImpl::Recognize", 80 * 1000);
     return videoProcClient.Recognize(channelId, bgr24, width, height, param, imageResult);
 }
 

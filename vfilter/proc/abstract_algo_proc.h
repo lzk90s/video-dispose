@@ -12,8 +12,7 @@ namespace filter {
 
 class AbstractAlgoProcessor : public  FrameHandler {
 public:
-
-    AbstractAlgoProcessor(const std::string &name) {
+    AbstractAlgoProcessor(const std::string &name, uint32_t framePickInterval) : framePicker_(framePickInterval) {
         name_ = name;
     }
 
@@ -24,16 +23,20 @@ public:
     int32_t OnChannelReceivedFrame(std::shared_ptr<ChannelSink> chl, cv::Mat &frame) {
         if (framePicker_.NeedPickFrame()) {
             cv::Mat cloneFrame = frame.clone();
-            OnFrame(chl, cloneFrame);
+            onFrame(chl, cloneFrame);
         }
-        chl->MixFrame(frame);
+        mixFrame(chl, frame);
         return 0;
     }
 
+    // 处理通道关闭
     int32_t OnChannelClose(std::shared_ptr<ChannelSink> chl) {
-        OnFrameEnd(chl);
+        onFrameEnd(chl);
         return 0;
     }
+
+protected:
+    virtual void mixFrame(std::shared_ptr<ChannelSink> chl, cv::Mat &frame) {}
 
 private:
     std::string name_;

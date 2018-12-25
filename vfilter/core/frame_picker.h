@@ -1,22 +1,20 @@
 #pragma once
 
-#include <chrono>
-
-#include "vfilter/config/setting.h"
+#include <cstdint>
 
 namespace video {
 namespace filter {
 
 class FramePicker {
 public:
-    FramePicker() {
+    FramePicker(uint32_t pickInterval) : pickInterval_(pickInterval) {
         pickCnt_ = 0;
     }
 
     bool NeedPickFrame() {
         bool pickFlag = false;
         pickCnt_++;
-        if (pickCnt_ >= G_CFG().framePickInternalNum) {
+        if (pickCnt_ >= pickInterval_) {
             pickFlag = true;
             pickCnt_ = 0;
         }
@@ -24,6 +22,7 @@ public:
     }
 
 private:
+    uint32_t pickInterval_;
     uint32_t pickCnt_;
 };
 

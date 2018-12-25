@@ -68,11 +68,11 @@ int32_t VFilter_Routine(uint32_t channelId,
 
     //handle frame
     auto chl = vf::CSMS().sinks[channelId];
-    if (nullptr != defaultProcessor) {
-        defaultProcessor->OnChannelReceivedFrame(chl, frame);
-    }
     if (nullptr != faceProcessor) {
         faceProcessor->OnChannelReceivedFrame(chl, frame);
+    }
+    if (nullptr != defaultProcessor) {
+        defaultProcessor->OnChannelReceivedFrame(chl, frame);
     }
 
     //BGR24->YUV420P

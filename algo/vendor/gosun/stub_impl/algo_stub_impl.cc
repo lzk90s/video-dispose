@@ -53,7 +53,7 @@ int32_t AlgoStubImpl::Trail(
         return -1;
     }
 
-    CountTimer t1("AlgoStubImpl::Trail", 80 * 1000);
+    CountTimer t1("gosun::AlgoStubImpl::Trail", 80 * 1000);
 
     faceId faceIds[30] = { 0 };
     int32_t faceNum = 30;
@@ -99,7 +99,7 @@ int32_t AlgoStubImpl::Recognize(
         return -1;
     }
 
-    CountTimer t1("AlgoStubImpl::Recognize", 80 * 1000);
+    CountTimer t1("gosun::AlgoStubImpl::Recognize", 80 * 1000);
 
     return 0;
 }

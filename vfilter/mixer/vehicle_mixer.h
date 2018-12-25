@@ -21,7 +21,7 @@ protected:
             // 区域从objs1取
             algo::Rect &rect = objs1[idx].detect;
             int32_t x = rect[0], y = rect[1], w = rect[2], h = rect[3];
-            mixObjectRectangle(frame, x, y, w, h, CV_RGB(0, 255, 0));
+            mixObjectRectangle(frame, x, y, w, h, CV_RGB(0, 255, 255));
 
             // 属性从objs2取
             std::vector<algo::Attribute> mixableAttrs;

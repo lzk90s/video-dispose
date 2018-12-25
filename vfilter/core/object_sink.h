@@ -39,13 +39,13 @@ public:
         gofIdx_++;
     }
 
-    void GetShowableObjects(std::vector<T> &t1, std::vector<T> &t2) {
+    void GetMixableObjects(uint32_t frameWidth, uint32_t frameHeight, std::vector<T> &t1, std::vector<T> &t2) {
         std::unique_lock<std::mutex> lck(mutex_);
         for (auto &o : existObjs_) {
             if (o.second.Showable()) {
                 T tmp = o.second.obj1;
                 //修正抽帧导致的位置偏移
-                tmp.detect = fixObjectRect(tmp.detect, tmp.trail);
+                tmp.detect = calcObjectRealRect(frameWidth, frameHeight, tmp.detect, tmp.trail);
                 t1.push_back(tmp);
                 t2.push_back(o.second.obj2);
             }
@@ -58,24 +58,43 @@ public:
     }
 
 private:
-    //目标位移修正, shift表示的是当前帧与上一帧之间的位移
-    //目标的移动一般都是有规律的，因为是抽帧的，所以用目标当前区域和位移来计算出预估的位置
-    algo::Rect fixObjectRect(algo::Rect &rect, algo::Shift &shift) {
+    //根据抽帧后目标位置和偏移计算目标的真实位置
+    algo::Rect calcObjectRealRect(uint32_t frameWidth, uint32_t frameHeight,
+                                  const algo::Rect &rect, const algo::Shift &shift) {
         if (rect.size() != 4 || shift.size() != 2) {
             return rect;
         }
 
         int32_t x = rect[0], y = rect[1], w = rect[2], h = rect[3];
-        int32_t gofSize = (int32_t)gofSize_;
-        if (gofSize > 0) {
-            int32_t gofIdx = gofIdx_ > gofSize_ ? (int32_t)gofSize_ : (int32_t)gofIdx_;
-            int32_t sx = shift[0], sy = shift[1];
-            x += round((double)sx / (double)gofSize) * gofIdx;
-            y += round((double)sy / (double)gofSize) * gofIdx;
-            //计算后，可能会导致x，或者y小于0，小于0时，设置为0
-            x = (x < 0) ? 0 : x;
-            y = (y < 0) ? 0 : y;
+        int32_t sx = shift[0], sy = shift[1];
+        int32_t wmax = (int32_t)frameWidth, hmax=(int32_t)frameHeight;
+
+        if (gofSize_ > 0) {
+            x += round((double)sx / (double)gofSize_) * gofIdx_;
+            y += round((double)sy / (double)gofSize_) * gofIdx_;
+            //计算后的坐标可能会超出画面，超出部分截断处理
+            if (x < 0) {
+                w += x;
+                x = 0;
+            }
+            if (y < 0) {
+                h += y;
+                y = 0;
+            }
+            if (x + w > wmax) {
+                w = wmax - x;
+            }
+            if (y + h > hmax) {
+                h = hmax - y;
+            }
+            if (w < 0) {
+                w = 0;
+            }
+            if (h < 0) {
+                h = 0;
+            }
         }
+
         return algo::Rect{ x,y,w,h };
     }
 
@@ -91,7 +110,7 @@ private:
                 auto &p = existObjs_[o.guid];
                 if ((o.score > p.maxScore) && (o.score - p.maxScore > G_CFG().scoreDiff4ReRecognize)) {
                     toRecObjs.push_back(o);
-                    p.maxScore = o.score;	//update max score
+                    p.maxScore = o.score;   //update max score
                 }
             }
         }
@@ -169,10 +188,10 @@ private:
 private:
     class ObjectVO {
     public:
-        T           obj1;			//obj1 存储检测结果，检测结果不带属性信息
-        T           obj2;			//obj2 存储识别结果，识别结果带属性信息
-        uint32_t    maxScore;		//目标最大分数，用来判断是否需要重新识别
-        uint32_t    absentCount;	//消失计数
+        T           obj1;           //obj1 存储检测结果，检测结果不带属性信息
+        T           obj2;           //obj2 存储识别结果，识别结果带属性信息
+        uint32_t    maxScore;       //目标最大分数，用来判断是否需要重新识别
+        uint32_t    absentCount;    //消失计数
 
         ObjectVO() {
             maxScore = 0;
@@ -193,8 +212,8 @@ private:
     std::map<std::string, ObjectVO> existObjs_;
     //因为是抽帧检测，所以，把相邻两次检测之间的帧认作一个gof（group of frame）
     //gofSize表示一个gof中的帧数目，gofidx表示一帧在当前gof中的序号
-    uint32_t gofSize_;
-    uint32_t gofIdx_;
+    int32_t gofSize_;
+    int32_t gofIdx_;
 };
 
 typedef ObjectSink<algo::BikeObject> BikeObjectSink;

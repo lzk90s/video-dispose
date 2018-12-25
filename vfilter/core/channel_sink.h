@@ -66,18 +66,6 @@ public:
         return this->channelId_;
     }
 
-    void MixFrame(cv::Mat &frame) {
-        vehicleMixer.MixFrame(frame, vehicleObjectSink);
-        personMixer.MixFrame(frame, personObjectSink);
-        bikeMixer.MixFrame(frame, bikeObjectSink);
-        faceMixer.MixFrame(frame, faceObjectSink);
-
-        vehicleObjectSink.IncreaseGofIdx();
-        personObjectSink.IncreaseGofIdx();
-        bikeObjectSink.IncreaseGofIdx();
-        faceObjectSink.IncreaseGofIdx();
-    }
-
 private:
     //channel id
     uint32_t channelId_;

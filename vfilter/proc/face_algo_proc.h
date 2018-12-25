@@ -12,7 +12,7 @@ namespace filter {
 class FaceAlgoProcessor : public AbstractAlgoProcessor {
 public:
     FaceAlgoProcessor()
-        : AbstractAlgoProcessor("face"),
+        : AbstractAlgoProcessor("face", G_CFG().gosunFramePickInterval),
           algo_(algo::AlgoStubFactory::NewAlgoStub("gosun")),
           worker_(1) {
     }
@@ -21,13 +21,19 @@ public:
         waitForComplete();
     }
 
-    void OnFrame(std::shared_ptr<ChannelSink> chl, cv::Mat &frame) override {
+protected:
+    void onFrame(std::shared_ptr<ChannelSink> chl, cv::Mat &frame) override {
         uint64_t frameId = chl->frameCache.AllocateEmptyFrame();
         worker_.commit(std::bind(&FaceAlgoProcessor::algoRoutine, this, chl, frameId, frame));
     }
 
-    void OnFrameEnd(std::shared_ptr<ChannelSink> chl) override {
+    void onFrameEnd(std::shared_ptr<ChannelSink> chl) override {
         waitForComplete();
+    }
+
+    void mixFrame(std::shared_ptr<ChannelSink> chl, cv::Mat &frame) override {
+        chl->faceMixer.MixFrame(frame, chl->faceObjectSink);
+        chl->faceObjectSink.IncreaseGofIdx();
     }
 
 private:

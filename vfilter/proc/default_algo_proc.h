@@ -11,7 +11,7 @@ namespace filter {
 class DefaultAlgoProcessor : public AbstractAlgoProcessor {
 public:
     DefaultAlgoProcessor()
-        : AbstractAlgoProcessor("seemmo"),
+        : AbstractAlgoProcessor("seemmo", G_CFG().seemmoFramePickInterval),
           algo_(algo::AlgoStubFactory::NewAlgoStub("seemmo")),
           worker_(1),
           recogWorker_(1) {
@@ -21,14 +21,24 @@ public:
         waitForComplete();
     }
 
-    void OnFrame(std::shared_ptr<ChannelSink> chl, cv::Mat &frame) override {
+protected:
+    void onFrame(std::shared_ptr<ChannelSink> chl, cv::Mat &frame) override {
         uint64_t frameId = chl->frameCache.AllocateEmptyFrame();
         worker_.commit(std::bind(&DefaultAlgoProcessor::algoRoutine, this, chl, frameId, frame));
     }
 
-    void OnFrameEnd(std::shared_ptr<ChannelSink> chl) override {
+    void onFrameEnd(std::shared_ptr<ChannelSink> chl) override {
         waitForComplete();
         algo_->TrailEnd(chl->GetChannelId());
+    }
+
+    void mixFrame(std::shared_ptr<ChannelSink> chl, cv::Mat &frame) override {
+        chl->vehicleMixer.MixFrame(frame, chl->vehicleObjectSink);
+        chl->personMixer.MixFrame(frame, chl->personObjectSink);
+        chl->bikeMixer.MixFrame(frame, chl->bikeObjectSink);
+        chl->vehicleObjectSink.IncreaseGofIdx();
+        chl->personObjectSink.IncreaseGofIdx();
+        chl->bikeObjectSink.IncreaseGofIdx();
     }
 
 private:

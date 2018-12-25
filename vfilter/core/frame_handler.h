@@ -10,10 +10,10 @@ namespace video {
 namespace filter {
 
 class FrameHandler {
-public:
-    virtual void OnFrame(std::shared_ptr<ChannelSink> chl, cv::Mat &frame) = 0;
+protected:
+    virtual void onFrame(std::shared_ptr<ChannelSink> chl, cv::Mat &frame) = 0;
 
-    virtual void OnFrameEnd(std::shared_ptr<ChannelSink> chl) = 0;
+    virtual void onFrameEnd(std::shared_ptr<ChannelSink> chl) = 0;
 };
 
 }
