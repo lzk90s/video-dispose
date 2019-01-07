@@ -5,6 +5,7 @@ ENV CFLAGS -fPIC
 ENV CXXFLAGS -fPIC
 
 RUN sed -i 's/archive.ubuntu.com/mirrors.aliyun.com/g' /etc/apt/sources.list && \
+    rm -rf /etc/apt/sources.list.d/* && \
     apt-get update --fix-missing && \
     apt-get install -y \
       curl pkg-config git build-essential make g++ cmake automake libtool \
