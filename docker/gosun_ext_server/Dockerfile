@@ -1,5 +1,5 @@
 #------------ 算法sdk ------------
-FROM registry.cn-hangzhou.aliyuncs.com/gosun/gosun_ext_sdk:latest as gosun_ext_sdk
+FROM  registry.cn-hangzhou.aliyuncs.com/gosun/smartface:latest as gosun_ext_sdk
 
 #------------ 编译video-dispose ------------
 FROM registry.cn-hangzhou.aliyuncs.com/gosun/brpc_opencv_ffmpeg:latest as base_builder
