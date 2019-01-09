@@ -27,7 +27,7 @@ RUN cd /root/video-dispose && \
 
     
 # -------------------- runtime --------------------
-FROM nvidia/cuda:9.2-runtime-ubuntu16.04 as cuda_runtime
+FROM nvidia/cuda:9.2-cudnn7-runtime-ubuntu16.04 as cuda_runtime
 
 RUN sed -i 's/archive.ubuntu.com/mirrors.aliyun.com/g' /etc/apt/sources.list && \
     ##cuda和nvidia-ml下载会失败，直接删除掉
