@@ -38,7 +38,8 @@ RUN sed -i 's/archive.ubuntu.com/mirrors.aliyun.com/g' /etc/apt/sources.list && 
       libdc1394-22 libavcodec-ffmpeg56 libswscale-ffmpeg3 libavformat-ffmpeg56 \
       libcairo2 libgdk-pixbuf2.0-0 libgtk2.0-0 libopenexr22 uuid-dev \
       libopenblas-base libopenblas-dev libgflags-dev libjasper1 \
-      libmpich12  libgoogle-glog-dev   liblmdb0 libleveldb1v5 libopenmpi1.10 && \
+      libmpich12  libgoogle-glog-dev   liblmdb0 libleveldb1v5 libopenmpi1.10 \
+      libboost-filesystem1.58.0 libboost-system1.58.0 && \
     apt-get autoclean && apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
     ##修改时区
