@@ -120,14 +120,11 @@ private:
         char *jsonRsp,
         uint32_t *rspLen
     ) {
-        char *rspMsg = gosun_facecheck(param.c_str(), (unsigned char*)rgbImg, height, width);
-        if (nullptr == rspMsg) {
+        int ret = gosun_facecheck(param.c_str(), (unsigned char*)rgbImg, height, width, jsonRsp, *rspLen);
+        if (0 != ret) {
             LOG_ERROR("Call gosun_facecheck error");
-            return -1;
+            return ret;
         }
-        *rspLen = strlen(rspMsg);
-        strncpy(jsonRsp, rspMsg, strlen(rspMsg));
-        free(rspMsg);
         return 0;
     }
 };
