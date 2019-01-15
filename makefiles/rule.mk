@@ -15,7 +15,7 @@ AR = ar
 ifdef DEBUG
 CXXFLAGS += -g -O0
 else
-CXXFLAGS += -g -O0
+CXXFLAGS += -O3
 endif
 
 ifeq (x$(SRC_DIRS), x)

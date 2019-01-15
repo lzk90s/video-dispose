@@ -7,6 +7,7 @@ FROM registry.cn-hangzhou.aliyuncs.com/gosun/brpc_opencv_ffmpeg:latest as base_b
 WORKDIR /root
 ENV CFLAGS -fPIC
 ENV CXXFLAGS -fPIC
+ENV DEBUG 1
 ENV GOSUN_EXT_SDK_HOME /opt/GsFaceLib
 ENV LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${GOSUN_EXT_SDK_HOME}/face_libs
 
